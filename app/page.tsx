@@ -1,6 +1,5 @@
 import InterestGrid from '@/components/InterestGrid';
 import CountryStats from '@/components/CountryStats';
-import StatStrip from '@/components/StatStrip';
 import HowItWorks from '@/components/HowItWorks';
 import FAQ from '@/components/FAQ';
 import WhatsAppIcon from '@/components/WhatsAppIcon';
@@ -45,12 +44,12 @@ export default async function Home({ searchParams }: Props) {
 
           {/* Kicker */}
           <div className="flex items-center gap-3">
-            <div className="w-8 h-px" style={{ backgroundColor: '#C9A84C' }} />
+            <div className="w-8 h-px" style={{ backgroundColor: '#ff751f' }} />
             <span
               className="font-display text-xs font-semibold uppercase tracking-[0.2em]"
-              style={{ color: '#C9A84C' }}
+              style={{ color: '#ff751f' }}
             >
-              South Africa → The World
+              Before you pay a recruiter, check the pathway first.
             </span>
           </div>
 
@@ -65,9 +64,13 @@ export default async function Home({ searchParams }: Props) {
 
           {/* Sub-headline */}
           <p className="font-body text-base leading-relaxed max-w-xl" style={{ color: '#6B6B6B' }}>
-            Real pathways. No scams. No guesswork. Clear information on how South
-            Africans actually get working abroad — from professional nurses to
-            seasonal farm workers.
+            Find out which countries are open to your field, what documents you
+            need, what it may cost, and which scams to avoid.
+          </p>
+
+          {/* Trust line */}
+          <p className="font-body text-sm font-semibold max-w-xl" style={{ color: '#1B4D3E' }}>
+            No placement fees. No fake promises. Just clear information.
           </p>
 
           {/* CTA hint */}
@@ -79,9 +82,6 @@ export default async function Home({ searchParams }: Props) {
           </div>
         </div>
       </section>
-
-      {/* Stat strip */}
-      <StatStrip />
 
       {/* How it works */}
       <HowItWorks />
@@ -188,31 +188,41 @@ export default async function Home({ searchParams }: Props) {
       </section>
 
       {/* Footer */}
-      <footer className="px-6 py-10 text-center" style={{ backgroundColor: '#2C2C2C' }}>
-        <p className="font-body font-bold text-sm mb-1">
-          <span style={{ color: '#F8F5F0' }}>job</span><span style={{ color: '#ff751f' }}>abroad</span>
-        </p>
-        <p className="font-body text-xs mb-4" style={{ color: 'rgba(248,245,240,0.4)' }}>
-          Based in South Africa
-        </p>
-        <a
-          href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="font-body text-xs font-semibold"
-          style={{ color: '#C9A84C' }}
-        >
-          WhatsApp: {process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}
-        </a>
-        <p className="font-body text-xs leading-relaxed mt-4" style={{ color: '#6B6B6B' }}>
-          We are an information service and CV toolkit. We do not place candidates or act as recruiters.
-          We do not guarantee employment.
-        </p>
-        <p className="mt-3">
-          <a href="/privacy" className="font-body text-xs underline" style={{ color: '#6B6B6B' }}>
-            Privacy Policy
-          </a>
-        </p>
+      <footer className="px-6 py-12" style={{ backgroundColor: '#2C2C2C' }}>
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
+
+          {/* Left — contact + legal */}
+          <div className="flex flex-col gap-4">
+            <a
+              href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-body text-base font-semibold"
+              style={{ color: '#C9A84C' }}
+            >
+              WhatsApp: {process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}
+            </a>
+            <p className="font-body text-sm leading-relaxed" style={{ color: '#F8F5F0' }}>
+              We are an information service and CV toolkit. We do not place candidates or act as recruiters.
+              We do not guarantee employment.
+            </p>
+            <a href="/privacy" className="font-body text-sm underline" style={{ color: '#F8F5F0' }}>
+              Privacy Policy
+            </a>
+          </div>
+
+          {/* Right — logo + location */}
+          <div className="flex flex-col items-center gap-2">
+            <p className="font-body font-bold text-3xl">
+              <span style={{ color: '#F8F5F0' }}>job</span>
+              <span style={{ color: '#ff751f' }}>abroad</span>
+            </p>
+            <p className="font-body text-base" style={{ color: '#F8F5F0' }}>
+              Based in South Africa 🇿🇦
+            </p>
+          </div>
+
+        </div>
       </footer>
     </main>
   );

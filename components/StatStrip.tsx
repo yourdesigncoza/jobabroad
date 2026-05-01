@@ -1,3 +1,5 @@
+// Removed from homepage to keep hero → action flow clean.
+// Re-add <StatStrip /> in app/page.tsx (after HowItWorks) if you want the emigration stats back.
 const STATS = [
   { value: '74', unit: 'per day', label: 'South Africans leaving SA', source: 'IOL / Remitly 2025' },
   { value: '914,000+', unit: '', label: 'SA citizens already working abroad', source: 'UN DESA 2020' },
