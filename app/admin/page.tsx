@@ -39,18 +39,33 @@ export default function AdminPage() {
   }
 
   const waLink = link
-    ? `https://wa.me/${phone.replace(/\D/g, '')}?text=${encodeURIComponent(`Here is your Jobroad access link:\n${link}`)}`
+    ? `https://wa.me/${phone.replace(/\D/g, '')}?text=${encodeURIComponent(`Here is your Jobabroad access link:\n${link}`)}`
     : '';
 
   return (
     <main className="min-h-screen flex items-center justify-center px-6 py-12" style={{ backgroundColor: '#F8F5F0' }}>
       <div className="w-full max-w-md">
 
+        {/* Top nav */}
+        <div className="flex items-center justify-between mb-8">
+          <a
+            href="/"
+            className="font-display font-bold text-2xl uppercase tracking-widest"
+            style={{ color: '#1B4D3E' }}
+          >
+            JOBABROAD
+          </a>
+          <a
+            href="/"
+            className="font-body text-sm font-semibold flex items-center gap-1"
+            style={{ color: '#6B6B6B' }}
+          >
+            ← Home
+          </a>
+        </div>
+
         {/* Header */}
-        <div className="mb-8">
-          <p className="font-display font-bold text-2xl uppercase tracking-widest mb-1" style={{ color: '#1B4D3E' }}>
-            JOBROAD
-          </p>
+        <div className="mb-6">
           <h1 className="font-display font-bold uppercase text-lg tracking-wide" style={{ color: '#2C2C2C' }}>
             Generate Member Link
           </h1>

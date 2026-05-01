@@ -81,7 +81,7 @@ export default function FAQ() {
             </p>
           </div>
           <a
-            href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}?text=${encodeURIComponent('Hi, I have a question about Jobroad.')}`}
+            href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}?text=${encodeURIComponent('Hi, I have a question about Jobabroad.')}`}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 font-display font-bold uppercase text-xs tracking-wide px-5 py-3 rounded-full shrink-0 transition-all"

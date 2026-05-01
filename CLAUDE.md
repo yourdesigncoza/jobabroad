@@ -16,7 +16,7 @@ No test suite exists yet.
 
 ## What this is
 
-**Jobroad** — a South African work-abroad lead-generation site. The business model:
+**Jobabroad** — a South African work-abroad lead-generation site. The business model:
 
 1. Landing page captures interest via category selector → WhatsApp pre-fill
 2. John handles WhatsApp conversations manually using drip templates
@@ -84,6 +84,10 @@ SUPABASE_SERVICE_ROLE_KEY
 NEXT_PUBLIC_BASE_URL
 ADMIN_SECRET                  # 32-char random string for /admin auth
 ```
+
+## Domain
+
+Production domain: **jobabroad.co.za**
 
 ## UTM tracking
 

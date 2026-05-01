@@ -17,7 +17,7 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Jobroad — Work Abroad from South Africa",
+  title: "Jobabroad — Work Abroad from South Africa",
   description:
     "Real pathways to overseas work for South Africans. No scams. No guesswork. From nurses to farm workers.",
 };

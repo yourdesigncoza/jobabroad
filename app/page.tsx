@@ -23,7 +23,7 @@ export default async function Home({ searchParams }: Props) {
             JOB
           </span>
           <span className="font-display font-bold text-2xl tracking-widest uppercase" style={{ color: '#1B4D3E' }}>
-            ROAD
+            ABROAD
           </span>
         </div>
         <a
@@ -194,7 +194,7 @@ export default async function Home({ searchParams }: Props) {
       {/* Footer */}
       <footer className="px-6 py-10 text-center" style={{ backgroundColor: '#2C2C2C' }}>
         <p className="font-display font-bold uppercase tracking-widest text-sm mb-1" style={{ color: '#C9A84C' }}>
-          JOBROAD
+          JOBABROAD
         </p>
         <p className="font-body text-xs mb-4" style={{ color: 'rgba(248,245,240,0.4)' }}>
           Based in South Africa
