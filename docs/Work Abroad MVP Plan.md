@@ -151,11 +151,60 @@ git commit -m "feat: supabase schema"
 
 ---
 
+## Content Architecture
+
+**Decision: Obsidian → Next.js. No Quartz needed for Jobroad.**
+
+Quartz is a renderer for public static wikis (see signaltrace.wiki). It has no authentication layer, so it cannot gate content behind payment. Next.js already handles rendering — Quartz would be a redundant dependency.
+
+**Writing workflow:**
+1. Write pathway guides in an Obsidian vault (plain `.md` files — same workflow as signaltrace)
+2. Files live in the Next.js repo under `content/pathways/<category>.md`
+3. Next.js reads and renders markdown using `next-mdx-remote` + `gray-matter`
+4. `/members/[token]` resolves the token in Supabase → gets the category → loads the right `.md` file
+
+**File structure:**
+```
+content/
+  pathways/           ← gated, paid guides (one per category)
+    nursing.md
+    it-tech.md
+    engineering.md
+    teaching.md
+    finance.md
+    farming.md
+    seasonal.md
+    hospitality.md
+    trades.md
+    other.md
+  guides/             ← optional free public teasers for SEO
+    working-in-uk.md
+    working-in-australia.md
+```
+
+**Source material already exists:**
+`/home/laudes/zoot/projects/signaltrace-site/content/work-abroad-pathway-intelligence/`
+contains a complete research corpus: country pages (UK, Ireland, Germany, Australia, Canada, NZ), occupation pathways (nurses, engineers, ICT, accountants, teachers), visa routes, scam patterns, and regulatory constraints. Use this as the primary reference when writing the paid guides.
+
+**Why not Quartz:**
+- Quartz = public static site, no token gating possible
+- Next.js already renders markdown just as well with `next-mdx-remote`
+- One domain, one codebase, one deployment
+
+**Future public pages (SEO, free teasers):**
+Add free preview pages at `/pathways/[slug]` sourced from the same `.md` files — no gate, serves as organic traffic and trust-building content. These share the same writing workflow and file format.
+
+---
+
 ## Phase 2 — Pathway Content (Write This Before Building the Admin Tool)
 
-Before any tech is built beyond the landing page, write pathway content for all 10 categories in `lib/pathway-content.ts`. You cannot sell a link to an empty page.
+Before any tech is built beyond the landing page, write pathway guides for all 10 categories as markdown files in `content/pathways/`. You cannot sell a link to an empty page.
 
-Content per category must include: destinations, overview, document checklist, realistic costs, timeline, scam warnings, and legitimate routes. Research is already done in `Work Abroad Pathway Intelligence.md` for the professional wedges. For farm/carnival/seasonal/hospitality/trades: use the official programme sources (UK Home Office, State Department J1 list).
+Each `.md` file uses YAML frontmatter for structured fields and markdown body for prose. Content per guide must include: destinations, overview, document checklist, realistic costs, timeline, scam warnings, and legitimate routes.
+
+**Write in Obsidian.** Open the `content/pathways/` directory as an Obsidian vault. Write each guide as a note. Commit the files to git when done — Vercel rebuilds automatically.
+
+**Source material:** `/home/laudes/zoot/projects/signaltrace-site/content/work-abroad-pathway-intelligence/` — use the Occupation Pathways, Countries, Visa Routes, and Scam Patterns subdirectories as primary references.
 
 **Also create:** A downloadable Word CV template (`public/cv-template.docx`) — a clean, simple CV format anyone can fill in on their phone using Google Docs. This replaces the CV builder.
 
