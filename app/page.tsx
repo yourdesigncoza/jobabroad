@@ -18,13 +18,9 @@ export default async function Home({ searchParams }: Props) {
 
       {/* Nav */}
       <nav className="px-6 py-5 flex items-center justify-between max-w-6xl mx-auto">
-        <div className="flex items-center gap-1">
-          <span className="font-display font-bold text-2xl tracking-widest uppercase" style={{ color: '#2C2C2C' }}>
-            JOB
-          </span>
-          <span className="font-display font-bold text-2xl tracking-widest uppercase" style={{ color: '#1B4D3E' }}>
-            ABROAD
-          </span>
+        <div className="flex items-center text-[1.5em] md:text-[2.2em]">
+          <span className="font-body font-bold" style={{ color: '#2C2C2C' }}>job</span>
+          <span className="font-body font-bold" style={{ color: '#ff751f' }}>abroad</span>
         </div>
         <a
           href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}`}
@@ -193,8 +189,8 @@ export default async function Home({ searchParams }: Props) {
 
       {/* Footer */}
       <footer className="px-6 py-10 text-center" style={{ backgroundColor: '#2C2C2C' }}>
-        <p className="font-display font-bold uppercase tracking-widest text-sm mb-1" style={{ color: '#C9A84C' }}>
-          JOBABROAD
+        <p className="font-body font-bold text-sm mb-1">
+          <span style={{ color: '#F8F5F0' }}>job</span><span style={{ color: '#ff751f' }}>abroad</span>
         </p>
         <p className="font-body text-xs mb-4" style={{ color: 'rgba(248,245,240,0.4)' }}>
           Based in South Africa

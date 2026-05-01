@@ -69,6 +69,7 @@ All colors are inlined as `style={}` props — there is no Tailwind theme extens
 | Dark green | `#1B4D3E` | brand primary, CTAs |
 | Charcoal | `#2C2C2C` | headings |
 | Gold | `#C9A84C` | accents, kicker lines |
+| Orange | `#ff751f` | logo accent ("abroad"), CTAs |
 | Muted | `#6B6B6B` | body copy |
 | Off-white | `#EDE8E0` | section backgrounds |
 

@@ -48,12 +48,9 @@ export default function AdminPage() {
 
         {/* Top nav */}
         <div className="flex items-center justify-between mb-8">
-          <a
-            href="/"
-            className="font-display font-bold text-2xl uppercase tracking-widest"
-            style={{ color: '#1B4D3E' }}
-          >
-            JOBABROAD
+          <a href="/" className="flex items-center text-[1.5em] md:text-[2.2em]">
+            <span className="font-body font-bold" style={{ color: '#2C2C2C' }}>job</span>
+            <span className="font-body font-bold" style={{ color: '#ff751f' }}>abroad</span>
           </a>
           <a
             href="/"
