@@ -65,3 +65,15 @@ h1, h2, h3, h4 {
 .category-card:hover .card-emoji {
   transform: scale(1.2);
 }
+
+/* SVG icon colour flip on hover */
+.category-card:hover .icon-wrap svg {
+  color: #2C2C2C !important;
+  stroke: #2C2C2C !important;
+  transform: scale(1.15);
+  transition: transform 0.2s ease;
+}
+
+.icon-wrap svg {
+  transition: transform 0.2s ease;
+}
