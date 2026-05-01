@@ -1,4 +1,10 @@
 import InterestGrid from '@/components/InterestGrid';
+import CountryStats from '@/components/CountryStats';
+import StatStrip from '@/components/StatStrip';
+import HowItWorks from '@/components/HowItWorks';
+import FAQ from '@/components/FAQ';
+import WhatsAppIcon from '@/components/WhatsAppIcon';
+import { ShieldCheck, AlertTriangle, Ban } from 'lucide-react';
 
 interface Props {
   searchParams: Promise<{ src?: string }>;
@@ -13,16 +19,10 @@ export default async function Home({ searchParams }: Props) {
       {/* Nav */}
       <nav className="px-6 py-5 flex items-center justify-between max-w-6xl mx-auto">
         <div className="flex items-center gap-1">
-          <span
-            className="font-display font-bold text-2xl tracking-widest uppercase"
-            style={{ color: '#2C2C2C' }}
-          >
+          <span className="font-display font-bold text-2xl tracking-widest uppercase" style={{ color: '#2C2C2C' }}>
             JOB
           </span>
-          <span
-            className="font-display font-bold text-2xl tracking-widest uppercase"
-            style={{ color: '#1B4D3E' }}
-          >
+          <span className="font-display font-bold text-2xl tracking-widest uppercase" style={{ color: '#1B4D3E' }}>
             ROAD
           </span>
         </div>
@@ -30,12 +30,10 @@ export default async function Home({ searchParams }: Props) {
           href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-xs font-body font-semibold px-4 py-2 rounded-full border-2 transition-all"
-          style={{
-            borderColor: '#1B4D3E',
-            color: '#1B4D3E',
-          }}
+          className="flex items-center gap-2 text-sm font-body font-semibold px-4 py-2 rounded-full border-2 transition-all"
+          style={{ borderColor: '#1B4D3E', color: '#1B4D3E' }}
         >
+          <WhatsAppIcon size={15} />
           WhatsApp Us
         </a>
       </nav>
@@ -46,8 +44,8 @@ export default async function Home({ searchParams }: Props) {
       </div>
 
       {/* Hero */}
-      <section className="max-w-6xl mx-auto px-6 pt-14 pb-10">
-        <div className="flex flex-col gap-4 max-w-2xl">
+      <section className="max-w-6xl mx-auto px-6 pt-14 pb-12">
+        <div className="flex flex-col gap-4 max-w-3xl">
 
           {/* Kicker */}
           <div className="flex items-center gap-3">
@@ -70,10 +68,7 @@ export default async function Home({ searchParams }: Props) {
           </h1>
 
           {/* Sub-headline */}
-          <p
-            className="font-body text-base leading-relaxed max-w-lg"
-            style={{ color: '#6B6B6B' }}
-          >
+          <p className="font-body text-base leading-relaxed max-w-xl" style={{ color: '#6B6B6B' }}>
             Real pathways. No scams. No guesswork. Clear information on how South
             Africans actually get working abroad — from professional nurses to
             seasonal farm workers.
@@ -81,19 +76,19 @@ export default async function Home({ searchParams }: Props) {
 
           {/* CTA hint */}
           <div className="flex items-center gap-2 mt-2">
-            <div
-              className="w-2 h-2 rounded-full"
-              style={{ backgroundColor: '#C9A84C' }}
-            />
-            <span
-              className="font-body text-sm font-medium"
-              style={{ color: '#2C2C2C' }}
-            >
+            <div className="w-2 h-2 rounded-full" style={{ backgroundColor: '#C9A84C' }} />
+            <span className="font-body text-sm font-medium" style={{ color: '#2C2C2C' }}>
               Pick your field below — WhatsApp opens automatically.
             </span>
           </div>
         </div>
       </section>
+
+      {/* Stat strip */}
+      <StatStrip />
+
+      {/* How it works */}
+      <HowItWorks />
 
       {/* Interest Selector */}
       <section className="px-6 py-14" style={{ backgroundColor: '#EDE8E0' }}>
@@ -108,63 +103,79 @@ export default async function Home({ searchParams }: Props) {
             <div className="flex-1 h-px" style={{ backgroundColor: '#C9A84C', opacity: 0.4 }} />
           </div>
           <InterestGrid source={src} />
-          <p
-            className="font-body text-xs mt-6 text-center"
-            style={{ color: '#6B6B6B' }}
-          >
+          <p className="font-body text-xs mt-6 text-center" style={{ color: '#6B6B6B' }}>
             Tap a tile — WhatsApp opens with your selection pre-filled.
           </p>
         </div>
       </section>
 
-      {/* Trust band — dark green */}
-      <section
-        className="px-6 py-14"
-        style={{ backgroundColor: '#1B4D3E' }}
-      >
-        <div className="max-w-4xl mx-auto text-center">
-          <p
-            className="font-display font-bold uppercase text-2xl md:text-3xl leading-tight mb-4"
-            style={{ color: '#F8F5F0' }}
-          >
-            Know what&apos;s real before<br />you pay anyone anything.
-          </p>
-          <p
-            className="font-body text-sm leading-relaxed max-w-lg mx-auto"
-            style={{ color: '#C9A84C' }}
-          >
-            Every pathway we share is verified against official government sources —
-            UK Home Office, State Department, Australian Home Affairs. We help you
-            understand your options, not sell you false hope.
-          </p>
+      {/* Trust band — dark green, upgraded pillars */}
+      <section className="px-6 py-16" style={{ backgroundColor: '#1B4D3E' }}>
+        <div className="max-w-6xl mx-auto">
 
-          {/* Three pillars */}
-          <div className="grid grid-cols-3 gap-6 mt-10 max-w-lg mx-auto">
+          {/* Headline */}
+          <div className="text-center mb-12">
+            <p
+              className="font-display font-bold uppercase leading-tight"
+              style={{ fontSize: 'clamp(1.8rem, 5vw, 3rem)', color: '#F8F5F0' }}
+            >
+              Know what&apos;s real before<br />you pay anyone anything.
+            </p>
+            <p className="font-body text-sm leading-relaxed max-w-lg mx-auto mt-4" style={{ color: 'rgba(248,245,240,0.7)' }}>
+              Every pathway we share is verified against official government sources —
+              UK Home Office, US State Department, Australian Home Affairs.
+            </p>
+          </div>
+
+          {/* Upgraded pillars */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
-              { icon: '✓', label: 'Official sources only' },
-              { icon: '✓', label: 'Scam warnings included' },
-              { icon: '✓', label: 'No placement fees' },
-            ].map((item) => (
-              <div key={item.label} className="flex flex-col items-center gap-2">
-                <span
-                  className="font-display font-bold text-lg"
-                  style={{ color: '#C9A84C' }}
-                >
-                  {item.icon}
-                </span>
-                <span
-                  className="font-body text-xs leading-snug"
-                  style={{ color: '#F8F5F0' }}
-                >
-                  {item.label}
-                </span>
+              {
+                Icon: ShieldCheck,
+                title: 'Official sources only',
+                body: 'Every claim links to GOV.UK, State Department, Home Affairs, or equivalent official government portals. No blog posts. No hearsay.',
+              },
+              {
+                Icon: AlertTriangle,
+                title: 'Scam warnings included',
+                body: 'Each pathway guide includes a red-flag checklist of known scam patterns — fake recruiters, upfront fee fraud, and fraudulent job offers.',
+              },
+              {
+                Icon: Ban,
+                title: 'No placement fees. Ever.',
+                body: 'We charge for information, not for placing you in a job. It is illegal in South Africa to charge job seekers placement fees — and we never do.',
+              },
+            ].map(({ Icon, title, body }) => (
+              <div
+                key={title}
+                className="flex flex-col gap-4 p-6 rounded-2xl"
+                style={{ backgroundColor: 'rgba(248,245,240,0.06)', border: '1px solid rgba(248,245,240,0.12)' }}
+              >
+                <Icon size={28} color="#C9A84C" strokeWidth={1.5} />
+                <div>
+                  <p
+                    className="font-display font-bold uppercase text-sm tracking-wide mb-2"
+                    style={{ color: '#F8F5F0' }}
+                  >
+                    {title}
+                  </p>
+                  <p className="font-body text-sm leading-relaxed" style={{ color: 'rgba(248,245,240,0.65)' }}>
+                    {body}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Lost link + footer */}
+      {/* Country stats */}
+      <CountryStats />
+
+      {/* FAQ */}
+      <FAQ />
+
+      {/* Lost link recovery */}
       <section className="px-6 py-8 text-center" style={{ backgroundColor: '#EDE8E0' }}>
         <p className="font-body text-sm" style={{ color: '#6B6B6B' }}>
           Already paid? Lost your access link?{' '}
@@ -180,15 +191,28 @@ export default async function Home({ searchParams }: Props) {
         </p>
       </section>
 
-      <footer className="px-6 py-6 text-center" style={{ backgroundColor: '#2C2C2C' }}>
-        <p className="font-display font-bold uppercase tracking-widest text-sm mb-2" style={{ color: '#C9A84C' }}>
+      {/* Footer */}
+      <footer className="px-6 py-10 text-center" style={{ backgroundColor: '#2C2C2C' }}>
+        <p className="font-display font-bold uppercase tracking-widest text-sm mb-1" style={{ color: '#C9A84C' }}>
           JOBROAD
         </p>
-        <p className="font-body text-xs leading-relaxed" style={{ color: '#6B6B6B' }}>
+        <p className="font-body text-xs mb-4" style={{ color: 'rgba(248,245,240,0.4)' }}>
+          Based in South Africa
+        </p>
+        <a
+          href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-body text-xs font-semibold"
+          style={{ color: '#C9A84C' }}
+        >
+          WhatsApp: {process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}
+        </a>
+        <p className="font-body text-xs leading-relaxed mt-4" style={{ color: '#6B6B6B' }}>
           We are an information service and CV toolkit. We do not place candidates or act as recruiters.
           We do not guarantee employment.
         </p>
-        <p className="mt-2">
+        <p className="mt-3">
           <a href="/privacy" className="font-body text-xs underline" style={{ color: '#6B6B6B' }}>
             Privacy Policy
           </a>

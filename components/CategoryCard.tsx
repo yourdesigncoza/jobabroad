@@ -45,7 +45,7 @@ export default function CategoryCard({ category, href }: Props) {
 
         {/* Description */}
         <span
-          className="card-desc font-body text-xs leading-snug"
+          className="card-desc font-body text-xs leading-relaxed"
           style={{ color: 'rgba(248,245,240,0.6)' }}
         >
           {category.description}
@@ -60,7 +60,7 @@ export default function CategoryCard({ category, href }: Props) {
               style={{
                 backgroundColor: 'rgba(201,168,76,0.2)',
                 color: '#C9A84C',
-                fontSize: '9px',
+                fontSize: '13px',
               }}
             >
               {dest}
