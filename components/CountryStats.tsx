@@ -4,7 +4,7 @@ const COUNTRIES = [
     name: 'United Kingdom',
     stat: '39,000+',
     label: 'NHS vacancies open right now',
-    detail: 'SA nurses up 4× in 4 years — £28K–£60K starting',
+    detail: 'SA nurse registrations have quadrupled in 4 years — £28K–£60K starting',
     roles: ['Nurses', 'Teachers', 'Seasonal', 'Trades'],
     source: 'NHS England / NMC',
   },
@@ -13,8 +13,8 @@ const COUNTRIES = [
     name: 'Ireland',
     stat: '1,631',
     label: 'SA critical skills permits in 2024',
-    detail: 'SA is 6th largest source globally — Google & Amazon both hiring',
-    roles: ['IT & Tech', 'Engineering', 'Finance', 'Healthcare'],
+    detail: 'SA is among the top source countries globally. IT, engineering and healthcare are in demand.',
+    roles: ['IT & Tech', 'Engineering', 'Healthcare'],
     source: 'Dept. Enterprise Ireland',
   },
   {
@@ -22,7 +22,7 @@ const COUNTRIES = [
     name: 'Germany',
     stat: '639,000',
     label: 'open job vacancies (Feb 2025)',
-    detail: 'Opportunity Card launched — 11,497 issued in first year',
+    detail: 'Opportunity Card launched — over 11,000 issued in its first year',
     roles: ['Engineering', 'IT', 'Healthcare', 'Trades'],
     source: 'German Economic Institute (IW)',
   },
@@ -31,7 +31,7 @@ const COUNTRIES = [
     name: 'Australia',
     stat: '456 roles',
     label: 'on the Core Skills Occupation List',
-    detail: 'SA engineers fast-tracked via Sydney & Dublin Accord',
+    detail: 'Several routes are open to SA applicants in healthcare, engineering and trades.',
     roles: ['Healthcare', 'Engineering', 'Farming', 'IT'],
     source: 'Home Affairs Australia',
   },
@@ -40,8 +40,8 @@ const COUNTRIES = [
     name: 'UAE',
     stat: 'Year-round',
     label: 'expat demand in 5+ sectors',
-    detail: 'Dubai & Abu Dhabi — healthcare, hospitality & finance hubs',
-    roles: ['Hospitality', 'Healthcare', 'Finance', 'Trades'],
+    detail: 'Dubai & Abu Dhabi — healthcare, hospitality & trades hubs',
+    roles: ['Hospitality', 'Healthcare', 'Trades'],
     source: 'UAE Ministry of HR',
   },
   {
@@ -49,7 +49,7 @@ const COUNTRIES = [
     name: 'Canada',
     stat: '48,000+',
     label: 'SAICA members eligible for CPA Canada',
-    detail: 'Mutual recognition agreement — no full re-qualification',
+    detail: 'Mutual recognition agreement — credential assessment varies by province',
     roles: ['Accounting', 'Engineering', 'IT', 'Healthcare'],
     source: 'SAICA / CPA Canada MRA',
   },
@@ -58,7 +58,7 @@ const COUNTRIES = [
     name: 'New Zealand',
     stat: '70,000+',
     label: 'South Africans already living there',
-    detail: 'Green List: nurses & engineers go straight to residence',
+    detail: 'Green List: nurses & engineers may qualify for faster residence — if requirements are met',
     roles: ['Nursing', 'Engineering', 'Farming', 'IT'],
     source: 'UN DESA / Immigration NZ',
   },
@@ -67,7 +67,7 @@ const COUNTRIES = [
     name: 'United States',
     stat: 'J1 Visa',
     label: 'seasonal & exchange work every year',
-    detail: 'Farm work, carnival, summer camps — legal & structured',
+    detail: 'Farm work, carnival, summer camps — legal route for eligible young South Africans',
     roles: ['Farm work', 'Carnival', 'Hospitality', 'Camps'],
     source: 'US State Department',
   },
@@ -86,21 +86,20 @@ export default function CountryStats() {
               className="font-display text-xs font-semibold uppercase tracking-[0.2em]"
               style={{ color: '#C9A84C' }}
             >
-              Verified demand
+              Real demand
             </span>
           </div>
           <h2
             className="font-display font-bold uppercase leading-tight"
             style={{ fontSize: 'clamp(1.6rem, 4vw, 2.4rem)', color: '#2C2C2C' }}
           >
-            Where South Africans<br className="hidden sm:block" /> are working right now.
+            Where South Africans<br className="hidden sm:block" /> are finding work abroad.
           </h2>
           <p
             className="font-body text-sm max-w-lg mt-2"
             style={{ color: '#6B6B6B' }}
           >
-            Real programmes. Real numbers. Every country below has an active, legal
-            route available to South Africans today — backed by official sources.
+            These countries have legal work or migration routes South Africans commonly explore. Always check official requirements before applying or paying anyone.
           </p>
         </div>
 
@@ -139,10 +138,7 @@ export default function CountryStats() {
               <div>
                 <p
                   className="font-display font-bold leading-none"
-                  style={{
-                    fontSize: 'clamp(1.5rem, 3vw, 2rem)',
-                    color: '#1B4D3E',
-                  }}
+                  style={{ fontSize: 'clamp(1.1rem, 2.5vw, 1.4rem)', color: '#1B4D3E' }}
                 >
                   {country.stat}
                 </p>
@@ -181,7 +177,7 @@ export default function CountryStats() {
               {/* Source */}
               <p
                 className="font-body"
-                style={{ fontSize: '13px', color: '#B0B0B0' }}
+                style={{ fontSize: '11px', color: '#B0B0B0' }}
               >
                 Source: {country.source}
               </p>

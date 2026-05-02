@@ -48,7 +48,7 @@ export default async function Home({ searchParams }: Props) {
               className="font-display text-xs font-semibold uppercase tracking-[0.2em]"
               style={{ color: '#ff751f' }}
             >
-              Before you pay a recruiter, check the pathway first.
+              Before you pay a recruiter, get the facts first.
             </span>
           </div>
 
@@ -96,7 +96,7 @@ export default async function Home({ searchParams }: Props) {
           </div>
           <InterestGrid source={src} />
           <p className="font-body text-xs mt-6 text-center" style={{ color: '#6B6B6B' }}>
-            First conversation is free. Work Abroad Playbook available for R199.
+            First chat is free. Get the full Playbook for R199.
           </p>
         </div>
       </section>
@@ -119,7 +119,7 @@ export default async function Home({ searchParams }: Props) {
           <div className="flex flex-col items-center gap-6 max-w-2xl mx-auto">
 
             <p className="font-body text-sm leading-relaxed text-center" style={{ color: 'rgba(248,245,240,0.7)' }}>
-              Everything we tell you comes straight from official government websites — UK Home Office, US State Department, Australian Home Affairs. Not WhatsApp groups. Not word of mouth. Not an agent guessing.
+              Everything we tell you comes straight from official government websites: UK Home Office, US State Department, Australian Home Affairs. Not WhatsApp groups. Not word of mouth. Not an agent guessing.
             </p>
 
             <div className="w-16 h-px" style={{ backgroundColor: '#C9A84C' }} />
@@ -128,7 +128,7 @@ export default async function Home({ searchParams }: Props) {
               className="font-body font-semibold leading-relaxed text-center"
               style={{ fontSize: 'clamp(1rem, 2vw, 1.2rem)', color: '#C9A84C' }}
             >
-              Our R199 Work Abroad Playbook is the only thing you&apos;ll ever pay us for. No monthly fees, no hidden costs — and no fake recruiter taking R5,000 from you.
+              Our R199 Work Abroad Playbook is the only thing you&apos;ll ever pay us for. No monthly fees, no hidden costs. No fake recruiter taking R5,000 from you.
             </p>
 
           </div>
@@ -174,8 +174,7 @@ export default async function Home({ searchParams }: Props) {
               WhatsApp Us
             </a>
             <p className="font-body text-sm leading-relaxed" style={{ color: '#F8F5F0' }}>
-              We are an information service and CV toolkit. We do not place candidates or act as recruiters.
-              We do not guarantee employment.
+              We&apos;re an information service. We don&apos;t place candidates, act as recruiters or guarantee employment.
             </p>
             <a href="/privacy" className="font-body text-sm underline" style={{ color: '#F8F5F0' }}>
               Privacy Policy

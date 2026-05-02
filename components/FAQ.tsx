@@ -10,31 +10,31 @@ const PILLARS = [
   {
     Icon: AlertTriangle,
     title: 'Scam warnings included',
-    body: 'Each pathway guide includes a red-flag checklist of known scam patterns — fake recruiters, upfront fee fraud, and fraudulent job offers.',
+    body: 'Each Playbook includes a red-flag checklist of known scam patterns: fake recruiters, upfront fee fraud, fraudulent job offers.',
   },
   {
     Icon: Ban,
     title: 'No placement fees. Ever.',
-    body: 'We charge for information, not for placing you in a job. It is illegal in South Africa to charge job seekers placement fees — and we never do.',
+    body: 'We charge for information, not for placing you in a job. Charging job seekers placement fees is illegal in South Africa. We never do.',
   },
 ] as const;
 
 const QUESTIONS = [
   {
     q: 'What do I get for R199?',
-    a: 'You get our Work Abroad Playbook for your chosen field — researched, up to date, and built around the questions scam recruiters hope you never ask. Includes destination options, step-by-step document checklist, realistic costs, visa route overview, scam red flags, and legitimate contacts. Plus a CV template and personal WhatsApp feedback.',
+    a: 'You get our Work Abroad Playbook for your field — researched, up to date and built around the questions scam recruiters hope you never ask. Inside: destination options, document checklist, realistic costs, visa route overview, scam red flags and legitimate contacts. Plus a CV template and direct WhatsApp feedback.',
   },
   {
     q: 'Are you a recruitment agency?',
-    a: 'No. We are an information service and CV toolkit. We provide verified pathway information — we do not place candidates, charge placement fees, or guarantee employment. This is explicitly stated on every page.',
+    a: "No. We're an information service. We provide clear information from official sources. We don't place candidates, charge placement fees or guarantee employment.",
   },
   {
     q: 'Is this legal in South Africa?',
-    a: 'Yes. We operate as an information service under South African law and comply with POPIA (Protection of Personal Information Act). We are not required to register as a private employment agency because we do not place candidates or earn referral fees from employers.',
+    a: "Yes. We operate under South African law and comply with POPIA (Protection of Personal Information Act). We're not required to register as a recruitment agency — we don't place candidates or earn referral fees.",
   },
   {
     q: "What if my job type isn't listed?",
-    a: "Tap the \"Other\" tile — WhatsApp opens and you can tell us exactly what you do. We'll let you know honestly whether a realistic overseas route exists for your situation.",
+    a: "Tap the \"Other\" tile. WhatsApp opens and you can tell us exactly what you do. We'll tell you straight whether a real overseas route exists for your field.",
   },
 ] as const;
 
@@ -120,7 +120,7 @@ export default function FAQ() {
               Still have a question?
             </p>
             <p className="font-body text-xs mt-1" style={{ color: 'rgba(248,245,240,0.65)' }}>
-              WhatsApp us directly — we reply to every message.
+              WhatsApp us. We reply to every message.
             </p>
           </div>
           <a

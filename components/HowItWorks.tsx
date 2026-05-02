@@ -3,20 +3,20 @@ const STEPS = [
     number: "1",
     title: "Pick your field",
     description:
-      "Tap a category tile. WhatsApp opens with your interest pre-filled — no forms, no sign-up. Just tap and send.",
+      "Tap a category tile. WhatsApp opens with your interest pre-filled. No forms, no sign-up. Just tap and send.",
   },
   {
     number: "2",
     title: "A real conversation",
     description:
-      "We reply with honest, scam-free guidance for your field — which countries are realistic, what it actually costs, and what red flags to watch for.",
+      "We reply with honest, scam-free guidance for your field: which countries are realistic, what it actually costs, and what red flags to watch for.",
   },
 ] as const;
 
 const PLAYBOOK_ITEMS = [
-  "Destination options realistic for your field",
+  "Which destinations are realistic for your field",
   "Step-by-step document checklist",
-  "Realistic costs — visa fees, flights, relocation",
+  "Realistic costs: visa fees, flights, relocation",
   "Current visa route overview",
   "Scam red flags to watch for",
   "Legitimate contacts and official programme links",
