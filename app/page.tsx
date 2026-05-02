@@ -28,7 +28,7 @@ export default async function Home({ searchParams }: Props) {
           style={{ borderColor: '#1B4D3E', color: '#1B4D3E' }}
         >
           <WhatsAppIcon size={15} />
-          WhatsApp Us
+          WhatsApp Me
         </a>
       </nav>
 
@@ -111,15 +111,19 @@ export default async function Home({ searchParams }: Props) {
           {/* Heading — full width */}
           <p
             className="font-display font-bold uppercase leading-tight text-center mb-10"
-            style={{ fontSize: 'clamp(1.8rem, 5vw, 3rem)', color: '#F8F5F0' }}
+            style={{ fontSize: 'clamp(1.6rem, 4vw, 2.4rem)', color: '#F8F5F0' }}
           >
             Know what&apos;s real before<br />you pay a recruiter anything.
           </p>
 
-          <div className="flex flex-col items-center gap-6 max-w-2xl mx-auto">
+          <div className="flex flex-col items-center gap-6 max-w-3xl mx-auto">
 
             <p className="font-body text-sm leading-relaxed text-center" style={{ color: 'rgba(248,245,240,0.7)' }}>
-              Everything we tell you comes straight from official government websites: UK Home Office, US State Department, Australian Home Affairs. Not WhatsApp groups. Not word of mouth. Not an agent guessing.
+              The information comes from official government, regulator, and programme sources. Not WhatsApp rumours. Not word of mouth. Not an agent guessing.
+            </p>
+
+            <p className="font-body leading-relaxed text-center italic" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.25rem)', color: '#F8F5F0' }}>
+              I built Jobabroad because I watched too many South Africans hand money to fake recruiters and get nothing back.
             </p>
 
             <div className="w-16 h-px" style={{ backgroundColor: '#C9A84C' }} />
@@ -128,7 +132,8 @@ export default async function Home({ searchParams }: Props) {
               className="font-body font-semibold leading-relaxed text-center"
               style={{ fontSize: 'clamp(1rem, 2vw, 1.2rem)', color: '#C9A84C' }}
             >
-              Our R199 Work Abroad Playbook is the only thing you&apos;ll ever pay us for. No monthly fees, no hidden costs. No fake recruiter taking R5,000 from you.
+              My R199 Work Abroad Playbook is the only thing you&apos;ll ever pay Jobabroad for.<br />
+              No monthly fees, no hidden costs. No fake recruiter taking R5,000 from you.
             </p>
 
           </div>
@@ -152,7 +157,7 @@ export default async function Home({ searchParams }: Props) {
             className="font-semibold underline"
             style={{ color: '#1B4D3E' }}
           >
-            WhatsApp us and we&apos;ll resend it.
+            WhatsApp me and I&apos;ll resend it.
           </a>
         </p>
       </section>
@@ -171,10 +176,10 @@ export default async function Home({ searchParams }: Props) {
               style={{ backgroundColor: '#C9A84C', color: '#FFFFFF' }}
             >
               <WhatsAppIcon size={16} color="#FFFFFF" />
-              WhatsApp Us
+              WhatsApp Me
             </a>
             <p className="font-body text-sm leading-relaxed" style={{ color: '#F8F5F0' }}>
-              We&apos;re an information service. We don&apos;t place candidates, act as recruiters or guarantee employment.
+              Jobabroad is an information service. I don&apos;t place candidates, act as recruiters or guarantee employment.
             </p>
             <a href="/privacy" className="font-body text-sm underline" style={{ color: '#F8F5F0' }}>
               Privacy Policy

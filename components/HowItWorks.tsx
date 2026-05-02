@@ -9,7 +9,7 @@ const STEPS = [
     number: "2",
     title: "A real conversation",
     description:
-      "We reply with honest, scam-free guidance for your field: which countries are realistic, what it actually costs, and what red flags to watch for.",
+      "I'll reply with honest, scam-free guidance for your field: which countries are realistic, what it actually costs, and what red flags to watch for.",
   },
 ] as const;
 
