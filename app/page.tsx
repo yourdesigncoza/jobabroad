@@ -3,7 +3,6 @@ import CountryStats from '@/components/CountryStats';
 import HowItWorks from '@/components/HowItWorks';
 import FAQ from '@/components/FAQ';
 import WhatsAppIcon from '@/components/WhatsAppIcon';
-import { ShieldCheck, AlertTriangle, Ban } from 'lucide-react';
 
 interface Props {
   searchParams: Promise<{ src?: string }>;
@@ -83,9 +82,6 @@ export default async function Home({ searchParams }: Props) {
         </div>
       </section>
 
-      {/* How it works */}
-      <HowItWorks />
-
       {/* Interest Selector */}
       <section className="px-6 py-14" style={{ backgroundColor: '#EDE8E0' }}>
         <div className="max-w-6xl mx-auto">
@@ -94,82 +90,56 @@ export default async function Home({ searchParams }: Props) {
               className="font-display font-bold uppercase text-lg tracking-[0.12em]"
               style={{ color: '#1B4D3E' }}
             >
-              Where do you want to go?
+              What's your field?
             </h2>
             <div className="flex-1 h-px" style={{ backgroundColor: '#C9A84C', opacity: 0.4 }} />
           </div>
           <InterestGrid source={src} />
           <p className="font-body text-xs mt-6 text-center" style={{ color: '#6B6B6B' }}>
-            Tap a tile — WhatsApp opens with your selection pre-filled.
+            First conversation is free. Work Abroad Playbook available for R199.
           </p>
         </div>
       </section>
 
-      {/* Trust band — dark green, upgraded pillars */}
+      {/* How it works */}
+      <HowItWorks />
+
+      {/* Trust band */}
       <section className="px-6 py-16" style={{ backgroundColor: '#1B4D3E' }}>
         <div className="max-w-6xl mx-auto">
 
-          {/* Headline */}
-          <div className="text-center mb-12">
-            <p
-              className="font-display font-bold uppercase leading-tight"
-              style={{ fontSize: 'clamp(1.8rem, 5vw, 3rem)', color: '#F8F5F0' }}
-            >
-              Know what&apos;s real before<br />you pay anyone anything.
-            </p>
-            <p className="font-body text-sm leading-relaxed max-w-lg mx-auto mt-4" style={{ color: 'rgba(248,245,240,0.7)' }}>
-              Every pathway we share is verified against official government sources —
-              UK Home Office, US State Department, Australian Home Affairs.
-            </p>
-          </div>
+          {/* Heading — full width */}
+          <p
+            className="font-display font-bold uppercase leading-tight text-center mb-10"
+            style={{ fontSize: 'clamp(1.8rem, 5vw, 3rem)', color: '#F8F5F0' }}
+          >
+            Know what&apos;s real before<br />you pay a recruiter anything.
+          </p>
 
-          {/* Upgraded pillars */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              {
-                Icon: ShieldCheck,
-                title: 'Official sources only',
-                body: 'Every claim links to GOV.UK, State Department, Home Affairs, or equivalent official government portals. No blog posts. No hearsay.',
-              },
-              {
-                Icon: AlertTriangle,
-                title: 'Scam warnings included',
-                body: 'Each pathway guide includes a red-flag checklist of known scam patterns — fake recruiters, upfront fee fraud, and fraudulent job offers.',
-              },
-              {
-                Icon: Ban,
-                title: 'No placement fees. Ever.',
-                body: 'We charge for information, not for placing you in a job. It is illegal in South Africa to charge job seekers placement fees — and we never do.',
-              },
-            ].map(({ Icon, title, body }) => (
-              <div
-                key={title}
-                className="flex flex-col gap-4 p-6 rounded-2xl"
-                style={{ backgroundColor: 'rgba(248,245,240,0.06)', border: '1px solid rgba(248,245,240,0.12)' }}
-              >
-                <Icon size={28} color="#C9A84C" strokeWidth={1.5} />
-                <div>
-                  <p
-                    className="font-display font-bold uppercase text-sm tracking-wide mb-2"
-                    style={{ color: '#F8F5F0' }}
-                  >
-                    {title}
-                  </p>
-                  <p className="font-body text-sm leading-relaxed" style={{ color: 'rgba(248,245,240,0.65)' }}>
-                    {body}
-                  </p>
-                </div>
-              </div>
-            ))}
+          <div className="flex flex-col items-center gap-6 max-w-2xl mx-auto">
+
+            <p className="font-body text-sm leading-relaxed text-center" style={{ color: 'rgba(248,245,240,0.7)' }}>
+              Everything we tell you comes straight from official government websites — UK Home Office, US State Department, Australian Home Affairs. Not WhatsApp groups. Not word of mouth. Not an agent guessing.
+            </p>
+
+            <div className="w-16 h-px" style={{ backgroundColor: '#C9A84C' }} />
+
+            <p
+              className="font-body font-semibold leading-relaxed text-center"
+              style={{ fontSize: 'clamp(1rem, 2vw, 1.2rem)', color: '#C9A84C' }}
+            >
+              Our R199 Work Abroad Playbook is the only thing you&apos;ll ever pay us for. No monthly fees, no hidden costs — and no fake recruiter taking R5,000 from you.
+            </p>
+
           </div>
         </div>
       </section>
 
-      {/* Country stats */}
-      <CountryStats />
-
       {/* FAQ */}
       <FAQ />
+
+      {/* Country stats */}
+      <CountryStats />
 
       {/* Lost link recovery */}
       <section className="px-6 py-8 text-center" style={{ backgroundColor: '#EDE8E0' }}>

@@ -1,13 +1,32 @@
 import WhatsAppIcon from './WhatsAppIcon';
+import { ShieldCheck, AlertTriangle, Ban } from 'lucide-react';
+
+const PILLARS = [
+  {
+    Icon: ShieldCheck,
+    title: 'Official sources only',
+    body: 'Every claim links to GOV.UK, State Department, Home Affairs, or equivalent official government portals. No blog posts. No hearsay.',
+  },
+  {
+    Icon: AlertTriangle,
+    title: 'Scam warnings included',
+    body: 'Each pathway guide includes a red-flag checklist of known scam patterns — fake recruiters, upfront fee fraud, and fraudulent job offers.',
+  },
+  {
+    Icon: Ban,
+    title: 'No placement fees. Ever.',
+    body: 'We charge for information, not for placing you in a job. It is illegal in South Africa to charge job seekers placement fees — and we never do.',
+  },
+] as const;
 
 const QUESTIONS = [
   {
-    q: 'Are you a recruitment agency?',
-    a: 'No. We are an information service and CV toolkit. We provide verified pathway information — we do not place candidates, charge placement fees, or guarantee employment. This is explicitly stated on every page.',
+    q: 'What do I get for R199?',
+    a: 'You get our Work Abroad Playbook for your chosen field — researched, up to date, and built around the questions scam recruiters hope you never ask. Includes destination options, step-by-step document checklist, realistic costs, visa route overview, scam red flags, and legitimate contacts. Plus a CV template and personal WhatsApp feedback.',
   },
   {
-    q: 'What do I get for R199?',
-    a: 'A full pathway guide for your chosen field: destination options, step-by-step document checklist, realistic costs, current visa route overview, scam red flags, and legitimate programme contacts. Plus CV upload and a downloadable CV template you can fill in on your phone.',
+    q: 'Are you a recruitment agency?',
+    a: 'No. We are an information service and CV toolkit. We provide verified pathway information — we do not place candidates, charge placement fees, or guarantee employment. This is explicitly stated on every page.',
   },
   {
     q: 'Is this legal in South Africa?',
@@ -41,6 +60,30 @@ export default function FAQ() {
           >
             Straight answers.
           </h2>
+        </div>
+
+        {/* Trust pillars */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+          {PILLARS.map(({ Icon, title, body }) => (
+            <div
+              key={title}
+              className="flex flex-col gap-4 p-6 rounded-2xl"
+              style={{ backgroundColor: '#FFFFFF', border: '1.5px solid #EDE8E0' }}
+            >
+              <Icon size={28} color="#ff751f" strokeWidth={1.5} />
+              <div>
+                <p
+                  className="font-display font-bold uppercase text-sm tracking-wide mb-2"
+                  style={{ color: '#2C2C2C' }}
+                >
+                  {title}
+                </p>
+                <p className="font-body text-sm leading-relaxed" style={{ color: '#6B6B6B' }}>
+                  {body}
+                </p>
+              </div>
+            </div>
+          ))}
         </div>
 
         {/* Q&A grid */}

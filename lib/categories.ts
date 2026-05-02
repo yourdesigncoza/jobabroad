@@ -28,11 +28,11 @@ export const CATEGORIES = [
     destinations: ['UK', 'AUS', 'UAE'],
   },
   {
-    id: 'finance',
-    label: 'Finance',
-    emoji: '💼',
-    description: 'Accountants, analysts, banking',
-    destinations: ['UK', 'AUS', 'CA'],
+    id: 'remote-work',
+    label: 'Remote Work',
+    emoji: '🌐',
+    description: 'Teaching abroad, online roles, e.g. China',
+    destinations: ['Worldwide'],
   },
   {
     id: 'farming',

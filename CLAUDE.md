@@ -2,6 +2,38 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working in this repository.
 
+## ⚠️ NEXT SESSION — START HERE
+
+**Build `lib/pathway-content.ts` + `app/members/[token]/page.tsx`**
+
+The R199 product is not yet built. The target reader is NOT thinking "pathway" —
+they are thinking:
+
+- How do I actually get there?
+- What papers do I need?
+- How much will it cost me?
+- Who do I contact?
+- Will I get scammed?
+
+Each category guide must answer all five. Structure per guide:
+1. Destination options (which countries are realistic for this field)
+2. Step-by-step document checklist
+3. Realistic costs (visa fees, flights, relocation estimate)
+4. Current visa route overview
+5. Scam red flags specific to this field
+6. Legitimate programme contacts / official links
+
+**Decision needed before building:** what format is the guide?
+- A structured page on the members site (preferred — easy to update)
+- A downloadable PDF
+- Both
+
+Also: update step 3 copy in `components/HowItWorks.tsx` — replace
+"unlock your complete pathway guide" with language that mirrors the
+five questions above.
+
+---
+
 @AGENTS.md
 
 ## Commands
