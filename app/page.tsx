@@ -21,7 +21,7 @@ export default async function Home({ searchParams }: Props) {
           <span className="font-body font-bold" style={{ color: '#ff751f' }}>abroad</span>
         </div>
         <a
-          href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}`}
+          href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}?text=${encodeURIComponent("Hi, I'm interested in working abroad. Can you help me?")}`}
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-2 text-sm font-body font-semibold px-4 py-2 rounded-full border-2 transition-all"
@@ -164,13 +164,14 @@ export default async function Home({ searchParams }: Props) {
           {/* Left — contact + legal */}
           <div className="flex flex-col gap-4">
             <a
-              href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}`}
+              href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}?text=${encodeURIComponent("Hi, I'm interested in working abroad. Can you help me?")}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="font-body text-base font-semibold"
-              style={{ color: '#C9A84C' }}
+              className="flex items-center gap-2 font-body font-semibold text-sm px-5 py-3 rounded-full self-start transition-all"
+              style={{ backgroundColor: '#C9A84C', color: '#FFFFFF' }}
             >
-              WhatsApp: {process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}
+              <WhatsAppIcon size={16} color="#FFFFFF" />
+              WhatsApp Us
             </a>
             <p className="font-body text-sm leading-relaxed" style={{ color: '#F8F5F0' }}>
               We are an information service and CV toolkit. We do not place candidates or act as recruiters.
