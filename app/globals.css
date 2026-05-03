@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 @theme inline {
   --color-green:        #1B4D3E;
@@ -76,4 +77,26 @@ h1, h2, h3, h4 {
 
 .icon-wrap svg {
   transition: transform 0.2s ease;
+}
+
+/* Members page — prose table cell padding */
+.prose table th,
+.prose table td {
+  padding-left: 1rem !important;
+  padding-right: 0.75rem !important;
+}
+
+.prose table th {
+  padding-top: 0.75rem !important;
+  padding-bottom: 0.75rem !important;
+}
+
+/* Members page — tables scroll horizontally on mobile */
+.prose .table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.prose .table-scroll table {
+  min-width: 1000px;
 }

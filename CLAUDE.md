@@ -2,35 +2,69 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working in this repository.
 
+## External Links — STRICT RULE
+
+**All external links must open in a new tab.** Never navigate the user away from the app.
+
+- In React/JSX: always include `target="_blank" rel="noopener noreferrer"` on every `<a>` that points outside the app
+- In markdown rendered via `marked`: the custom renderer in `lib/pathway-content.ts` handles this automatically — do not remove it
+- This applies everywhere: member pages, landing page, admin page, any future pages
+
 ## ⚠️ NEXT SESSION — START HERE
 
-**Build `lib/pathway-content.ts` + `app/members/[token]/page.tsx`**
+**Member page (`/members/[token]`) is built and working end-to-end.**
 
-The R199 product is not yet built. The target reader is NOT thinking "pathway" —
-they are thinking:
+### What's done
+- `content/pathways/healthcare.md` — full nurses guide (6 sections, Gemini-reviewed)
+- `lib/pathway-content.ts` — reads markdown, renders to sanitized HTML, extracts TOC from h2 headings
+- `app/members/[token]/page.tsx` — token-gated page: two-column desktop (sticky TOC left, article right), single column mobile (TOC below article)
+- `components/TableOfContents.tsx` — active-section highlighting via IntersectionObserver, collapse toggle
+- `components/CVSection.tsx` — CV template download + file upload
+- `app/api/cv/upload/route.ts` — uploads to Supabase `cvs` bucket
+- `public/cv-template.docx` — basic CV template (8 sections, colour-coded)
+- Supabase schema applied + `cvs` bucket created ✅
+- All external links open in new tab (enforced in marked renderer + CLAUDE.md rule)
 
-- How do I actually get there?
-- What papers do I need?
-- How much will it cost me?
-- Who do I contact?
-- Will I get scammed?
+### UI state (polish in progress)
+- Table cell padding ✅
+- Table horizontal scroll on mobile (min-width 1000px) ✅
+- Page width widened to `max-w-6xl` ✅
+- "My CV" anchor link in top nav ✅
 
-Each category guide must answer all five. Structure per guide:
-1. Destination options (which countries are realistic for this field)
-2. Step-by-step document checklist
-3. Realistic costs (visa fees, flights, relocation estimate)
-4. Current visa route overview
-5. Scam red flags specific to this field
-6. Legitimate programme contacts / official links
+### What to do next
+- Continue UI polish on the member page (typography, spacing, mobile feel)
+- Review the CV template and refine it
+- Test full flow end-to-end on mobile
+- Eventually: build guides for other categories (IT/tech, engineering, teaching, accounting)
 
-**Decision needed before building:** what format is the guide?
-- A structured page on the members site (preferred — easy to update)
-- A downloadable PDF
-- Both
+### Test token (healthcare, local dev)
+`http://localhost:3000/members/3c625e74-5f85-4d61-844b-3087a8e27ed8`
 
-Also: update step 3 copy in `components/HowItWorks.tsx` — replace
-"unlock your complete pathway guide" with language that mirrors the
-five questions above.
+All 6 nursing vaults are complete (separate vaults per prompt):
+- `wa-nursing-01-destinations` — 45 notes, 686 nodes
+- `wa-nursing-02-documents` — 34 notes, 330 nodes
+- `wa-nursing-03-costs` — 47 notes, 525 nodes
+- `wa-nursing-04-visa-routes` — 28 notes, 534 nodes
+- `wa-nursing-05-scams` — 25 notes, 514 nodes
+- `wa-nursing-06-contacts` — 45 notes, 531 nodes
+
+**Guide status:** `docs/guides/healthcare-nurses.md`
+- [x] Section 1 — Destination Options (Gemini reviewed + approved)
+- [x] Section 2 — Document Checklist (Gemini reviewed + approved)
+- [x] Section 3 — Realistic Costs (Gemini reviewed + corrections applied)
+- [x] Section 4 — Visa Route Overview (Gemini reviewed + corrections applied)
+- [x] Section 5 — Scam Red Flags (Gemini reviewed + corrections applied)
+- [x] Section 6 — Legitimate Contacts (Gemini reviewed + corrections applied)
+
+**Section 4 key facts confirmed (do not re-debate):**
+- NZ OSCE: old CAP deprecated Dec 2023; replaced by OSCE (2-day + 3hr exam, Christchurch) NZ$3,000–3,500; SA nurses should expect it (non-comparable jurisdiction)
+- NZ CGFNS: USD$300 (CGFNS) + USD$380 (CVS-NCNZ) — replaces RNZCUS from mid-2025
+- AHPRA OBA pathway DOES include an OSCE (AUD$3,000–3,500); Pathway 2 eliminates it for UK-first nurses
+- UK: SA NOT on UKVI English exempt list; NMC Option 1 (training-in-English evidence) may avoid IELTS/OET
+- IHS waiver is for HCW visa holder only — dependants pay full IHS
+- CSIT AUD$76,515 is subject to annual July indexation
+
+**After guide complete:** build `lib/pathway-content.ts` + `app/members/[token]/page.tsx` + Supabase schema.
 
 ---
 
