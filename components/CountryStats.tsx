@@ -1,4 +1,15 @@
-const COUNTRIES = [
+type Country = {
+  flag: string
+  name: string
+  stat: string
+  label: string
+  detail: string
+  roles: readonly string[]
+  source: string
+  popular?: boolean
+}
+
+const COUNTRIES: Country[] = [
   {
     flag: '🇬🇧',
     name: 'United Kingdom',
