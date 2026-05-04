@@ -53,7 +53,7 @@ export default function StickyNav({ items, whatsappNumber }: Props) {
       <div className="px-6 py-3 flex items-center justify-between">
         <a href="/" className="flex items-center text-[1.4em]">
           <span className="font-body font-bold" style={{ color: '#F8F5F0' }}>job</span>
-          <span className="font-body font-bold" style={{ color: '#C9A84C' }}>abroad</span>
+          <span className="font-body font-bold" style={{ color: '#ff751f' }}>abroad</span>
         </a>
         <a
           href={`https://wa.me/${whatsappNumber}`}
@@ -72,18 +72,25 @@ export default function StickyNav({ items, whatsappNumber }: Props) {
           className="lg:hidden px-6 py-2 flex items-center justify-between gap-3"
           style={{ backgroundColor: '#FFFFFF' }}
         >
-          {activeLabel && (
+          {/* Left: section count on load → active section name when scrolled */}
+          {activeLabel ? (
             <span
-              className="font-body text-xs truncate"
-              style={{ color: '#6B6B6B', minWidth: 0 }}
+              className="font-body text-sm font-bold truncate"
+              style={{ color: '#2C2C2C', minWidth: 0 }}
             >
               {activeLabel}
             </span>
+          ) : (
+            <span className="font-display font-bold uppercase text-xs tracking-wide" style={{ color: '#ff751f' }}>
+              {items.length} sections
+            </span>
           )}
+
+          {/* Right: hamburger only */}
           <button
             onClick={() => setOpen((o) => !o)}
             aria-label={open ? 'Close menu' : 'Open menu'}
-            className="flex flex-col justify-center gap-[5px] w-8 h-8"
+            className="flex flex-col justify-center gap-[5px] w-6 h-8 shrink-0"
           >
             <span style={{ display: 'block', height: 2, backgroundColor: '#2C2C2C', borderRadius: 1, transition: 'transform 0.2s', transform: open ? 'translateY(7px) rotate(45deg)' : 'none' }} />
             <span style={{ display: 'block', height: 2, backgroundColor: '#2C2C2C', borderRadius: 1, transition: 'opacity 0.2s', opacity: open ? 0 : 1 }} />
@@ -106,7 +113,7 @@ export default function StickyNav({ items, whatsappNumber }: Props) {
                   className="w-full text-left px-6 py-4 font-body text-sm"
                   style={{ color: '#2C2C2C' }}
                 >
-                  {text}
+                  {text.split(/\s[—–-]\s/)[0]}
                 </button>
               </li>
             ))}

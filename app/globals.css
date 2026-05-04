@@ -79,7 +79,22 @@ h1, h2, h3, h4 {
   transition: transform 0.2s ease;
 }
 
-/* Members page — prose table cell padding */
+/* Members page — prose table styles */
+.prose {
+  --tw-prose-td-borders: #FFFFFF;
+  --tw-prose-th-borders: #FFFFFF;
+}
+
+.prose table,
+.prose table thead,
+.prose table tbody,
+.prose table tfoot,
+.prose table tr,
+.prose table th,
+.prose table td {
+  border-color: #FFFFFF !important;
+}
+
 .prose table th,
 .prose table td {
   padding-left: 1rem !important;
@@ -95,8 +110,29 @@ h1, h2, h3, h4 {
 .prose .table-scroll {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: #1B4D3E #EDE8E0;
+}
+
+.prose .table-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+
+.prose .table-scroll::-webkit-scrollbar-track {
+  background: #EDE8E0;
+  border-radius: 3px;
+}
+
+.prose .table-scroll::-webkit-scrollbar-thumb {
+  background: #1B4D3E;
+  border-radius: 3px;
 }
 
 .prose .table-scroll table {
   min-width: 1000px;
+}
+
+/* Alternating table rows */
+.prose table tbody tr:nth-child(even) td {
+  background-color: #EDE8E0 !important;
 }

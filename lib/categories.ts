@@ -18,7 +18,7 @@ export const CATEGORIES = [
     label: 'Engineering',
     emoji: '⚙️',
     description: 'Civil, mechanical, electrical',
-    destinations: ['AUS', 'UK', 'IRE', 'CA'],
+    destinations: ['AUS', 'UK', 'IRE', 'CA', 'UAE'],
   },
   {
     id: 'teaching',

@@ -1,7 +1,5 @@
 # SA Registered Nurses: Work Abroad Field Guide
 
-> **Disclaimer:** This is general information about work-abroad pathways for South African registered nurses. It does not constitute immigration advice and is not tailored to your individual circumstances. For advice about your specific situation, consult a licensed immigration adviser or attorney in the relevant country.
-
 *Last updated: May 2026 — visa fees, salary thresholds, and occupation list status change regularly. Date-stamped figures are noted throughout.*
 
 ---
@@ -14,7 +12,7 @@ Your English-language training removes the single biggest barrier that filters o
 
 ---
 
-### Route Status at a Glance *(May 2026)*
+### Route Status at a Glance (May 2026)
 
 | Destination | Status | Dependents | Best for |
 |---|---|---|---|

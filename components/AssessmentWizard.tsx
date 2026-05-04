@@ -117,7 +117,6 @@ export default function AssessmentWizard({
   function handleStartNew() {
     setSubmitted(false);
     setCurrentIndex(0);
-    setValues({});
     setAssessmentId(null);
     setCompletedSlugs([]);
   }

@@ -12,6 +12,7 @@ export interface TocItem {
 export interface PathwayContent {
   html: string;
   toc: TocItem[];
+  readTime: number; // minutes
 }
 
 function slugify(text: string): string {
@@ -70,5 +71,8 @@ export function getPathwayContent(category: string): PathwayContent | null {
     .replace(/<table>/g, '<div class="table-scroll"><table>')
     .replace(/<\/table>/g, '</table></div>');
 
-  return { html, toc: [...toc] };
+  const wordCount = content.replace(/[#*_`\[\]()>-]/g, ' ').split(/\s+/).filter(Boolean).length;
+  const readTime = Math.ceil(wordCount / 220);
+
+  return { html, toc: [...toc], readTime };
 }

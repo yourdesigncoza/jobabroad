@@ -62,16 +62,11 @@ export default async function MembersPage({
               className="hidden lg:block sticky top-20 self-start rounded-2xl p-5"
               style={{ backgroundColor: '#FFFFFF', border: '1.5px solid #EDE8E0' }}
             >
-              <TableOfContents items={pathway.toc} />
+              <TableOfContents items={pathway.toc} assessmentHref={`/members/${token}/assessment`} />
             </aside>
 
             {/* Main content */}
             <div className="flex flex-col gap-10 min-w-0">
-              {pathway.readTime > 0 && (
-                <p className="font-body text-xs" style={{ color: '#9B9B9B' }}>
-                  {pathway.readTime} min read
-                </p>
-              )}
               {/* sanitizeHtml in getPathwayContent ensures this is safe to render */}
               <article
                 className="prose prose-sm sm:prose-base max-w-none
@@ -92,6 +87,12 @@ export default async function MembersPage({
 
               <AssessmentCTA token={token} isSubmitted={assessmentSubmitted} />
 
+              <details className="font-body text-xs pb-2" style={{ color: '#9B9B9B' }}>
+                <summary className="cursor-pointer select-none" style={{ color: '#9B9B9B' }}>Legal disclaimer</summary>
+                <p className="mt-2 leading-relaxed">
+                  This is general information about work-abroad pathways for South African registered nurses. It does not constitute immigration advice and is not tailored to your individual circumstances. For advice about your specific situation, consult a licensed immigration adviser or attorney in the relevant country.
+                </p>
+              </details>
               <footer className="text-center font-body text-xs pb-6" style={{ color: '#6B6B6B' }}>
                 We are an information service. We do not place candidates or act as recruiters. We do not guarantee employment.
               </footer>
