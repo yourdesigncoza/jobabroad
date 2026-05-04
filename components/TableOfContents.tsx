@@ -50,22 +50,27 @@ export default function TableOfContents({ items }: { items: TocItem[] }) {
       {/* Items */}
       {!collapsed && (
         <ul className="flex flex-col gap-0.5">
-          {items.map(({ id, text }) => {
+          {items.map(({ id, text }, index) => {
             const isActive = activeId === id;
+            const activeIndex = items.findIndex((i) => i.id === activeId);
+            const isDone = activeIndex > 0 && index < activeIndex;
             return (
               <li key={id}>
                 <a
                   href={`#${id}`}
-                  className="block font-body text-sm py-1.5 pl-3 rounded-r transition-colors duration-150"
+                  className="flex items-center gap-2 font-body text-sm py-1.5 pl-3 rounded-r transition-colors duration-150"
                   style={{
-                    borderLeft: isActive
-                      ? '3px solid #1B4D3E'
-                      : '3px solid transparent',
-                    color: isActive ? '#1B4D3E' : '#6B6B6B',
+                    borderLeft: isActive ? '3px solid #1B4D3E' : '3px solid transparent',
+                    color: isActive ? '#1B4D3E' : isDone ? '#9B9B9B' : '#6B6B6B',
                     fontWeight: isActive ? 600 : 400,
                     backgroundColor: isActive ? 'rgba(27,77,62,0.06)' : 'transparent',
                   }}
                 >
+                  {isDone && (
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true" style={{ flexShrink: 0 }}>
+                      <path d="M2 6l3 3 5-5" stroke="#9B9B9B" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  )}
                   {text}
                 </a>
               </li>
