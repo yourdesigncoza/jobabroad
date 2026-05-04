@@ -46,12 +46,31 @@ Run /build-pathway <category> after resolving the issue to retry.
   ```
 
 ### Stage 4 — Synthesis
-- Teammate fails: mark that `section_file.status: failed`, continue waiting for other teammates. After TeamDelete, if any sections failed, exit with:
+
+**Section error classes (set `last_error_class` on each failure):**
+
+| Class | Meaning | Retryable |
+|---|---|---|
+| `context_exhausted` | Teammate hit context budget limit or truncated | Yes |
+| `provenance_missing` | Postcheck found claims without `<!-- src:` markers | Yes |
+| `task_died` | Task never returned a result / agent unreachable | Yes |
+| `output_invalid` | File missing, < 1000 bytes, or no H2 heading | Yes |
+| `agent_refused` | Agent returned a refusal or irrelevant response | No — hard-stop |
+
+**On teammate failure:** set `section_file.status: failed`, `last_error_class: <class>`. Continue waiting for other teammates.
+
+**After TeamDelete:** if any sections failed:
+- If any have `last_error_class: agent_refused`: hard-stop immediately — do not offer retry.
+- Otherwise exit with:
   ```
-  ✗ Stage 4 partial failure: sections <N> failed.
+  ✗ Stage 4 partial failure: sections <slugs> failed (classes: <list>).
   Run /build-pathway <category> to re-spawn just the failed sections.
   ```
-- Re-invocation into a partial stage 4: re-spawn only teammates whose `section_file.status != completed`.
+- Append failure details to RUN_REPORT.
+
+**On TeamCreate failure:** reset all just-marked `in_progress` sections to `pending`, write `stage_status: failed`, `last_error: "TeamCreate failed: <error>"`, append RUN_REPORT, hard-exit.
+
+- Re-invocation into a partial stage 4: source of truth is output file existence (see state-schema.md file-truth rule), not TaskList. Re-spawn only sections whose file is absent or invalid.
 
 ### Stage 5 — Gemini review
 - Gemini returns empty or irrelevant response after 3 attempts: add a `<!-- TODO: human-review: gemini failed to respond -->` marker at the start of that section, mark `status: completed` (do not block the pipeline on a tool failure).

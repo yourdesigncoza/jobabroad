@@ -9,14 +9,17 @@ Automated 7-stage pathway-content pipeline for jobabroad.co.za. Each invocation 
 
 ## Step 1 — Parse and validate
 
-Read the category argument from the user's invocation: `/build-pathway <category>`.
+Read the invocation arguments: `/build-pathway <category> [proceed <manifest_hash>]`
 
-Valid categories: `engineering` | `it-tech` | `teaching` | `accounting`
+- `<category>` (required): `engineering` | `it-tech` | `teaching` | `accounting`
+- `proceed <manifest_hash>` (optional): 64-char hex string. Only valid when the current state is `current_stage: 4, stage_status: pending`. Alias: `proceed-to-synthesis`.
 
-If the argument is missing or invalid, stop with:
+If the category is missing or invalid:
 ```
 Error: Unknown category "<input>". Valid categories: engineering | it-tech | teaching | accounting
 ```
+
+Store the parsed `proceed_hash` (or null) for use in Step 2.
 
 ## Step 2 — Locate and read state file
 
@@ -26,12 +29,25 @@ State file path (project-relative): `docs/prompts/<category>/_PIPELINE_STATE.md`
 |---|---|
 | Does not exist | Run Stage 0 immediately |
 | Exists, YAML parse fails | Restore from `_PIPELINE_STATE.md.bak`; if bak also fails, stop with error message |
-| `current_stage: 6, stage_status: completed` | Print "Pipeline complete for <category>." and stop. |
+| `current_stage: 6, stage_status: completed` | Print "Pipeline complete for <category>." and stop |
 | `stage_status: failed` | Print `last_error`, then re-attempt the failed stage |
 | `stage_status: in_progress` | Resume current stage (skip steps already done, do remaining) |
+| `stage_status: pending` | Run current stage (treat as not yet started) |
 | `stage_status: completed` | Advance to next stage and run it |
 
-**Stage 3 special case:** `stage_status: completed` in stage 3 means one batch of 3 vaults finished. Check whether all 6 category vaults have `status: completed`. If yes, advance to stage 4. If no, re-run stage 3 for the next batch.
+**Stage 3 special case:** `stage_status: completed` in stage 3 means one batch of 3 vaults finished. Check whether all 6 category vaults have `status: completed`. If yes, stage 3 handler prints REVIEW GATE and hard-exits (does NOT auto-advance to stage 4). The state is left as `current_stage: 4, stage_status: pending`.
+
+**Stage 4 gate:** When `current_stage: 4, stage_status: pending`:
+- If `proceed_hash` is null → read `manifest.json`, reprint the REVIEW GATE block, and hard-exit. Do NOT run stage 4.
+- If `proceed_hash` is supplied → read `docs/prompts/<category>/manifest.json`. Compute expected hash (SHA256 of sorted `"<path>:<sha256>"` lines). If the supplied hash does not match, reject:
+  ```
+  ✗ Manifest hash mismatch. The vault set has changed since this hash was issued.
+  Re-check the FINAL_REPORTs and re-run: /build-pathway <category>
+  ```
+  Append to RUN_REPORT and hard-exit.
+- If hashes match → dispatch to stage 4 handler (which does its own precondition check).
+
+**Per-stage preconditions:** Before running any stage, verify the preconditions listed in `state-schema.md`. On failure, write `stage_status: failed`, append to RUN_REPORT, and hard-exit.
 
 ## Step 3 — Dispatch to stage handler
 

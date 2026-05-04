@@ -130,6 +130,9 @@ Append to run log:
 
 ## 6. Hard-exit
 
+Append to `docs/prompts/<category>/RUN_REPORT.md` (create if absent — see `references/run-report.md` schema):
+- Stage 3 block with completed/failed vault slugs, SHA256s of FINAL_REPORTs produced, and next_action.
+
 Print:
 ```
 ✓ Stage 3 batch complete for <category>.
@@ -142,20 +145,121 @@ Run /build-pathway <category> to continue.
 
 Hard-exit.
 
-## 7. Advance to Stage 4 (all vaults done)
+## 7. Advance to Stage 4 — REVIEW GATE (all vaults done)
 
-If the next invocation runs stage 3 and finds 0 vaults qualify for the batch (all completed/reused), update state:
+If this invocation finds 0 vaults qualify for the batch (all 6 are completed/reused):
+
+### 7a. Build manifest.json
+
+For each of the 6 FINAL_REPORT files:
+```bash
+shasum -a 256 <final_report_path>  # or sha256sum on Linux
+```
+
+Write `docs/prompts/<category>/manifest.json`:
+```json
+{
+  "category": "<category>",
+  "created_at": "<ISO8601 datetime>",
+  "vaults": [
+    { "section": "01-destinations", "final_report_path": "<abs path>", "sha256": "<hex>", "size_bytes": <n> },
+    ... (6 entries)
+  ]
+}
+```
+
+Compute `manifest_hash`: SHA256 of the sorted concatenation of `"<final_report_path>:<sha256>"` strings (one per line, sorted lexicographically, no trailing newline).
+```bash
+echo -n "<line1>\n<line2>..." | shasum -a 256
+```
+
+### 7b. Update state
+
 ```yaml
 current_stage: 4
 stage_status: pending
+manifest_hash: "<64-char hex>"
 ```
 
-Append to run log: `- <datetime> — Stage 3 complete: all 6 vaults done, advancing to stage 4`
+Append to run log: `- <datetime> — Stage 3 complete: all 6 vaults done. Manifest hash: <first 12 chars of hash>...`
 
-Print:
+### 7c. Append to RUN_REPORT
+
+Append a stage 3 success block to `docs/prompts/<category>/RUN_REPORT.md` (create if absent):
+- List all 6 FINAL_REPORT paths with SHA256 + size
+- Include manifest_hash
+- next_action: `/build-pathway <category> proceed <manifest_hash>`
+
+### 7d. Automated vault quality assessment
+
+Do NOT ask the human to read FINAL_REPORTs. Run quality checks automatically.
+
+For each of the 6 FINAL_REPORTs:
+
+**Structural checks (Claude, no external call needed):**
+- File size > 5000 bytes → pass
+- Contains a `## Conclusion` or `## Summary` heading → pass
+- Contains at least 10 `[[wikilink]]` references → pass (indicates the vault built a real graph, not a stub)
+- No `{{PLACEHOLDER}}` text → pass
+
+**Gemini quality pass (one call per vault, sequential):**
+
+Send each FINAL_REPORT to Gemini with this prompt:
 ```
-✓ All vaults built for <category>.
-Run /build-pathway <category> to continue to stage 4 (synthesis).
+You are reviewing a research vault FINAL_REPORT built for a South African work-abroad guide.
+The vault covers: {{SECTION_TOPIC}} for the category: {{CATEGORY}}
+
+Read the report below and answer these questions with YES/NO + one line reasoning:
+1. Does the report contain specific, named destinations with concrete evidence of demand?
+2. Does it contain at least one official government or regulatory source URL?
+3. Are the key facts (fees, thresholds, requirements) specific enough to write a guide from?
+4. Is there any section that is dangerously thin (fewer than 3 paragraphs of substance)?
+
+Report:
+{{FINAL_REPORT_CONTENT}}
+
+Respond in this exact format:
+Q1: YES/NO — <reason>
+Q2: YES/NO — <reason>
+Q3: YES/NO — <reason>
+Q4: YES/NO (thin sections: <list or "none">) — <reason>
+VERDICT: PASS / BORDERLINE / FAIL
+VERDICT_REASON: <one sentence>
+```
+
+Use `mcp__gemini-cli__ask-gemini` with `model: "gemini-2.5-pro"`.
+
+**Classify each vault:**
+- `PASS`: all 4 structural checks pass + Gemini VERDICT = PASS
+- `BORDERLINE`: structural pass + Gemini VERDICT = BORDERLINE
+- `FAIL`: any structural check fails OR Gemini VERDICT = FAIL
+
+If any vault is `FAIL`: write a warning into the RUN_REPORT and gate printout. The gate still opens (the human decides whether to rebuild or proceed), but the failure is explicit.
+
+### 7e. Print REVIEW GATE and hard-exit
+
+```
+─────────────────────────────────────────────────────
+STAGE 3 COMPLETE — REVIEW GATE
+Category: <category>
+
+Vault quality assessment:
+  01-destinations:  PASS/BORDERLINE/FAIL — <Gemini verdict reason>
+  02-documents:     PASS/BORDERLINE/FAIL — <Gemini verdict reason>
+  03-costs:         PASS/BORDERLINE/FAIL — <Gemini verdict reason>
+  04-visa-routes:   PASS/BORDERLINE/FAIL — <Gemini verdict reason>
+  05-scams:         PASS/BORDERLINE/FAIL — <Gemini verdict reason>
+  06-contacts:      PASS/BORDERLINE/FAIL — <Gemini verdict reason>
+
+<If any FAIL>
+⚠ FAIL vaults detected. To rebuild:
+  delete <vault_path> and run /build-pathway <category>
+
+Run report: docs/prompts/<category>/RUN_REPORT.md
+Manifest hash: <full 64-char hex>
+
+When ready: /build-pathway <category> proceed <manifest_hash>
+─────────────────────────────────────────────────────
 ```
 
 Hard-exit.

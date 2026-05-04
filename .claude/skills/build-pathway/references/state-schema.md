@@ -108,25 +108,29 @@ publish_gate:
   status: pending                    # pending | in_progress | completed
   exchanges_used: 0                  # count of adversarial exchanges (max 4 total across all disagreements)
   todo_flags: 0                      # count of <!-- TODO: human-review --> markers added
+  reviewed_against_guide_hash: null  # SHA256 of guide at time of review — must match state.guide_hash for publish
 ```
 
-The 6 fixed headings (must match guide-template.md):
-1. Destination Options
-2. Step-by-Step Document Checklist
-3. Realistic Costs
-4. Visa Route Overview
-5. Scam Red Flags
-6. Legitimate Contacts & Official Links
+The 6 fixed headings (must match guide-template.md canonical H2s):
+1. Destination Options — Where Can I Actually Go?
+2. Document Checklist — What Papers Do I Need?
+3. Realistic Costs — How Much Will This Actually Cost Me?
+4. Visa Route Overview — What's the Actual Process?
+5. Scam Red Flags — Will I Get Scammed?
+6. Legitimate Contacts — Who Do I Actually Call?
 
 ## Idempotency rules
 
 1. `stage_status: completed` + re-invocation → advance to next stage; do NOT re-run
-2. `stage_status: failed` + re-invocation → re-attempt (from failure point, not from scratch)
-3. `stage_status: in_progress` + re-invocation → resume (check what sub-steps are done, skip those)
-4. `vault.status: completed` → skip in stage 3; do NOT rebuild
-5. `vault.status: reused` → skip in stage 3; already on disk
-6. `section_file.status: completed` → skip in stage 4; do NOT re-write
-7. `gemini_review_status[i].status: completed` → skip in stage 5; do NOT re-review
+2. `stage_status: pending` + re-invocation → run current stage (treat as not yet started)
+3. `stage_status: failed` + re-invocation → re-attempt (from failure point, not from scratch)
+4. `stage_status: in_progress` + re-invocation → resume (check what sub-steps are done, skip those)
+5. `vault.status: completed` → skip in stage 3; do NOT rebuild
+6. `vault.status: reused` → skip in stage 3; already on disk
+7. `section_file.status: completed` → skip in stage 4; do NOT re-write
+8. `gemini_review_status[i].status: completed` → skip in stage 5; do NOT re-review
+
+**Stage 4 file-truth rule (overrides TaskList liveness):** A section is `completed` if and only if its output file exists AND is > 1000 bytes AND contains at least one `<!-- src:` claim marker AND has exactly one `## ` H2 heading. On resume, re-scan all section files and reconcile `status` fields against this truth before spawning any teammates.
 
 ## Stage progression table
 
@@ -136,11 +140,24 @@ The 6 fixed headings (must match guide-template.md):
 | 1 | completed | — | Auto-advance: run stage 2 |
 | 2 | completed | — | Hard-exit |
 | 3 | completed | Pending vaults remain | Hard-exit (next invocation runs next batch) |
-| 3 | completed | All 6 vaults complete/reused | Hard-exit (next invocation advances to stage 4) |
+| 3 | completed | All 6 vaults complete/reused | Hard-exit + print REVIEW GATE with manifest hash |
+| 4 | pending | No `proceed <hash>` arg supplied | Reprint REVIEW GATE and hard-exit (gate blocks) |
+| 4 | pending | `proceed <hash>` arg supplied + hash matches | Precondition check → run stage 4 |
 | 4 | completed | — | Auto-advance: run stage 4.5 |
 | 4.5 | completed | — | Auto-advance: run stage 5 |
 | 5 | completed | — | Hard-exit |
+| 6 | pending | — | Run publish_gate check before proceeding |
 | 6 | completed | — | Print "Pipeline complete." and stop |
+
+## Per-stage preconditions (checked before running; fail writes `stage_status: failed` + RUN_REPORT)
+
+| Stage | Precondition |
+|---|---|
+| 3 | `state.prompt_paths` has 6 entries, all files exist on disk |
+| 4 | 6 FINAL_REPORTs exist on disk + `state.manifest_hash` matches supplied `proceed <hash>` |
+| 4.5 | All 6 section files exist, > 1000 bytes, start with `## `, contain at least one `<!-- src:` marker |
+| 5 | `state.synthesis_doc` exists + `state.guide_hash` is set |
+| 6 | `publish_gate.passed: true` |
 
 ## Run log format
 
