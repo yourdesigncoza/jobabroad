@@ -1,7 +1,9 @@
 import { createClient } from '@supabase/supabase-js';
 import { notFound } from 'next/navigation';
-import CVSection from '@/components/CVSection';
+import AssessmentCTA from '@/components/AssessmentCTA';
+import BackToTop from '@/components/BackToTop';
 import TableOfContents from '@/components/TableOfContents';
+import StickyNav from '@/components/StickyNav';
 import { getPathwayContent } from '@/lib/pathway-content';
 
 const supabase = createClient(
@@ -32,38 +34,23 @@ export default async function MembersPage({
   }
 
   const pathway = getPathwayContent(tokenRow.interest_category);
+
+  const { data: latestAssessment } = await supabase
+    .from('assessments')
+    .select('status')
+    .eq('member_token_id', tokenRow.id)
+    .order('updated_at', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  const assessmentSubmitted = latestAssessment?.status === 'submitted';
+
   const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '';
 
   return (
     <main className="min-h-screen" style={{ backgroundColor: '#F8F5F0' }}>
       {/* Top bar */}
-      <div
-        className="sticky top-0 z-10 px-6 py-3 flex items-center justify-between"
-        style={{ backgroundColor: '#1B4D3E' }}
-      >
-        <a href="/" className="flex items-center text-[1.4em]">
-          <span className="font-body font-bold" style={{ color: '#F8F5F0' }}>job</span>
-          <span className="font-body font-bold" style={{ color: '#C9A84C' }}>abroad</span>
-        </a>
-        <div className="flex items-center gap-3">
-          <a
-            href="#cv"
-            className="font-body text-xs font-semibold rounded-lg px-3 py-1.5"
-            style={{ backgroundColor: 'rgba(255,255,255,0.15)', color: '#F8F5F0' }}
-          >
-            My CV
-          </a>
-          <a
-            href={`https://wa.me/${whatsappNumber}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-body text-xs font-semibold rounded-lg px-3 py-1.5"
-            style={{ backgroundColor: '#C9A84C', color: '#FFFFFF' }}
-          >
-            WhatsApp us
-          </a>
-        </div>
-      </div>
+      <StickyNav items={pathway?.toc ?? []} whatsappNumber={whatsappNumber} />
 
       <div className="max-w-6xl mx-auto px-4 lg:px-8 py-10">
         {pathway ? (
@@ -80,6 +67,11 @@ export default async function MembersPage({
 
             {/* Main content */}
             <div className="flex flex-col gap-10 min-w-0">
+              {pathway.readTime > 0 && (
+                <p className="font-body text-xs" style={{ color: '#9B9B9B' }}>
+                  {pathway.readTime} min read
+                </p>
+              )}
               {/* sanitizeHtml in getPathwayContent ensures this is safe to render */}
               <article
                 className="prose prose-sm sm:prose-base max-w-none
@@ -92,30 +84,16 @@ export default async function MembersPage({
                   prose-strong:text-[#2C2C2C]
                   prose-table:text-sm
                   prose-th:bg-[#EDE8E0] prose-th:text-[#2C2C2C]
-                  prose-td:text-[#2C2C2C]
+                  prose-td:text-[#2C2C2C] prose-td:text-xs
                   prose-blockquote:border-l-[#C9A84C] prose-blockquote:text-[#6B6B6B]
                   prose-hr:border-[#EDE8E0]"
                 dangerouslySetInnerHTML={{ __html: pathway.html }}
               />
 
-              <div id="cv">
-                <CVSection
-                  leadId={tokenRow.lead_id}
-                  token={token}
-                  whatsappNumber={whatsappNumber}
-                />
-              </div>
-
-              {/* Mobile TOC — collapsible, below article */}
-              <div
-                className="lg:hidden rounded-2xl p-5"
-                style={{ backgroundColor: '#FFFFFF', border: '1.5px solid #EDE8E0' }}
-              >
-                <TableOfContents items={pathway.toc} />
-              </div>
+              <AssessmentCTA token={token} isSubmitted={assessmentSubmitted} />
 
               <footer className="text-center font-body text-xs pb-6" style={{ color: '#6B6B6B' }}>
-                We are an information service and CV toolkit. We do not place candidates or act as recruiters. We do not guarantee employment.
+                We are an information service. We do not place candidates or act as recruiters. We do not guarantee employment.
               </footer>
             </div>
           </div>
@@ -125,14 +103,11 @@ export default async function MembersPage({
               category={tokenRow.interest_category}
               whatsappNumber={whatsappNumber}
             />
-            <CVSection
-              leadId={tokenRow.lead_id}
-              token={token}
-              whatsappNumber={whatsappNumber}
-            />
+            <AssessmentCTA token={token} isSubmitted={assessmentSubmitted} />
           </div>
         )}
       </div>
+      <BackToTop />
     </main>
   );
 }
