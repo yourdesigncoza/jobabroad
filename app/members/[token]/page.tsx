@@ -132,13 +132,14 @@ function ComingSoon({
         className="font-display font-bold uppercase tracking-wide text-xl"
         style={{ color: '#2C2C2C' }}
       >
-        Your guide is on its way
+        Your guide has been updated
       </h1>
       <p className="font-body text-sm" style={{ color: '#6B6B6B' }}>
         The{' '}
         <strong style={{ color: '#2C2C2C', textTransform: 'capitalize' }}>{label}</strong>{' '}
-        pathway guide is being finalised. WhatsApp us and we will send you what we have now —
-        plus notify you the moment the full guide is ready.
+        guide has been updated with critical new information pertaining to your field.
+        We apologise for the interruption — but it&apos;s important you get the latest, most
+        up-to-date information. We will WhatsApp you the link within the next 12 hours.
       </p>
       <a
         href={waLink}
