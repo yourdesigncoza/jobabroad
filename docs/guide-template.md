@@ -11,6 +11,15 @@ Each profession guide answers the five questions a buyer is actually asking:
 
 ## Guide Structure
 
+> **Canonical H2 headings — do not vary these across categories:**
+> 1. `## 1. Destination Options — Where Can I Actually Go?`
+> 2. `## 2. Document Checklist — What Papers Do I Need?`
+> 3. `## 3. Realistic Costs — How Much Will This Actually Cost Me?`
+> 4. `## 4. Visa Route Overview — What's the Actual Process?`
+> 5. `## 5. Scam Red Flags — Will I Get Scammed?`
+> 6. `## 6. Legitimate Contacts — Who Do I Actually Call?`
+> The TOC is generated from these headings — any deviation breaks consistency across guides.
+
 ### 1. Destination Options
 *Which countries are realistic for this field?*
 
@@ -19,7 +28,7 @@ Each profession guide answers the five questions a buyer is actually asking:
 - Honest about which routes are closed or unlikely (e.g. care workers UK July 2025)
 - Source every claim — GOV.UK, DETE, Home Affairs, AHPRA, etc.
 
-### 2. Step-by-Step Document Checklist
+### 2. Document Checklist
 *What papers do I need?*
 
 - Ordered list from SA-side prep through to destination-side submission

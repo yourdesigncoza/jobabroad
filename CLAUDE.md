@@ -16,6 +16,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working in this
 
 ### What's done
 - `content/pathways/healthcare.md` — full nurses guide (6 sections, Gemini-reviewed)
+- `content/pathways/teaching.md` — full teaching guide (6 sections, Gemini-reviewed)
 - `lib/pathway-content.ts` — reads markdown, renders to sanitized HTML, extracts TOC from h2 headings
 - `app/members/[token]/page.tsx` — token-gated page: two-column desktop (sticky TOC left, article right), single column mobile (TOC below article)
 - `components/TableOfContents.tsx` — active-section highlighting via IntersectionObserver, collapse toggle
@@ -35,7 +36,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working in this
 - Continue UI polish on the member page (typography, spacing, mobile feel)
 - Review the CV template and refine it
 - Test full flow end-to-end on mobile
-- Eventually: build guides for other categories (IT/tech, engineering, teaching, accounting)
+- Eventually: build guides for other categories (IT/tech, engineering, accounting)
 
 ### Test token (healthcare, local dev)
 `http://localhost:3000/members/3c625e74-5f85-4d61-844b-3087a8e27ed8`
@@ -70,15 +71,35 @@ All 6 nursing vaults are complete (separate vaults per prompt):
 
 @AGENTS.md
 
+## Testing — Playwright First
+
+**Always use Playwright for any UI or flow testing.** Prefer the Playwright MCP tools (available in-session) over writing standalone test files. For repeatable regression tests, use the Playwright CLI.
+
+### Priority order
+1. **Playwright MCP** (`mcp__plugin_playwright_playwright__*`) — use in every session after UI changes; no setup required
+2. **Playwright CLI** (`npx playwright test`) — for automated regression suites checked into the repo
+3. **Manual browser testing** — last resort only; never the primary verification method
+
+### What to test with Playwright after every feature
+- Happy path: full user flow end-to-end
+- State persistence: navigate away and return, verify server-hydrated data matches
+- Edge cases visible in the UI (empty states, error states, conditional fields)
+
+### Test token (healthcare, local dev)
+`http://localhost:3000/members/3c625e74-5f85-4d61-844b-3087a8e27ed8`
+`http://localhost:3000/members/3c625e74-5f85-4d61-844b-3087a8e27ed8/assessment`
+
+### Automation goal
+Optimise and automate the dev + test loop as far as possible. When adding a new feature, write or update Playwright tests in the same session before marking the task done.
+
 ## Commands
 
 ```bash
-npm run dev      # start dev server on localhost:3000
-npm run build    # production build
-npm run lint     # eslint
+npm run dev          # start dev server on localhost:3000
+npm run build        # production build
+npm run lint         # eslint
+npx playwright test  # run Playwright regression suite (once tests exist)
 ```
-
-No test suite exists yet.
 
 ## What this is
 

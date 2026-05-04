@@ -32,13 +32,26 @@ Run shared vaults first — nursing prompts cross-reference them.
 
 ---
 
+## Teaching (separate vaults per prompt)
+
+| Status | Prompt | Section | Iter | Notes |
+|---|---|---|---|---|
+| [x] | [01 — Destination Options](teaching/01-destination-options.md) | Where can I teach? | 6 | 44 notes, FINAL_REPORT done — vault: wa-teaching-01-destinations |
+| [x] | [02 — Document Checklist](teaching/02-document-checklist.md) | What papers do I need? | 5 | 37 notes, FINAL_REPORT done — vault: wa-teaching-02-documents |
+| [x] | [03 — Realistic Costs](teaching/03-realistic-costs.md) | How much will it cost? | 5 | 44 notes, FINAL_REPORT done — vault: wa-teaching-03-costs |
+| [x] | [04 — Visa Route Overview](teaching/04-visa-routes.md) | How do I get there? | 7 | 50 notes, FINAL_REPORT done — vault: wa-teaching-04-visa-routes |
+| [x] | [05 — Scam Red Flags](teaching/05-scam-red-flags.md) | Will I get scammed? | 6 | 16 notes, FINAL_REPORT done — vault: wa-teaching-05-scams |
+| [x] | [06 — Legitimate Contacts](teaching/06-legitimate-contacts.md) | Who do I contact? | 5 | 29 notes, FINAL_REPORT done — vault: wa-teaching-06-contacts |
+
+---
+
 ## Other Categories (prompts not yet built)
 
 | Status | Category | Vault | Prompts Built |
 |---|---|---|---|
 | [ ] | IT / Tech | `wa-it-tech` | No |
 | [ ] | Engineering | `wa-engineering` | No |
-| [ ] | Teaching | `wa-teaching` | No |
+| [x] | Teaching | `wa-teaching` | Yes — 6 prompts written, 6 vaults complete |
 | [ ] | Accounting | `wa-accounting` | No |
 
 ---

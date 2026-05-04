@@ -1,0 +1,184 @@
+---
+category: teaching
+current_stage: 6
+stage_status: completed
+started_at: 2026-05-04T10:32:23+02:00
+last_run_at: 2026-05-04T16:11:08+02:00
+last_error: null
+brief_path: "docs/prompts/teaching/_BRIEF.md"
+prompt_paths:
+  - "docs/prompts/teaching/01-destination-options.md"
+  - "docs/prompts/teaching/02-document-checklist.md"
+  - "docs/prompts/teaching/03-realistic-costs.md"
+  - "docs/prompts/teaching/04-visa-routes.md"
+  - "docs/prompts/teaching/05-scam-red-flags.md"
+  - "docs/prompts/teaching/06-legitimate-contacts.md"
+shared_vaults_required:
+  - wa-shared-documents
+  - wa-shared-scams
+  - wa-shared-regulatory-bodies
+  - wa-shared-migration-cos
+  - wa-shared-legal-boundary
+shared_vaults_status:
+  - slug: wa-shared-documents
+    status: reused
+  - slug: wa-shared-scams
+    status: reused
+  - slug: wa-shared-regulatory-bodies
+    status: reused
+  - slug: wa-shared-migration-cos
+    status: reused
+  - slug: wa-shared-legal-boundary
+    status: reused
+vaults:
+  - section: "01-destinations"
+    vault_path: "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-teaching-01-destinations"
+    final_report_path: "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-teaching-01-destinations/FINAL_REPORT.md"
+    iter_log_path: "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-teaching-01-destinations/.vault-builder/iter_log.jsonl"
+    status: completed
+    iter_count: 6
+    note_count: 44
+    last_error: null
+    attempts: 1
+  - section: "02-documents"
+    vault_path: "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-teaching-02-documents"
+    final_report_path: "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-teaching-02-documents/FINAL_REPORT.md"
+    iter_log_path: "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-teaching-02-documents/.vault-builder/iter_log.jsonl"
+    status: completed
+    iter_count: 5
+    note_count: 37
+    last_error: null
+    attempts: 1
+  - section: "03-costs"
+    vault_path: "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-teaching-03-costs"
+    final_report_path: "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-teaching-03-costs/FINAL_REPORT.md"
+    iter_log_path: "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-teaching-03-costs/.vault-builder/iter_log.jsonl"
+    status: completed
+    iter_count: 5
+    note_count: 44
+    last_error: null
+    attempts: 1
+  - section: "04-visa-routes"
+    vault_path: "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-teaching-04-visa-routes"
+    final_report_path: "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-teaching-04-visa-routes/FINAL_REPORT.md"
+    iter_log_path: "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-teaching-04-visa-routes/.vault-builder/iter_log.jsonl"
+    status: completed
+    iter_count: 7
+    note_count: 50
+    last_error: null
+    attempts: 1
+  - section: "05-scams"
+    vault_path: "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-teaching-05-scams"
+    final_report_path: "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-teaching-05-scams/FINAL_REPORT.md"
+    iter_log_path: "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-teaching-05-scams/.vault-builder/iter_log.jsonl"
+    status: completed
+    iter_count: 6
+    note_count: 16
+    last_error: null
+    attempts: 1
+  - section: "06-contacts"
+    vault_path: "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-teaching-06-contacts"
+    final_report_path: "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-teaching-06-contacts/FINAL_REPORT.md"
+    iter_log_path: "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-teaching-06-contacts/.vault-builder/iter_log.jsonl"
+    status: completed
+    iter_count: 5
+    note_count: 29
+    last_error: null
+    attempts: 1
+section_files:
+  - section: "01-destinations"
+    path: "docs/guides/teaching.section-01-destinations.md"
+    status: completed
+    attempts: 1
+    last_error: null
+  - section: "02-documents"
+    path: "docs/guides/teaching.section-02-documents.md"
+    status: completed
+    attempts: 1
+    last_error: null
+  - section: "03-costs"
+    path: "docs/guides/teaching.section-03-costs.md"
+    status: completed
+    attempts: 1
+    last_error: null
+  - section: "04-visa-routes"
+    path: "docs/guides/teaching.section-04-visa-routes.md"
+    status: completed
+    attempts: 1
+    last_error: null
+  - section: "05-scams"
+    path: "docs/guides/teaching.section-05-scams.md"
+    status: completed
+    attempts: 1
+    last_error: null
+  - section: "06-contacts"
+    path: "docs/guides/teaching.section-06-contacts.md"
+    status: completed
+    attempts: 1
+    last_error: null
+synthesis_doc: "docs/guides/teaching.md"
+gemini_review_status:
+  - section: "1. Destination Options"
+    slug: "01-destinations"
+    status: completed
+    exchanges_used: 0
+    todo_flags: 0
+  - section: "2. Step-by-Step Document Checklist"
+    slug: "02-documents"
+    status: completed
+    exchanges_used: 1
+    todo_flags: 0
+  - section: "3. Realistic Costs"
+    slug: "03-costs"
+    status: completed
+    exchanges_used: 0
+    todo_flags: 0
+  - section: "4. Visa Route Overview"
+    slug: "04-visa-routes"
+    status: completed
+    exchanges_used: 0
+    todo_flags: 0
+  - section: "5. Scam Red Flags"
+    slug: "05-scams"
+    status: completed
+    exchanges_used: 0
+    todo_flags: 0
+  - section: "6. Legitimate Contacts & Official Links"
+    slug: "06-contacts"
+    status: completed
+    exchanges_used: 0
+    todo_flags: 0
+published_path: "content/pathways/teaching.md"
+---
+
+## Run log
+- 2026-05-04T10:32:23+02:00 — Pipeline scaffolded for category: teaching
+- 2026-05-04T10:32:53+02:00 — Stage 0 complete: pre-flight passed, state file scaffolded
+- 2026-05-04T10:33:05+02:00 — Stage 1 started
+- 2026-05-04T10:35:53+02:00 — Stage 1 complete: brief written at docs/prompts/teaching/_BRIEF.md
+- 2026-05-04T10:36:11+02:00 — Stage 2 started
+- 2026-05-04T10:38:36+02:00 — Stage 2 paused by user: 2/6 prompts written (01-destination-options, 02-document-checklist)
+- 2026-05-04T11:05:00+02:00 — Stage 2 resumed: wrote 03-realistic-costs, 04-visa-routes, 05-scam-red-flags, 06-legitimate-contacts
+- 2026-05-04T11:05:00+02:00 — Stage 2 complete: 6 prompts written
+- 2026-05-04T12:30:00+02:00 — Codex adversarial review (gpt-5.5): 6/6 prompts reviewed. Critical corrections applied: AITSL fee ($595/$665 → $1,154 flat from Jul 2025); UK IRP [CLOSED]; NZ Green List tier (Tier 2 → Tier 1 Straight to Residence); SOC codes corrected (2317/2315 → 2313/2316); NZ age limit attribution fixed (INZ, not Teaching Council); Ecctis renamed UK ENIC; fee-law Act corrected (LRA → Employment Services Act s.15); QTS subject restriction nuanced for teachers in valid English roles; IAA replaces OISC in schema
+- 2026-05-04T13:00:00+02:00 — Scope decision applied: Canada demoted to out-of-scope brief mention in 01-destinations and 04-visa-routes. Australia state regulators (VIT, NESA, QCT) added to source constraints across prompts 01, 02, 04. NZ Straight to Residence (Tier 1) explicitly marked as headline finding in 01 and 04. Buyer north star doc created and wired into stage-2-prompts, stage-4-synthesis, stage-5-review, and teammate-prompts.
+- 2026-05-04T13:10:00+02:00 — Stage 3 started: all 5 shared vaults reused; batch 1 (01-destinations, 02-documents, 03-costs) launching
+- 2026-05-04T13:45:00+02:00 — Stage 3 batch 1 complete: 3 completed (wa-teaching-01-destinations: 44 notes/6 iters, wa-teaching-02-documents: 37 notes/5 iters, wa-teaching-03-costs: 44 notes/5 iters), 0 failed
+- 2026-05-04T13:50:00+02:00 — Stage 3 batch 2 started: launching 04-visa-routes, 05-scams, 06-contacts
+- 2026-05-04T14:18:00+02:00 — Session paused (usage limit + user stop): 04-visa-routes complete (50 notes, 7 iters); 05-scams and 06-contacts still pending. stage_status corrected to in_progress. Resume after 2:20PM reset: run /build-pathway teaching to build 05 and 06
+- 2026-05-04T14:25:00+02:00 — Stage 3 resumed: batch 2 continuing with 05-scams and 06-contacts; spawning 05-scams vault agent
+- 2026-05-04T14:43:00+02:00 — wa-teaching-05-scams complete: 16 notes, 6 iters; spawning 06-contacts vault agent
+- 2026-05-04T15:07:00+02:00 — wa-teaching-06-contacts complete: 29 notes, 5 iters; all 6 vaults done; stage 3 batch 2 complete
+- 2026-05-04T15:15:00+02:00 — Stage 4 started: advancing from stage 3 (all 6 vaults complete); spawning 6 synthesis teammates via synth-teaching team
+- 2026-05-04T15:40:35+02:00 — Stage 4.5 started: assembling sections into docs/guides/teaching.md
+- 2026-05-04T15:41:31+02:00 — Stage 4.5 complete: guide assembled at docs/guides/teaching.md (96,501 bytes, 6 sections)
+- 2026-05-04T15:41:31+02:00 — Stage 5 started: Gemini adversarial review of 6 sections
+- 2026-05-04T16:08:25+02:00 — Section 1 reviewed: 0 exchanges, 1 TODO flag (SACE LoGS validity period)
+- 2026-05-04T16:08:25+02:00 — Section 2 reviewed: 1 exchange (AITSL fee defended), 0 TODO flags
+- 2026-05-04T16:08:25+02:00 — Section 3 reviewed: 0 exchanges, 0 TODO flags
+- 2026-05-04T16:08:25+02:00 — Section 4 reviewed: 0 exchanges, 0 TODO flags
+- 2026-05-04T16:08:25+02:00 — Section 5 reviewed: 0 exchanges, 0 TODO flags
+- 2026-05-04T16:08:25+02:00 — Section 6 reviewed: 0 exchanges, 0 TODO flags
+- 2026-05-04T16:08:25+02:00 — Stage 5 complete: all 6 sections reviewed by Gemini-2.5-pro; 1 TODO flag for human review
+- 2026-05-04T16:10:36+02:00 — Stage 6 started
+- 2026-05-04T16:11:08+02:00 — Stage 6 complete: published to content/pathways/teaching.md (99,727 bytes)
