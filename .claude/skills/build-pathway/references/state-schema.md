@@ -20,7 +20,10 @@ Always snapshot to `.bak` before writing (see SKILL.md).
 | `vaults` | list[object] | see below | 0 (scaffolded), 3 (updated) |
 | `section_files` | list[object] | see below | 4 |
 | `synthesis_doc` | string or null | relative path | 4.5 |
+| `guide_hash` | string or null | SHA256 hex of assembled guide | 4.5 |
+| `manifest_hash` | string or null | SHA256 of sorted (path, sha256) pairs from manifest.json | 3 |
 | `gemini_review_status` | list[object] | see below | 5 |
+| `publish_gate` | object or null | see below | 6 |
 | `published_path` | string or null | relative path | 6 |
 
 ## vault object schema
@@ -56,9 +59,27 @@ Vault root: `/home/laudes/zoot/projects/wiki-builds/work-abroad-web/`
 - section: "01-destinations"
   path: "docs/guides/<category>.section-01-destinations.md"
   status: pending                   # pending | in_progress | completed | failed
-  attempts: 0
+  attempts: 0                       # cap at 2; see retry policy below
   last_error: null
+  last_error_class: null            # context_exhausted | provenance_missing | task_died | output_invalid | agent_refused
+  source_paths:                     # resolved by stage 4 parent (path-passing — not inline content)
+    brief: null
+    final_report: null
+    wiki_notes: []                  # up to 5 paths
+    shared_vault_reports: []        # up to 2 paths
+    nursing_section: null           # 1 path to the matching H2 extracted from healthcare-nurses.md
+  reviewed_against_guide_hash: null # SHA256 of guide at the time stage 5 reviewed this section
 ```
+
+**Section retry policy:**
+- Max 2 attempts per section.
+- Retryable classes: `context_exhausted`, `task_died`, `output_invalid`, `provenance_missing`.
+- Non-retryable class: `agent_refused` — hard-stop immediately with manual inspection prompt regardless of attempt count.
+- After `attempts >= 2` (retryable), stop the pipeline:
+  ```
+  ✗ Section <slug> has failed 2 times (class: <last_error_class>). Manual inspection required.
+  Inspect: docs/guides/<category>.section-<slug>.md
+  ```
 
 ## shared_vault object schema
 
@@ -66,6 +87,17 @@ Vault root: `/home/laudes/zoot/projects/wiki-builds/work-abroad-web/`
 - vault: "wa-shared-documents"       # slug
   status: reused                     # reused | completed | failed
   vault_path: "/abs/path/or/null"
+```
+
+## publish_gate object schema
+
+```yaml
+publish_gate:
+  unresolved_blocking_todos: 0      # grep count of <!-- TODO: human-review: in guide
+  non_primary_corrections_applied: 0  # incremented by stage 5 when Defend fires and was overridden
+  unverified_high_risk_claims: 0    # claim markers tier=unverified in sections 03/04/06
+  all_sections_reviewed_at_current_hash: false  # true when all gemini_review[i].reviewed_against_guide_hash == state.guide_hash
+  passed: false                     # true only when all four checks == 0/true
 ```
 
 ## gemini_review object schema
