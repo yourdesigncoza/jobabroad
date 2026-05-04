@@ -45,7 +45,7 @@ export default async function Home({ searchParams }: Props) {
           <div className="flex items-center gap-3">
             <div className="w-8 h-px" style={{ backgroundColor: '#ff751f' }} />
             <span
-              className="font-display text-xs font-semibold uppercase tracking-[0.2em]"
+              className="font-display text-[0.65rem] md:text-xs font-semibold uppercase tracking-[0.08em] md:tracking-[0.2em]"
               style={{ color: '#ff751f' }}
             >
               Before you pay a recruiter, get the facts first.
@@ -72,10 +72,10 @@ export default async function Home({ searchParams }: Props) {
             No placement fees. No fake promises. Just clear information.
           </p>
 
-          {/* CTA hint */}
-          <div className="flex items-center gap-2 mt-2">
-            <div className="w-2 h-2 rounded-full" style={{ backgroundColor: '#C9A84C' }} />
-            <span className="font-body text-sm font-medium" style={{ color: '#2C2C2C' }}>
+          {/* CTA hint pill */}
+          <div className="flex items-center gap-3 mt-2 self-start px-4 py-2 rounded-full" style={{ backgroundColor: '#EDE8E0' }}>
+            <div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: '#ff751f' }} />
+            <span className="font-body text-sm font-bold" style={{ color: '#2C2C2C' }}>
               Pick your field below — WhatsApp opens automatically.
             </span>
           </div>
@@ -83,7 +83,7 @@ export default async function Home({ searchParams }: Props) {
       </section>
 
       {/* Interest Selector */}
-      <section className="px-6 py-14" style={{ backgroundColor: '#EDE8E0' }}>
+      <section id="interest-grid" className="px-6 py-14" style={{ backgroundColor: '#EDE8E0' }}>
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center gap-4 mb-8">
             <h2
@@ -95,9 +95,6 @@ export default async function Home({ searchParams }: Props) {
             <div className="flex-1 h-px" style={{ backgroundColor: '#C9A84C', opacity: 0.4 }} />
           </div>
           <InterestGrid source={src} />
-          <p className="font-body text-xs mt-6 text-center" style={{ color: '#6B6B6B' }}>
-            First chat is free. Get the full Playbook for R199.
-          </p>
         </div>
       </section>
 
@@ -136,6 +133,14 @@ export default async function Home({ searchParams }: Props) {
               No monthly fees, no hidden costs. No fake recruiter taking R5,000 from you.
             </p>
 
+            <a
+              href="#interest-grid"
+              className="flex items-center gap-2 font-body font-semibold text-sm px-6 py-3 rounded-full mt-2"
+              style={{ backgroundColor: '#C9A84C', color: '#FFFFFF' }}
+            >
+              Pick your field →
+            </a>
+
           </div>
         </div>
       </section>
@@ -145,22 +150,6 @@ export default async function Home({ searchParams }: Props) {
 
       {/* Country stats */}
       <CountryStats />
-
-      {/* Lost link recovery */}
-      <section className="px-6 py-8 text-center" style={{ backgroundColor: '#EDE8E0' }}>
-        <p className="font-body text-sm" style={{ color: '#6B6B6B' }}>
-          Already paid? Lost your access link?{' '}
-          <a
-            href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}?text=${encodeURIComponent('I lost my link. My number is [your number].')}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-semibold underline"
-            style={{ color: '#1B4D3E' }}
-          >
-            WhatsApp me and I&apos;ll resend it.
-          </a>
-        </p>
-      </section>
 
       {/* Footer */}
       <footer className="px-6 py-12" style={{ backgroundColor: '#2C2C2C' }}>
@@ -184,6 +173,18 @@ export default async function Home({ searchParams }: Props) {
             <a href="/privacy" className="font-body text-sm underline" style={{ color: '#F8F5F0' }}>
               Privacy Policy
             </a>
+            <p className="font-body text-xs" style={{ color: 'rgba(248,245,240,0.45)' }}>
+              Already paid? Lost your link?{' '}
+              <a
+                href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}?text=${encodeURIComponent('I lost my link. My number is [your number].')}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline"
+                style={{ color: 'rgba(248,245,240,0.6)' }}
+              >
+                WhatsApp me and I&apos;ll resend it.
+              </a>
+            </p>
           </div>
 
           {/* Right — logo + location */}

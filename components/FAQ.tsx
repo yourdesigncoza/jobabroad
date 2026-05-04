@@ -22,7 +22,7 @@ const PILLARS = [
 const QUESTIONS = [
   {
     q: 'What do I get for R199?',
-    a: 'You get my Work Abroad Playbook for your field — researched, up to date and built around the questions scam recruiters hope you never ask. Inside: destination options, document checklist, realistic costs, visa route overview, scam red flags and legitimate contacts. Plus a CV template and direct WhatsApp feedback.',
+    a: 'You get my Work Abroad Playbook for your field — researched, up to date and built around the questions scam recruiters hope you never ask. Inside: destination options, document checklist, realistic costs, visa route overview, scam red flags and legitimate contacts. Plus your own eligibility assessment — find out what\'s ready, what\'s missing, and what your next step is.',
   },
   {
     q: 'Are you a recruitment agency?',

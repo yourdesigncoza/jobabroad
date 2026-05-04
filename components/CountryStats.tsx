@@ -7,6 +7,7 @@ const COUNTRIES = [
     detail: 'SA nurse registrations have quadrupled in 4 years — £28K–£60K starting',
     roles: ['Nurses', 'Teachers', 'Seasonal', 'Trades'],
     source: 'NHS England / NMC',
+    popular: true,
   },
   {
     flag: '🇮🇪',
@@ -16,6 +17,7 @@ const COUNTRIES = [
     detail: 'SA is among the top source countries globally. IT, engineering and healthcare are in demand.',
     roles: ['IT & Tech', 'Engineering', 'Healthcare'],
     source: 'Dept. Enterprise Ireland',
+    popular: true,
   },
   {
     flag: '🇩🇪',
@@ -34,6 +36,7 @@ const COUNTRIES = [
     detail: 'Several routes are open to SA applicants in healthcare, engineering and trades.',
     roles: ['Healthcare', 'Engineering', 'Farming', 'IT'],
     source: 'Home Affairs Australia',
+    popular: true,
   },
   {
     flag: '🇦🇪',
@@ -114,21 +117,31 @@ export default function CountryStats() {
                 border: '1.5px solid #EDE8E0',
               }}
             >
-              {/* Flag + country */}
-              <div className="flex items-center gap-3">
-                <span
-                  className="text-4xl leading-none select-none"
-                  role="img"
-                  aria-label={country.name}
-                >
-                  {country.flag}
-                </span>
-                <span
-                  className="font-display font-semibold uppercase text-xs tracking-wider leading-tight"
-                  style={{ color: '#6B6B6B' }}
-                >
-                  {country.name}
-                </span>
+              {/* Flag + country + popular badge */}
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-3">
+                  <span
+                    className="text-4xl leading-none select-none"
+                    role="img"
+                    aria-label={country.name}
+                  >
+                    {country.flag}
+                  </span>
+                  <span
+                    className="font-display font-semibold uppercase text-xs tracking-wider leading-tight"
+                    style={{ color: '#6B6B6B' }}
+                  >
+                    {country.name}
+                  </span>
+                </div>
+                {country.popular && (
+                  <span
+                    className="font-display font-bold uppercase text-[0.55rem] tracking-wide px-2 py-0.5 rounded-full shrink-0"
+                    style={{ backgroundColor: '#ff751f', color: '#FFFFFF' }}
+                  >
+                    Most Popular
+                  </span>
+                )}
               </div>
 
               {/* Divider */}
@@ -157,7 +170,7 @@ export default function CountryStats() {
               </div>
 
               {/* Role tags */}
-              <div className="flex flex-wrap gap-1 mt-auto pt-3" style={{ borderTop: '1px solid #EDE8E0' }}>
+              <div className="flex flex-wrap gap-1 mt-auto pt-3" style={{ borderTop: '1px solid #EDE8E0', minHeight: '56px', alignItems: 'flex-start' }}>
                 {country.roles.map((role) => (
                   <span
                     key={role}

@@ -20,7 +20,7 @@ const PLAYBOOK_ITEMS = [
   "Current visa route overview",
   "Scam red flags to watch for",
   "Legitimate contacts and official programme links",
-  "CV template + personal WhatsApp feedback",
+  "Personalised eligibility assessment — know exactly where you stand",
 ];
 
 export default function HowItWorks() {
@@ -136,7 +136,7 @@ export default function HowItWorks() {
               </p>
               <div
                 className="inline-flex items-baseline gap-1 px-4 py-2 rounded-full self-start"
-                style={{ backgroundColor: "#C9A84C" }}
+                style={{ backgroundColor: "#ff751f" }}
               >
                 <span
                   className="font-display font-bold text-xl"
