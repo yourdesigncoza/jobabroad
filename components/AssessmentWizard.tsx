@@ -8,7 +8,6 @@ import AssessmentConfirmation from './AssessmentConfirmation';
 
 interface Props {
   token: string;
-  memberTokenId: string;
   whatsappNumber: string;
   initialData: Record<string, unknown>;
   initialSlugs: string[];
@@ -22,7 +21,7 @@ function toPayload(fieldId: string, version: number, value: unknown) {
 }
 
 export default function AssessmentWizard({
-  token, memberTokenId, whatsappNumber,
+  token, whatsappNumber,
   initialData, initialSlugs, initialAssessmentId,
   initialStatus, leadPhone,
 }: Props) {
