@@ -160,3 +160,8 @@ If your source material covers a destination or route shallowly (thin research, 
 | it-tech | IT professionals |
 | teaching | teachers |
 | accounting | accountants |
+| farming | agricultural professionals |
+| healthcare | healthcare workers (nurses, caregivers, medical staff) |
+| seasonal | seasonal and carnival workers |
+| hospitality | hospitality workers (hotels, restaurants, tourism) |
+| trades | tradespeople (plumbers, electricians, builders) |

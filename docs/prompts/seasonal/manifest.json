@@ -1,0 +1,43 @@
+{
+  "category": "seasonal",
+  "created_at": "2026-05-04T21:40:30+02:00",
+  "vaults": [
+    {
+      "section": "01-destinations",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-01-destinations/FINAL_REPORT.md",
+      "sha256": "bb71bf5dfd70e26bba4aef90dc735b4c5248530106e7ce158ee1febc4262d388",
+      "size_bytes": 7177
+    },
+    {
+      "section": "02-documents",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-02-documents/FINAL_REPORT.md",
+      "sha256": "6f981bf63aca1e926a4093f534aefdba8522927f0c6e118983c0afd83db13573",
+      "size_bytes": 8150
+    },
+    {
+      "section": "03-costs",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-03-costs/FINAL_REPORT.md",
+      "sha256": "c4eb652a5122405f49eabab0710bd99d0a5568e6fbb9e1a2cc1ae50cedbf6cbe",
+      "size_bytes": 8345
+    },
+    {
+      "section": "04-visa-routes",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-04-visa-routes/FINAL_REPORT.md",
+      "sha256": "d4e9a6e8ce8e157996aafec9bffa743dafeb7345b215b2e726a638f4816886b4",
+      "size_bytes": 7695
+    },
+    {
+      "section": "05-scams",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-05-scams/FINAL_REPORT.md",
+      "sha256": "e04d691d019cb47ca8ea5a5469e5fd010875b744afccb563970a0f4f7d3dfa12",
+      "size_bytes": 7725
+    },
+    {
+      "section": "06-contacts",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-06-contacts/FINAL_REPORT.md",
+      "sha256": "92e1f34063cdfdae3afa72d884690af78c3cd943f0b39c499c305ee1b3c36001",
+      "size_bytes": 6902
+    }
+  ],
+  "manifest_hash": "bafedb6ea116f500c4ef9ebb9b68f9682842fbc4f6e1143ac3700dd1c3f82958"
+}

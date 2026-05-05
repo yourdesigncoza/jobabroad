@@ -32,7 +32,7 @@ Read:
 
 1. Check if `/home/laudes/zoot/projects/wiki-builds/work-abroad-pathway-intelligence/wiki/Occupation Pathways/<category-slug>/` exists.
    - If yes: read all notes in that directory (these are the most relevant).
-   - `<category-slug>` is the category as written (engineering, it-tech, teaching, accounting).
+   - `<category-slug>` is the category as written (engineering, it-tech, teaching, accounting, farming, healthcare, seasonal, hospitality, trades).
 2. From each of these wiki subfolders, read the 5 most recently modified `.md` files:
    - `Countries/`
    - `Visa Routes/`

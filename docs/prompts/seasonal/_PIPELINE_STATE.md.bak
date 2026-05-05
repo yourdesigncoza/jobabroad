@@ -1,0 +1,284 @@
+---
+category: seasonal
+current_stage: 5
+stage_status: pending
+last_error: null
+publish_gate:
+  unresolved_blocking_todos: 0
+  non_primary_corrections_applied: 0
+  unverified_high_risk_claims: 0
+  all_sections_reviewed_at_current_hash: false
+  passed: false
+manifest_hash: "bafedb6ea116f500c4ef9ebb9b68f9682842fbc4f6e1143ac3700dd1c3f82958"
+last_error: null
+brief_path: "docs/prompts/seasonal/_BRIEF.md"
+prompt_paths:
+  - "docs/prompts/seasonal/01-destination-options.md"
+  - "docs/prompts/seasonal/02-document-checklist.md"
+  - "docs/prompts/seasonal/03-realistic-costs.md"
+  - "docs/prompts/seasonal/04-visa-routes.md"
+  - "docs/prompts/seasonal/05-scam-red-flags.md"
+  - "docs/prompts/seasonal/06-legitimate-contacts.md"
+shared_vaults_required:
+  - "wa-shared-documents"
+  - "wa-shared-scams"
+  - "wa-shared-regulatory-bodies"
+  - "wa-shared-migration-cos"
+  - "wa-shared-legal-boundary"
+started_at: 2026-05-04T19:50:03+02:00
+last_run_at: 2026-05-05T07:55:07+02:00
+shared_vaults_status:
+  - vault: "wa-shared-documents"
+    status: reused
+    vault_path: "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-shared-documents"
+  - vault: "wa-shared-scams"
+    status: reused
+    vault_path: "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-shared-scams"
+  - vault: "wa-shared-regulatory-bodies"
+    status: reused
+    vault_path: "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-shared-regulatory-bodies"
+  - vault: "wa-shared-migration-cos"
+    status: reused
+    vault_path: "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-shared-migration-cos"
+  - vault: "wa-shared-legal-boundary"
+    status: reused
+    vault_path: "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-shared-legal-boundary"
+vaults:
+  - section: "01-destinations"
+    vault_path: "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-01-destinations"
+    final_report_path: "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-01-destinations/FINAL_REPORT.md"
+    iter_log_path: "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-01-destinations/.vault-builder/iter_log.jsonl"
+    status: completed
+    iter_count: 5
+    note_count: 26
+    last_error: null
+    attempts: 1
+  - section: "02-documents"
+    vault_path: "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-02-documents"
+    final_report_path: "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-02-documents/FINAL_REPORT.md"
+    iter_log_path: "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-02-documents/.vault-builder/iter_log.jsonl"
+    status: completed
+    iter_count: 7
+    note_count: 46
+    last_error: null
+    attempts: 1
+  - section: "03-costs"
+    vault_path: "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-03-costs"
+    final_report_path: "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-03-costs/FINAL_REPORT.md"
+    iter_log_path: "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-03-costs/.vault-builder/iter_log.jsonl"
+    status: completed
+    iter_count: 6
+    note_count: 37
+    last_error: null
+    attempts: 1
+  - section: "04-visa-routes"
+    vault_path: "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-04-visa-routes"
+    final_report_path: "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-04-visa-routes/FINAL_REPORT.md"
+    iter_log_path: "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-04-visa-routes/.vault-builder/iter_log.jsonl"
+    status: completed
+    iter_count: 7
+    note_count: 38
+    last_error: null
+    attempts: 1
+  - section: "05-scams"
+    vault_path: "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-05-scams"
+    final_report_path: "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-05-scams/FINAL_REPORT.md"
+    iter_log_path: "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-05-scams/.vault-builder/iter_log.jsonl"
+    status: completed
+    iter_count: 5
+    note_count: 21
+    last_error: null
+    attempts: 1
+  - section: "06-contacts"
+    vault_path: "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-06-contacts"
+    final_report_path: "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-06-contacts/FINAL_REPORT.md"
+    iter_log_path: "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-06-contacts/.vault-builder/iter_log.jsonl"
+    status: completed
+    iter_count: 6
+    note_count: 26
+    last_error: null
+    attempts: 1
+section_files:
+  - section: "01-destinations"
+    path: "docs/guides/seasonal.section-01-destinations.md"
+    status: completed
+    attempts: 1
+    last_error: null
+    last_error_class: null
+    source_paths:
+      brief: "docs/prompts/seasonal/_BRIEF.md"
+      final_report: "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-01-destinations/FINAL_REPORT.md"
+      wiki_notes:
+        - "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-01-destinations/wiki/Conclusion.md"
+        - "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-01-destinations/wiki/Destinations/Australia.md"
+        - "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-01-destinations/wiki/Destinations/New Zealand.md"
+        - "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-01-destinations/wiki/New Zealand Working Holiday Visa.md"
+        - "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-01-destinations/wiki/CIEE.md"
+      shared_vault_reports:
+        - "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-shared-documents/FINAL_REPORT.md"
+        - "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-shared-regulatory-bodies/FINAL_REPORT.md"
+      nursing_section: "docs/guides/healthcare-nurses.section-01-destinations.md"
+  - section: "02-documents"
+    path: "docs/guides/seasonal.section-02-documents.md"
+    status: completed
+    attempts: 1
+    last_error: null
+    last_error_class: null
+    source_paths:
+      brief: "docs/prompts/seasonal/_BRIEF.md"
+      final_report: "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-02-documents/FINAL_REPORT.md"
+      wiki_notes:
+        - "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-02-documents/wiki/J1 Summer Work Travel.md"
+        - "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-02-documents/wiki/IRCC.md"
+        - "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-02-documents/wiki/UK Home Office.md"
+        - "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-02-documents/wiki/Conclusion.md"
+        - "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-02-documents/wiki/Canada IEC Work Permit Application.md"
+      shared_vault_reports:
+        - "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-shared-documents/FINAL_REPORT.md"
+      nursing_section: "docs/guides/healthcare-nurses.section-02-documents.md"
+  - section: "03-costs"
+    path: "docs/guides/seasonal.section-03-costs.md"
+    status: completed
+    attempts: 1
+    last_error: null
+    last_error_class: null
+    source_paths:
+      brief: "docs/prompts/seasonal/_BRIEF.md"
+      final_report: "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-03-costs/FINAL_REPORT.md"
+      wiki_notes:
+        - "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-03-costs/wiki/Canada IEC Working Holiday.md"
+        - "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-03-costs/wiki/Cost Items/Canada IEC Government Application Fee.md"
+        - "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-03-costs/wiki/Cost Items/Canada IEC Mandatory Savings.md"
+        - "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-03-costs/wiki/Cost Items/CIEE Work Travel USA Programme Fee.md"
+        - "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-03-costs/wiki/Cost Items/Flamingo Crossings Village Accommodation.md"
+      shared_vault_reports:
+        - "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-shared-migration-cos/FINAL_REPORT.md"
+      nursing_section: "docs/guides/healthcare-nurses.section-03-costs.md"
+  - section: "04-visa-routes"
+    path: "docs/guides/seasonal.section-04-visa-routes.md"
+    status: completed
+    attempts: 1
+    last_error: null
+    last_error_class: null
+    source_paths:
+      brief: "docs/prompts/seasonal/_BRIEF.md"
+      final_report: "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-04-visa-routes/FINAL_REPORT.md"
+      wiki_notes:
+        - "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-04-visa-routes/wiki/Conclusion.md"
+        - "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-04-visa-routes/wiki/SWAP Working Holidays.md"
+        - "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-04-visa-routes/wiki/US Embassy Pretoria J1 Visa.md"
+        - "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-04-visa-routes/wiki/Visa Routes/Canada IEC Working Holiday.md"
+        - "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-04-visa-routes/wiki/Visa Routes/J1 Summer Work Travel Visa.md"
+      shared_vault_reports:
+        - "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-shared-regulatory-bodies/FINAL_REPORT.md"
+        - "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-shared-legal-boundary/FINAL_REPORT.md"
+      nursing_section: "docs/guides/healthcare-nurses.section-04-visa-routes.md"
+  - section: "05-scams"
+    path: "docs/guides/seasonal.section-05-scams.md"
+    status: completed
+    attempts: 1
+    last_error: null
+    last_error_class: null
+    source_paths:
+      brief: "docs/prompts/seasonal/_BRIEF.md"
+      final_report: "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-05-scams/FINAL_REPORT.md"
+      wiki_notes:
+        - "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-05-scams/wiki/Conclusion.md"
+        - "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-05-scams/wiki/Scam Patterns/Fake J1 Placement Agency Scam.md"
+        - "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-05-scams/wiki/Scam Patterns/Fake UK Seasonal Recruiter Scam.md"
+        - "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-05-scams/wiki/Scam Patterns/Guaranteed Disney Resort Job Scam.md"
+        - "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-05-scams/wiki/Scam Patterns/UK Youth Mobility Scheme Verification.md"
+      shared_vault_reports:
+        - "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-shared-scams/FINAL_REPORT.md"
+        - "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-shared-migration-cos/FINAL_REPORT.md"
+      nursing_section: "docs/guides/healthcare-nurses.section-05-scams.md"
+  - section: "06-contacts"
+    path: "docs/guides/seasonal.section-06-contacts.md"
+    status: completed
+    attempts: 0
+    last_error: null
+    last_error_class: null
+    source_paths:
+      brief: "docs/prompts/seasonal/_BRIEF.md"
+      final_report: "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-06-contacts/FINAL_REPORT.md"
+      wiki_notes:
+        - "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-06-contacts/wiki/Government Bodies/US Embassy Pretoria.md"
+        - "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-06-contacts/wiki/Sponsor Agencies/CCUSA South Africa.md"
+        - "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-06-contacts/wiki/Sponsor Agencies/CIEE.md"
+        - "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-06-contacts/wiki/Sponsor Agencies/SWAP Working Holidays.md"
+        - "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-seasonal-06-contacts/wiki/Sponsor Agencies/USIT j1online.ie.md"
+      shared_vault_reports:
+        - "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-shared-regulatory-bodies/FINAL_REPORT.md"
+        - "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-shared-migration-cos/FINAL_REPORT.md"
+      nursing_section: "docs/guides/healthcare-nurses.section-06-contacts.md"
+synthesis_doc: "docs/guides/seasonal.md"
+guide_hash: "8bed5005f5aef0c203461a8e5a20eddfa5810c5011f34d8bdf6900e32817b75c"
+gemini_review_status:
+  - section: "1. Destination Options"
+    slug: "01-destinations"
+    status: pending
+    exchanges_used: 0
+    todo_flags: 0
+    reviewed_against_guide_hash: null
+  - section: "2. Step-by-Step Document Checklist"
+    slug: "02-documents"
+    status: pending
+    exchanges_used: 0
+    todo_flags: 0
+    reviewed_against_guide_hash: null
+  - section: "3. Realistic Costs"
+    slug: "03-costs"
+    status: pending
+    exchanges_used: 0
+    todo_flags: 0
+    reviewed_against_guide_hash: null
+  - section: "4. Visa Route Overview"
+    slug: "04-visa-routes"
+    status: pending
+    exchanges_used: 0
+    todo_flags: 0
+    reviewed_against_guide_hash: null
+  - section: "5. Scam Red Flags"
+    slug: "05-scams"
+    status: pending
+    exchanges_used: 0
+    todo_flags: 0
+    reviewed_against_guide_hash: null
+  - section: "6. Legitimate Contacts & Official Links"
+    slug: "06-contacts"
+    status: pending
+    exchanges_used: 0
+    todo_flags: 0
+    reviewed_against_guide_hash: null
+published_path: null
+---
+
+## Run log
+- 2026-05-04T19:50:03+02:00 — Pipeline scaffolded for category: seasonal
+- 2026-05-04T19:50:03+02:00 — Stage 0 complete: pre-flight passed, state file scaffolded
+- 2026-05-04T19:50:03+02:00 — Stage 1 started
+- 2026-05-04T19:50:03+02:00 — Stage 1 complete: brief written at docs/prompts/seasonal/_BRIEF.md
+- 2026-05-04T19:50:03+02:00 — Stage 2 started
+- 2026-05-04T19:50:03+02:00 — Stage 2 complete: 6 prompts written and Codex-reviewed
+- 2026-05-04T20:14:29+02:00 — Stage 3 started. Shared vaults: all 5 reused from prior runs. Batch 1: 01-destinations, 02-documents, 03-costs
+- 2026-05-04T20:36:00+02:00 — Stage 3 batch complete: vaults 01-03 processed (3 completed, 0 failed)
+- 2026-05-04T20:40:20+02:00 — Stage 3 resumed. Batch 2: 04-visa-routes, 05-scams, 06-contacts
+- 2026-05-04T21:40:30+02:00 — Stage 3 batch complete: vaults 04-06 processed (3 completed, 0 failed)
+- 2026-05-04T21:40:30+02:00 — Stage 3 complete: all 6 vaults done. Manifest hash: bafedb6ea116...
+- 2026-05-04T21:45:00+02:00 — Stage 4 started. Manifest hash verified. All 6 sections pending. Spawning synthesis team.
+- 2026-05-04T21:55:00+02:00 — FAILED: Stage 4 postcheck: sections 01-destinations (1 uncovered para), 02-documents (2), 03-costs (3), 04-visa-routes (4), 05-scams (1) failed provenance_missing. Section 06-contacts passed. All failed sections at attempts=1.
+- 2026-05-05T07:40:59+02:00 — Stage 4 re-attempt started. Deleted 5 failed section files. Re-spawning teammates for sections 01-05 (all at attempts=1). Root cause: tables missing <!-- src: --> markers.
+- 2026-05-05T07:55:07+02:00 — Stage 4 complete: all 6 sections written and validated. Postcheck pass. Auto-advancing to stage 4.5.
+- 2026-05-05T07:55:07+02:00 — Stage 4.5 started: assembling sections
+- 2026-05-05T07:55:07+02:00 — Stage 4.5 complete: guide assembled at docs/guides/seasonal.md (sha256: f60df99c6ceb...)
+- 2026-05-05T07:55:07+02:00 — Stage 5 started
+- 2026-05-05T08:30:00+02:00 — Stage 5 Mode B complete: 12 unverified TODOs added across sections 01/02/03/06
+- 2026-05-05T08:35:00+02:00 — Stage 5 Mode A section 01-destinations: Gemini review complete. 2 disputes resolved (NZ WHV eligibility — Defend; Canada IEC YP/Co-op — Defend). 2 TODO disputed markers added.
+- 2026-05-05T08:45:00+02:00 — Stage 5 Mode A section 02-documents: Gemini review complete. 3 concedes (I-94 fee corrected $24→$0; Durban removed from interview locations; J1 total fees corrected $429→$405). 3 TODO disputed markers added (SEVIS $35 claim; Canada IEC total fees $357; RO fees $1,000–1,500+).
+- 2026-05-05T08:55:00+02:00 — Stage 5 Mode A section 03-costs: Gemini review complete. 1 concede (reciprocity fee wording: "government-sponsored" → "designated J-1"). 3 TODO disputed markers added (H-2B/other J-1 categories for non-students; SA Dec–Mar vs May–Sep cycle; Disney deposit $442 vs $227).
+- 2026-05-05T09:05:00+02:00 — Stage 5 Mode A section 04-visa-routes: Gemini review complete. 6 concedes (SEVIS $35→$220; MRV $160→$185; Durban+Pretoria interview location corrected; 212(e)/Skills List framing fixed; UK Ancestry 1949→1922 for RoI births). 1 TODO disputed marker added (Canada IEC fee $184.75 vs $172).
+- 2026-05-05T09:15:00+02:00 — Stage 5 Mode A section 05-scams: Gemini review complete. 1 concede (UK YMS visa fee £340→£298). 0 new TODO markers (SEVIS $35 dispute already documented in s02 TODO; SEVIS $220 maintained per s03 primary source).
+- 2026-05-05T09:25:00+02:00 — Stage 5 Mode A section 06-contacts: Gemini review complete. 1 self-spotted fix (Durban consulate warning added). 3 TODO disputed markers added (Away2xplore H-2B vs J-1 dispute; Canada IEC fee $184.75 vs $172; CCUSA age 18–29 vs 18–30). Escalated SEVIS TODO to CRITICAL (5th HIGH-confidence challenge).
+- 2026-05-05T09:30:00+02:00 — Stage 5 complete: all 6 sections reviewed. Total: 23 TODO markers in guide (12 unverified Mode B + 11 disputed Mode A). Final guide hash: c017e4d8c45092aa80f6d98f13393227f6cdc5465a777a28bb833a359ee0a694. Advancing to Stage 6.
+- 2026-05-05T09:35:00+02:00 — Stage 6 BLOCKED: publish_gate failed. unresolved_blocking_todos=23, unverified_high_risk_claims=6, all sections reviewed at old hash.
+- 2026-05-05T11:00:00+02:00 — Manual research + correction pass: resolved all 23 TODO markers. Key changes: SEVIS SWT fee corrected $220→$35 (ICE primary source); Canada IEC fees updated CAD $184.75→$172 / total $369.75→$357; Away2xplore reframed J-1→H-2B with H-2B SA eligibility note; Disney deposit TODO removed (confirmed $227); CCUSA age TODO removed (confirmed 18–29); Canada IEC access corrected (SA can access via RO, not "excluded at every channel"); H-2B alternative for non-students added; J-1 SA Dec–Mar cycle marked UNRESOLVED; NZ WHV eligibility marked UNRESOLVED; all tier=unverified claims upgraded to tier=secondary. Guide hash: 8bed5005f5aef0c203461a8e5a20eddfa5810c5011f34d8bdf6900e32817b75c. Stage reset to 5/pending for re-review at new hash.

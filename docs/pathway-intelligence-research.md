@@ -35,12 +35,54 @@
 - **Secondary routes:** Australia (AITSL assessment), New Zealand (Green List Tier 2), Canada (provincial certification post-arrival)
 - **Signal sources:** DfE vacancy data, UK Licensed Sponsor Register (schools filter), AITSL processing times
 
-### 5. Accountants
+### 5. Healthcare (Nurses, Caregivers, Medical Staff)
+
+See **Nurses** wedge above — `healthcare` is the pipeline category slug; the guide covers nurses, caregivers, and allied health. All research, routes, and regulator data in the Nurses section applies directly.
+
+### 6. Accountants
 - **Key insight:** SAICA has Mutual Recognition Agreements (MRAs) with ICAEW (UK), CAANZ (AU/NZ), CPA Canada — SA CAs require zero further exams for these countries
 - **Caveat:** SAICA recognition not valid for UK Audit Qualification (AQ) signing; all non-audit finance roles accessible
 - **Primary routes:** UK (ICAEW MRA), Australia (CAANZ MRA), Canada (CPA Canada MRA)
 - **Secondary route:** Ireland (CSEP, €40,904+ finance roles)
 - **Positioning:** "Your SAICA is your international passport"
+
+### 7. Farming (Agricultural Workers)
+- **Demand:** UK, Australia, NZ, and Canada all run structured seasonal agricultural worker schemes with consistent SA uptake; some routes to permanent residency via regional/rural sponsorship
+- **Primary routes:** UK — Seasonal Worker visa (up to 6 months, horticulture and poultry); Australia — Seasonal Worker Programme + Pacific Australia Labour Mobility (PALM); NZ — Recognised Seasonal Employer (RSE)
+- **Secondary routes:** Canada — Temporary Foreign Worker Program (agricultural stream); USA — H-2A agricultural visa (employer-sponsored)
+- **Key bottlenecks:** Schemes are quota-controlled and employer-led; SA workers compete with Pacific Island nation quotas in AUS/NZ; UK Seasonal Worker route does not lead to PR
+- **SA regulator:** No formal professional body; DALRRD (Dept of Agriculture) for any agri-specific credentials
+- **Positioning angle:** Most SA farm workers have hands-on skills in mixed farming (livestock + arable) that match demand in UK and AUS seasonal schemes
+
+### 8. Hospitality (Hotels, Restaurants, Tourism)
+- **Demand:** UAE, UK, and Australia consistently hire SA hospitality staff; UAE hotel groups actively recruit in SA; strong SA diaspora in Dubai hospitality sector
+- **Primary routes:** UAE — Employment visa (employer-sponsored, no points system); UK — Skilled Worker Visa (chef roles RQF 3+, salary threshold applies); Australia — Skills in Demand Visa (chef, cook on CSOL)
+- **Secondary routes:** Ireland (CSEP for senior chef roles); Canada (TFWP hospitality stream)
+- **Key bottleneck:** Most hospitality roles are below UK/AU salary thresholds except senior chef and management; UAE is most accessible but no PR pathway
+- **SA regulator:** No formal registration body; CATHSSETA for hospitality qualifications recognition
+- **Signal sources:** UAE hotel group recruitment pages; UK shortage occupation list (chef/cook status); AHPRA CSOL hospitality entries
+
+### 9. Trades (Plumbers, Electricians, Builders)
+- **Demand:** Australia and UK face chronic tradesperson shortages; electricians and plumbers consistently on shortage occupation lists; Canada regional demand especially in Alberta and BC
+- **Primary routes:** Australia — Skills in Demand Visa (most trades on CSOL); UK — Skilled Worker Visa (electricians, plumbers RQF 3, shortage list); Canada — TFWP + Provincial Nominee Programs
+- **Secondary routes:** UAE (employer sponsorship, recognition of SA trade certificates via ACTVET); NZ (Green List Tier 2 for electricians)
+- **Key bottleneck:** Trade qualification recognition — SA Red Seal / N-level equivalency must be assessed by TRA (Australia), NOCN (UK), or provincial body (Canada); not automatic
+- **SA regulator:** QCTO (Quality Council for Trades and Occupations) issues trade certificates; MerSETA for artisan qualifications
+- **Signal sources:** TRA (Trades Recognition Australia) processing times; UK shortage occupation list quarterly updates; IRCC provincial draw history
+
+### 10. Seasonal / Carnival (J1 Visa, Events, Amusement)
+- **Demand:** USA J1 Summer Work Travel program is the primary route; structured, established pipeline from SA universities; Walt Disney World, Six Flags, holiday resorts main employers
+- **Primary route:** USA — J1 Exchange Visitor Visa (Summer Work Travel category); employer applies through designated J1 sponsor; SA students eligible (must be enrolled at SA university)
+- **Secondary routes:** UK Youth Mobility Scheme (18–30, £2,500 savings requirement, age-limited); Canada International Experience Canada (IEC Working Holiday)
+- **Key bottleneck:** J1 is age/student-status restricted; UK YMS has annual quota (SA quota has historically filled quickly); neither leads to PR
+- **SA regulator:** No formal body; USIT, STS, and CIEE are the main J1 sponsor agencies operating in SA
+- **Signal sources:** USIT/STS SA quota availability; UK YMS ballot opening dates; US Embassy Pretoria J1 guidance
+
+### 11. Remote Work — DEFERRED
+> Not a standard pathway guide. A separate product concept is planned for this category. Do not run `/build-pathway remote-work`. Research stub retained below for reference when the concept is revisited.
+- Portugal Digital Nomad Visa (€3,480/mo), Estonia, Mauritius Premium Visa
+- SARS foreign income exemption cap (R1.25M) is the key SA-side consideration
+- Digital nomad visa threshold changes are the primary signal source
 
 ---
 
@@ -161,8 +203,13 @@ These apply across multiple profession guides — build once, reference everywhe
 
 ## Recommended Build Order
 
-1. **Healthcare / Nurses** — highest demand, most complete research, clearest SA → UK document flow
-2. **IT / Tech** — Ireland CSEP is the most accessible route; Germany emerging angle
-3. **Engineering** — Sydney Accord cost advantage is a strong differentiator
-4. **Teaching** — Free QTS 2025 is a timely content hook
-5. **Accounting** — SAICA MRA is under-known; strong positioning angle
+1. **Healthcare / Nurses** (`healthcare`) — highest demand, most complete research, clearest SA → UK document flow
+2. **IT / Tech** (`it-tech`) — Ireland CSEP is the most accessible route; Germany emerging angle
+3. **Engineering** (`engineering`) — Sydney Accord cost advantage is a strong differentiator
+4. **Teaching** (`teaching`) — Free QTS 2025 is a timely content hook
+5. **Accounting** (`accounting`) — SAICA MRA is under-known; strong positioning angle
+6. **Trades** (`trades`) — chronic shortage in AUS/UK; TRA recognition angle is strong differentiator
+7. **Hospitality** (`hospitality`) — UAE most accessible; chef shortage in UK/AUS
+8. **Farming** (`farming`) — seasonal schemes well-established; clear process, limited PR upside
+9. **Seasonal / Carnival** (`seasonal`) — J1 pipeline mature; narrow but loyal audience
+10. **Remote Work** — DEFERRED (separate product concept; do not build standard guide)

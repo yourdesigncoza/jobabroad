@@ -7,7 +7,7 @@ Always snapshot to `.bak` before writing (see SKILL.md).
 
 | Field | Type | Valid values | Set by stage |
 |---|---|---|---|
-| `category` | string | engineering, it-tech, teaching, accounting | 0 (never changed) |
+| `category` | string | engineering, it-tech, teaching, accounting, farming, healthcare, seasonal, hospitality, trades | 0 (never changed) |
 | `current_stage` | number | 0, 1, 2, 3, 4, 4.5, 5, 6 | each stage on entry |
 | `stage_status` | string | pending, in_progress, completed, failed | each stage |
 | `started_at` | ISO8601 | datetime | 0 (never changed) |

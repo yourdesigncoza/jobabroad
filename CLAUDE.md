@@ -2,6 +2,12 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working in this repository.
 
+## build-pathway — Unresolved Claims Rule
+
+When any build-pathway stage leaves an item genuinely unresolved (no primary source available, conflicting sources, or unfetchable official page), **write the uncertainty as visible user-facing prose** — not as an HTML comment.
+
+Use plain language: "We could not get a definitive answer on X — check [official source] directly before acting." Never leave `<!-- UNRESOLVED: -->` or `<!-- TODO: -->` blocks in the published guide markdown; readers cannot see HTML comments and the content is worthless to them.
+
 ## External Links — STRICT RULE
 
 **All external links must open in a new tab.** Never navigate the user away from the app.

@@ -7,7 +7,7 @@
 Run each check. If any fails, stop immediately with a descriptive error — do NOT proceed.
 
 ### 1a. Category validation
-Confirm `<category>` ∈ {engineering, it-tech, teaching, accounting}.
+Confirm `<category>` ∈ {engineering, it-tech, teaching, accounting, farming, healthcare, seasonal, hospitality, trades}.
 
 ### 1b. Required files readable
 Check that each of these files exists and can be read:
@@ -39,7 +39,7 @@ Confirm the vault root directory exists and is writable:
 Use `ls -la /home/laudes/zoot/projects/wiki-builds/work-abroad-web/` to verify.
 
 ### 1e. Category in research doc
-Read the first 100 lines of `docs/pathway-intelligence-research.md`. Confirm the category (`engineering`, `it-tech`, `teaching`, or `accounting`) is mentioned. If not, stop with:
+Read the first 100 lines of `docs/pathway-intelligence-research.md`. Confirm the category is mentioned. If not, stop with:
 ```
 Error: Category "<category>" not found in docs/pathway-intelligence-research.md.
 Add it to the research document before running this pipeline.

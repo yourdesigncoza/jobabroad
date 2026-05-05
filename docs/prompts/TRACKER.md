@@ -45,6 +45,19 @@ Run shared vaults first — nursing prompts cross-reference them.
 
 ---
 
+## Seasonal (separate vaults per prompt)
+
+| Status | Prompt | Section | Iter | Notes |
+|---|---|---|---|---|
+| [x] | [01 — Destination Options](seasonal/01-destination-options.md) | Where can I actually go? | 5 | 26 notes, FINAL_REPORT done — vault: wa-seasonal-01-destinations |
+| [x] | [02 — Document Checklist](seasonal/02-document-checklist.md) | What papers do I need? | 7 | 46 notes, FINAL_REPORT done — vault: wa-seasonal-02-documents |
+| [x] | [03 — Realistic Costs](seasonal/03-realistic-costs.md) | How much will it cost? | 6 | 37 notes, FINAL_REPORT done — vault: wa-seasonal-03-costs |
+| [x] | [04 — Visa Route Overview](seasonal/04-visa-routes.md) | What's the actual process? | 7 | 38 notes, FINAL_REPORT done — vault: wa-seasonal-04-visa-routes |
+| [x] | [05 — Scam Red Flags](seasonal/05-scam-red-flags.md) | Will I get scammed? | 5 | 21 notes, FINAL_REPORT done — vault: wa-seasonal-05-scams |
+| [x] | [06 — Legitimate Contacts](seasonal/06-legitimate-contacts.md) | Who do I actually call? | 6 | 26 notes, FINAL_REPORT done — vault: wa-seasonal-06-contacts |
+
+---
+
 ## Other Categories (prompts not yet built)
 
 | Status | Category | Vault | Prompts Built |
@@ -53,6 +66,7 @@ Run shared vaults first — nursing prompts cross-reference them.
 | [ ] | Engineering | `wa-engineering` | No |
 | [x] | Teaching | `wa-teaching` | Yes — 6 prompts written, 6 vaults complete |
 | [ ] | Accounting | `wa-accounting` | No |
+| [x] | Seasonal | `wa-seasonal` | Yes — 6 prompts written, vaults pending |
 
 ---
 

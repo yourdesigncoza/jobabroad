@@ -1,6 +1,6 @@
 ---
 name: build-pathway
-description: Automates the jobabroad.co.za pathway guide pipeline. Trigger with /build-pathway <category>. Valid categories: engineering | it-tech | teaching | accounting. Reads docs/prompts/<category>/_PIPELINE_STATE.md on each invocation and resumes from the current stage. One invocation = one stage (or one batch of 3 vaults). Re-invoke to continue.
+description: Automates the jobabroad.co.za pathway guide pipeline. Trigger with /build-pathway <category>. Valid categories: engineering | it-tech | teaching | accounting | farming | healthcare | seasonal | hospitality | trades. Reads docs/prompts/<category>/_PIPELINE_STATE.md on each invocation and resumes from the current stage. One invocation = one stage (or one batch of 3 vaults). Re-invoke to continue.
 ---
 
 # build-pathway
@@ -16,7 +16,7 @@ Read the invocation arguments: `/build-pathway <category> [proceed <manifest_has
 
 If the category is missing or invalid:
 ```
-Error: Unknown category "<input>". Valid categories: engineering | it-tech | teaching | accounting
+Error: Unknown category "<input>". Valid categories: engineering | it-tech | teaching | accounting | farming | healthcare | seasonal | hospitality | trades
 ```
 
 Store the parsed `proceed_hash` (or null) for use in Step 2.
