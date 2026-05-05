@@ -79,6 +79,13 @@ export default function PathwaySearch({ token, whatsappNumber, category }: Props
         </button>
       </form>
 
+      <span
+        className="font-display font-bold uppercase text-[0.65rem] tracking-wide px-3 py-1 rounded-full self-start"
+        style={{ backgroundColor: '#ff751f', color: '#FFFFFF' }}
+      >
+        Tip: Search relevant content for best results
+      </span>
+
       {error && (
         <p className="font-body text-sm" style={{ color: '#8C2A2A' }}>
           Search failed: {error}
