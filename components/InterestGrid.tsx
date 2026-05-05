@@ -11,6 +11,7 @@ export default function InterestGrid({ source }: { source?: string }) {
           key={cat.id}
           category={cat}
           href={buildWhatsAppLink(cat.label, source)}
+          source={source}
         />
       ))}
     </div>

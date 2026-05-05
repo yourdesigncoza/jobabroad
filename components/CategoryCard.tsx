@@ -1,5 +1,6 @@
 'use client';
 
+import { track } from '@vercel/analytics';
 import CategoryIcon from './CategoryIcon';
 
 interface Props {
@@ -10,14 +11,22 @@ interface Props {
     destinations: readonly string[];
   };
   href: string;
+  source?: string;
 }
 
-export default function CategoryCard({ category, href }: Props) {
+export default function CategoryCard({ category, href, source }: Props) {
   return (
     <a
       href={href}
       target="_blank"
       rel="noopener noreferrer"
+      onClick={() =>
+        track('category_click', {
+          id: category.id,
+          label: category.label,
+          source: source ?? 'direct',
+        })
+      }
       className="category-card group flex flex-col items-center gap-3 p-5 rounded-2xl text-center no-underline relative overflow-hidden"
       style={{ backgroundColor: '#1B4D3E', minHeight: '190px' }}
     >
