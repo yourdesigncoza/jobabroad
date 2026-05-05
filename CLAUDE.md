@@ -46,7 +46,7 @@ Use plain language: "We could not get a definitive answer on X — check [offici
 - Eventually: build guides for other categories (IT/tech, engineering, accounting, farming, hospitality, trades)
 
 ### Test token (healthcare, local dev)
-`http://localhost:3000/members/3c625e74-5f85-4d61-844b-3087a8e27ed8`
+`http://localhost:3000/members/d2e097bc-47b4-4db2-b55a-d0886ce65d3c`
 
 All 6 nursing vaults are complete (separate vaults per prompt):
 - `wa-nursing-01-destinations` — 45 notes, 686 nodes
@@ -93,8 +93,8 @@ All 6 nursing vaults are complete (separate vaults per prompt):
 - Edge cases visible in the UI (empty states, error states, conditional fields)
 
 ### Test token (healthcare, local dev)
-`http://localhost:3000/members/3c625e74-5f85-4d61-844b-3087a8e27ed8`
-`http://localhost:3000/members/3c625e74-5f85-4d61-844b-3087a8e27ed8/assessment`
+`http://localhost:3000/members/d2e097bc-47b4-4db2-b55a-d0886ce65d3c`
+`http://localhost:3000/members/d2e097bc-47b4-4db2-b55a-d0886ce65d3c/assessment`
 
 ### Automation goal
 Optimise and automate the dev + test loop as far as possible. When adding a new feature, write or update Playwright tests in the same session before marking the task done.
