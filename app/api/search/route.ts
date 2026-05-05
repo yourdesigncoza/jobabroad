@@ -75,6 +75,7 @@ export async function POST(req: NextRequest) {
     body: JSON.stringify({
       query,
       category: tokenRow.interest_category,
+      threshold: 0.6,
     }),
   });
 
@@ -98,7 +99,8 @@ export async function POST(req: NextRequest) {
     .sort((a, b) => {
       if (a.source_type !== b.source_type) return a.source_type === 'guide' ? -1 : 1;
       return b.similarity - a.similarity;
-    });
+    })
+    .slice(0, 4);
 
   return NextResponse.json({ results: trimmed });
 }
