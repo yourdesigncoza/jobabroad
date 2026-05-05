@@ -22,9 +22,24 @@ interface MatchRow {
 }
 
 function snippet(text: string, max = 200): string {
-  const stripped = text.replace(/^#\s.*\n+/, '').replace(/\s+/g, ' ').trim();
-  if (stripped.length <= max) return stripped;
-  return stripped.slice(0, max).replace(/\s\S*$/, '') + '…';
+  const s = text
+    .replace(/^---[\s\S]*?---\n/, '')
+    .replace(/^#\s.*\n+/, '')
+    .replace(/\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g, (_, t, l) => l ?? t)
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    .replace(/\*\*([^*]+)\*\*/g, '$1')
+    .replace(/\*([^*]+)\*/g, '$1')
+    .replace(/__([^_]+)__/g, '$1')
+    .replace(/`([^`]+)`/g, '$1')
+    .replace(/^[\s|:-]+$/gm, '')
+    .replace(/^#{1,6}\s+/gm, '')
+    .replace(/^[\s>]*[-*+]\s+/gm, '')
+    .replace(/^\s*\d+\.\s+/gm, '')
+    .replace(/\|/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+  if (s.length <= max) return s;
+  return s.slice(0, max).replace(/\s\S*$/, '') + '…';
 }
 
 export async function POST(req: NextRequest) {
