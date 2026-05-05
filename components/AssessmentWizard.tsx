@@ -1,13 +1,15 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { HEALTHCARE_STEPS, SCHEMA_VERSION } from '@/lib/assessments/steps/healthcare';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import { SCHEMA_VERSION } from '@/lib/assessments/types';
+import { getStepsForCategory } from '@/lib/assessments/steps';
 import AssessmentProgress from './AssessmentProgress';
 import AssessmentStep from './AssessmentStep';
 import AssessmentConfirmation from './AssessmentConfirmation';
 
 interface Props {
   token: string;
+  category: string;
   whatsappNumber: string;
   initialData: Record<string, unknown>;
   initialSlugs: string[];
@@ -21,13 +23,14 @@ function toPayload(fieldId: string, version: number, value: unknown) {
 }
 
 export default function AssessmentWizard({
-  token, whatsappNumber,
+  token, category, whatsappNumber,
   initialData, initialSlugs, initialAssessmentId,
   initialStatus, leadPhone,
 }: Props) {
-  const steps = HEALTHCARE_STEPS;
+  const steps = useMemo(() => getStepsForCategory(category) ?? [], [category]);
+  const hasSteps = steps.length > 0;
 
-  const firstIncomplete = steps.findIndex((s) => !initialSlugs.includes(s.slug));
+  const firstIncomplete = hasSteps ? steps.findIndex((s) => !initialSlugs.includes(s.slug)) : -1;
   const startIndex = initialStatus === 'submitted' ? 0 : (firstIncomplete === -1 ? 0 : firstIncomplete);
 
   const [currentIndex, setCurrentIndex] = useState(startIndex);
@@ -50,7 +53,7 @@ export default function AssessmentWizard({
   const [saveError, setSaveError] = useState<string | null>(null);
 
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const currentStep = steps[currentIndex];
+  const currentStep = hasSteps ? steps[currentIndex] : null;
 
   const saveStep = useCallback(async (slug: string, currentValues: Record<string, unknown>, assessId: string | null) => {
     const step = steps.find((s) => s.slug === slug);
@@ -76,6 +79,7 @@ export default function AssessmentWizard({
   }, [token, steps]);
 
   useEffect(() => {
+    if (!currentStep) return;
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(async () => {
       const newId = await saveStep(currentStep.slug, values, assessmentId);
@@ -89,6 +93,7 @@ export default function AssessmentWizard({
   }
 
   async function handleNext() {
+    if (!currentStep) return;
     const newId = await saveStep(currentStep.slug, values, assessmentId);
     if (newId) setAssessmentId(newId);
     const newSlugs = Array.from(new Set([...completedSlugs, currentStep.slug]));
@@ -119,6 +124,14 @@ export default function AssessmentWizard({
     setCurrentIndex(0);
     setAssessmentId(null);
     setCompletedSlugs([]);
+  }
+
+  if (!hasSteps || !currentStep) {
+    return (
+      <p className="font-body text-sm" style={{ color: '#6B6B6B' }}>
+        An eligibility assessment isn&apos;t available for this pathway yet. Reply to your WhatsApp thread and we&apos;ll work through the assessment with you directly.
+      </p>
+    );
   }
 
   if (submitted) {

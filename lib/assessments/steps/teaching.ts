@@ -1,6 +1,6 @@
 import type { StepDef } from '../types';
 
-export const HEALTHCARE_STEPS: StepDef[] = [
+export const TEACHING_STEPS: StepDef[] = [
   {
     slug: 'personal',
     title: 'Personal Details',
@@ -25,46 +25,53 @@ export const HEALTHCARE_STEPS: StepDef[] = [
       {
         id: 'qualifications.highest_qualification',
         version: 1,
-        label: 'Highest nursing qualification',
+        label: 'Highest teaching qualification',
         type: 'select',
-        options: ['Diploma', 'Degree', 'Honours', 'Masters', 'Other'],
+        options: ['PGCE', 'B.Ed', 'B.Ed Honours', 'M.Ed / Masters', 'PhD', 'Other'],
       },
       { id: 'qualifications.institution', version: 1, label: 'Institution', type: 'text' },
       { id: 'qualifications.graduation_year', version: 1, label: 'Graduation year', type: 'number', placeholder: '2018' },
       {
-        id: 'qualifications.speciality',
+        id: 'qualifications.phase',
         version: 1,
-        label: 'Speciality (select all that apply)',
+        label: 'Phase qualified to teach (select all)',
         type: 'multiselect',
-        options: ['ICU', 'Theatre', 'General', 'Paediatrics', 'Maternity', 'Psychiatry', 'Emergency', 'Other'],
+        options: ['Foundation (Gr R–3)', 'Intermediate (Gr 4–6)', 'Senior (Gr 7–9)', 'FET (Gr 10–12)', 'Early Childhood', 'Adult / Tertiary'],
+      },
+      {
+        id: 'qualifications.subjects',
+        version: 1,
+        label: 'Subject specialisms (select all)',
+        type: 'multiselect',
+        options: ['English', 'Maths', 'Sciences', 'Languages', 'Humanities / Social Sciences', 'Tech / Computing', 'Arts / Music', 'Phys Ed', 'Special Needs', 'Other'],
       },
     ],
   },
   {
     slug: 'registration',
-    title: 'SANC Registration',
-    supportHint: "Not sure about your SANC details?",
+    title: 'SACE Registration',
+    supportHint: 'Not sure about your SACE details?',
     fields: [
-      { id: 'registration.sanc_number', version: 1, label: 'SANC registration number', type: 'text' },
+      { id: 'registration.sace_number', version: 1, label: 'SACE registration number', type: 'text' },
       {
-        id: 'registration.sanc_status',
+        id: 'registration.sace_status',
         version: 1,
         label: 'Registration status',
         type: 'select',
-        options: ['Active', 'Lapsed', 'Pending renewal'],
+        options: ['Active (full)', 'Provisional', 'Lapsed', 'Pending renewal', 'Not registered'],
       },
       {
-        id: 'registration.sanc_expiry',
+        id: 'registration.sace_expiry',
         version: 1,
-        label: 'Registration expiry date',
+        label: 'Registration expiry year',
         type: 'select',
         options: ['2025', '2026', '2027', '2028+', "I don't know"],
         hint: 'Approximate year is fine',
       },
       {
-        id: 'registration.prior_nmc_ahpra_ncnz',
+        id: 'registration.qts_started',
         version: 1,
-        label: 'Have you started registration with NMC (UK), AHPRA (AU), or NCNZ (NZ)?',
+        label: 'Have you started UK QTS / iQTS or any overseas teacher registration?',
         type: 'select',
         options: ['None started', 'In progress', 'Completed'],
       },
@@ -72,36 +79,36 @@ export const HEALTHCARE_STEPS: StepDef[] = [
   },
   {
     slug: 'experience',
-    title: 'Work Experience',
+    title: 'Teaching Experience',
     fields: [
-      { id: 'experience.years_experience', version: 1, label: 'Years of nursing experience', type: 'number', placeholder: '5' },
+      { id: 'experience.years_teaching', version: 1, label: 'Years of teaching experience', type: 'number', placeholder: '5' },
       {
-        id: 'experience.employer_type',
+        id: 'experience.school_type',
         version: 1,
-        label: 'Current / most recent employer type',
+        label: 'Current / most recent school type',
         type: 'select',
-        options: ['Public hospital', 'Private hospital', 'Clinic', 'Agency', 'Other'],
+        options: ['Public (state)', 'Private / independent', 'Model C', 'International school', 'Tutoring / online', 'Not currently teaching', 'Other'],
       },
       {
-        id: 'experience.worked_abroad',
+        id: 'experience.taught_abroad',
         version: 1,
-        label: 'Have you worked abroad before?',
+        label: 'Have you taught abroad before?',
         type: 'boolean',
       },
       {
-        id: 'experience.worked_abroad_where',
+        id: 'experience.taught_abroad_where',
         version: 1,
-        label: 'Where did you work?',
+        label: 'Where did you teach?',
         type: 'text',
         optional: true,
-        showIf: { field: 'experience.worked_abroad', value: true },
+        showIf: { field: 'experience.taught_abroad', value: true },
       },
       {
         id: 'experience.notice_period',
         version: 1,
-        label: 'Notice period at current job',
+        label: 'Notice period at current school',
         type: 'select',
-        options: ['Immediate', '1 month', '2 months', '3 months', 'Other / not employed'],
+        options: ['Immediate', 'End of current term', '1 calendar month', '3 months / end of semester', 'Other / not employed'],
       },
     ],
   },
@@ -144,7 +151,7 @@ export const HEALTHCARE_STEPS: StepDef[] = [
   {
     slug: 'readiness',
     title: 'Language & Readiness',
-    supportHint: "Not sure which English test applies?",
+    supportHint: 'Not sure which English test applies?',
     fields: [
       {
         id: 'readiness.english_rating',
@@ -158,7 +165,7 @@ export const HEALTHCARE_STEPS: StepDef[] = [
         version: 1,
         label: 'Have you taken an English test?',
         type: 'select',
-        options: ['Not yet', 'IELTS', 'OET'],
+        options: ['Not yet', 'IELTS', 'TOEFL', 'Other / exempt'],
       },
       {
         id: 'readiness.english_test_score',
@@ -166,24 +173,24 @@ export const HEALTHCARE_STEPS: StepDef[] = [
         label: 'Score / grade',
         type: 'text',
         optional: true,
-        placeholder: 'e.g. IELTS 7.0 or OET B',
+        placeholder: 'e.g. IELTS 7.0',
         showIf: { field: 'readiness.english_test', value: 'IELTS' },
       },
       {
-        id: 'readiness.oet_grade',
+        id: 'readiness.toefl_score',
         version: 1,
-        label: 'OET grade',
+        label: 'TOEFL score',
         type: 'text',
         optional: true,
-        placeholder: 'e.g. B in all components',
-        showIf: { field: 'readiness.english_test', value: 'OET' },
+        placeholder: 'e.g. 100 iBT',
+        showIf: { field: 'readiness.english_test', value: 'TOEFL' },
       },
       {
         id: 'readiness.target_destinations',
         version: 1,
         label: 'Target destinations (select all)',
         type: 'multiselect',
-        options: ['UK', 'Australia', 'New Zealand', 'UAE', 'Canada'],
+        options: ['UAE', 'Saudi Arabia', 'China', 'UK', 'Vietnam', 'Thailand', 'Qatar / Oman / Kuwait', 'Australia / NZ', 'Other'],
       },
       {
         id: 'readiness.target_timeline',
@@ -195,4 +202,3 @@ export const HEALTHCARE_STEPS: StepDef[] = [
     ],
   },
 ];
-

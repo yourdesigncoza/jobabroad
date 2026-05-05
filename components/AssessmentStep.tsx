@@ -1,6 +1,6 @@
 'use client';
 
-import type { StepDef, FieldDef } from '@/lib/assessments/steps/healthcare';
+import type { StepDef, FieldDef } from '@/lib/assessments/types';
 
 interface Props {
   step: StepDef;

@@ -70,6 +70,7 @@ export default async function AssessmentPage({
         >
           <AssessmentWizard
             token={token}
+            category={tokenRow.interest_category}
             whatsappNumber={whatsappNumber}
             initialData={(assessment?.data as Record<string, unknown>) ?? {}}
             initialSlugs={(assessment?.completed_step_slugs as string[]) ?? []}

@@ -5,6 +5,6 @@ const entry = z.object({
   v: z.union([z.string(), z.number(), z.boolean(), z.array(z.string())]),
 });
 
-export const healthcareDataSchema = z.record(z.string(), entry);
+export const assessmentDataSchema = z.record(z.string(), entry);
 
-export type HealthcareData = z.infer<typeof healthcareDataSchema>;
+export type AssessmentData = z.infer<typeof assessmentDataSchema>;

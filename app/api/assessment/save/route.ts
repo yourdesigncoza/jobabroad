@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
-import { healthcareDataSchema } from '@/lib/assessments/schemas/healthcare';
+import { assessmentDataSchema } from '@/lib/assessments/schemas/assessment';
 import { saveAssessmentStep, getLatestAssessment } from '@/lib/assessments/assessment-client';
-import { SCHEMA_VERSION } from '@/lib/assessments/steps/healthcare';
+import { SCHEMA_VERSION } from '@/lib/assessments/types';
+import { hasAssessment } from '@/lib/assessments/steps';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -25,7 +26,11 @@ export async function POST(req: NextRequest) {
 
   if (!tokenRow) return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
 
-  const parsed = healthcareDataSchema.safeParse(stepData);
+  if (!hasAssessment(tokenRow.interest_category)) {
+    return NextResponse.json({ error: 'Assessment not available for this category' }, { status: 400 });
+  }
+
+  const parsed = assessmentDataSchema.safeParse(stepData);
   if (!parsed.success) {
     return NextResponse.json({ error: 'Invalid data', details: parsed.error.flatten() }, { status: 422 });
   }
