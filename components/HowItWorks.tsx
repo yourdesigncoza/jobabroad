@@ -20,7 +20,6 @@ const PLAYBOOK_ITEMS = [
   "Current visa route overview",
   "Scam red flags to watch for",
   "Legitimate contacts and official programme links",
-  "Personalised eligibility assessment — know exactly where you stand",
 ];
 
 export default function HowItWorks() {
@@ -181,6 +180,47 @@ export default function HowItWorks() {
                   </li>
                 ))}
               </ul>
+
+              {/* Featured item — assessment */}
+              <div
+                className="mt-5 flex items-start gap-4 rounded-xl px-5 py-4"
+                style={{
+                  backgroundColor: "rgba(201,168,76,0.12)",
+                  border: "1.5px solid rgba(201,168,76,0.4)",
+                }}
+              >
+                <div
+                  className="shrink-0 flex items-center justify-center rounded-full font-display font-bold text-base"
+                  style={{
+                    width: "40px",
+                    height: "40px",
+                    backgroundColor: "#C9A84C",
+                    color: "#1B4D3E",
+                  }}
+                >
+                  ✓
+                </div>
+                <div>
+                  <p
+                    className="font-display font-bold uppercase text-xs tracking-[0.1em] mb-1 whitespace-nowrap"
+                    style={{ color: "#C9A84C" }}
+                  >
+                    Sets Us Apart
+                  </p>
+                  <p
+                    className="font-body text-sm font-semibold leading-snug mb-1"
+                    style={{ color: "rgba(248,245,240,0.95)" }}
+                  >
+                    Personalised eligibility assessment
+                  </p>
+                  <p
+                    className="font-body text-sm leading-relaxed"
+                    style={{ color: "rgba(248,245,240,0.7)" }}
+                  >
+                    We review your background and tell you which countries are realistic for your profile — before you spend a cent on applications.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
