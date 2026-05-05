@@ -2,6 +2,7 @@ import { createClient } from '@supabase/supabase-js';
 import { notFound } from 'next/navigation';
 import AssessmentCTA from '@/components/AssessmentCTA';
 import BackToTop from '@/components/BackToTop';
+import PathwaySearch from '@/components/PathwaySearch';
 import TableOfContents from '@/components/TableOfContents';
 import StickyNav from '@/components/StickyNav';
 import { getPathwayContent } from '@/lib/pathway-content';
@@ -67,6 +68,7 @@ export default async function MembersPage({
 
             {/* Main content */}
             <div className="flex flex-col gap-10 min-w-0">
+              <PathwaySearch token={token} whatsappNumber={whatsappNumber} />
               {/* sanitizeHtml in getPathwayContent ensures this is safe to render */}
               <article
                 className="prose prose-sm sm:prose-base max-w-none

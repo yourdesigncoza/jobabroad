@@ -1,0 +1,4 @@
+project_id = "work-abroad-web"
+
+[functions.search-pathway]
+verify_jwt = false
