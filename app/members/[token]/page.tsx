@@ -68,7 +68,11 @@ export default async function MembersPage({
 
             {/* Main content */}
             <div className="flex flex-col gap-10 min-w-0">
-              <PathwaySearch token={token} whatsappNumber={whatsappNumber} />
+              <PathwaySearch
+                token={token}
+                whatsappNumber={whatsappNumber}
+                category={tokenRow.interest_category}
+              />
               {/* sanitizeHtml in getPathwayContent ensures this is safe to render */}
               <article
                 className="prose prose-sm sm:prose-base max-w-none

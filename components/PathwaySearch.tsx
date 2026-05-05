@@ -16,9 +16,11 @@ interface SearchResult {
 interface Props {
   token: string;
   whatsappNumber: string;
+  category: string;
 }
 
-export default function PathwaySearch({ token, whatsappNumber }: Props) {
+export default function PathwaySearch({ token, whatsappNumber, category }: Props) {
+  const categoryLabel = category.charAt(0).toUpperCase() + category.slice(1);
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<SearchResult[] | null>(null);
   const [loading, setLoading] = useState(false);
@@ -50,7 +52,7 @@ export default function PathwaySearch({ token, whatsappNumber }: Props) {
   };
 
   const waLink = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
-    `I searched my guide for "${query}" but didn't find what I was looking for. Can you help?`,
+    `I searched "${categoryLabel}" for "${query}" but didn't find what I was looking for. Can you help?`,
   )}`;
 
   return (
