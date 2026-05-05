@@ -55,7 +55,12 @@ export function getPathwayContent(category: string): PathwayContent | null {
   const { content } = matter(fs.readFileSync(filePath, 'utf-8'));
 
   toc.length = 0; // reset before each render
-  const raw = marked(content) as string;
+
+  // Strip HTML comments before tokenization — pipes inside <!-- src: a | b | c --> markers
+  // would otherwise be parsed as table column separators, breaking surrounding cells.
+  const stripped = content.replace(/<!--[\s\S]*?-->/g, '');
+
+  const raw = marked(stripped) as string;
 
   const clean = sanitizeHtml(raw, {
     allowedTags: ALLOWED_TAGS,

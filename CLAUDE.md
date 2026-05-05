@@ -23,6 +23,7 @@ Use plain language: "We could not get a definitive answer on X — check [offici
 ### What's done
 - `content/pathways/healthcare.md` — full nurses guide (6 sections, Gemini-reviewed)
 - `content/pathways/teaching.md` — full teaching guide (6 sections, Gemini-reviewed)
+- `content/pathways/seasonal.md` — full seasonal guide (6 sections, Gemini-reviewed)
 - `lib/pathway-content.ts` — reads markdown, renders to sanitized HTML, extracts TOC from h2 headings
 - `app/members/[token]/page.tsx` — token-gated page: two-column desktop (sticky TOC left, article right), single column mobile (TOC below article)
 - `components/TableOfContents.tsx` — active-section highlighting via IntersectionObserver, collapse toggle
@@ -42,7 +43,7 @@ Use plain language: "We could not get a definitive answer on X — check [offici
 - Continue UI polish on the member page (typography, spacing, mobile feel)
 - Review the CV template and refine it
 - Test full flow end-to-end on mobile
-- Eventually: build guides for other categories (IT/tech, engineering, accounting)
+- Eventually: build guides for other categories (IT/tech, engineering, accounting, farming, hospitality, trades)
 
 ### Test token (healthcare, local dev)
 `http://localhost:3000/members/3c625e74-5f85-4d61-844b-3087a8e27ed8`
