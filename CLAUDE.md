@@ -105,8 +105,13 @@ Optimise and automate the dev + test loop as far as possible. When adding a new 
 npm run dev          # start dev server on localhost:3000
 npm run build        # production build
 npm run lint         # eslint
+npm run reindex      # rebuild pathway_chunks (semantic search index) — see docs/semantic-search.md
 npx playwright test  # run Playwright regression suite (once tests exist)
 ```
+
+## Semantic search
+
+See `docs/semantic-search.md` for: when to re-run the index, how to add a new category, troubleshooting, and tuning knobs.
 
 ## What this is
 
