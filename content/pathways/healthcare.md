@@ -761,7 +761,7 @@ Start with SANC. Every other contact in this section depends on having a current
 | Body | Role | Contact | Cost |
 |---|---|---|---|
 | **SANC** | SA source regulator — issues CoGS | customerservice@sanc.co.za · 012 420 1000 · sanc.co.za | R2,740 (2025/2026 fee schedule) |
-| **NMC** | UK destination regulator | nmc.org.uk · 020 7637 7181 | CBT £83 + OSCE £794 + reg £153 = ~£1,030 |
+| **NMC** | UK destination regulator | nmc.org.uk · 020 7637 7181 | £140 evaluation + £83 CBT + £794 OSCE + £153 reg = £1,170 |
 | **AHPRA** | Australia destination regulator | ahpra.gov.au | ~AUD 410 initial + ~AUD 193/year renewal (verify at ahpra.gov.au/fees) |
 | **NMBI** | Ireland destination regulator | my.nmbi.ie · G3reg@nmbi.ie | €350 recognition + €145 registration = €495 |
 | **NCNZ** | New Zealand destination regulator | ncnz.org.nz | NZ$485 (after CGFNS/TruMerit USD$680) |
@@ -799,7 +799,7 @@ The Nursing and Midwifery Council is the statutory regulator for nurses in the U
 | **Website** | nmc.org.uk |
 | **Overseas nurses guidance** | nmc.org.uk/registration/joining-the-register/register-nurse-midwife/trained-outside-uk/ |
 | **Phone** | 020 7637 7181 |
-| **Registration fees** | CBT £83 (Pearson VUE, can be sat in SA) + OSCE £794 (UK only) + Registration £153 — ~£1,030 as published in vault research; an additional application fee (~£140) has been cited in some sources. Verify the current complete breakdown at nmc.org.uk before budgeting. |
+| **Registration fees** | £140 qualification evaluation + £83 CBT (Pearson VUE, can be sat in SA) + £794 OSCE (UK only) + £153 registration = **£1,170 total**. Source: nmc.org.uk/registration/information-for-internationally-trained-applicants. |
 | **Language requirement** | IELTS 7.0 overall, no band below 7.0 (or OET Grade B) — NMC professional registration standard (January 2026). For UKVI visa English requirements, see Section 4. |
 | **Processing time** | 3–6 months from UK visa entry to full registration |
 | **When to engage** | Once you have a concrete UK job offer, or intend to apply within 6 months — CBT can be sat in SA before travelling |
