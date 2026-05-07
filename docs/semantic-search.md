@@ -4,15 +4,28 @@ Search lives on `/members/[token]` and indexes the pathway guide + the `wiki-bui
 
 ## When to re-run the index
 
-Run `npm run reindex` whenever any of these change:
+Run reindex whenever any of these change:
 
 - A pathway guide markdown (`content/pathways/<category>.md`)
 - Any wiki note in `/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-*/wiki/`
 - The reindex script itself (chunking logic, frontmatter handling)
 
-The script wipes `pathway_chunks` and rebuilds from scratch — safe to re-run as often as needed.
+### Two modes
 
-## Adding a new category (e.g. engineering, IT/tech, accounting, farming, hospitality, trades)
+**Full rebuild** — `npm run reindex`
+Wipes `pathway_chunks` and re-embeds every chunk for every category. Use after changes to the script itself, after editing shared vaults (`wa-shared-*`), or whenever you want a clean rebuild. Embeds ~3,000+ chunks (~1–3 min).
+
+**Partial rebuild** — `npm run reindex -- --category=<name>`
+Wipes only rows where `category='<name>'` and re-embeds only that category's chunks (guide + the 6 vaults that map to it). Use after publishing one new category, or after editing one category's pathway guide or vaults. Valid `<name>` values match the `category` column in the DB: `healthcare`, `teaching`, `seasonal`, `trades`, `farming`, `shared`. ~5× faster than the full rebuild.
+
+The full mode is the safe default. Reach for partial when you know nothing else changed.
+
+## Publish-pathway process flow (adding a new category)
+
+**Categories live so far:** healthcare, teaching, seasonal, trades, farming.
+**Remaining:** engineering, IT/tech, accounting, hospitality.
+
+Run through these steps in order each time you publish a new category. Each step is mechanical — the goal is that nothing required to make the category fully operational is missed.
 
 ### 1. Build the content
 
@@ -24,44 +37,72 @@ This produces:
 - `content/pathways/<category>.md` — the buyer-facing guide
 - `wiki-builds/work-abroad-web/wa-<vault-prefix>-{01..06}-*/` — the supporting vaults
 
-Note the **vault prefix** the build-pathway pipeline uses. It does not always match the category name. Existing mappings:
+The **vault prefix** does not always match the category name. Current mappings:
 
-| `interest_category` (DB)   | Vault prefix (filesystem)       |
-|----------------------------|---------------------------------|
-| `healthcare`               | `wa-nursing-*`                  |
-| `teaching`                 | `wa-teaching-*`                 |
-| `seasonal`                 | `wa-seasonal-*`                 |
-| (any)                      | `wa-shared-*` — applied to all  |
+| `interest_category` (DB) | Vault prefix (filesystem) |
+|---|---|
+| `healthcare` | `wa-nursing-*` |
+| `teaching`   | `wa-teaching-*` |
+| `seasonal`   | `wa-seasonal-*` |
+| `trades`     | `wa-trades-*` |
+| `farming`    | `wa-farming-*` |
+| (any)        | `wa-shared-*` — applied to all |
 
-### 2. Wire the new category into the reindex script
+### 2. Add the eligibility assessment
 
-Edit `scripts/reindex.ts` in two places — the regex and the map. Example for engineering, assuming `wa-engineering-*` vaults:
+Create `lib/assessments/steps/<category>.ts` exporting `<CATEGORY>_STEPS: StepDef[]` (mirror the structure in `farming.ts` / `seasonal.ts`), then register it in `lib/assessments/steps/index.ts`:
 
 ```ts
-const VAULT_TO_CATEGORY: Record<string, string> = {
-  nursing: 'healthcare',
-  teaching: 'teaching',
-  seasonal: 'seasonal',
-  shared: 'shared',
-  engineering: 'engineering',
+import { FARMING_STEPS } from './farming';
+const REGISTRY: Record<string, StepDef[]> = {
+  // …
+  farming: FARMING_STEPS,
 };
-
-const m = /^wa-(nursing|teaching|seasonal|shared|engineering)-/.exec(vault);
 ```
+
+Without this, `/members/[token]` shows no Assessment CTA for the new category and the buyer flow degrades silently.
+
+### 3. Wire the new category into the reindex script
+
+Two edits in `scripts/reindex.ts`:
+
+- Add `<vault-prefix>: '<category>'` to the `VAULT_TO_CATEGORY` map
+- Add the new vault prefix to the regex literal that matches `wa-<prefix>-` (the line just below `for (const vault of vaults)` — currently lists `nursing|teaching|seasonal|trades|farming|shared`)
 
 The pathway guide is picked up automatically — its filename becomes the category (`content/pathways/engineering.md` → `category='engineering'`).
 
-### 3. Re-index
+### 4. Re-index
 
 ```bash
-npm run reindex
+set -a; source .env.local; set +a   # the script reads SUPABASE env from here
+npm run reindex -- --category=<category>
 ```
 
-Confirm the per-vault counts at the top of the output, then verify in the browser with a token whose `interest_category` matches the new category.
+Use `--category=<category>` for the partial reindex — only the new category's rows are wiped and re-embedded, ~5× faster than the full mode. Switch to `npm run reindex` (no flag) if you also edited `wa-shared-*` vaults or anything else outside the new category.
 
-### 4. Make sure the DB has matching tokens
+Confirm the per-vault counts at the top of the output. Expect `guide <category>: NN chunks` and 6 × `wiki wa-<prefix>-* -> <category>: NN chunks` lines.
 
-Members must have `member_tokens.interest_category = '<category>'` for search to scope to that category. New tokens are created via `/admin` — make sure the admin form accepts the new category, or insert directly via SQL/dashboard for testing.
+### 5. Generate a test token + record the URL
+
+```bash
+curl -s -u admin:$ADMIN_SECRET \
+  -X POST -H "Content-Type: application/json" \
+  -d '{"phone":"27617114715","category":"<category>"}' \
+  http://localhost:3000/api/admin/generate-token
+```
+
+Then add the token to `.env.local` (under the `# Test tokens` block, alongside `TEST_TOKEN_HEALTHCARE` etc.) and to the `Test tokens (local dev)` list inside `CLAUDE.md`. This keeps Playwright tests and future debugging sessions self-serve.
+
+### 6. Verify in browser
+
+Open `http://localhost:3000/members/<test-token>` and confirm:
+- Pathway content renders with TOC sidebar
+- Assessment CTA appears (proves Step 2 worked)
+- Search box returns results for category-specific terms (proves Steps 3–4 worked)
+
+### 7. Commit + push
+
+Two commits work well — one for the assessment and system changes, one for the guide and pipeline output. Match the existing commit-style: `feat(assessment): add <category> eligibility wizard` and `feat(<category>): publish full pathway guide with 6 sections`. The reindex itself is a runtime side-effect — no commit needed for the index update, only for the script edits in Step 3.
 
 ## Verifying the index
 

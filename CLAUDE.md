@@ -94,9 +94,13 @@ All 6 nursing vaults are complete (separate vaults per prompt):
 - State persistence: navigate away and return, verify server-hydrated data matches
 - Edge cases visible in the UI (empty states, error states, conditional fields)
 
-### Test token (healthcare, local dev)
-`http://localhost:3000/members/d2e097bc-47b4-4db2-b55a-d0886ce65d3c`
-`http://localhost:3000/members/d2e097bc-47b4-4db2-b55a-d0886ce65d3c/assessment`
+### Test tokens (local dev)
+- Healthcare: `http://localhost:3000/members/d2e097bc-47b4-4db2-b55a-d0886ce65d3c`
+- Healthcare assessment: `http://localhost:3000/members/d2e097bc-47b4-4db2-b55a-d0886ce65d3c/assessment`
+- Teaching: `http://localhost:3000/members/684d2bbc-e704-4756-b377-79dcbcc4c3a2`
+- Seasonal: `http://localhost:3000/members/3c625e74-5f85-4d61-844b-3087a8e27ed8`
+- Trades: `http://localhost:3000/members/fe6f49b2-b992-410d-8074-fe2a2e3748c6`
+- Farming: `http://localhost:3000/members/a8139f18-725c-4ade-9df6-f718001c96ae`
 
 ### Automation goal
 Optimise and automate the dev + test loop as far as possible. When adding a new feature, write or update Playwright tests in the same session before marking the task done.

@@ -25,6 +25,7 @@ const VAULT_TO_CATEGORY: Record<string, string> = {
   teaching: 'teaching',
   seasonal: 'seasonal',
   trades: 'trades',
+  farming: 'farming',
   shared: 'shared',
 };
 
@@ -169,7 +170,7 @@ function collectChunks(): Chunk[] {
 
   if (fs.existsSync(WIKI_ROOT)) {
     for (const vault of fs.readdirSync(WIKI_ROOT)) {
-      const m = /^wa-(nursing|teaching|seasonal|trades|shared)-/.exec(vault);
+      const m = /^wa-(nursing|teaching|seasonal|trades|farming|shared)-/.exec(vault);
       if (!m) continue;
       const category = VAULT_TO_CATEGORY[m[1]];
       const wikiDir = path.join(WIKI_ROOT, vault, 'wiki');
@@ -196,13 +197,41 @@ function collectChunks(): Chunk[] {
   return all;
 }
 
+function parseCategoryFlag(): string | null {
+  for (const arg of process.argv.slice(2)) {
+    if (arg.startsWith('--category=')) return arg.slice('--category='.length);
+    if (arg === '--category') {
+      const next = process.argv[process.argv.indexOf(arg) + 1];
+      if (next && !next.startsWith('--')) return next;
+    }
+  }
+  return null;
+}
+
 async function main() {
+  const onlyCategory = parseCategoryFlag();
+  if (onlyCategory) {
+    const valid = new Set(Object.values(VAULT_TO_CATEGORY));
+    if (!valid.has(onlyCategory)) {
+      console.error(`Unknown category '${onlyCategory}'. Valid: ${[...valid].sort().join(', ')}`);
+      process.exit(1);
+    }
+    console.log(`Partial reindex — category='${onlyCategory}' only`);
+  } else {
+    console.log('Full reindex — all categories');
+  }
+
   console.log('Loading gte-small model...');
   const embedder = await pipeline('feature-extraction', 'Xenova/gte-small');
 
   console.log('Collecting chunks...');
-  const chunks = collectChunks();
-  console.log(`Total chunks: ${chunks.length}`);
+  const allChunks = collectChunks();
+  const chunks = onlyCategory ? allChunks.filter((c) => c.category === onlyCategory) : allChunks;
+  console.log(
+    onlyCategory
+      ? `Total chunks for '${onlyCategory}': ${chunks.length} (of ${allChunks.length} all categories)`
+      : `Total chunks: ${chunks.length}`,
+  );
   if (chunks.length === 0) {
     console.error('No chunks to index — aborting.');
     process.exit(1);
@@ -222,8 +251,15 @@ async function main() {
     auth: { persistSession: false },
   });
 
-  console.log('Wiping pathway_chunks...');
-  const { error: delErr } = await supabase.from('pathway_chunks').delete().not('id', 'is', null);
+  console.log(
+    onlyCategory
+      ? `Wiping pathway_chunks where category='${onlyCategory}'...`
+      : 'Wiping pathway_chunks...',
+  );
+  const deleteQuery = supabase.from('pathway_chunks').delete();
+  const { error: delErr } = onlyCategory
+    ? await deleteQuery.eq('category', onlyCategory)
+    : await deleteQuery.not('id', 'is', null);
   if (delErr) {
     console.error('Delete failed:', delErr.message);
     process.exit(1);
