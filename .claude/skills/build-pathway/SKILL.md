@@ -98,3 +98,7 @@ Read `.claude/skills/build-pathway/references/error-policy.md` for transient/per
 ## State schema
 
 Read `.claude/skills/build-pathway/references/state-schema.md` for the full YAML field specification and idempotency rules before writing any state.
+
+## Resource limits (mandatory)
+
+**Section-build concurrency cap: 3.** Stage 4 spawns one Agent teammate per pending section. Run **at most 3 teammates concurrently**, never 6. A prior run with 6 parallel teammates exhausted RAM on the operator's machine. Stage-4 handler must batch pending sections in groups of 3 and wait for each batch to fully resolve before spawning the next. This applies to every category build.

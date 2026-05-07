@@ -1,7 +1,9 @@
 # Stage 4 — Synthesis (Team)
 
 **Entry condition:** `current_stage: 4, stage_status: pending` (after manifest hash verified in SKILL.md Step 2).
-**Purpose:** Six sonnet teammates each write one guide section to separate files. No file-conflict risk since each teammate owns exactly one output file.
+**Purpose:** Sonnet teammates each write one guide section to separate files. No file-conflict risk since each teammate owns exactly one output file.
+
+**Concurrency cap (mandatory):** Spawn at most **3 teammates concurrently**. Pending sections are processed in batches of up to 3; each batch must fully resolve (Steps 7–8a/8b for that batch) before the next batch is spawned. 6 parallel teammates previously caused OOM on the operator's machine — do not exceed 3 under any circumstance.
 
 ## 1. Mark in-progress
 
@@ -108,7 +110,7 @@ Ensure `docs/guides/` exists. Do NOT pre-create section files — teammates crea
 
 Create TaskCreate for each section that is not already `completed`. Subject: `Write section <N>: <heading>`.
 
-## 6. Create team and spawn teammates
+## 6. Create team and spawn teammates (batched, max 3 concurrent)
 
 **Wrap this entire block in error handling. If TeamCreate or any Agent spawn throws, immediately:**
 1. Reset all sections just marked `in_progress` back to `pending`
@@ -118,21 +120,35 @@ Create TaskCreate for each section that is not already `completed`. Subject: `Wr
 
 Use `TeamCreate` to create a team named `synth-<category>`.
 
-For each section where `section_files[i].status != completed`:
+Build a queue `pending_sections` = all `i` where `section_files[i].status != completed`, ordered by section number (01 first, 06 last).
+
+**Process the queue in batches of up to 3 — never spawn more than 3 teammates at once.**
+
+For each batch (slice of up to 3 sections from the head of `pending_sections`):
+
+### 6a. Spawn the batch
+
+For each section `i` in this batch:
 
 Mark `section_files[i].status: in_progress` in state **before** spawning (so a session kill during spawn is recoverable).
 
 Read the spawn prompt template from `.claude/skills/build-pathway/references/teammate-prompts.md`.
 
-Fill in all `{{PLACEHOLDER}}` fields for each section. The new template uses **file paths**, not inline content — see teammate-prompts.md for the updated field list.
+Fill in all `{{PLACEHOLDER}}` fields. The template uses **file paths**, not inline content — see teammate-prompts.md for the updated field list.
 
 Spawn a teammate using the `Agent` tool with `team_name: synth-<category>`, `model: sonnet`.
 
-## 7. Wait for all teammates
+### 6b. Wait for this batch to drain
 
-Poll `TaskList` every 60 seconds. Wait until all spawned section tasks are `completed` or `failed`.
+Poll `TaskList` every 60 seconds. Wait until **every section in this batch** has its task `completed` or `failed`. Do not start the next batch while any teammate in the current batch is still running.
 
-Do not close the team while any task is still `in_progress`.
+### 6c. Continue
+
+Once the batch has drained, return to step 6a with the next slice of up to 3 from `pending_sections`. When `pending_sections` is empty, proceed to Step 7.
+
+## 7. Final drain check
+
+All teammates from all batches should now be terminal. Re-poll `TaskList` once to confirm no `in_progress` tasks remain in the team. Do not close the team while any task is still `in_progress`.
 
 ## 8. Collect results, postcheck, TeamDelete
 
