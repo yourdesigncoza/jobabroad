@@ -1,0 +1,177 @@
+import { createClient } from '@supabase/supabase-js';
+import { NextRequest, NextResponse } from 'next/server';
+import OpenAI from 'openai';
+import { buildAnswerPrompt, extractCitedIndexes } from '@/lib/rag/prompt';
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!,
+);
+
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY! });
+
+const SIMILARITY_GATE = 0.85;
+const MAX_CHUNKS = 8;
+const MODEL = 'gpt-4o-mini';
+
+interface ChunkRef {
+  id: number;
+  similarity: number;
+}
+
+interface RequestBody {
+  token?: string;
+  query?: string;
+  chunks?: ChunkRef[];
+}
+
+interface DbChunk {
+  id: number;
+  category: string;
+  source_type: 'guide' | 'wiki';
+  heading: string;
+  anchor: string | null;
+  slug: string | null;
+  content: string;
+}
+
+export async function POST(req: NextRequest) {
+  let body: RequestBody;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
+  }
+
+  const token = body.token?.trim();
+  const query = body.query?.trim();
+  const chunkRefs = Array.isArray(body.chunks) ? body.chunks : null;
+
+  if (!token || !query || !chunkRefs) {
+    return NextResponse.json(
+      { error: 'token, query, and chunks are required' },
+      { status: 400 },
+    );
+  }
+
+  if (chunkRefs.length === 0) {
+    return NextResponse.json({ refused: true, citations: [] });
+  }
+
+  if (chunkRefs.length > MAX_CHUNKS) {
+    return NextResponse.json({ error: 'too many chunks' }, { status: 400 });
+  }
+
+  const validRefs = chunkRefs.filter(
+    (c) =>
+      typeof c.id === 'number' &&
+      Number.isInteger(c.id) &&
+      typeof c.similarity === 'number',
+  );
+  if (validRefs.length !== chunkRefs.length) {
+    return NextResponse.json({ error: 'invalid chunk shape' }, { status: 400 });
+  }
+
+  const topSim = Math.max(...validRefs.map((c) => c.similarity));
+  if (topSim < SIMILARITY_GATE) {
+    return NextResponse.json({ refused: true, citations: [] });
+  }
+
+  const { data: tokenRow } = await supabase
+    .from('member_tokens')
+    .select('interest_category')
+    .eq('token', token)
+    .single();
+
+  if (!tokenRow) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  const category = tokenRow.interest_category as string;
+  const ids = validRefs.map((c) => c.id);
+
+  const { data: dbChunks, error: dbErr } = await supabase
+    .from('pathway_chunks')
+    .select('id, category, source_type, heading, anchor, slug, content')
+    .in('id', ids)
+    .in('category', [category, 'shared']);
+
+  if (dbErr) {
+    return NextResponse.json({ error: 'db_error' }, { status: 500 });
+  }
+
+  const fetched = (dbChunks ?? []) as DbChunk[];
+
+  if (fetched.length !== ids.length) {
+    return NextResponse.json(
+      { error: 'cross_category_or_missing_chunks' },
+      { status: 403 },
+    );
+  }
+
+  const orderedChunks = ids
+    .map((id) => fetched.find((c) => c.id === id))
+    .filter((c): c is DbChunk => c !== undefined);
+
+  const prompt = buildAnswerPrompt(
+    query,
+    category,
+    orderedChunks.map((c) => ({
+      id: c.id,
+      source_type: c.source_type,
+      heading: c.heading,
+      content: c.content,
+    })),
+  );
+
+  try {
+    const completion = await openai.chat.completions.create({
+      model: MODEL,
+      max_tokens: 500,
+      temperature: 0.2,
+      response_format: { type: 'json_object' },
+      messages: [
+        { role: 'system', content: prompt.system },
+        {
+          role: 'user',
+          content: `Question: ${prompt.user}\n\nPassages:\n${prompt.context}`,
+        },
+      ],
+    });
+
+    const raw = completion.choices[0]?.message?.content?.trim() ?? '';
+    if (!raw) {
+      return NextResponse.json({ error: 'empty_answer' }, { status: 503 });
+    }
+
+    let parsed: { answered?: unknown; answer?: unknown };
+    try {
+      parsed = JSON.parse(raw);
+    } catch {
+      console.error('[answer] json_parse_failure', raw);
+      return NextResponse.json({ error: 'answer_unavailable' }, { status: 503 });
+    }
+
+    const answered = parsed.answered === true;
+    const answer = typeof parsed.answer === 'string' ? parsed.answer.trim() : '';
+
+    if (!answered || !answer) {
+      return NextResponse.json({ refused: true, citations: [] });
+    }
+
+    const citedIndexes = extractCitedIndexes(answer);
+    const citationIds = citedIndexes
+      .map((n) => prompt.numberedIds[n - 1])
+      .filter((id): id is number => typeof id === 'number');
+
+    return NextResponse.json({
+      refused: false,
+      answer,
+      citationIds,
+      usage: completion.usage ?? null,
+    });
+  } catch (err) {
+    console.error('[answer] openai_failure', err);
+    return NextResponse.json({ error: 'answer_unavailable' }, { status: 503 });
+  }
+}

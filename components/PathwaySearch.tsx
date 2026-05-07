@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+import AnswerCard from './AnswerCard';
 import WikiNotePanel from './WikiNotePanel';
 
 interface SearchResult {
@@ -13,19 +14,34 @@ interface SearchResult {
   similarity: number;
 }
 
+interface AnswerResponse {
+  refused: boolean;
+  answer?: string;
+  citationIds?: number[];
+}
+
 interface Props {
   token: string;
   whatsappNumber: string;
   category: string;
 }
 
+type AnswerState =
+  | { kind: 'idle' }
+  | { kind: 'loading' }
+  | { kind: 'answered'; text: string; citationIds: number[] }
+  | { kind: 'refused' }
+  | { kind: 'error' };
+
 export default function PathwaySearch({ token, whatsappNumber, category }: Props) {
   const categoryLabel = category.charAt(0).toUpperCase() + category.slice(1);
   const [query, setQuery] = useState('');
+  const [submittedQuery, setSubmittedQuery] = useState('');
   const [results, setResults] = useState<SearchResult[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [openWiki, setOpenWiki] = useState<number | null>(null);
+  const [answerState, setAnswerState] = useState<AnswerState>({ kind: 'idle' });
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,6 +50,8 @@ export default function PathwaySearch({ token, whatsappNumber, category }: Props
     setLoading(true);
     setError(null);
     setOpenWiki(null);
+    setAnswerState({ kind: 'idle' });
+    setSubmittedQuery(q);
     try {
       const r = await fetch('/api/search', {
         method: 'POST',
@@ -43,17 +61,80 @@ export default function PathwaySearch({ token, whatsappNumber, category }: Props
       if (!r.ok) throw new Error(`HTTP ${r.status}`);
       const json = (await r.json()) as { results: SearchResult[] };
       setResults(json.results);
+      setLoading(false);
+
+      if (json.results.length === 0) {
+        return;
+      }
+
+      setAnswerState({ kind: 'loading' });
+      try {
+        const a = await fetch('/api/search/answer', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({
+            token,
+            query: q,
+            chunks: json.results.map((x) => ({ id: x.id, similarity: x.similarity })),
+          }),
+        });
+        if (!a.ok) {
+          setAnswerState({ kind: 'error' });
+          return;
+        }
+        const ans = (await a.json()) as AnswerResponse;
+        if (ans.refused) {
+          setAnswerState({ kind: 'refused' });
+        } else if (ans.answer) {
+          setAnswerState({
+            kind: 'answered',
+            text: ans.answer,
+            citationIds: ans.citationIds ?? [],
+          });
+        } else {
+          setAnswerState({ kind: 'error' });
+        }
+      } catch {
+        setAnswerState({ kind: 'error' });
+      }
     } catch (err) {
       setError((err as Error).message);
       setResults(null);
-    } finally {
       setLoading(false);
     }
   };
 
+  const queryForLink = submittedQuery || query;
   const waLink = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
-    `I searched "${categoryLabel}" for "${query}" but didn't find what I was looking for. Can you help?`,
+    `I searched "${categoryLabel}" for "${queryForLink}" but didn't find what I was looking for. Can you help?`,
   )}`;
+
+  const resultsById = useMemo(() => {
+    const map = new Map<
+      number,
+      { id: number; source_type: 'guide' | 'wiki'; heading: string; anchor: string | null }
+    >();
+    (results ?? []).forEach((r) =>
+      map.set(r.id, {
+        id: r.id,
+        source_type: r.source_type,
+        heading: r.heading,
+        anchor: r.anchor,
+      }),
+    );
+    return map;
+  }, [results]);
+
+  const handleCitationClick = (id: number) => {
+    const target = resultsById.get(id);
+    if (target?.source_type === 'wiki') {
+      setOpenWiki(id);
+      requestAnimationFrame(() => {
+        const el = document.getElementById(`result-${id}`);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    }
+  };
 
   return (
     <section
@@ -92,9 +173,29 @@ export default function PathwaySearch({ token, whatsappNumber, category }: Props
         </p>
       )}
 
+      {answerState.kind !== 'idle' && (
+        <AnswerCard
+          state={
+            answerState.kind === 'loading'
+              ? 'loading'
+              : answerState.kind === 'answered'
+                ? 'answered'
+                : answerState.kind === 'refused'
+                  ? 'refused'
+                  : 'error'
+          }
+          answer={answerState.kind === 'answered' ? answerState.text : undefined}
+          chunkOrder={results?.map((r) => r.id) ?? []}
+          resultsById={resultsById}
+          query={submittedQuery}
+          whatsappLink={waLink}
+          onCitationClick={handleCitationClick}
+        />
+      )}
+
       {results !== null && results.length === 0 && (
         <div className="font-body text-sm flex flex-col gap-2" style={{ color: '#6B6B6B' }}>
-          <p>No matches for &ldquo;{query}&rdquo;.</p>
+          <p>No matches for &ldquo;{submittedQuery}&rdquo;.</p>
           <a
             href={waLink}
             target="_blank"
@@ -110,7 +211,7 @@ export default function PathwaySearch({ token, whatsappNumber, category }: Props
       {results && results.length > 0 && (
         <ul className="flex flex-col gap-3">
           {results.map((r) => (
-            <li key={r.id} className="flex flex-col gap-2">
+            <li key={r.id} id={`result-${r.id}`} className="flex flex-col gap-2">
               <ResultCard
                 result={r}
                 isOpen={openWiki === r.id}
