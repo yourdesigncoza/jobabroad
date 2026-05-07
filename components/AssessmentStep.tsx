@@ -133,7 +133,13 @@ export default function AssessmentStep({ step, values, onChange, whatsappNumber 
       {step.fields.map((field) => {
         if (field.showIf) {
           const depValue = values[field.showIf.field];
-          if (depValue !== field.showIf.value) return null;
+          if ('includes' in field.showIf) {
+            if (!Array.isArray(depValue) || !depValue.includes(field.showIf.includes)) {
+              return null;
+            }
+          } else if (depValue !== field.showIf.value) {
+            return null;
+          }
         }
         return (
           <div key={field.id} className="flex flex-col gap-2">

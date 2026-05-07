@@ -15,7 +15,9 @@ export interface FieldDef {
   placeholder?: string;
   hint?: string;
   optional?: boolean;
-  showIf?: { field: string; value: string | boolean };
+  showIf?:
+    | { field: string; value: string | boolean }
+    | { field: string; includes: string };
 }
 
 export interface StepDef {
