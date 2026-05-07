@@ -237,7 +237,8 @@ Send this only after they reply "yes" or confirm they want to go ahead.
 
 > R199 to PayShap proxy: 0791771970
 > Receiver: J. M. Montgomery
-> Reference: [their first and Last name] — [category, e.g. Healthcare]
+> Recipient reference (the "Their reference" field, NOT "My reference"):
+> [their first and Last name] — [category, e.g. Healthcare]
 >
 > Send a screenshot once paid and I'll send your Playbook + access link straight away.
 >

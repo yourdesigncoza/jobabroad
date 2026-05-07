@@ -142,7 +142,8 @@ R199 once-off. Ready to see the actual routes and costs? I'll send the PayShap d
 export function getMessage3(categoryLabel: string): string {
   return `${PAYSHAP.amount} to PayShap proxy: ${PAYSHAP.proxy}
 Receiver: ${PAYSHAP.name}
-Reference: [Your first and last name] — ${categoryLabel}
+Recipient reference (the "Their reference" field, NOT "My reference"):
+[Your first and last name] — ${categoryLabel}
 
 Send a screenshot once paid and I'll send your Playbook + access link straight away.
 

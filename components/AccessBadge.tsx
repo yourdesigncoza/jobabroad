@@ -48,7 +48,7 @@ export default function AccessBadge({
           <dt className="font-semibold" style={{ color: '#6B6B6B' }}>Amount</dt>
           <dd>{PAYSHAP.amount}</dd>
 
-          <dt className="font-semibold" style={{ color: '#6B6B6B' }}>Reference format</dt>
+          <dt className="font-semibold" style={{ color: '#6B6B6B' }}>Recipient reference</dt>
           <dd>[Your name] — {categoryLabel}</dd>
 
           <dt className="font-semibold" style={{ color: '#6B6B6B' }}>Access link issued</dt>
