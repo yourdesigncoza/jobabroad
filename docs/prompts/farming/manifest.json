@@ -1,0 +1,43 @@
+{
+  "category": "farming",
+  "created_at": "2026-05-07T10:55:00+02:00",
+  "manifest_hash": "7b0c4abe37496ab52f67c6c838fb2921624a0d96e2853fa0f2c52e4c2a35dc6c",
+  "vaults": [
+    {
+      "section": "01-destinations",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-farming-01-destinations/FINAL_REPORT.md",
+      "sha256": "52e76d9a4b02b7b1cb2f4620e7f8e377b525df072f08bb8f205a8c0fcbe4e2c1",
+      "size_bytes": 9130
+    },
+    {
+      "section": "02-documents",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-farming-02-documents/FINAL_REPORT.md",
+      "sha256": "a23551d782bcb5a72a10e4d4dea81b767c4453f6fa6aa24cc31f6b2259be4d0d",
+      "size_bytes": 13142
+    },
+    {
+      "section": "03-costs",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-farming-03-costs/FINAL_REPORT.md",
+      "sha256": "daab64d0242a53a4cffa9a7c553a6f7f6771b8531a6a734ca5b358a03d6f386b",
+      "size_bytes": 7227
+    },
+    {
+      "section": "04-visa-routes",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-farming-04-visa-routes/FINAL_REPORT.md",
+      "sha256": "97a599bd691d2b580c45a23baa5e6c5dd7e33d65086c3520b4eda252b0d83ad4",
+      "size_bytes": 8607
+    },
+    {
+      "section": "05-scams",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-farming-05-scams/FINAL_REPORT.md",
+      "sha256": "736c1eed59e2fe3be172514f011d7c4417343ade3250d78d75944030b1d0716e",
+      "size_bytes": 6606
+    },
+    {
+      "section": "06-contacts",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-farming-06-contacts/FINAL_REPORT.md",
+      "sha256": "89f7641aa33b748c5c00a0ce6ee0fe86e35701a07ec264bf742c75e080b52db0",
+      "size_bytes": 7577
+    }
+  ]
+}
