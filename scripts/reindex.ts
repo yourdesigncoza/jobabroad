@@ -24,6 +24,7 @@ const VAULT_TO_CATEGORY: Record<string, string> = {
   nursing: 'healthcare',
   teaching: 'teaching',
   seasonal: 'seasonal',
+  trades: 'trades',
   shared: 'shared',
 };
 
@@ -168,7 +169,7 @@ function collectChunks(): Chunk[] {
 
   if (fs.existsSync(WIKI_ROOT)) {
     for (const vault of fs.readdirSync(WIKI_ROOT)) {
-      const m = /^wa-(nursing|teaching|seasonal|shared)-/.exec(vault);
+      const m = /^wa-(nursing|teaching|seasonal|trades|shared)-/.exec(vault);
       if (!m) continue;
       const category = VAULT_TO_CATEGORY[m[1]];
       const wikiDir = path.join(WIKI_ROOT, vault, 'wiki');
