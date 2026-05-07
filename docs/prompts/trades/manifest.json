@@ -1,0 +1,42 @@
+{
+  "category": "trades",
+  "created_at": "2026-05-06T21:49:43+02:00",
+  "vaults": [
+    {
+      "section": "01-destinations",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-trades-01-destinations/FINAL_REPORT.md",
+      "sha256": "9905dbb143cc02e8665232d512c8d6548a52c79b4efca6b2a7c434dc5e1f9b4c",
+      "size_bytes": 8766
+    },
+    {
+      "section": "02-documents",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-trades-02-documents/FINAL_REPORT.md",
+      "sha256": "1e095521d1cf81bb6ddf6ee6b733e85d369bd60f7f20feb55a6fd732434ef58e",
+      "size_bytes": 10033
+    },
+    {
+      "section": "03-costs",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-trades-03-costs/FINAL_REPORT.md",
+      "sha256": "679e1992c11dcf004c751350f7dc7deb934b5203bb38c55730c5bb019ab162fb",
+      "size_bytes": 7925
+    },
+    {
+      "section": "04-visa-routes",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-trades-04-visa-routes/FINAL_REPORT.md",
+      "sha256": "3058cc5e3395d09a2e061a42cf44c54e90670ab87ab76b5a721d397919deefff",
+      "size_bytes": 10219
+    },
+    {
+      "section": "05-scams",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-trades-05-scams/FINAL_REPORT.md",
+      "sha256": "279f1c8abe0cc9eb260ac272a3981bcd611ace5f6774c3e0163dfa85d99095ee",
+      "size_bytes": 10104
+    },
+    {
+      "section": "06-contacts",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-trades-06-contacts/FINAL_REPORT.md",
+      "sha256": "3ce9946eba6690e8174a54a95734b22897fa184422e631067c37c609e16190d2",
+      "size_bytes": 8976
+    }
+  ]
+}

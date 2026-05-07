@@ -58,6 +58,19 @@ Run shared vaults first — nursing prompts cross-reference them.
 
 ---
 
+## Trades (separate vaults per prompt)
+
+| Status | Prompt | Section | Iter | Notes |
+|---|---|---|---|---|
+| [x] | [01 — Destination Options](trades/01-destination-options.md) | Where can I actually go? | 8/8 | completed — vault: wa-trades-01-destinations (43 notes) |
+| [x] | [02 — Document Checklist](trades/02-document-checklist.md) | What papers do I need? | 7/6 | completed — vault: wa-trades-02-documents (57 notes) |
+| [x] | [03 — Realistic Costs](trades/03-realistic-costs.md) | How much will it cost? | 6/6 | completed — vault: wa-trades-03-costs (50 notes) |
+| [x] | [04 — Visa Route Overview](trades/04-visa-routes.md) | What's the actual process? | 4/10 | completed — vault: wa-trades-04-visa-routes (37 notes) |
+| [x] | [05 — Scam Red Flags](trades/05-scam-red-flags.md) | Will I get scammed? | 5/6 | completed — vault: wa-trades-05-scams (52 notes) |
+| [x] | [06 — Legitimate Contacts](trades/06-legitimate-contacts.md) | Who do I actually call? | 5/6 | completed — vault: wa-trades-06-contacts (73 notes) |
+
+---
+
 ## Other Categories (prompts not yet built)
 
 | Status | Category | Vault | Prompts Built |
@@ -67,6 +80,7 @@ Run shared vaults first — nursing prompts cross-reference them.
 | [x] | Teaching | `wa-teaching` | Yes — 6 prompts written, 6 vaults complete |
 | [ ] | Accounting | `wa-accounting` | No |
 | [x] | Seasonal | `wa-seasonal` | Yes — 6 prompts written, vaults pending |
+| [~] | Trades | `wa-trades` | Yes — 6 prompts written, all 6 vaults complete (Stage 4 review gate open) |
 
 ---
 
