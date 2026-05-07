@@ -186,7 +186,7 @@ function ComingSoon({
         className="font-display font-bold uppercase tracking-wide text-xl"
         style={{ color: '#2C2C2C' }}
       >
-        Your guide has been updated
+        Your guide is being updated
       </h1>
       <p className="font-body text-sm" style={{ color: '#6B6B6B' }}>
         The{' '}
