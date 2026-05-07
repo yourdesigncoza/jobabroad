@@ -40,7 +40,7 @@ export default async function Home({ searchParams }: Props) {
 
       {/* Hero */}
       <section className="max-w-6xl mx-auto px-6 pt-14 pb-12">
-        <div className="flex flex-col gap-4 max-w-3xl">
+        <div className="flex flex-col gap-6 max-w-3xl">
 
           {/* Kicker */}
           <div className="flex items-center gap-3">
@@ -64,8 +64,11 @@ export default async function Home({ searchParams }: Props) {
 
           {/* Sub-headline */}
           <p className="font-body text-base leading-relaxed max-w-xl" style={{ color: '#6B6B6B' }}>
-            Find out which countries are open to your field, what documents you
-            need, what it may cost, and which scams to avoid.
+            Get a{' '}
+            <em className="italic font-semibold" style={{ color: '#1B4D3E' }}>
+              Personalised Eligibility Check
+            </em>{' '}
+            before spending money on documents, agents, or visa applications.
           </p>
 
           {/* Trust line */}

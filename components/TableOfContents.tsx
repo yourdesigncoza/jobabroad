@@ -89,7 +89,7 @@ export default function TableOfContents({ items, assessmentHref }: { items: TocI
               onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = '#C9A84C'; }}
               onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = '#F8F5F0'; }}
             >
-              Eligibility Assessment
+              Eligibility Check
             </a>
           )}
         </>

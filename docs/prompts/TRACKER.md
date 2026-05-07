@@ -84,6 +84,19 @@ Run shared vaults first — nursing prompts cross-reference them.
 
 ---
 
+## Hospitality (separate vaults per prompt)
+
+| Status | Prompt | Section | Iter | Notes |
+|---|---|---|---|---|
+| [x] | [01 — Destination Options](hospitality/01-destination-options.md) | Where can I actually go? | 7/8 | completed — vault: wa-hospitality-01-destinations (60 notes) |
+| [x] | [02 — Document Checklist](hospitality/02-document-checklist.md) | What papers do I need? | 8/6 | completed — vault: wa-hospitality-02-documents (38 notes) |
+| [x] | [03 — Realistic Costs](hospitality/03-realistic-costs.md) | How much will it cost? | 4/6 | completed — vault: wa-hospitality-03-costs (25 notes) |
+| [x] | [04 — Visa Route Overview](hospitality/04-visa-routes.md) | What's the actual process? | 4/10 | completed — vault: wa-hospitality-04-visa-routes (41 notes) |
+| [x] | [05 — Scam Red Flags](hospitality/05-scam-red-flags.md) | Will I get scammed? | 5/6 | completed — vault: wa-hospitality-05-scams (53 notes) |
+| [x] | [06 — Legitimate Contacts](hospitality/06-legitimate-contacts.md) | Who do I actually call? | 6/6 | completed — vault: wa-hospitality-06-contacts (33 notes) |
+
+---
+
 ## Other Categories (prompts not yet built)
 
 | Status | Category | Vault | Prompts Built |
@@ -95,7 +108,7 @@ Run shared vaults first — nursing prompts cross-reference them.
 | [x] | Seasonal | `wa-seasonal` | Yes — 6 prompts written, vaults pending |
 | [~] | Trades | `wa-trades` | Yes — 6 prompts written, all 6 vaults complete (Stage 4 review gate open) |
 | [x] | Farming | `wa-farming` | Yes — published to content/pathways/farming.md (Stage 6 complete) |
-| [~] | Hospitality | `wa-hospitality` | Yes — 6 prompts written, vaults pending (Stage 3) |
+| [~] | Hospitality | `wa-hospitality` | Yes — all 6 vaults complete (Stage 4 review gate open) |
 
 ---
 

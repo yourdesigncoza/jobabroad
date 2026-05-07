@@ -129,7 +129,7 @@ export default function AssessmentWizard({
   if (!hasSteps || !currentStep) {
     return (
       <p className="font-body text-sm" style={{ color: '#6B6B6B' }}>
-        An eligibility assessment isn&apos;t available for this pathway yet. Reply to your WhatsApp thread and we&apos;ll work through the assessment with you directly.
+        An Eligibility Check isn&apos;t available for this pathway yet. Reply to your WhatsApp thread and we&apos;ll work through it with you directly.
       </p>
     );
   }
@@ -173,7 +173,7 @@ export default function AssessmentWizard({
           className="flex-1 font-display font-bold uppercase text-xs tracking-wide rounded-xl px-4 py-3"
           style={{ backgroundColor: '#1B4D3E', color: '#F8F5F0' }}
         >
-          {submitting ? 'Submitting...' : currentIndex === steps.length - 1 ? 'Submit Assessment' : 'Next'}
+          {submitting ? 'Submitting...' : currentIndex === steps.length - 1 ? 'Submit Eligibility Check' : 'Next'}
         </button>
       </div>
     </div>

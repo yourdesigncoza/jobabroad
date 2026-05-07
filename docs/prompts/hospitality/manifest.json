@@ -1,0 +1,43 @@
+{
+  "category": "hospitality",
+  "created_at": "2026-05-07T14:05:26+02:00",
+  "manifest_hash": "04f91119c7c065a2c705d27faeef8d747ed3d6a23c6b205cc95ea55b6269ac17",
+  "vaults": [
+    {
+      "section": "01-destinations",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-hospitality-01-destinations/FINAL_REPORT.md",
+      "sha256": "2f0309e08cbbccd44374e3c32d66834d5cbd37ec8144cee164e4960ab7a2bde8",
+      "size_bytes": 6506
+    },
+    {
+      "section": "02-documents",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-hospitality-02-documents/FINAL_REPORT.md",
+      "sha256": "5b4dfd71b5c9c33b5e81b7da991f6b158c37a1b6c4d64e3018d92c0a2e3319e4",
+      "size_bytes": 9034
+    },
+    {
+      "section": "03-costs",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-hospitality-03-costs/FINAL_REPORT.md",
+      "sha256": "8a5e5431664e0537f35d7c600d2723386af7b1a4f6745a3e121709d1afd3d363",
+      "size_bytes": 6609
+    },
+    {
+      "section": "04-visa-routes",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-hospitality-04-visa-routes/FINAL_REPORT.md",
+      "sha256": "e3bfd081d65b41ab6458f4bc3cf7acfc7e439023b2ce28e91ea6bd35638676a7",
+      "size_bytes": 8800
+    },
+    {
+      "section": "05-scams",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-hospitality-05-scams/FINAL_REPORT.md",
+      "sha256": "27d27dea60cf3795ec8125c70cd28c03ea00ded024f1e8bb26bf14c5685ccfde",
+      "size_bytes": 8096
+    },
+    {
+      "section": "06-contacts",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-hospitality-06-contacts/FINAL_REPORT.md",
+      "sha256": "8140a1272debd67612bad1937b72d0b09c49d2d271cd6dcb3d22b1a72a2ac4ea",
+      "size_bytes": 8094
+    }
+  ]
+}

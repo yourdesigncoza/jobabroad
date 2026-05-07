@@ -57,7 +57,7 @@ export default async function AssessmentPage({
             className="font-display font-bold uppercase tracking-wide text-2xl"
             style={{ color: '#2C2C2C' }}
           >
-            Eligibility Assessment
+            Eligibility Check
           </h1>
           <p className="font-body text-sm" style={{ color: '#6B6B6B' }}>
             Your answers help us assess your readiness and identify your next steps.

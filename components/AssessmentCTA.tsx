@@ -14,11 +14,11 @@ export default function AssessmentCTA({ token, isSubmitted }: Props) {
           className="font-display font-bold uppercase tracking-wide text-base"
           style={{ color: '#F8F5F0' }}
         >
-          {isSubmitted ? 'Your Eligibility Assessment' : 'Start Your Eligibility Assessment'}
+          {isSubmitted ? 'Your Eligibility Check' : 'Start Your Eligibility Check'}
         </h2>
         <p className="font-body text-sm" style={{ color: 'rgba(255,255,255,0.7)' }}>
           {isSubmitted
-            ? 'You have completed your assessment. Update it any time your situation changes.'
+            ? 'You have completed your Eligibility Check. Update it any time your situation changes.'
             : 'Answer 6 short sections so we can assess your readiness and send you a personalised action plan.'}
         </p>
       </div>
@@ -27,7 +27,7 @@ export default function AssessmentCTA({ token, isSubmitted }: Props) {
         className="inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 font-display font-bold uppercase text-sm tracking-wide self-start"
         style={{ backgroundColor: '#C9A84C', color: '#FFFFFF' }}
       >
-        {isSubmitted ? 'Update Assessment' : 'Start Assessment'}
+        {isSubmitted ? 'Update Eligibility Check' : 'Start Eligibility Check'}
       </a>
     </div>
   );

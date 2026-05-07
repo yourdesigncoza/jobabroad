@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { PAYSHAP } from '@/lib/payshap';
 
 const issuedFormatter = new Intl.DateTimeFormat('en-ZA', {
@@ -10,54 +11,68 @@ export default function AccessBadge({
   token,
   categoryLabel,
   createdAt,
+  children,
 }: {
   token: string;
   categoryLabel: string;
   createdAt: string | null;
+  children?: ReactNode;
 }) {
   const issued = createdAt ? issuedFormatter.format(new Date(createdAt)) : '—';
   const tokenPreview = `${token.slice(0, 8)}…`;
 
   return (
     <div
-      className="rounded-2xl px-5 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3"
-      style={{ backgroundColor: '#FFFFFF', border: '1.5px solid #EDE8E0' }}
+      className="rounded-2xl overflow-hidden"
+      style={{ backgroundColor: '#FFFFFF', border: '1px solid #EDE8E0' }}
     >
-      <span
-        className="inline-flex items-center gap-2 self-start rounded-full px-3 py-1 font-display font-bold uppercase text-xs tracking-wide"
-        style={{ backgroundColor: '#EDE8E0', color: '#1B4D3E' }}
-      >
-        <span aria-hidden>✓</span>
-        Access active
-      </span>
+      {/* Top accent stripe */}
+      <div style={{ height: 3, backgroundColor: '#C9A84C' }} aria-hidden />
 
-      <details className="font-body text-xs sm:text-right" style={{ color: '#6B6B6B' }}>
-        <summary className="cursor-pointer select-none font-semibold" style={{ color: '#1B4D3E' }}>
-          Access &amp; Payment Reference
-        </summary>
-        <dl
-          className="mt-3 grid grid-cols-[max-content_1fr] gap-x-4 gap-y-1.5 text-left"
-          style={{ color: '#2C2C2C' }}
+      <div className="px-5 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <span
+          className="inline-flex items-center gap-2 self-start rounded-full px-3 py-1 font-display font-bold uppercase text-xs tracking-wide"
+          style={{ backgroundColor: '#EDE8E0', color: '#1B4D3E' }}
         >
-          <dt className="font-semibold" style={{ color: '#6B6B6B' }}>PayShap proxy</dt>
-          <dd>{PAYSHAP.proxy}</dd>
+          <span aria-hidden>✓</span>
+          Access active
+        </span>
 
-          <dt className="font-semibold" style={{ color: '#6B6B6B' }}>Receiver</dt>
-          <dd>{PAYSHAP.name}</dd>
+        <details className="font-body text-xs sm:text-right" style={{ color: '#6B6B6B' }}>
+          <summary className="cursor-pointer select-none font-semibold" style={{ color: '#1B4D3E' }}>
+            Access &amp; Payment Reference
+          </summary>
+          <dl
+            className="mt-3 grid grid-cols-[max-content_1fr] gap-x-4 gap-y-1.5 text-left"
+            style={{ color: '#2C2C2C' }}
+          >
+            <dt className="font-semibold" style={{ color: '#6B6B6B' }}>PayShap proxy</dt>
+            <dd>{PAYSHAP.proxy}</dd>
 
-          <dt className="font-semibold" style={{ color: '#6B6B6B' }}>Amount</dt>
-          <dd>{PAYSHAP.amount}</dd>
+            <dt className="font-semibold" style={{ color: '#6B6B6B' }}>Receiver</dt>
+            <dd>{PAYSHAP.name}</dd>
 
-          <dt className="font-semibold" style={{ color: '#6B6B6B' }}>Recipient reference</dt>
-          <dd>[Your name] — {categoryLabel}</dd>
+            <dt className="font-semibold" style={{ color: '#6B6B6B' }}>Amount</dt>
+            <dd>{PAYSHAP.amount}</dd>
 
-          <dt className="font-semibold" style={{ color: '#6B6B6B' }}>Access link issued</dt>
-          <dd>{issued}</dd>
+            <dt className="font-semibold" style={{ color: '#6B6B6B' }}>Recipient reference</dt>
+            <dd>[Your name] — {categoryLabel}</dd>
 
-          <dt className="font-semibold" style={{ color: '#6B6B6B' }}>Token</dt>
-          <dd className="font-mono">{tokenPreview}</dd>
-        </dl>
-      </details>
+            <dt className="font-semibold" style={{ color: '#6B6B6B' }}>Access link issued</dt>
+            <dd>{issued}</dd>
+
+            <dt className="font-semibold" style={{ color: '#6B6B6B' }}>Token</dt>
+            <dd className="font-mono">{tokenPreview}</dd>
+          </dl>
+        </details>
+      </div>
+
+      {children && (
+        <>
+          <div style={{ height: 1, backgroundColor: '#EDE8E0' }} aria-hidden />
+          <div className="px-5 py-4">{children}</div>
+        </>
+      )}
     </div>
   );
 }

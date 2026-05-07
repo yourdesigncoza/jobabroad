@@ -211,7 +211,7 @@ export default function HowItWorks() {
                     className="font-body text-sm font-semibold leading-snug mb-1"
                     style={{ color: "rgba(248,245,240,0.95)" }}
                   >
-                    Personalised eligibility assessment
+                    Personalised Eligibility Check
                   </p>
                   <p
                     className="font-body text-sm leading-relaxed"

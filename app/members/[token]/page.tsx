@@ -50,9 +50,9 @@ export default async function MembersPage({
 
   const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '';
 
-  const categoryLabel =
-    CATEGORIES.find(c => c.id === tokenRow.interest_category)?.label
-    ?? tokenRow.interest_category;
+  const category = CATEGORIES.find(c => c.id === tokenRow.interest_category);
+  const categoryLabel = category?.label ?? tokenRow.interest_category;
+  const audience = category?.audience ?? 'South African work-abroad applicants';
 
   return (
     <main className="min-h-screen" style={{ backgroundColor: '#F8F5F0' }}>
@@ -78,12 +78,40 @@ export default async function MembersPage({
                 token={token}
                 categoryLabel={categoryLabel}
                 createdAt={tokenRow.created_at}
-              />
+              >
+                <div className="flex flex-col gap-2">
+                  <p
+                    className="font-display font-bold uppercase tracking-wide text-xs"
+                    style={{ color: '#B8902F' }}
+                  >
+                    Last checked: May 2026
+                  </p>
+                  <p
+                    className="font-body text-[13px] leading-snug"
+                    style={{ color: '#2C2C2C' }}
+                  >
+                    This guide is for planning and research only. Visa fees, salary thresholds,
+                    and eligibility rules change — always confirm with the official regulator,
+                    employer, or immigration authority before paying anyone.
+                  </p>
+                  <p
+                    className="font-body text-[13px] leading-snug"
+                    style={{ color: '#2C2C2C' }}
+                  >
+                    <strong>What this guide does not do:</strong> we do not apply for you,
+                    guarantee employment, arrange visas, replace a licensed immigration
+                    adviser, or verify your personal eligibility. It helps you understand
+                    realistic pathways before spending money.
+                  </p>
+                </div>
+              </AccessBadge>
+
               <PathwaySearch
                 token={token}
                 whatsappNumber={whatsappNumber}
                 category={tokenRow.interest_category}
               />
+
               {/* sanitizeHtml in getPathwayContent ensures this is safe to render */}
               <article
                 className="prose prose-sm sm:prose-base max-w-none
@@ -104,14 +132,18 @@ export default async function MembersPage({
 
               <AssessmentCTA token={token} isSubmitted={assessmentSubmitted} />
 
-              <details className="font-body text-xs pb-2" style={{ color: '#9B9B9B' }}>
-                <summary className="cursor-pointer select-none" style={{ color: '#9B9B9B' }}>Legal disclaimer</summary>
-                <p className="mt-2 leading-relaxed">
-                  This is general information about work-abroad pathways for South African registered nurses. It does not constitute immigration advice and is not tailored to your individual circumstances. For advice about your specific situation, consult a licensed immigration adviser or attorney in the relevant country.
+              <footer
+                className="border-t pt-6 pb-8 flex flex-col gap-4 font-body text-xs leading-relaxed"
+                style={{ color: '#6B6B6B', borderColor: '#EDE8E0' }}
+              >
+                <p>© {new Date().getFullYear()} Jobabroad. All rights reserved.</p>
+                <p>
+                  <strong style={{ color: '#2C2C2C' }}>Disclaimer:</strong>{' '}
+                  This is general information about work-abroad pathways for {audience}. It does not constitute immigration advice and is not tailored to your individual circumstances. For advice about your specific situation, consult a licensed immigration adviser or attorney in the relevant country.
                 </p>
-              </details>
-              <footer className="text-center font-body text-xs pb-6" style={{ color: '#6B6B6B' }}>
-                We are an information service. We do not place candidates or act as recruiters. We do not guarantee employment.
+                <p>
+                  We are an information service. We do not place candidates or act as recruiters, and we do not guarantee employment.
+                </p>
               </footer>
             </div>
           </div>
