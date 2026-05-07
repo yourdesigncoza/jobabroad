@@ -1,5 +1,7 @@
 # WhatsApp Follow-Up Templates
 
+> **Runtime source:** [`lib/whatsapp-templates.ts`](../lib/whatsapp-templates.ts) — the TypeScript module is what `/admin` and any other UI render. This markdown doc is the editorial / review record. Any wording change here must also land in `lib/whatsapp-templates.ts` (or vice versa).
+
 Working document. Add comments, strike through what doesn't work, replace copy directly.
 
 ---
@@ -233,7 +235,8 @@ When the pre-fill doesn't tell us the category, Message 1 is enough to qualify. 
 
 Send this only after they reply "yes" or confirm they want to go ahead.
 
-> R199 to PayShap proxy: 061-711-4715
+> R199 to PayShap proxy: 0791771970
+> Receiver: J. M. Montgomery
 > Reference: [their first and Last name] — [category, e.g. Healthcare]
 >
 > Send a screenshot once paid and I'll send your Playbook + access link straight away.

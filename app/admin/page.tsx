@@ -1,18 +1,35 @@
 'use client';
 
 import { useState } from 'react';
-import { CATEGORIES } from '@/lib/categories';
+import { CATEGORIES, type CategoryId } from '@/lib/categories';
 import WhatsAppIcon from '@/components/WhatsAppIcon';
+import {
+  MESSAGE_1_UNIVERSAL,
+  MESSAGE_2,
+  getMessage3,
+} from '@/lib/whatsapp-templates';
 
 type Status = 'idle' | 'loading' | 'success' | 'error';
 
 export default function AdminPage() {
   const [secret, setSecret] = useState('');
   const [phone, setPhone] = useState('');
-  const [category, setCategory] = useState<string>(CATEGORIES[0].id);
+  const [category, setCategory] = useState<CategoryId>(CATEGORIES[0].id);
   const [link, setLink] = useState('');
   const [status, setStatus] = useState<Status>('idle');
   const [copied, setCopied] = useState(false);
+  const [copiedTemplate, setCopiedTemplate] = useState<string | null>(null);
+
+  const categoryLabel =
+    CATEGORIES.find(c => c.id === category)?.label ?? '';
+  const message2 = MESSAGE_2[category];
+  const message3 = getMessage3(categoryLabel);
+
+  async function copyTemplate(key: string, text: string) {
+    await navigator.clipboard.writeText(text);
+    setCopiedTemplate(key);
+    setTimeout(() => setCopiedTemplate(null), 2000);
+  }
 
   async function generate() {
     setStatus('loading');
@@ -107,7 +124,7 @@ export default function AdminPage() {
             </label>
             <select
               value={category}
-              onChange={e => setCategory(e.target.value)}
+              onChange={e => setCategory(e.target.value as CategoryId)}
               className="w-full rounded-xl px-4 py-3 font-body text-sm outline-none appearance-none"
               style={{ border: '1.5px solid #EDE8E0', backgroundColor: '#FFFFFF', color: '#2C2C2C' }}
             >
@@ -167,7 +184,89 @@ export default function AdminPage() {
             <p className="font-body text-sm" style={{ color: '#dc2626' }}>{link}</p>
           </div>
         )}
+
+        {/* Drip Templates */}
+        <div className="mt-10">
+          <div className="mb-4">
+            <h2 className="font-display font-bold uppercase text-lg tracking-wide" style={{ color: '#2C2C2C' }}>
+              Drip Templates
+            </h2>
+            <p className="font-body text-sm mt-1" style={{ color: '#6B6B6B' }}>
+              Tap copy, paste into WhatsApp. Messages 2 and 3 follow the selected category.
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-4">
+            <TemplateCard
+              label="Message 1 — Qualifier"
+              hint="Send first, regardless of category"
+              text={MESSAGE_1_UNIVERSAL}
+              copyKey="m1"
+              copiedKey={copiedTemplate}
+              onCopy={copyTemplate}
+            />
+            <TemplateCard
+              label={`Message 2 — Pitch (${categoryLabel})`}
+              hint="Send after they reply with their field + experience"
+              text={message2}
+              copyKey="m2"
+              copiedKey={copiedTemplate}
+              onCopy={copyTemplate}
+            />
+            <TemplateCard
+              label="Message 3 — Payment"
+              hint="Send only after they say yes"
+              text={message3}
+              copyKey="m3"
+              copiedKey={copiedTemplate}
+              onCopy={copyTemplate}
+            />
+          </div>
+        </div>
       </div>
     </main>
+  );
+}
+
+function TemplateCard({
+  label,
+  hint,
+  text,
+  copyKey,
+  copiedKey,
+  onCopy,
+}: {
+  label: string;
+  hint: string;
+  text: string;
+  copyKey: string;
+  copiedKey: string | null;
+  onCopy: (key: string, text: string) => void;
+}) {
+  const isCopied = copiedKey === copyKey;
+  return (
+    <div className="rounded-2xl p-5 flex flex-col gap-3" style={{ backgroundColor: '#FFFFFF', border: '1.5px solid #EDE8E0' }}>
+      <div className="flex flex-col gap-0.5">
+        <p className="font-body text-xs font-semibold uppercase tracking-wide" style={{ color: '#1B4D3E' }}>
+          {label}
+        </p>
+        <p className="font-body text-xs" style={{ color: '#6B6B6B' }}>
+          {hint}
+        </p>
+      </div>
+      <p className="font-body text-sm whitespace-pre-line" style={{ color: '#2C2C2C' }}>
+        {text}
+      </p>
+      <button
+        onClick={() => onCopy(copyKey, text)}
+        className="rounded-xl px-4 py-3 font-display font-bold uppercase text-xs tracking-wide transition-all min-h-[44px]"
+        style={{
+          backgroundColor: isCopied ? '#1B4D3E' : '#EDE8E0',
+          color: isCopied ? '#F8F5F0' : '#2C2C2C',
+        }}
+      >
+        {isCopied ? 'Copied!' : 'Copy'}
+      </button>
+    </div>
   );
 }

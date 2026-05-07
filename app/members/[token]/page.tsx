@@ -5,7 +5,9 @@ import BackToTop from '@/components/BackToTop';
 import PathwaySearch from '@/components/PathwaySearch';
 import TableOfContents from '@/components/TableOfContents';
 import StickyNav from '@/components/StickyNav';
+import AccessBadge from '@/components/AccessBadge';
 import { getPathwayContent } from '@/lib/pathway-content';
+import { CATEGORIES } from '@/lib/categories';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -21,7 +23,7 @@ export default async function MembersPage({
 
   const { data: tokenRow } = await supabase
     .from('member_tokens')
-    .select('id, lead_id, interest_category, accessed_at')
+    .select('id, lead_id, interest_category, accessed_at, created_at')
     .eq('token', token)
     .single();
 
@@ -48,6 +50,10 @@ export default async function MembersPage({
 
   const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '';
 
+  const categoryLabel =
+    CATEGORIES.find(c => c.id === tokenRow.interest_category)?.label
+    ?? tokenRow.interest_category;
+
   return (
     <main className="min-h-screen" style={{ backgroundColor: '#F8F5F0' }}>
       {/* Top bar */}
@@ -68,6 +74,11 @@ export default async function MembersPage({
 
             {/* Main content */}
             <div className="flex flex-col gap-10 min-w-0">
+              <AccessBadge
+                token={token}
+                categoryLabel={categoryLabel}
+                createdAt={tokenRow.created_at}
+              />
               <PathwaySearch
                 token={token}
                 whatsappNumber={whatsappNumber}
@@ -106,6 +117,11 @@ export default async function MembersPage({
           </div>
         ) : (
           <div className="flex flex-col gap-10">
+            <AccessBadge
+              token={token}
+              categoryLabel={categoryLabel}
+              createdAt={tokenRow.created_at}
+            />
             <ComingSoon
               category={tokenRow.interest_category}
               whatsappNumber={whatsappNumber}
