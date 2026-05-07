@@ -1,36 +1,87 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Jobabroad
 
-## Getting Started
+South African work-abroad lead-generation site. Production domain: **jobabroad.co.za**.
 
-First, run the development server:
+## What this is
+
+1. Landing page captures interest via category selector → WhatsApp pre-fill
+2. WhatsApp conversations handled manually using drip templates
+3. PayShap R199 Request to Pay sent to interested leads
+4. After payment, `/admin` generates a unique member link
+5. Member link is a Supabase-token-gated route serving pathway content + CV upload
+
+See `docs/Work Abroad MVP Plan.md` for the full flow and what is deliberately deferred.
+
+## Stack
+
+- **Next.js 16.2.4** (App Router) + **React 19** — check `node_modules/next/dist/docs/` before using any Next.js APIs
+- **Tailwind CSS v4** via `@tailwindcss/postcss` — no `tailwind.config.js`; config is in `postcss.config.mjs`
+- **Supabase** (`@supabase/supabase-js` + `@supabase/ssr`)
+- **lucide-react** for icons
+- Fonts: Oswald (display) + DM Sans (body)
+
+## Commands
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run dev          # start dev server on localhost:3000
+npm run build        # production build
+npm run lint         # eslint
+npm run reindex      # rebuild pathway_chunks (semantic search index)
+npx playwright test  # run Playwright regression suite
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Environment variables
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+NEXT_PUBLIC_WHATSAPP_NUMBER   # e.g. 27617114715 — used in every wa.me link
+NEXT_PUBLIC_SUPABASE_URL
+NEXT_PUBLIC_SUPABASE_ANON_KEY
+SUPABASE_SERVICE_ROLE_KEY
+NEXT_PUBLIC_BASE_URL
+ADMIN_SECRET                  # 32-char random string for /admin auth
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Architecture
 
-## Learn More
+```
+app/
+  layout.tsx              — Oswald + DM Sans fonts, global metadata
+  page.tsx                — landing page (server component, reads ?src=)
+  members/[token]/        — token-gated pathway page + assessment
+  admin/                  — manual token generator
+  api/cv/upload/          — Supabase Storage upload endpoint
+  globals.css             — Tailwind base + CSS variables
 
-To learn more about Next.js, take a look at the following resources:
+components/               — presentational, no data fetching
+lib/
+  categories.ts           — CATEGORIES array + buildWhatsAppLink()
+  pathway-content.ts      — reads markdown, renders sanitized HTML, extracts TOC
+content/pathways/         — per-category guides (healthcare, teaching, seasonal, …)
+docs/                     — MVP plan, semantic-search notes, build prompts
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Design tokens
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+All colors are inlined as `style={}` props — there is no Tailwind theme extension yet.
 
-## Deploy on Vercel
+| Token        | Value     | Use                          |
+|--------------|-----------|------------------------------|
+| Background   | `#F8F5F0` | page background              |
+| Dark green   | `#1B4D3E` | brand primary, CTAs          |
+| Charcoal     | `#2C2C2C` | headings                     |
+| Gold         | `#C9A84C` | accents, kicker lines        |
+| Orange       | `#ff751f` | logo accent ("abroad"), CTAs |
+| Muted        | `#6B6B6B` | body copy                    |
+| Off-white    | `#EDE8E0` | section backgrounds          |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## UTM tracking
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+`page.tsx` reads `?src=` from `searchParams` and passes it through to every WhatsApp link via `buildWhatsAppLink(label, src)`. QR codes are printed with unique `?src=batch-001-location` values; Vercel Analytics shows traffic per source.
+
+## Testing
+
+Playwright first — use the Playwright MCP tools in-session for any UI or flow change, and the Playwright CLI for regression suites checked into the repo. Manual browser testing is a last resort.
+
+## Semantic search
+
+See `docs/semantic-search.md` for: when to re-run the index, how to add a new category, troubleshooting, and tuning knobs.

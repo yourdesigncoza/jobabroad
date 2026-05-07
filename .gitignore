@@ -48,3 +48,4 @@ docs/plans/
 .worktrees/
 .claude/scheduled_tasks.lock
 supabase/.temp/
+graphify-out/
