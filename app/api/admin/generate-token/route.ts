@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
+import { isAdminAuthorized } from '@/lib/admin-auth';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -7,11 +8,11 @@ const supabase = createClient(
 );
 
 export async function POST(req: NextRequest) {
-  const { secret, phone, category } = await req.json();
-
-  if (secret !== process.env.ADMIN_SECRET) {
+  if (!isAdminAuthorized(req)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
+
+  const { phone, category } = await req.json();
 
   const { data: lead, error: leadError } = await supabase
     .from('leads')

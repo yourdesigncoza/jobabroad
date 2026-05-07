@@ -12,7 +12,6 @@ import {
 type Status = 'idle' | 'loading' | 'success' | 'error';
 
 export default function AdminPage() {
-  const [secret, setSecret] = useState('');
   const [phone, setPhone] = useState('');
   const [category, setCategory] = useState<CategoryId>(CATEGORIES[0].id);
   const [link, setLink] = useState('');
@@ -37,7 +36,7 @@ export default function AdminPage() {
     const res = await fetch('/api/admin/generate-token', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ secret, phone, category }),
+      body: JSON.stringify({ phone, category }),
     });
     const data = await res.json();
     if (res.ok) {
@@ -92,20 +91,6 @@ export default function AdminPage() {
         <div className="flex flex-col gap-4">
           <div>
             <label className="font-body text-xs font-semibold uppercase tracking-wide block mb-1" style={{ color: '#6B6B6B' }}>
-              Admin Secret
-            </label>
-            <input
-              type="password"
-              value={secret}
-              onChange={e => setSecret(e.target.value)}
-              placeholder="Enter admin password"
-              className="w-full rounded-xl px-4 py-3 font-body text-sm outline-none"
-              style={{ border: '1.5px solid #EDE8E0', backgroundColor: '#FFFFFF', color: '#2C2C2C' }}
-            />
-          </div>
-
-          <div>
-            <label className="font-body text-xs font-semibold uppercase tracking-wide block mb-1" style={{ color: '#6B6B6B' }}>
               Customer WhatsApp Number
             </label>
             <input
@@ -136,12 +121,12 @@ export default function AdminPage() {
 
           <button
             onClick={generate}
-            disabled={status === 'loading' || !secret || !phone}
+            disabled={status === 'loading' || !phone}
             className="w-full rounded-xl px-4 py-3 font-display font-bold uppercase text-sm tracking-wide transition-all"
             style={{
               backgroundColor: status === 'loading' ? '#6B6B6B' : '#1B4D3E',
               color: '#F8F5F0',
-              opacity: !secret || !phone ? 0.5 : 1,
+              opacity: !phone ? 0.5 : 1,
             }}
           >
             {status === 'loading' ? 'Generating...' : 'Generate Link'}
