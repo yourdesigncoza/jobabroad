@@ -2,8 +2,8 @@ import InterestGrid from '@/components/InterestGrid';
 import CountryStats from '@/components/CountryStats';
 import HowItWorks from '@/components/HowItWorks';
 import FAQ from '@/components/FAQ';
-import WhatsAppIcon from '@/components/WhatsAppIcon';
-import TrackedLink from '@/components/TrackedLink';
+import SiteNav from '@/components/SiteNav';
+import SiteFooter from '@/components/SiteFooter';
 
 interface Props {
   searchParams: Promise<{ src?: string }>;
@@ -15,23 +15,7 @@ export default async function Home({ searchParams }: Props) {
   return (
     <main className="min-h-screen" style={{ backgroundColor: '#F8F5F0' }}>
 
-      {/* Nav */}
-      <nav className="px-6 py-5 flex items-center justify-between max-w-6xl mx-auto">
-        <div className="flex items-center text-[1.5em] md:text-[2.2em]">
-          <span className="font-body font-bold" style={{ color: '#2C2C2C' }}>job</span>
-          <span className="font-body font-bold" style={{ color: '#ff751f' }}>abroad</span>
-        </div>
-        <TrackedLink
-          href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}?text=${encodeURIComponent("Hi, I'm interested in working abroad. Can you help me?")}`}
-          event="cta_click"
-          data={{ location: 'nav', source: src ?? 'direct' }}
-          className="flex items-center gap-2 text-sm font-body font-semibold px-4 py-2 rounded-full border-2 transition-all"
-          style={{ borderColor: '#1B4D3E', color: '#1B4D3E' }}
-        >
-          <WhatsAppIcon size={15} />
-          WhatsApp Me
-        </TrackedLink>
-      </nav>
+      <SiteNav src={src} />
 
       {/* Divider */}
       <div className="max-w-6xl mx-auto px-6">
@@ -155,55 +139,7 @@ export default async function Home({ searchParams }: Props) {
       {/* Country stats */}
       <CountryStats />
 
-      {/* Footer */}
-      <footer className="px-6 py-12" style={{ backgroundColor: '#2C2C2C' }}>
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
-
-          {/* Left — contact + legal */}
-          <div className="flex flex-col gap-4">
-            <TrackedLink
-              href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}?text=${encodeURIComponent("Hi, I'm interested in working abroad. Can you help me?")}`}
-              event="cta_click"
-              data={{ location: 'footer', source: src ?? 'direct' }}
-              className="flex items-center gap-2 font-body font-semibold text-sm px-5 py-3 rounded-full self-start transition-all"
-              style={{ backgroundColor: '#C9A84C', color: '#FFFFFF' }}
-            >
-              <WhatsAppIcon size={16} color="#FFFFFF" />
-              WhatsApp Me
-            </TrackedLink>
-            <p className="font-body text-sm leading-relaxed" style={{ color: '#F8F5F0' }}>
-              Jobabroad is an information service. I don&apos;t place candidates, act as recruiters or guarantee employment.
-            </p>
-            <a href="/privacy" className="font-body text-sm underline" style={{ color: '#F8F5F0' }}>
-              Privacy Policy
-            </a>
-            <p className="font-body text-xs" style={{ color: 'rgba(248,245,240,0.45)' }}>
-              Already paid? Lost your link?{' '}
-              <TrackedLink
-                href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}?text=${encodeURIComponent('I lost my link. My number is [your number].')}`}
-                event="cta_click"
-                data={{ location: 'lost_link', source: src ?? 'direct' }}
-                className="underline"
-                style={{ color: 'rgba(248,245,240,0.6)' }}
-              >
-                WhatsApp me and I&apos;ll resend it.
-              </TrackedLink>
-            </p>
-          </div>
-
-          {/* Right — logo + location */}
-          <div className="flex flex-col items-center gap-2">
-            <p className="font-body font-bold text-3xl">
-              <span style={{ color: '#F8F5F0' }}>job</span>
-              <span style={{ color: '#ff751f' }}>abroad</span>
-            </p>
-            <p className="font-body text-base" style={{ color: '#F8F5F0' }}>
-              Based in South Africa 🇿🇦
-            </p>
-          </div>
-
-        </div>
-      </footer>
+      <SiteFooter src={src} />
     </main>
   );
 }
