@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react';
 
 interface Props {
   id: number;
-  token: string;
+  token?: string;
+  demoCategory?: string;
 }
 
 interface WikiResponse {
@@ -14,7 +15,7 @@ interface WikiResponse {
   html: string;
 }
 
-export default function WikiNotePanel({ id, token }: Props) {
+export default function WikiNotePanel({ id, token, demoCategory }: Props) {
   const [data, setData] = useState<WikiResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -22,8 +23,14 @@ export default function WikiNotePanel({ id, token }: Props) {
     let cancelled = false;
     setError(null);
     setData(null);
-    fetch(`/api/wiki/${id}?token=${encodeURIComponent(token)}`)
+    const qs = demoCategory
+      ? `demo=${encodeURIComponent(demoCategory)}`
+      : `token=${encodeURIComponent(token ?? '')}`;
+    fetch(`/api/wiki/${id}?${qs}`)
       .then(async (r) => {
+        if (r.status === 429) {
+          throw new Error('Daily preview limit reached');
+        }
         if (!r.ok) throw new Error(`HTTP ${r.status}`);
         return r.json();
       })
@@ -36,7 +43,7 @@ export default function WikiNotePanel({ id, token }: Props) {
     return () => {
       cancelled = true;
     };
-  }, [id, token]);
+  }, [id, token, demoCategory]);
 
   if (error) {
     return (

@@ -1,7 +1,9 @@
 import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
+import { checkBotId } from 'botid/server';
 import { buildAnswerPrompt, extractCitedIndexes } from '@/lib/rag/prompt';
+import { isValidDemoCategory } from '@/lib/demo-mode';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -21,6 +23,7 @@ interface ChunkRef {
 
 interface RequestBody {
   token?: string;
+  demo?: string;
   query?: string;
   chunks?: ChunkRef[];
 }
@@ -44,12 +47,13 @@ export async function POST(req: NextRequest) {
   }
 
   const token = body.token?.trim();
+  const demo = body.demo?.trim();
   const query = body.query?.trim();
   const chunkRefs = Array.isArray(body.chunks) ? body.chunks : null;
 
-  if (!token || !query || !chunkRefs) {
+  if (!query || !chunkRefs || (!token && !demo)) {
     return NextResponse.json(
-      { error: 'token, query, and chunks are required' },
+      { error: 'query, chunks, and (token or demo) are required' },
       { status: 400 },
     );
   }
@@ -77,17 +81,40 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ refused: true, citations: [] });
   }
 
-  const { data: tokenRow } = await supabase
-    .from('member_tokens')
-    .select('interest_category')
-    .eq('token', token)
-    .single();
+  let category: string;
 
-  if (!tokenRow) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  if (demo) {
+    if (!isValidDemoCategory(demo)) {
+      return NextResponse.json({ error: 'invalid demo category' }, { status: 400 });
+    }
+    // /api/search already incremented this user's daily quota for the search
+    // step. /answer still BotID-gates (separate request) but skips the
+    // rate-limit increment so one demo query consumes 1 unit total, not 2.
+    try {
+      const verification = await checkBotId();
+      if (verification.isBot) {
+        return NextResponse.json({ error: 'bot_detected' }, { status: 403 });
+      }
+    } catch (err) {
+      console.error('[answer] checkBotId failed', err);
+      if (process.env.NODE_ENV === 'production') {
+        return NextResponse.json({ error: 'bot_check_unavailable' }, { status: 503 });
+      }
+    }
+    category = demo;
+  } else {
+    const { data: tokenRow } = await supabase
+      .from('member_tokens')
+      .select('interest_category')
+      .eq('token', token!)
+      .single();
+
+    if (!tokenRow) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+    category = tokenRow.interest_category as string;
   }
 
-  const category = tokenRow.interest_category as string;
   const ids = validRefs.map((c) => c.id);
 
   const { data: dbChunks, error: dbErr } = await supabase

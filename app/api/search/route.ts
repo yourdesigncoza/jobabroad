@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
+import { gateDemoRequest, isValidDemoCategory } from '@/lib/demo-mode';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -43,7 +44,7 @@ function snippet(text: string, max = 200): string {
 }
 
 export async function POST(req: NextRequest) {
-  let body: { token?: string; query?: string };
+  let body: { token?: string; query?: string; demo?: string };
   try {
     body = await req.json();
   } catch {
@@ -51,19 +52,35 @@ export async function POST(req: NextRequest) {
   }
 
   const token = body.token?.trim();
+  const demo = body.demo?.trim();
   const query = body.query?.trim();
-  if (!token || !query) {
-    return NextResponse.json({ error: 'token and query are required' }, { status: 400 });
+  if (!query || (!token && !demo)) {
+    return NextResponse.json(
+      { error: 'query and (token or demo) are required' },
+      { status: 400 },
+    );
   }
 
-  const { data: tokenRow } = await supabase
-    .from('member_tokens')
-    .select('interest_category')
-    .eq('token', token)
-    .single();
+  let category: string;
 
-  if (!tokenRow) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  if (demo) {
+    if (!isValidDemoCategory(demo)) {
+      return NextResponse.json({ error: 'invalid demo category' }, { status: 400 });
+    }
+    const rejection = await gateDemoRequest(req, 'search');
+    if (rejection) return rejection;
+    category = demo;
+  } else {
+    const { data: tokenRow } = await supabase
+      .from('member_tokens')
+      .select('interest_category')
+      .eq('token', token!)
+      .single();
+
+    if (!tokenRow) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+    category = tokenRow.interest_category as string;
   }
 
   const res = await fetch(`${SUPABASE_URL}/functions/v1/search-pathway`, {
@@ -74,7 +91,7 @@ export async function POST(req: NextRequest) {
     },
     body: JSON.stringify({
       query,
-      category: tokenRow.interest_category,
+      category,
       threshold: 0.5,
     }),
   });

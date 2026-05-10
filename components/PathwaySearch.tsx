@@ -21,7 +21,8 @@ interface AnswerResponse {
 }
 
 interface Props {
-  token: string;
+  token?: string;
+  demoCategory?: string;
   whatsappNumber: string;
   category: string;
 }
@@ -33,8 +34,10 @@ type AnswerState =
   | { kind: 'refused' }
   | { kind: 'error' };
 
-export default function PathwaySearch({ token, whatsappNumber, category }: Props) {
+export default function PathwaySearch({ token, demoCategory, whatsappNumber, category }: Props) {
   const categoryLabel = category.charAt(0).toUpperCase() + category.slice(1);
+  const isDemo = !!demoCategory;
+  const authBody = isDemo ? { demo: demoCategory } : { token };
   const [query, setQuery] = useState('');
   const [submittedQuery, setSubmittedQuery] = useState('');
   const [results, setResults] = useState<SearchResult[] | null>(null);
@@ -56,8 +59,14 @@ export default function PathwaySearch({ token, whatsappNumber, category }: Props
       const r = await fetch('/api/search', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ token, query: q }),
+        body: JSON.stringify({ ...authBody, query: q }),
       });
+      if (r.status === 429) {
+        setError('Daily preview search limit reached. WhatsApp us to unlock the full guide.');
+        setResults(null);
+        setLoading(false);
+        return;
+      }
       if (!r.ok) throw new Error(`HTTP ${r.status}`);
       const json = (await r.json()) as { results: SearchResult[] };
       setResults(json.results);
@@ -73,7 +82,7 @@ export default function PathwaySearch({ token, whatsappNumber, category }: Props
           method: 'POST',
           headers: { 'content-type': 'application/json' },
           body: JSON.stringify({
-            token,
+            ...authBody,
             query: q,
             chunks: json.results.map((x) => ({ id: x.id, similarity: x.similarity })),
           }),
@@ -218,7 +227,7 @@ export default function PathwaySearch({ token, whatsappNumber, category }: Props
                 onToggleWiki={() => setOpenWiki((cur) => (cur === r.id ? null : r.id))}
               />
               {r.source_type === 'wiki' && openWiki === r.id && (
-                <WikiNotePanel id={r.id} token={token} />
+                <WikiNotePanel id={r.id} token={token} demoCategory={demoCategory} />
               )}
             </li>
           ))}

@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { renderWikiMarkdown } from '@/lib/render-wiki';
+import { gateDemoRequest, isValidDemoCategory } from '@/lib/demo-mode';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -13,8 +14,9 @@ export async function GET(
 ) {
   const { id } = await params;
   const token = req.nextUrl.searchParams.get('token')?.trim();
-  if (!token) {
-    return NextResponse.json({ error: 'token required' }, { status: 400 });
+  const demo = req.nextUrl.searchParams.get('demo')?.trim();
+  if (!token && !demo) {
+    return NextResponse.json({ error: 'token or demo required' }, { status: 400 });
   }
 
   const numericId = Number(id);
@@ -22,14 +24,26 @@ export async function GET(
     return NextResponse.json({ error: 'invalid id' }, { status: 400 });
   }
 
-  const { data: tokenRow } = await supabase
-    .from('member_tokens')
-    .select('interest_category')
-    .eq('token', token)
-    .single();
+  let allowedCategory: string;
 
-  if (!tokenRow) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  if (demo) {
+    if (!isValidDemoCategory(demo)) {
+      return NextResponse.json({ error: 'invalid demo category' }, { status: 400 });
+    }
+    const rejection = await gateDemoRequest(req, 'wiki');
+    if (rejection) return rejection;
+    allowedCategory = demo;
+  } else {
+    const { data: tokenRow } = await supabase
+      .from('member_tokens')
+      .select('interest_category')
+      .eq('token', token!)
+      .single();
+
+    if (!tokenRow) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+    allowedCategory = tokenRow.interest_category as string;
   }
 
   const { data: chunk } = await supabase
@@ -42,7 +56,7 @@ export async function GET(
     return NextResponse.json({ error: 'Not found' }, { status: 404 });
   }
 
-  const allowed = chunk.category === tokenRow.interest_category || chunk.category === 'shared';
+  const allowed = chunk.category === allowedCategory || chunk.category === 'shared';
   if (!allowed) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
   }
