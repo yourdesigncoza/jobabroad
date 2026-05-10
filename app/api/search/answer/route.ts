@@ -12,7 +12,7 @@ const supabase = createClient(
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY! });
 
-const SIMILARITY_GATE = 0.85;
+const SIMILARITY_GATE = 0.8;
 const MAX_CHUNKS = 8;
 const MODEL = 'gpt-4o-mini';
 
