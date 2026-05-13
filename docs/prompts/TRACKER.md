@@ -97,6 +97,19 @@ Run shared vaults first — nursing prompts cross-reference them.
 
 ---
 
+## TEFL (separate vaults per prompt)
+
+| Status | Prompt | Section | Iter | Notes |
+|---|---|---|---|---|
+| [x] | [01 — Destination Options](tefl/01-destination-options.md) | Where can I actually go? | 6/8 | completed — vault: wa-tefl-01-destinations (77 notes) |
+| [x] | [02 — Document Checklist](tefl/02-document-checklist.md) | What papers do I need? | 6/6 | completed — vault: wa-tefl-02-documents (50 notes) |
+| [x] | [03 — Realistic Costs](tefl/03-realistic-costs.md) | How much will it cost? | 6/6 | completed — vault: wa-tefl-03-costs (30 notes) |
+| [x] | [04 — Visa Routes](tefl/04-visa-routes.md) | What's the actual process? | 4/8 | completed — vault: wa-tefl-04-visa-routes (37 notes) |
+| [x] | [05 — Scam Red Flags](tefl/05-scam-red-flags.md) | Will I get scammed? | 4/6 | completed — vault: wa-tefl-05-scams (36 notes) |
+| [x] | [06 — Legitimate Contacts](tefl/06-legitimate-contacts.md) | Who do I actually call? | 7/6 | completed — vault: wa-tefl-06-contacts (38 notes) |
+
+---
+
 ## Other Categories (prompts not yet built)
 
 | Status | Category | Vault | Prompts Built |
@@ -109,6 +122,8 @@ Run shared vaults first — nursing prompts cross-reference them.
 | [~] | Trades | `wa-trades` | Yes — 6 prompts written, all 6 vaults complete (Stage 4 review gate open) |
 | [x] | Farming | `wa-farming` | Yes — published to content/pathways/farming.md (Stage 6 complete) |
 | [~] | Hospitality | `wa-hospitality` | Yes — all 6 vaults complete (Stage 4 review gate open) |
+| [~] | TEFL | `wa-tefl` | Yes — all 6 vaults complete, Stage 4 review gate open |
+| [ ] | Au Pair | `wa-au-pair` | No |
 
 ---
 

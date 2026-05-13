@@ -1,0 +1,43 @@
+{
+  "category": "tefl",
+  "created_at": "2026-05-13T16:30:00+02:00",
+  "manifest_hash": "061e1f0cdf66dbf327596720a5c96e1e27ee5d98f59952382f9b73c9dc30e683",
+  "vaults": [
+    {
+      "section": "01-destinations",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-tefl-01-destinations/FINAL_REPORT.md",
+      "sha256": "a7ada5657f926bc7e22bd92861f132fdedf75a2c7f7e91ad1a72a7c623b4c715",
+      "size_bytes": 7639
+    },
+    {
+      "section": "02-documents",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-tefl-02-documents/FINAL_REPORT.md",
+      "sha256": "89439d3667de50fb4cc631a127f3d41ab78e626ecfeacff9883366aec12ef01a",
+      "size_bytes": 9450
+    },
+    {
+      "section": "03-costs",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-tefl-03-costs/FINAL_REPORT.md",
+      "sha256": "a1c8a170d3480b15cba8582819f590973d120e526ef2dc30973ebadb5b3c739d",
+      "size_bytes": 7471
+    },
+    {
+      "section": "04-visa-routes",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-tefl-04-visa-routes/FINAL_REPORT.md",
+      "sha256": "a8823ae8ebb850029466b85899d09f71577078c9ce8e46c1ba7c218bea0d0c45",
+      "size_bytes": 9268
+    },
+    {
+      "section": "05-scams",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-tefl-05-scams/FINAL_REPORT.md",
+      "sha256": "ee907d20d47dc953375ca7dede57de7896c5955c05bed8ca21f57e1658a3482a",
+      "size_bytes": 8967
+    },
+    {
+      "section": "06-contacts",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-tefl-06-contacts/FINAL_REPORT.md",
+      "sha256": "f48bb59c969f38fc67789f23a20566444778e9b4b0a45d88a179495646ac8844",
+      "size_bytes": 8035
+    }
+  ]
+}

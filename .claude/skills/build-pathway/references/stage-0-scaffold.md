@@ -7,7 +7,7 @@
 Run each check. If any fails, stop immediately with a descriptive error — do NOT proceed.
 
 ### 1a. Category validation
-Confirm `<category>` ∈ {engineering, it-tech, teaching, accounting, farming, healthcare, seasonal, hospitality, trades}.
+Confirm `<category>` ∈ {engineering, it-tech, teaching, accounting, farming, healthcare, seasonal, hospitality, trades, tefl, au-pair}.
 
 ### 1b. Required files readable
 Check that each of these files exists and can be read:

@@ -72,6 +72,22 @@ export const CATEGORIES = [
     destinations: ['UK', 'AUS', 'CA', 'UAE'],
   },
   {
+    id: 'tefl',
+    label: 'TEFL',
+    emoji: '🗣️',
+    audience: 'South Africans teaching English as a foreign language',
+    description: 'Teach English abroad (TEFL)',
+    destinations: ['KOR', 'CHN', 'VNM', 'ESP', 'KSA'],
+  },
+  {
+    id: 'au-pair',
+    label: 'Au Pair',
+    emoji: '🧒',
+    audience: 'South African au pairs',
+    description: 'Live-in childcare placements',
+    destinations: ['USA', 'NL', 'DE', 'AUS'],
+  },
+  {
     id: 'other',
     label: 'Other',
     emoji: '✈️',

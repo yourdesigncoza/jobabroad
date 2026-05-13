@@ -1,6 +1,6 @@
 ---
 name: build-pathway
-description: Automates the jobabroad.co.za pathway guide pipeline. Trigger with /build-pathway <category>. Valid categories: engineering | it-tech | teaching | accounting | farming | healthcare | seasonal | hospitality | trades. Reads docs/prompts/<category>/_PIPELINE_STATE.md on each invocation and resumes from the current stage. One invocation = one stage (or one batch of 3 vaults). Re-invoke to continue.
+description: Automates the jobabroad.co.za pathway guide pipeline. Trigger with /build-pathway <category>. Valid categories: engineering | it-tech | teaching | accounting | farming | healthcare | seasonal | hospitality | trades | tefl | au-pair. Reads docs/prompts/<category>/_PIPELINE_STATE.md on each invocation and resumes from the current stage. One invocation = one stage (or one batch of 3 vaults). Re-invoke to continue.
 ---
 
 # build-pathway
@@ -11,12 +11,12 @@ Automated 7-stage pathway-content pipeline for jobabroad.co.za. Each invocation 
 
 Read the invocation arguments: `/build-pathway <category> [proceed <manifest_hash>]`
 
-- `<category>` (required): `engineering` | `it-tech` | `teaching` | `accounting`
+- `<category>` (required): `engineering` | `it-tech` | `teaching` | `accounting` | `farming` | `healthcare` | `seasonal` | `hospitality` | `trades` | `tefl` | `au-pair`
 - `proceed <manifest_hash>` (optional): 64-char hex string. Only valid when the current state is `current_stage: 4, stage_status: pending`. Alias: `proceed-to-synthesis`.
 
 If the category is missing or invalid:
 ```
-Error: Unknown category "<input>". Valid categories: engineering | it-tech | teaching | accounting | farming | healthcare | seasonal | hospitality | trades
+Error: Unknown category "<input>". Valid categories: engineering | it-tech | teaching | accounting | farming | healthcare | seasonal | hospitality | trades | tefl | au-pair
 ```
 
 Store the parsed `proceed_hash` (or null) for use in Step 2.

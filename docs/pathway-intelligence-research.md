@@ -35,6 +35,15 @@
 - **Secondary routes:** Australia (AITSL assessment), New Zealand (Green List Tier 2), Canada (provincial certification post-arrival)
 - **Signal sources:** DfE vacancy data, UK Licensed Sponsor Register (schools filter), AITSL processing times
 
+### 4a. TEFL (Teach English as a Foreign Language)
+- **Demand:** Steady year-round demand in East Asia + Middle East; SA passport-holders qualify as "native English speakers" for the strict 7-nation list (USA/UK/IRE/CAN/AUS/NZ/SA) used by South Korea EPIK and most Gulf programs — a structural advantage SA candidates often don't realise
+- **Primary routes:** South Korea — EPIK / GEPIK / SMOE public-school programs (E-2 visa, 1-year contract, ~KRW 2.1–2.7M/mo + flight + housing); Vietnam — direct hire by language centres (no central program; ~USD 1,500–2,000/mo); Saudi Arabia / UAE — university and private-academy contracts (highest pay band, USD 2,500–4,500/mo, often tax-free)
+- **Secondary routes:** China — Z visa (post-COVID market reset; salaries lower than pre-2020); Spain — Auxiliares de Conversación (government program, modest stipend, EU experience angle); Czech Republic, Thailand (lifestyle-led, lower pay)
+- **Key bottlenecks:** TEFL/TESOL/CELTA certificate required (120hr minimum standard; CELTA = highest-recognised, ~£1,500); bachelor's degree (any field) required for most visa-eligible positions; criminal background check + apostille; some countries require degree apostille via DIRCO
+- **SA regulator:** No SA professional body for TEFL; SACE registration NOT required (TEFL is not formal teaching). DIRCO apostille is the main SA-side touchpoint
+- **Common scams:** Recruiters demanding upfront fees; jobs that require holding your passport on arrival; "guaranteed placement" programs charging R20k+ that simply forward your CV; private Chinese academies that close mid-contract
+- **Positioning angle:** TEFL is the most accessible work-abroad route — no professional registration, no skills assessment, structured government programs accept SA candidates directly; most viable entry route for non-degreed professionals (some Cambodia/Vietnam roles), most lucrative for degreed candidates (Korea, Gulf)
+
 ### 5. Healthcare (Nurses, Caregivers, Medical Staff)
 
 See **Nurses** wedge above — `healthcare` is the pipeline category slug; the guide covers nurses, caregivers, and allied health. All research, routes, and regulator data in the Nurses section applies directly.

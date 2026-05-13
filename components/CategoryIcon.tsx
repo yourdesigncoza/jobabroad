@@ -8,6 +8,8 @@ import {
   Sparkles,
   UtensilsCrossed,
   Hammer,
+  Languages,
+  Baby,
   Globe,
 } from 'lucide-react';
 
@@ -16,11 +18,13 @@ const ICONS: Record<string, React.ComponentType<{ size?: number; strokeWidth?: n
   'it-tech':    Monitor,
   engineering:  HardHat,
   teaching:     GraduationCap,
-  finance:      TrendingUp,
+  accounting:   TrendingUp,
   farming:      Wheat,
   seasonal:     Sparkles,
   hospitality:  UtensilsCrossed,
   trades:       Hammer,
+  tefl:         Languages,
+  'au-pair':    Baby,
   other:        Globe,
 };
 
