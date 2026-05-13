@@ -2,11 +2,11 @@
 
 Generated from `wiki-builds/work-abroad-web/wa-*/wiki/` vaults. Recruiters and placement agencies only — embassies, regulators, government bodies, hotels, sponsors, and scheme operators are excluded.
 
-**Sources scanned:** 50 `type: organisation` notes across 5 category vaults + shared migration-cos vault. **TEFL appended 2026-05-13** after the TEFL pathway pipeline completed; +8 additional TEFL recruiters elevated 2026-05-13 from prose mentions across the TEFL vault corpus (the Stage 6 vault builder applied a primary-source-only filter that missed legitimate recruiters mentioned outside structured `type: organisation` notes).
+**Sources scanned:** 50 `type: organisation` notes across 5 category vaults + shared migration-cos vault. **TEFL appended 2026-05-13** after the TEFL pathway pipeline completed; +8 additional TEFL recruiters elevated 2026-05-13 from prose mentions. **Au Pair appended 2026-05-13** after the au-pair pathway pipeline completed (10 sponsor_agency / organisation entries surfaced cleanly from the contacts vault — much richer than TEFL).
 
-**Recruiters/agencies kept:** 32 (23 original + 9 from TEFL: Korvia, TravelBud, Teach Away, The TEFL Org, CIEE, Footprints Recruiting, International TEFL Academy, i-to-i TEFL, Reach to Teach)
+**Recruiters/agencies kept:** 40 (23 original + 9 from TEFL + 8 from Au Pair: Cultural Care, AIFS Au Pair in America, African Ambassadors, OVC South Africa, AuPairCare, Go Au Pair, EurAuPair, GreatAuPair)
 
-**Excluded (embassies/regulators/etc):** 30 (25 original + 5 TEFL government programmes: EPIK, GEPIK, SMOE, JET, Auxiliares de Conversación)
+**Excluded (embassies/regulators/etc):** 30+ (25 original + 5 TEFL government programmes + au-pair regulators: US ECA, IND, BAMF, OFII, Goethe-Institut, etc.)
 
 ---
 
@@ -46,6 +46,14 @@ Generated from `wiki-builds/work-abroad-web/wa-*/wiki/` vaults. Recruiters and p
 | International TEFL Academy | tefl | Global, Spain, China, South Korea | tefl_training_placement | https://www.internationalteflacademy.com/ | — | — | confirmed | Chicago-based training + post-graduation placement across 80+ countries. Form-only contact. |
 | i-to-i TEFL | tefl | Global | tefl_training_jobs_board | https://www.i-to-i.com/ | — | — | confirmed | UK-based Ofqual-regulated trainer + jobs board for graduates. Form-only contact. |
 | Reach to Teach Recruiting | tefl | Taiwan, China, South Korea | tefl_placement | https://www.reachtoteachrecruiting.com/ | — | — | confirmed | Specialist Taiwan placement (since 2003). Free to teachers. Form-only contact. Note: original reachtoteach.com is domain-parked for sale; correct active URL is reachtoteachrecruiting.com. |
+| Cultural Care Au Pair | au-pair | USA | usa_j1_designated_sponsor | https://www.culturalcare.com | capetown@culturalcare.com | 021 422 0807 | confirmed | Largest US au-pair sponsor by volume; State Dept J-1 designated. SA office at 50 Kloof St, Cape Town. FREE to au pair. Drafted batch 4. |
+| AIFS Au Pair in America | au-pair | USA | usa_j1_designated_sponsor | https://www.aupairinamerica.com | info@aupairinamerica.co.za | — | confirmed | First-designated US J-1 au-pair sponsor (since 1986). SA recruitment via African Ambassadors. FREE to au pair. Drafted batch 4. |
+| African Ambassadors | au-pair | USA | sa_aifs_partner | https://www.aupairinamerica.co.za/ | info@aupairinamerica.co.za | — | confirmed | SA Pty Ltd CIPC-registered. AIFS recruitment partner — NOT the legal sponsor. Cape Town head office, regional offices. |
+| OVC South Africa | au-pair | USA, Netherlands | sa_placement_partner_fee_charging | https://www.ovc.co.za/pages/aupair.asp | Admin1@ovc.co.za | — | confirmed | SA's longest-running au-pair placement partner (since 1986). Charges SA au pairs ~R5,450 admin + R8,500 programme fee. Franchise model — per-office addresses; Admin1@ovc.co.za is head-office admin. Drafted batch 4. |
+| AuPairCare | au-pair | USA | usa_j1_designated_sponsor | https://www.aupaircare.com | customercare@aupaircare.com | — | confirmed | US State Dept J-1 designated. No SA office. FREE to au pair. Drafted batch 4. |
+| Go Au Pair | au-pair | USA | usa_j1_designated_sponsor | https://goaupair.com | — | — | confirmed | US State Dept J-1 designated. FREE to au pair. Form-only contact. |
+| EurAuPair Intercultural Child Care Programs | au-pair | USA | usa_j1_designated_sponsor | https://www.euraupair.com | — | — | confirmed | US State Dept J-1 designated. FREE to au pair. Form-only contact. |
+| GreatAuPair | au-pair | USA | usa_j1_designated_sponsor + matching platform | https://www.greataupair.com | — | — | confirmed | US State Dept J-1 designated. Also runs matching platform for non-USA destinations — catfish-host-family risk. Form-only contact. |
 
 
 ---

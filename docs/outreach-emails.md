@@ -21,6 +21,7 @@ Generated 2026-05-08. Voice-cleaned and demo-links added 2026-05-11. One bespoke
 - https://www.jobabroad.co.za/demo/farming
 - https://www.jobabroad.co.za/demo/hospitality
 - https://www.jobabroad.co.za/demo/tefl
+- https://www.jobabroad.co.za/demo/au-pair
 
 Each draft below now includes one or two of these demo links, picked to match the recipient's actual sector. Single-sector recruiters get one demo link. Multi-sector consultancies get two.
 
@@ -54,19 +55,31 @@ Tracks send order, send date, and response status. Update the date and status co
 | 14 | 3 | MMA Healthcare Recruitment | nursing, multi-region | email | sent 2026-05-11 | admin@mmarecruitment.com found via Google "email address for mmarecruitment.com" after defuddle-based search missed it. |
 | 15 | 10 | Eteach | teaching, UK + intl | email | sent 2026-05-11 | info@eteach.com found via Google "email address for eteach.com". |
 | 16 | 15 | ECS Card | trades, UK electrical | email | sent 2026-05-11 | administration@ecscard.org.uk found via Google "email address for ecscard.org.uk". |
-| 17 | 24 | Korvia Consulting | TEFL, Korea (EPIK official partner) | email | drafted 2026-05-13 | support@korvia.com (from korvia.com/contact). Drafted via gog batch 3 — review and send. |
-| 18 | 25 | TravelBud | TEFL, SA-domiciled (Cape Town), multi-Asia | email | drafted 2026-05-13 | info@travelbud.com (from travelbud.com/contact-us/). Only SA-domiciled TEFL agency found. Drafted via gog batch 3. |
-| 19 | 26 | Teach Away | TEFL, Toronto-based, UAE/Saudi/global | email | drafted 2026-05-13 | info@teachaway.com (from teachaway.com/contact). Drafted via gog batch 3. |
-| 20 | 27 | The TEFL Org | TEFL training + jobs, UK | email | drafted 2026-05-13 | info@tefl.org (from tefl.org/contact-us/). Drafted via gog batch 3. |
-| 21 | 28 | CIEE | TEFL, USA Teach Abroad (Spain alternative) | email | drafted 2026-05-13 | contact@ciee.org (from ciee.org/about/contact). Drafted via gog batch 3. |
+| 17 | 24 | Korvia Consulting | TEFL, Korea (EPIK official partner) | email | sent 2026-05-13 | support@korvia.com (from korvia.com/contact). Drafted + sent via gog batch 3. |
+| 18 | 25 | TravelBud | TEFL, SA-domiciled (Cape Town), multi-Asia | email | sent 2026-05-13 | info@travelbud.com (from travelbud.com/contact-us/). Only SA-domiciled TEFL agency found. Drafted + sent via gog batch 3. |
+| 19 | 26 | Teach Away | TEFL, Toronto-based, UAE/Saudi/global | email | sent 2026-05-13 | info@teachaway.com (from teachaway.com/contact). Drafted + sent via gog batch 3. |
+| 20 | 27 | The TEFL Org | TEFL training + jobs, UK | email | sent 2026-05-13 | info@tefl.org (from tefl.org/contact-us/). Drafted + sent via gog batch 3. |
+| 21 | 28 | CIEE | TEFL, USA Teach Abroad (Spain alternative) | email | sent 2026-05-13 | contact@ciee.org (from ciee.org/about/contact). Drafted + sent via gog batch 3. |
 
-All 16 emails sent 2026-05-11. Batch 3 (TEFL recipients) added 2026-05-13 after the TEFL pathway guide was published — 5 drafts created (Korvia, TravelBud, Teach Away, The TEFL Org, CIEE). Auto-replies, bounces, and substantive responses are tracked in the recipient's row above as they arrive.
+All 16 emails sent 2026-05-11. Batch 3 (5 TEFL recipients: Korvia, TravelBud, Teach Away, The TEFL Org, CIEE) all sent 2026-05-13. Auto-replies, bounces, and substantive responses are tracked in the recipient's row above as they arrive.
 
 **TEFL form-only recipients** (no public email surfaced May 2026 — handle via contact form OR run Google search "email address for <domain>" before form-submit):
-- #29 Footprints Recruiting — footprintsrecruiting.com/contact
-- #30 International TEFL Academy — internationalteflacademy.com
-- #31 i-to-i TEFL — i-to-i.com
-- #32 Reach to Teach — reachtoteach.com
+- Footprints Recruiting — footprintsrecruiting.com/contact
+- International TEFL Academy — internationalteflacademy.com
+- i-to-i TEFL — i-to-i.com
+- Reach to Teach Recruiting — reachtoteachrecruiting.com
+
+| 22 | 29 | Cultural Care Au Pair | au-pair, USA J-1 (Cape Town office) | email | drafted 2026-05-13 | capetown@culturalcare.com (from corpus). Drafted via gog batch 4. |
+| 23 | 30 | Au Pair in America / AIFS | au-pair, USA J-1 (African Ambassadors SA) | email | drafted 2026-05-13 | info@aupairinamerica.co.za (from aupairinamerica.co.za/contact-us). Drafted via gog batch 4. |
+| 24 | 31 | AuPairCare | au-pair, USA J-1 | email | drafted 2026-05-13 | customercare@aupaircare.com (from aupaircare.com/contact-us). Drafted via gog batch 4. |
+| 25 | 35 | OVC South Africa | au-pair, SA-domiciled (USA + NL placement) | email | drafted 2026-05-13 | Admin1@ovc.co.za (head-office admin address from ovc.co.za "Other Contact Emails" — franchise-per-office means no single info@ address). Drafted via gog batch 4. |
+
+Batch 4 (au-pair recipients) added 2026-05-13 after the au-pair pathway guide was published — 4 drafts created (Cultural Care, AIFS/APIA, AuPairCare, OVC).
+
+**Au-pair form-only recipients** (no public email surfaced May 2026 — handle via contact form OR run Google search "email address for <domain>" before form-submit):
+- EurAuPair — euraupair.com
+- Go Au Pair — goaupair.com
+- GreatAuPair — greataupair.com
 
 **Pending (contact form):** #5 NHS England IRP, #6 AHP/ALOR, #8 Impact Teachers, #11 TES, #12 Teaching Vacancies, #13 SA-Recruitment, #18 Sable International. Status of these 7 contact-form submissions is recorded separately by John (or update the rows here as each form is submitted).
 
