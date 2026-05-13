@@ -55,8 +55,18 @@ Tracks send order, send date, and response status. Update the date and status co
 | 15 | 10 | Eteach | teaching, UK + intl | email | sent 2026-05-11 | info@eteach.com found via Google "email address for eteach.com". |
 | 16 | 15 | ECS Card | trades, UK electrical | email | sent 2026-05-11 | administration@ecscard.org.uk found via Google "email address for ecscard.org.uk". |
 | 17 | 24 | Korvia Consulting | TEFL, Korea (EPIK official partner) | email | drafted 2026-05-13 | support@korvia.com (from korvia.com/contact). Drafted via gog batch 3 — review and send. |
+| 18 | 25 | TravelBud | TEFL, SA-domiciled (Cape Town), multi-Asia | email | drafted 2026-05-13 | info@travelbud.com (from travelbud.com/contact-us/). Only SA-domiciled TEFL agency found. Drafted via gog batch 3. |
+| 19 | 26 | Teach Away | TEFL, Toronto-based, UAE/Saudi/global | email | drafted 2026-05-13 | info@teachaway.com (from teachaway.com/contact). Drafted via gog batch 3. |
+| 20 | 27 | The TEFL Org | TEFL training + jobs, UK | email | drafted 2026-05-13 | info@tefl.org (from tefl.org/contact-us/). Drafted via gog batch 3. |
+| 21 | 28 | CIEE | TEFL, USA Teach Abroad (Spain alternative) | email | drafted 2026-05-13 | contact@ciee.org (from ciee.org/about/contact). Drafted via gog batch 3. |
 
-All 16 emails sent 2026-05-11. Batch 3 (TEFL recipients) added 2026-05-13 after the TEFL pathway guide was published. Auto-replies, bounces, and substantive responses are tracked in the recipient's row above as they arrive.
+All 16 emails sent 2026-05-11. Batch 3 (TEFL recipients) added 2026-05-13 after the TEFL pathway guide was published — 5 drafts created (Korvia, TravelBud, Teach Away, The TEFL Org, CIEE). Auto-replies, bounces, and substantive responses are tracked in the recipient's row above as they arrive.
+
+**TEFL form-only recipients** (no public email surfaced May 2026 — handle via contact form OR run Google search "email address for <domain>" before form-submit):
+- #29 Footprints Recruiting — footprintsrecruiting.com/contact
+- #30 International TEFL Academy — internationalteflacademy.com
+- #31 i-to-i TEFL — i-to-i.com
+- #32 Reach to Teach — reachtoteach.com
 
 **Pending (contact form):** #5 NHS England IRP, #6 AHP/ALOR, #8 Impact Teachers, #11 TES, #12 Teaching Vacancies, #13 SA-Recruitment, #18 Sable International. Status of these 7 contact-form submissions is recorded separately by John (or update the rows here as each form is submitted).
 

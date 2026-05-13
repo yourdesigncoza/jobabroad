@@ -2,9 +2,9 @@
 
 Generated from `wiki-builds/work-abroad-web/wa-*/wiki/` vaults. Recruiters and placement agencies only — embassies, regulators, government bodies, hotels, sponsors, and scheme operators are excluded.
 
-**Sources scanned:** 50 `type: organisation` notes across 5 category vaults + shared migration-cos vault. **TEFL appended 2026-05-13** after the TEFL pathway pipeline completed.
+**Sources scanned:** 50 `type: organisation` notes across 5 category vaults + shared migration-cos vault. **TEFL appended 2026-05-13** after the TEFL pathway pipeline completed; +8 additional TEFL recruiters elevated 2026-05-13 from prose mentions across the TEFL vault corpus (the Stage 6 vault builder applied a primary-source-only filter that missed legitimate recruiters mentioned outside structured `type: organisation` notes).
 
-**Recruiters/agencies kept:** 24 (23 original + Korvia from TEFL)
+**Recruiters/agencies kept:** 32 (23 original + 9 from TEFL: Korvia, TravelBud, Teach Away, The TEFL Org, CIEE, Footprints Recruiting, International TEFL Academy, i-to-i TEFL, Reach to Teach)
 
 **Excluded (embassies/regulators/etc):** 30 (25 original + 5 TEFL government programmes: EPIK, GEPIK, SMOE, JET, Auxiliares de Conversación)
 
@@ -37,7 +37,15 @@ Generated from `wiki-builds/work-abroad-web/wa-*/wiki/` vaults. Recruiters and p
 | Teaching Vacancies | teaching | United Kingdom | support_organisation | https://teaching-vacancies.service.gov.uk/ | — | — | confirmed | Free DfE government job board for UK school teaching jobs; SA teachers can apply directly to schools without using a paid recruitment agency |
 | TES (Times Educational Supplement) | teaching | United Kingdom, International | support_organisation | https://www.tes.com/jobs/ | — | — | confirmed | Major UK and international teacher job board; free for candidates; widely used by SA teachers seeking UK and international school roles |
 | Tradewind Recruitment | teaching | United Kingdom | teaching_recruiter | https://www.twrecruitment.com/teachers-from-south-africa | — | — | confirmed | UK teacher agency with 13 offices and dedicated SA support; employer-pays; 82 TrustPilot reviews (positive); noted for KCSIE training and CPD access |
-| Korvia Consulting | tefl | South Korea | tefl_placement (EPIK official partner) | https://www.korvia.com/ | support@korvia.com | +82-2-553-6210 | confirmed | EPIK's exclusive official recruiting partner since 2008. Korea-based; FREE to candidates. Treat any SA-based agent claiming "EPIK partnership" that charges a fee as fraudulent — verify against EPIK's published recruiter list at epik.go.kr. Drafted batch 3 — see scripts/outreach-drafts/create-drafts-batch3.sh. |
+| Korvia Consulting | tefl | South Korea | tefl_placement (EPIK official partner) | https://www.korvia.com/ | support@korvia.com | +82-2-553-6210 | confirmed | EPIK's exclusive official recruiting partner since 2008. Korea-based; FREE to candidates. Treat any SA-based agent claiming "EPIK partnership" that charges a fee as fraudulent — verify against EPIK's published recruiter list at epik.go.kr. Drafted batch 3. |
+| TravelBud | tefl | South Korea, Vietnam, Thailand, Japan, Cambodia, Myanmar, Costa Rica | tefl_placement (SA-domiciled, Cape Town) | https://www.travelbud.com/ | info@travelbud.com | +27 21 300 1843 | confirmed | Only SA-domiciled TEFL placement agency found. Operating since 2013; 2,400+ teachers placed; in-region support staff across Asia. Charges programme fee. Drafted batch 3. |
+| Teach Away | tefl | UAE, Saudi Arabia, China, South Korea, Japan, Vietnam, Intl schools | tefl_placement | https://www.teachaway.com/ | info@teachaway.com | — | confirmed | Toronto-based global teacher recruiter; strong UAE/Saudi/China. Free to teachers (employer-pays). Public salary database useful for benchmarking. Drafted batch 3. |
+| The TEFL Org | tefl | Global, Saudi Arabia, UAE, South Korea, Vietnam | tefl_training_jobs_board | https://www.tefl.org/ | info@tefl.org | — | confirmed | UK-based Ofqual-regulated Level 5 trainer + jobs board. Strong regulatory accuracy. SA candidates often use as first reference point. Drafted batch 3. |
+| CIEE | tefl | Spain, China, South Korea, Thailand, Vietnam | tefl_programme_provider | https://www.ciee.org/ | contact@ciee.org | — | confirmed | US-based non-profit. Practical Spain answer for SA candidates (since Auxiliares de Conversación is closed to SA passport-holders). Charges programme fee; provides placement + training + support. Drafted batch 3. |
+| Footprints Recruiting | tefl | South Korea, China, Vietnam, Japan | tefl_placement | https://www.footprintsrecruiting.com/ | — | +1 604 200 8815 | confirmed | Vancouver-based since 2003; strong Korea EPIK and China channels; publishes SA-specific E-2 visa guide. Form-only — no public email surfaced May 2026. |
+| International TEFL Academy | tefl | Global, Spain, China, South Korea | tefl_training_placement | https://www.internationalteflacademy.com/ | — | — | confirmed | Chicago-based training + post-graduation placement across 80+ countries. Form-only contact. |
+| i-to-i TEFL | tefl | Global | tefl_training_jobs_board | https://www.i-to-i.com/ | — | — | confirmed | UK-based Ofqual-regulated trainer + jobs board for graduates. Form-only contact. |
+| Reach to Teach Recruiting | tefl | Taiwan, China, South Korea | tefl_placement | https://www.reachtoteachrecruiting.com/ | — | — | confirmed | Specialist Taiwan placement (since 2003). Free to teachers. Form-only contact. Note: original reachtoteach.com is domain-parked for sale; correct active URL is reachtoteachrecruiting.com. |
 
 
 ---
