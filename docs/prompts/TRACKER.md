@@ -110,6 +110,19 @@ Run shared vaults first — nursing prompts cross-reference them.
 
 ---
 
+## Au Pair (separate vaults per prompt)
+
+| Status | Prompt | Section | Iter | Notes |
+|---|---|---|---|---|
+| [x] | [01 — Destination Options](au-pair/01-destination-options.md) | Where can I actually go? | 8/8 | 47 notes |
+| [x] | [02 — Document Checklist](au-pair/02-document-checklist.md) | What papers do I need? | 7/6 | 41 notes |
+| [x] | [03 — Realistic Costs](au-pair/03-realistic-costs.md) | How much will it cost? | 5/6 | 30 notes |
+| [ ] | [04 — Visa Routes](au-pair/04-visa-routes.md) | What's the actual process? | 0/10 | pending |
+| [ ] | [05 — Scam Red Flags](au-pair/05-scam-red-flags.md) | Will I get scammed? | 0/6 | pending |
+| [ ] | [06 — Legitimate Contacts](au-pair/06-legitimate-contacts.md) | Who do I actually call? | 0/6 | pending |
+
+---
+
 ## Other Categories (prompts not yet built)
 
 | Status | Category | Vault | Prompts Built |
@@ -123,7 +136,7 @@ Run shared vaults first — nursing prompts cross-reference them.
 | [x] | Farming | `wa-farming` | Yes — published to content/pathways/farming.md (Stage 6 complete) |
 | [~] | Hospitality | `wa-hospitality` | Yes — all 6 vaults complete (Stage 4 review gate open) |
 | [~] | TEFL | `wa-tefl` | Yes — all 6 vaults complete, Stage 4 review gate open |
-| [ ] | Au Pair | `wa-au-pair` | No |
+| [~] | Au Pair | `wa-au-pair` | Yes — 6 prompts written, vaults pending |
 
 ---
 

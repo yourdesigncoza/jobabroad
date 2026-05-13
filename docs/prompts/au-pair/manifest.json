@@ -1,0 +1,43 @@
+{
+  "category": "au-pair",
+  "created_at": "2026-05-13T20:18:14+02:00",
+  "manifest_hash": "68a5e01412ec979ca25e131f999950c2fb39ccbfa7e41bd6455f0fa5db952f0c",
+  "vaults": [
+    {
+      "section": "01-destinations",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-au-pair-01-destinations/FINAL_REPORT.md",
+      "sha256": "65c464e1418a11c6a83a2d1945f74d7a16e3e21133b39a2d88b22aa7683c90b3",
+      "size_bytes": 6993
+    },
+    {
+      "section": "02-documents",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-au-pair-02-documents/FINAL_REPORT.md",
+      "sha256": "00ecd18a16454add78ecd1a19293d9d5cab6f113e5abb20c1be5eec8b64b5ab2",
+      "size_bytes": 7856
+    },
+    {
+      "section": "03-costs",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-au-pair-03-costs/FINAL_REPORT.md",
+      "sha256": "2d58cdc43d564851b68cfc356603028e1be81b31a24e924fad5e37838cb61573",
+      "size_bytes": 7444
+    },
+    {
+      "section": "04-visa-routes",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-au-pair-04-visa-routes/FINAL_REPORT.md",
+      "sha256": "d4c95e63e32e6a9dc85bf38a39d6ad08b9b1973e5cafd541c2fafed35052a099",
+      "size_bytes": 8016
+    },
+    {
+      "section": "05-scams",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-au-pair-05-scams/FINAL_REPORT.md",
+      "sha256": "a1e9a3beda601df8f246461cb48f40bb3dd166c1195e096329a2d5bf38ca2be1",
+      "size_bytes": 8618
+    },
+    {
+      "section": "06-contacts",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-au-pair-06-contacts/FINAL_REPORT.md",
+      "sha256": "76e918a253e228f89419503835bf466ebc04e6a6c525bd63280466ed41852894",
+      "size_bytes": 8255
+    }
+  ]
+}

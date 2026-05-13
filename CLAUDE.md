@@ -28,6 +28,7 @@ Use plain language: "We could not get a definitive answer on X — check [offici
 - `content/pathways/farming.md` — full farming guide (6 sections, Gemini-reviewed)
 - `content/pathways/hospitality.md` — full hospitality guide (6 sections, Gemini-reviewed)
 - `content/pathways/tefl.md` — full TEFL guide (6 sections, Gemini-reviewed)
+- `content/pathways/au-pair.md` — full au-pair guide (6 sections, Gemini-reviewed)
 - `lib/pathway-content.ts` — reads markdown, renders to sanitized HTML, extracts TOC from h2 headings
 - `app/members/[token]/page.tsx` — token-gated page: two-column desktop (sticky TOC left, article right), single column mobile (TOC below article)
 - `components/TableOfContents.tsx` — active-section highlighting via IntersectionObserver, collapse toggle
