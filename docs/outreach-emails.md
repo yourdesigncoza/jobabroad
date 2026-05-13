@@ -20,6 +20,7 @@ Generated 2026-05-08. Voice-cleaned and demo-links added 2026-05-11. One bespoke
 - https://www.jobabroad.co.za/demo/trades
 - https://www.jobabroad.co.za/demo/farming
 - https://www.jobabroad.co.za/demo/hospitality
+- https://www.jobabroad.co.za/demo/tefl
 
 Each draft below now includes one or two of these demo links, picked to match the recipient's actual sector. Single-sector recruiters get one demo link. Multi-sector consultancies get two.
 
@@ -53,8 +54,9 @@ Tracks send order, send date, and response status. Update the date and status co
 | 14 | 3 | MMA Healthcare Recruitment | nursing, multi-region | email | sent 2026-05-11 | admin@mmarecruitment.com found via Google "email address for mmarecruitment.com" after defuddle-based search missed it. |
 | 15 | 10 | Eteach | teaching, UK + intl | email | sent 2026-05-11 | info@eteach.com found via Google "email address for eteach.com". |
 | 16 | 15 | ECS Card | trades, UK electrical | email | sent 2026-05-11 | administration@ecscard.org.uk found via Google "email address for ecscard.org.uk". |
+| 17 | 24 | Korvia Consulting | TEFL, Korea (EPIK official partner) | email | drafted 2026-05-13 | support@korvia.com (from korvia.com/contact). Drafted via gog batch 3 — review and send. |
 
-All 16 emails sent 2026-05-11. Auto-replies, bounces, and substantive responses are tracked in the recipient's row above as they arrive.
+All 16 emails sent 2026-05-11. Batch 3 (TEFL recipients) added 2026-05-13 after the TEFL pathway guide was published. Auto-replies, bounces, and substantive responses are tracked in the recipient's row above as they arrive.
 
 **Pending (contact form):** #5 NHS England IRP, #6 AHP/ALOR, #8 Impact Teachers, #11 TES, #12 Teaching Vacancies, #13 SA-Recruitment, #18 Sable International. Status of these 7 contact-form submissions is recorded separately by John (or update the rows here as each form is submitted).
 

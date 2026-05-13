@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react';
 import { scamPatterns as ALL, type ScamPattern } from '@/lib/outreach-data';
 
-const CATEGORIES = ['All', 'Healthcare', 'Teaching', 'Trades', 'Hospitality', 'Seasonal', 'Farming', 'General'] as const;
+const CATEGORIES = ['All', 'Healthcare', 'Teaching', 'TEFL', 'Trades', 'Hospitality', 'Seasonal', 'Farming', 'General'] as const;
 
 function prettyChannel(c: string): string {
   const map: Record<string, string> = {

@@ -2,11 +2,11 @@
 
 Generated from `wiki-builds/work-abroad-web/wa-*/wiki/` vaults. Recruiters and placement agencies only — embassies, regulators, government bodies, hotels, sponsors, and scheme operators are excluded.
 
-**Sources scanned:** 50 `type: organisation` notes across 5 category vaults + shared migration-cos vault.
+**Sources scanned:** 50 `type: organisation` notes across 5 category vaults + shared migration-cos vault. **TEFL appended 2026-05-13** after the TEFL pathway pipeline completed.
 
-**Recruiters/agencies kept:** 23
+**Recruiters/agencies kept:** 24 (23 original + Korvia from TEFL)
 
-**Excluded (embassies/regulators/etc):** 25
+**Excluded (embassies/regulators/etc):** 30 (25 original + 5 TEFL government programmes: EPIK, GEPIK, SMOE, JET, Auxiliares de Conversación)
 
 ---
 
@@ -37,6 +37,7 @@ Generated from `wiki-builds/work-abroad-web/wa-*/wiki/` vaults. Recruiters and p
 | Teaching Vacancies | teaching | United Kingdom | support_organisation | https://teaching-vacancies.service.gov.uk/ | — | — | confirmed | Free DfE government job board for UK school teaching jobs; SA teachers can apply directly to schools without using a paid recruitment agency |
 | TES (Times Educational Supplement) | teaching | United Kingdom, International | support_organisation | https://www.tes.com/jobs/ | — | — | confirmed | Major UK and international teacher job board; free for candidates; widely used by SA teachers seeking UK and international school roles |
 | Tradewind Recruitment | teaching | United Kingdom | teaching_recruiter | https://www.twrecruitment.com/teachers-from-south-africa | — | — | confirmed | UK teacher agency with 13 offices and dedicated SA support; employer-pays; 82 TrustPilot reviews (positive); noted for KCSIE training and CPD access |
+| Korvia Consulting | tefl | South Korea | tefl_placement (EPIK official partner) | https://www.korvia.com/ | support@korvia.com | +82-2-553-6210 | confirmed | EPIK's exclusive official recruiting partner since 2008. Korea-based; FREE to candidates. Treat any SA-based agent claiming "EPIK partnership" that charges a fee as fraudulent — verify against EPIK's published recruiter list at epik.go.kr. Drafted batch 3 — see scripts/outreach-drafts/create-drafts-batch3.sh. |
 
 
 ---
