@@ -137,11 +137,12 @@ export const TEFL_STEPS: StepDef[] = [
         hint: 'Required for every TEFL visa; valid 6 months from issue',
       },
       {
-        id: 'documents.degree_apostille',
+        id: 'documents.degree_legalisation',
         version: 1,
-        label: 'Degree apostille / authentication',
+        label: 'Degree legalisation via DIRCO (apostille or authentication)',
         type: 'select',
-        options: ['Done via DIRCO', 'In progress', 'Not started', 'Not applicable'],
+        options: ['Done', 'In progress', 'Not started', 'Not applicable'],
+        hint: 'DIRCO Legalisation Services issues either an apostille (Hague-Convention destinations: Korea, Saudi, China, UAE) or authentication (Vietnam pre-Sep 2026). The service is free; private agents only courier documents for a fee',
       },
       {
         id: 'documents.dependants_count',
