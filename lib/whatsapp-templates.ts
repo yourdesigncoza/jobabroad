@@ -125,6 +125,32 @@ Includes a CV template and WhatsApp feedback.
 
 R199 once-off. Ready to see the actual routes and costs? I'll send the PayShap details.`,
 
+  tefl: `Thanks — TEFL is one of the most accessible work-abroad routes for South Africans. SA is on the official 7-nation native-English list for Korea EPIK and several Gulf programmes, which most candidates don't realise. No SACE registration, no skills assessment.
+
+The Jobabroad Playbook covers:
+• Realistic destinations (Korea, Saudi, UAE, Vietnam, China, Spain)
+• Documents and visa route to check (CELTA/TEFL cert, SAPS, SAQA, DIRCO apostille)
+• Likely costs before you apply
+• Scam red flags to avoid (upfront fee, fake EPIK recruiters, passport-holding)
+• Official government and programme links
+
+Includes a CV template and WhatsApp feedback.
+
+R199 once-off. Ready to see the actual routes and costs? I'll send the PayShap details.`,
+
+  'au-pair': `Thanks — au pair placements are a structured route, particularly the US J1 au pair programme and EU host-family schemes. The legitimate programmes are agency-screened and don't ask candidates for placement fees; the scam patterns in this space are specific and worth knowing before you commit to anyone.
+
+The Jobabroad Playbook covers:
+• Realistic destinations for SA au pairs (US, Netherlands, Germany, Australia)
+• Documents and visa route to check
+• Likely costs before you apply
+• Scam red flags to avoid
+• Official programme and host-family vetting links
+
+Includes a CV template and WhatsApp feedback.
+
+R199 once-off. Ready to see the actual routes and costs? I'll send the PayShap details.`,
+
   other: `Thanks — your field is worth looking into.
 
 The Jobabroad Playbook covers:
