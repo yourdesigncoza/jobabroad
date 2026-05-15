@@ -1,9 +1,16 @@
+import type { Metadata } from 'next';
 import InterestGrid from '@/components/InterestGrid';
 import CountryStats from '@/components/CountryStats';
 import HowItWorks from '@/components/HowItWorks';
 import FAQ from '@/components/FAQ';
 import SiteNav from '@/components/SiteNav';
 import SiteFooter from '@/components/SiteFooter';
+
+// Title, description and Open Graph come from the root layout's defaults;
+// only the canonical URL is page-specific (?src= UTM params must not fork it).
+export const metadata: Metadata = {
+  alternates: { canonical: '/' },
+};
 
 interface Props {
   searchParams: Promise<{ src?: string }>;
