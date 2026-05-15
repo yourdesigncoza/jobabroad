@@ -4,12 +4,27 @@ import BackToTop from '@/components/BackToTop';
 import PathwaySearch from '@/components/PathwaySearch';
 import TableOfContents from '@/components/TableOfContents';
 import StickyNav from '@/components/StickyNav';
-import { getPathwayContent } from '@/lib/pathway-content';
+import { getPathwayContent, listPathwaySlugs } from '@/lib/pathway-content';
 import { CATEGORIES, buildWhatsAppLink } from '@/lib/categories';
+import { pageMetadata } from '@/lib/site';
 
-export const metadata: Metadata = {
-  robots: { index: false, follow: false },
-};
+export async function generateStaticParams() {
+  return listPathwaySlugs().map(category => ({ category }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ category: string }>;
+}): Promise<Metadata> {
+  const { category } = await params;
+  const categoryDef = CATEGORIES.find(c => c.id === category);
+  if (!categoryDef) return { robots: { index: false, follow: false } };
+
+  const title = `${categoryDef.label} Jobs Abroad — ${categoryDef.destinations.join(', ')} pathways`;
+  const description = `Work-abroad guide for ${categoryDef.audience}. ${categoryDef.description}. Visa routes, realistic costs, scam red flags, vetted recruiters.`;
+  return pageMetadata({ title, description, path: `/demo/${category}` });
+}
 
 export default async function DemoPage({
   params,

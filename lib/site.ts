@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 
 /** Canonical origin, no trailing slash. Falls back to the production domain. */
-export const SITE_URL = (
-  process.env.NEXT_PUBLIC_BASE_URL ?? 'https://jobabroad.co.za'
-).replace(/\/$/, '');
+export const SITE_URL = (process.env.NEXT_PUBLIC_BASE_URL ?? 'https://jobabroad.co.za')
+  .trim()
+  .replace(/\/+$/, '');
 
 export const SITE_NAME = 'Jobabroad';
 
