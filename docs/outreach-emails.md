@@ -56,7 +56,7 @@ Tracks send order, send date, and response status. Update the date and status co
 | 15 | 10 | Eteach | teaching, UK + intl | email | sent 2026-05-11 | info@eteach.com found via Google "email address for eteach.com". |
 | 16 | 15 | ECS Card | trades, UK electrical | email | sent 2026-05-11 | administration@ecscard.org.uk found via Google "email address for ecscard.org.uk". |
 | 17 | 24 | Korvia Consulting | TEFL, Korea (EPIK official partner) | email | sent 2026-05-13 | support@korvia.com (from korvia.com/contact). Drafted + sent via gog batch 3. |
-| 18 | 25 | TravelBud | TEFL, SA-domiciled (Cape Town), multi-Asia | email | sent 2026-05-13 | info@travelbud.com (from travelbud.com/contact-us/). Only SA-domiciled TEFL agency found. Drafted + sent via gog batch 3. |
+| 18 | 25 | TravelBud | TEFL, SA-domiciled (Cape Town), multi-Asia | email | sent 2026-05-13 | **Replied 2026-05-14 — REMOVED.** TravelBud Holdings no longer operating (incorporated as a USA LLC), no longer accepts SA candidates, asked not to be mentioned. Removed from `/recruiters` and `docs/outreach-contacts.md`; profile archived in `docs/outreach-archive.md`. |
 | 19 | 26 | Teach Away | TEFL, Toronto-based, UAE/Saudi/global | email | sent 2026-05-13 | info@teachaway.com (from teachaway.com/contact). Drafted + sent via gog batch 3. |
 | 20 | 27 | The TEFL Org | TEFL training + jobs, UK | email | sent 2026-05-13 | info@tefl.org (from tefl.org/contact-us/). Drafted + sent via gog batch 3. |
 | 21 | 28 | CIEE | TEFL, USA Teach Abroad (Spain alternative) | email | sent 2026-05-13 | contact@ciee.org (from ciee.org/about/contact). Drafted + sent via gog batch 3. |

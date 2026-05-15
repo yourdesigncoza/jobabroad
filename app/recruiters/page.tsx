@@ -2,12 +2,14 @@ import type { Metadata } from 'next';
 import SiteNav from '@/components/SiteNav';
 import SiteFooter from '@/components/SiteFooter';
 import RecruitersTable from '@/components/RecruitersTable';
+import { pageMetadata } from '@/lib/site';
 
-export const metadata: Metadata = {
-  title: 'Recruiters & Agencies — Jobabroad',
+export const metadata: Metadata = pageMetadata({
+  title: 'Recruiters & Agencies',
   description:
     'A list of recruiters, placement agencies and migration consultants we found while researching work-abroad pathways for South Africans. We don\'t endorse any of them — verify each one independently before paying anything.',
-};
+  path: '/recruiters',
+});
 
 interface Props {
   searchParams: Promise<{ src?: string }>;
@@ -26,29 +28,31 @@ export default async function RecruitersPage({ searchParams }: Props) {
 
       {/* Hero */}
       <section className="max-w-6xl mx-auto px-6 pt-12 pb-8">
-        <div className="flex flex-col gap-5 max-w-3xl">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-px" style={{ backgroundColor: '#ff751f' }} />
-            <span
-              className="font-display text-[0.65rem] md:text-xs font-semibold uppercase tracking-[0.08em] md:tracking-[0.2em]"
-              style={{ color: '#ff751f' }}
+        <div className="flex flex-col gap-5">
+          <div className="max-w-3xl flex flex-col gap-5">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-px" style={{ backgroundColor: '#ff751f' }} />
+              <span
+                className="font-display text-[0.65rem] md:text-xs font-semibold uppercase tracking-[0.08em] md:tracking-[0.2em]"
+                style={{ color: '#ff751f' }}
+              >
+                Recruiters &amp; agencies — research log
+              </span>
+            </div>
+
+            <h1
+              className="font-display font-bold uppercase leading-none"
+              style={{ fontSize: 'clamp(2.2rem, 6vw, 3.8rem)', color: '#2C2C2C' }}
             >
-              Recruiters &amp; agencies — research log
-            </span>
+              Recruiters &amp; agencies we&apos;ve come across
+            </h1>
+
+            <p className="font-body text-lg leading-relaxed" style={{ color: '#2C2C2C' }}>
+              While we built our work-abroad guides, we kept a list of every recruiter,
+              placement agency and migration consultant that came up. This is that list — open
+              for anyone to use.
+            </p>
           </div>
-
-          <h1
-            className="font-display font-bold uppercase leading-none"
-            style={{ fontSize: 'clamp(2.2rem, 6vw, 3.8rem)', color: '#2C2C2C' }}
-          >
-            Recruiters &amp; agencies we&apos;ve come across
-          </h1>
-
-          <p className="font-body text-lg leading-relaxed" style={{ color: '#2C2C2C' }}>
-            While we built our work-abroad guides, we kept a list of every recruiter,
-            placement agency and migration consultant that came up. This is that list — open
-            for anyone to use.
-          </p>
 
           <div
             className="rounded-2xl p-5 border"

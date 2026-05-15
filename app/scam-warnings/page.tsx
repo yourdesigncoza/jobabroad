@@ -2,12 +2,14 @@ import type { Metadata } from 'next';
 import SiteNav from '@/components/SiteNav';
 import SiteFooter from '@/components/SiteFooter';
 import ScamWarningsList from '@/components/ScamWarningsList';
+import { pageMetadata } from '@/lib/site';
 
-export const metadata: Metadata = {
-  title: 'Scam Warnings — Jobabroad',
+export const metadata: Metadata = pageMetadata({
+  title: 'Scam Warnings',
   description:
     'Common scams targeting South Africans applying for work abroad — what they look like, how scammers reach you, and where to report them.',
-};
+  path: '/scam-warnings',
+});
 
 interface Props {
   searchParams: Promise<{ src?: string }>;
@@ -26,29 +28,31 @@ export default async function ScamWarningsPage({ searchParams }: Props) {
 
       {/* Hero */}
       <section className="max-w-6xl mx-auto px-6 pt-12 pb-8">
-        <div className="flex flex-col gap-5 max-w-3xl">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-px" style={{ backgroundColor: '#7A1F1F' }} />
-            <span
-              className="font-display text-[0.65rem] md:text-xs font-semibold uppercase tracking-[0.08em] md:tracking-[0.2em]"
-              style={{ color: '#7A1F1F' }}
+        <div className="flex flex-col gap-5">
+          <div className="max-w-3xl flex flex-col gap-5">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-px" style={{ backgroundColor: '#7A1F1F' }} />
+              <span
+                className="font-display text-[0.65rem] md:text-xs font-semibold uppercase tracking-[0.08em] md:tracking-[0.2em]"
+                style={{ color: '#7A1F1F' }}
+              >
+                Stay safe — common scam patterns
+              </span>
+            </div>
+
+            <h1
+              className="font-display font-bold uppercase leading-none"
+              style={{ fontSize: 'clamp(2.2rem, 6vw, 3.8rem)', color: '#2C2C2C' }}
             >
-              Stay safe — common scam patterns
-            </span>
+              Scam warnings
+            </h1>
+
+            <p className="font-body text-lg leading-relaxed" style={{ color: '#2C2C2C' }}>
+              These are the scam patterns we&apos;ve seen targeting South Africans who want to
+              work abroad. If something you&apos;re looking at matches one of these — pause,
+              verify, and report.
+            </p>
           </div>
-
-          <h1
-            className="font-display font-bold uppercase leading-none"
-            style={{ fontSize: 'clamp(2.2rem, 6vw, 3.8rem)', color: '#2C2C2C' }}
-          >
-            Scam warnings
-          </h1>
-
-          <p className="font-body text-lg leading-relaxed" style={{ color: '#2C2C2C' }}>
-            These are the scam patterns we&apos;ve seen targeting South Africans who want to
-            work abroad. If something you&apos;re looking at matches one of these — pause,
-            verify, and report.
-          </p>
 
           <div
             className="rounded-2xl p-5 border"
