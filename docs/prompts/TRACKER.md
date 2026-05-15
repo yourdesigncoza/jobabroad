@@ -149,6 +149,19 @@ Run shared vaults first — nursing prompts cross-reference them.
 
 ---
 
+## Accounting (separate vaults per prompt)
+
+| Status | Prompt | Section | Iter | Notes |
+|---|---|---|---|---|
+| [ ] | [01 — Destination Options](accounting/01-destination-options.md) | Where can I actually go? | 8 | pending — vault: wa-accounting-01-destinations |
+| [ ] | [02 — Document Checklist](accounting/02-document-checklist.md) | What papers do I need? | 6 | pending — vault: wa-accounting-02-documents |
+| [ ] | [03 — Realistic Costs](accounting/03-realistic-costs.md) | How much will it cost? | 6 | pending — vault: wa-accounting-03-costs |
+| [ ] | [04 — Visa Route Overview](accounting/04-visa-routes.md) | What's the actual process? | 10 | pending — vault: wa-accounting-04-visa-routes |
+| [ ] | [05 — Scam Red Flags](accounting/05-scam-red-flags.md) | Will I get scammed? | 6 | pending — vault: wa-accounting-05-scams |
+| [ ] | [06 — Legitimate Contacts](accounting/06-legitimate-contacts.md) | Who do I actually call? | 6 | pending — vault: wa-accounting-06-contacts |
+
+---
+
 ## Other Categories (prompts not yet built)
 
 | Status | Category | Vault | Prompts Built |
@@ -156,7 +169,7 @@ Run shared vaults first — nursing prompts cross-reference them.
 | [x] | IT / Tech | `wa-it-tech` | Yes — 6 prompts written, 6 vaults complete |
 | [~] | Engineering | `wa-engineering` | Yes — 6 prompts written, vaults pending |
 | [x] | Teaching | `wa-teaching` | Yes — 6 prompts written, 6 vaults complete |
-| [ ] | Accounting | `wa-accounting` | No |
+| [~] | Accounting | `wa-accounting` | Yes — 6 prompts written, vaults pending |
 | [x] | Seasonal | `wa-seasonal` | Yes — 6 prompts written, vaults pending |
 | [~] | Trades | `wa-trades` | Yes — 6 prompts written, all 6 vaults complete (Stage 4 review gate open) |
 | [x] | Farming | `wa-farming` | Yes — published to content/pathways/farming.md (Stage 6 complete) |
