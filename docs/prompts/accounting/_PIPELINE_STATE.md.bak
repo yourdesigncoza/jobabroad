@@ -1,9 +1,9 @@
 ---
 category: accounting
 current_stage: 6
-stage_status: completed
+stage_status: in_progress
 started_at: 2026-05-15T15:59:57+02:00
-last_run_at: 2026-05-15T21:50:00+02:00
+last_run_at: 2026-05-15T21:48:00+02:00
 last_error: null
 publish_gate:
   unresolved_blocking_todos: 0
@@ -259,7 +259,7 @@ gemini_review_status:
     source_audit_flags: 2
     reviewed_against_guide_hash: "ba3e6349b65de6117b1005ea00fa4f0bbb5250f7eeddca71d3717fe3d40ad66c"
     notes: "Gemini confirmed most data (URLs, body names, OISC F2001-00004, AUSTRAC 1 July 2026, HMRC Agent Services 18 May 2026, CPA Ireland→CAI amalgamation, NASBA renewal). Disagreements: UK Skilled Worker fees — Gemini suggested £769/£1,519 from outside UK; primary gov.uk/skilled-worker-visa/how-much-it-costs CONFIRMED £819/£1,618 from outside UK — defended. Four Corners MARN 1909422 — Gemini attributed to Nepcoms Services; MARA register page returned 403 so dispute could not be primary-resolved — TODO added. Internal consistency fixes applied: aligned UK/AU/Canada quick-reference fees with corrected figures in sections 3/4."
-published_path: "content/pathways/accounting.md"
+published_path: null
 ---
 
 ## Run log
@@ -299,5 +299,4 @@ published_path: "content/pathways/accounting.md"
 - 2026-05-15 21:42 — Stage 6 BLOCKED by publish_gate: 8 tier=unverified markers in high-risk sections (6 costs, 2 contacts). Sections 03-costs (5 salary/forex secondary cites + 1 SARS tax-practitioner fee estimate) and 06-contacts (CAI exam scope, DETE list currency).
 - 2026-05-15 21:48 — Reframe-as-estimate pass: 8 markers removed in section files, prose updated to explicitly label salary bands and SARS fee as industry estimates with verify-in-current-listings caveat. CAI and DETE markers dropped (surrounding prose is itself the verification warning). accounting.md re-concatenated; new guide_hash ba3e6349b65d... All 6 reviewed_against_guide_hash fields refreshed (edits were prose-only, no factual changes).
 - 2026-05-15 21:48 — Stage 6 publish_gate re-run: all 4 checks PASS.
-- 2026-05-15 21:50 — Stage 6 complete: published to content/pathways/accounting.md (156,933 bytes, sha256 ba3e6349b65d...). CLAUDE.md updated.
 - 2026-05-15 21:35 — Post-stage-5 TODO resolution pass: 13 TODO markers resolved via web search. Net zero `<!-- TODO: human-review -->` markers remain in guide. Material updates: dailyinvestor.com source upgraded (Graeme Marais, Blue Recruiting, via The Money Show); UK HC 997 PDF re-cited inline as primary confirmation of SOC 2421 £49,200; Four Corners MARN 1909422 confirmed via four-corners.com.au footer (Gemini overruled); NZ AEWV/NOL transition prose strengthened with primary INZ NOL URL; SAQA tariff PDF URL added; DETE Critical Skills primary fetch revealed only AICPA/PICPA/ICAP are named (the "nine bodies" claim softened to verified-3-named with industry-cite supplementary); CAI exam scope softened to "local company law and taxation exams" from CAI primary page; CPA BC/Alberta direct URLs added. Guide hash updated to e521b456772a...

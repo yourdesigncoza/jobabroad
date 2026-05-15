@@ -12,18 +12,30 @@ Run reindex whenever any of these change:
 
 ### Two modes
 
-**Full rebuild** — `npm run reindex`
-Wipes `pathway_chunks` and re-embeds every chunk for every category. Use after changes to the script itself, after editing shared vaults (`wa-shared-*`), or whenever you want a clean rebuild. Embeds ~3,000+ chunks (~1–3 min).
+Note: the reindex script does not auto-load `.env.local`. Run `set -a; source .env.local; set +a` first (in the same shell), or the script exits with `Missing NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY`.
 
-**Partial rebuild** — `npm run reindex -- --category=<name>`
-Wipes only rows where `category='<name>'` and re-embeds only that category's chunks (guide + the 6 vaults that map to it). Use after publishing one new category, or after editing one category's pathway guide or vaults. Valid `<name>` values match the `category` column in the DB: `healthcare`, `teaching`, `seasonal`, `trades`, `farming`, `shared`. ~5× faster than the full rebuild.
+**Full rebuild** — `npm run reindex`
+Wipes `pathway_chunks` and re-embeds every chunk for every category. Use after changes to the script itself, after editing shared vaults (`wa-shared-*`), or whenever you want a clean rebuild. Embeds ~6,300 chunks (~2–5 min).
+
+**Partial rebuild — preferred after publishing a single category** — `npm run reindex -- --category=<name>`
+Wipes only rows where `category='<name>'` and re-embeds only that category's chunks (guide + the 6 vaults that map to it). Use after publishing one new category, or after editing one category's pathway guide or vaults. ~5× faster than the full rebuild.
+
+Valid `<name>` values (one per published category, must also be registered in `scripts/reindex.ts`):
+`healthcare`, `teaching`, `seasonal`, `trades`, `farming`, `hospitality`, `accounting`, `tefl`, `au-pair`, `engineering`, `it-tech`, `shared`.
 
 The full mode is the safe default. Reach for partial when you know nothing else changed.
 
+**Standard post-publish step (every new `/build-pathway` run):**
+```bash
+set -a; source .env.local; set +a
+npm run reindex -- --category=<category>
+```
+If the category is not yet registered in `scripts/reindex.ts`, the script will print `Unknown category '<name>'. Valid: …` and exit — see step 3 of the publish flow below to register it, then re-run.
+
 ## Publish-pathway process flow (adding a new category)
 
-**Categories live so far:** healthcare, teaching, seasonal, trades, farming.
-**Remaining:** engineering, IT/tech, accounting, hospitality.
+**Categories live so far:** healthcare, teaching, seasonal, trades, farming, hospitality, tefl, au-pair, engineering, it-tech, accounting.
+**Remaining:** (none — every category from the build-pathway skill is published and indexed).
 
 Run through these steps in order each time you publish a new category. Each step is mechanical — the goal is that nothing required to make the category fully operational is missed.
 
@@ -41,12 +53,18 @@ The **vault prefix** does not always match the category name. Current mappings:
 
 | `interest_category` (DB) | Vault prefix (filesystem) |
 |---|---|
-| `healthcare` | `wa-nursing-*` |
-| `teaching`   | `wa-teaching-*` |
-| `seasonal`   | `wa-seasonal-*` |
-| `trades`     | `wa-trades-*` |
-| `farming`    | `wa-farming-*` |
-| (any)        | `wa-shared-*` — applied to all |
+| `healthcare`   | `wa-nursing-*` |
+| `teaching`     | `wa-teaching-*` |
+| `seasonal`     | `wa-seasonal-*` |
+| `trades`       | `wa-trades-*` |
+| `farming`      | `wa-farming-*` |
+| `hospitality`  | `wa-hospitality-*` |
+| `accounting`   | `wa-accounting-*` |
+| `tefl`         | `wa-tefl-*` |
+| `au-pair`      | `wa-au-pair-*` |
+| `engineering`  | `wa-engineering-*` |
+| `it-tech`      | `wa-it-tech-*` |
+| (any)          | `wa-shared-*` — applied to all |
 
 ### 2. Add the eligibility assessment
 
@@ -67,7 +85,7 @@ Without this, `/members/[token]` shows no Assessment CTA for the new category an
 Two edits in `scripts/reindex.ts`:
 
 - Add `<vault-prefix>: '<category>'` to the `VAULT_TO_CATEGORY` map
-- Add the new vault prefix to the regex literal that matches `wa-<prefix>-` (the line just below `for (const vault of vaults)` — currently lists `nursing|teaching|seasonal|trades|farming|shared`)
+- Add the new vault prefix to the regex literal that matches `wa-<prefix>-` (the line just below `for (const vault of vaults)` — currently lists `nursing|teaching|seasonal|trades|farming|hospitality|accounting|tefl|au-pair|engineering|it-tech|shared`)
 
 The pathway guide is picked up automatically — its filename becomes the category (`content/pathways/engineering.md` → `category='engineering'`).
 

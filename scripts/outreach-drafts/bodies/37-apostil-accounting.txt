@@ -1,0 +1,19 @@
+Hi Apostil team,
+
+Quick follow-up to our earlier note. We've just published the accountants pathway on Jobabroad (https://jobabroad.co.za), covering SA CA(SA) holders going to the UK, Australia, NZ, Canada and Ireland via the SAICA MRA / RMA routes.
+
+Apostil came up again as the recommended SA-side concierge — specifically for apostilling the SAPS PCC and, where required, the SAICA Letter of Good Standing for partner-body submissions (ICAEW, CA ANZ, CPA Canada, CAI). The accountants section pages link to your service the same way the nursing and trades pages do.
+
+Sample landing pages for accountant readers:
+- https://www.jobabroad.co.za/demo/accounting
+
+Two quick questions:
+
+1. Anything specific to the accountant/SAICA workflow that Apostil handles differently from the trades or nursing flows we already describe (e.g. SAICA LoGS handling, multi-document bundling for partner-body submissions)?
+2. Any tweak to the description on the recruiters page (current pricing, turnaround) you'd like me to make?
+
+Thanks,
+John Montgomery
+AI Engineer · Mossel Bay, South Africa
+info@devai.co.za
+https://www.linkedin.com/in/john-montgomery-za/

@@ -153,12 +153,12 @@ Run shared vaults first — nursing prompts cross-reference them.
 
 | Status | Prompt | Section | Iter | Notes |
 |---|---|---|---|---|
-| [ ] | [01 — Destination Options](accounting/01-destination-options.md) | Where can I actually go? | 8 | pending — vault: wa-accounting-01-destinations |
-| [ ] | [02 — Document Checklist](accounting/02-document-checklist.md) | What papers do I need? | 6 | pending — vault: wa-accounting-02-documents |
-| [ ] | [03 — Realistic Costs](accounting/03-realistic-costs.md) | How much will it cost? | 6 | pending — vault: wa-accounting-03-costs |
-| [ ] | [04 — Visa Route Overview](accounting/04-visa-routes.md) | What's the actual process? | 10 | pending — vault: wa-accounting-04-visa-routes |
-| [ ] | [05 — Scam Red Flags](accounting/05-scam-red-flags.md) | Will I get scammed? | 6 | pending — vault: wa-accounting-05-scams |
-| [ ] | [06 — Legitimate Contacts](accounting/06-legitimate-contacts.md) | Who do I actually call? | 6 | pending — vault: wa-accounting-06-contacts |
+| [x] | [01 — Destination Options](accounting/01-destination-options.md) | Where can I actually go? | 5 | 49 notes — vault: wa-accounting-01-destinations |
+| [x] | [02 — Document Checklist](accounting/02-document-checklist.md) | What papers do I need? | 5 | 45 notes — vault: wa-accounting-02-documents |
+| [x] | [03 — Realistic Costs](accounting/03-realistic-costs.md) | How much will it cost? | 6 | 59 notes — vault: wa-accounting-03-costs |
+| [x] | [04 — Visa Route Overview](accounting/04-visa-routes.md) | What's the actual process? | 7 | 52 notes — vault: wa-accounting-04-visa-routes |
+| [x] | [05 — Scam Red Flags](accounting/05-scam-red-flags.md) | Will I get scammed? | 7 | 49 notes — vault: wa-accounting-05-scams |
+| [x] | [06 — Legitimate Contacts](accounting/06-legitimate-contacts.md) | Who do I actually call? | 6 | 38 notes — vault: wa-accounting-06-contacts |
 
 ---
 

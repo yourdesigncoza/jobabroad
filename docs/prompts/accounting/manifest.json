@@ -1,0 +1,43 @@
+{
+  "category": "accounting",
+  "created_at": "2026-05-15T19:02:07+02:00",
+  "manifest_hash": "ed4c3a9657849f47f11bbdb1a24e050ca1b40218243c98b7ae90ab30996f6ee3",
+  "vaults": [
+    {
+      "section": "01-destinations",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-accounting-01-destinations/FINAL_REPORT.md",
+      "sha256": "4d66d23f63fa8b87333535011523ac12b095872a5e4b601f7f9219571e108b2f",
+      "size_bytes": 8919
+    },
+    {
+      "section": "02-documents",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-accounting-02-documents/FINAL_REPORT.md",
+      "sha256": "f0d8c55073a91cb4a15076837bb598444dec8b188be68bd73cca1f5c771644dc",
+      "size_bytes": 9493
+    },
+    {
+      "section": "03-costs",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-accounting-03-costs/FINAL_REPORT.md",
+      "sha256": "fa47034637a62ff2555f723316e4f319ffea3be12bc7fadcf2bd9883961e2090",
+      "size_bytes": 6158
+    },
+    {
+      "section": "04-visa-routes",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-accounting-04-visa-routes/FINAL_REPORT.md",
+      "sha256": "01fb5c22d9df55f59f9b2be2cdcaa98d974d02958d184cbfe27eeac606d7d901",
+      "size_bytes": 9356
+    },
+    {
+      "section": "05-scams",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-accounting-05-scams/FINAL_REPORT.md",
+      "sha256": "2a00019158dd5ab5a3668ad3b54c4c88476466edf4b31c40abada48fd1ffb47a",
+      "size_bytes": 8047
+    },
+    {
+      "section": "06-contacts",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-accounting-06-contacts/FINAL_REPORT.md",
+      "sha256": "4c11d4cc24dcb26f854b85b0031a1a38b9263b1546c3159a409d2809f0c9f87d",
+      "size_bytes": 7074
+    }
+  ]
+}
