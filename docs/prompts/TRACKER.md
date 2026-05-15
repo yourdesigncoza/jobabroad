@@ -136,11 +136,24 @@ Run shared vaults first — nursing prompts cross-reference them.
 
 ---
 
+## IT / Tech (separate vaults per prompt)
+
+| Status | Prompt | Section | Iter | Notes |
+|---|---|---|---|---|
+| [x] | [01 — Destination Options](it-tech/01-destination-options.md) | Where can I actually go? | 6/8 | completed — vault: wa-it-tech-01-destinations (78 notes) |
+| [x] | [02 — Document Checklist](it-tech/02-document-checklist.md) | What papers do I need? | 5/6 | completed — vault: wa-it-tech-02-documents (48 notes) |
+| [x] | [03 — Realistic Costs](it-tech/03-realistic-costs.md) | How much will it cost? | 5/6 | completed — vault: wa-it-tech-03-costs (46 notes) |
+| [x] | [04 — Visa Route Overview](it-tech/04-visa-routes.md) | What's the actual process? | 6/10 | completed — vault: wa-it-tech-04-visa-routes (69 notes) |
+| [x] | [05 — Scam Red Flags](it-tech/05-scam-red-flags.md) | Will I get scammed? | 6/6 | completed — vault: wa-it-tech-05-scams (58 notes) |
+| [x] | [06 — Legitimate Contacts](it-tech/06-legitimate-contacts.md) | Who do I actually call? | 7/6 | completed — vault: wa-it-tech-06-contacts (41 notes) |
+
+---
+
 ## Other Categories (prompts not yet built)
 
 | Status | Category | Vault | Prompts Built |
 |---|---|---|---|
-| [ ] | IT / Tech | `wa-it-tech` | No |
+| [x] | IT / Tech | `wa-it-tech` | Yes — 6 prompts written, 6 vaults complete |
 | [~] | Engineering | `wa-engineering` | Yes — 6 prompts written, vaults pending |
 | [x] | Teaching | `wa-teaching` | Yes — 6 prompts written, 6 vaults complete |
 | [ ] | Accounting | `wa-accounting` | No |

@@ -1,0 +1,43 @@
+{
+  "category": "it-tech",
+  "created_at": "2026-05-15T13:30:00+02:00",
+  "manifest_hash": "d0293ba4d5c13db4d1f0aeb04c63e641c03f5a88689f8a6becd969de1bffc6f6",
+  "vaults": [
+    {
+      "section": "01-destinations",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-it-tech-01-destinations/FINAL_REPORT.md",
+      "sha256": "d56b67b741ac0bcbf2a3c453f4c316a3bc2675b8d88afdc37b6b86b79b5158af",
+      "size_bytes": 9651
+    },
+    {
+      "section": "02-documents",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-it-tech-02-documents/FINAL_REPORT.md",
+      "sha256": "cc46845377dbc8e89a6d09345030375c11e2321ed520593a3520f79cf3204a25",
+      "size_bytes": 8279
+    },
+    {
+      "section": "03-costs",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-it-tech-03-costs/FINAL_REPORT.md",
+      "sha256": "a8f1801416768ff4d6db736960999f593c2c1c7f2f38af90a6496c922186c7fd",
+      "size_bytes": 8676
+    },
+    {
+      "section": "04-visa-routes",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-it-tech-04-visa-routes/FINAL_REPORT.md",
+      "sha256": "ac4e5af4bfae5d71bf1801cd568d2b7f3e20c74a893da1c42783c7761cf4fb4e",
+      "size_bytes": 10532
+    },
+    {
+      "section": "05-scams",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-it-tech-05-scams/FINAL_REPORT.md",
+      "sha256": "6ce3c741da14f839d4d458837ff9c9797ec290a8e4b47fa6746f304638cd8bca",
+      "size_bytes": 8612
+    },
+    {
+      "section": "06-contacts",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-it-tech-06-contacts/FINAL_REPORT.md",
+      "sha256": "87db50cfb815f6e986d440457241f13c5120c93723018cb96b8c3158a15598b8",
+      "size_bytes": 7787
+    }
+  ]
+}

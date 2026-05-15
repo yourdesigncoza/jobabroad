@@ -30,6 +30,7 @@ Use plain language: "We could not get a definitive answer on X — check [offici
 - `content/pathways/tefl.md` — full TEFL guide (6 sections, Gemini-reviewed)
 - `content/pathways/au-pair.md` — full au-pair guide (6 sections, Gemini-reviewed)
 - `content/pathways/engineering.md` — full engineering guide (6 sections, Gemini-reviewed)
+- `content/pathways/it-tech.md` — full IT/tech guide (6 sections, Gemini-reviewed)
 - `lib/pathway-content.ts` — reads markdown, renders to sanitized HTML, extracts TOC from h2 headings
 - `app/members/[token]/page.tsx` — token-gated page: two-column desktop (sticky TOC left, article right), single column mobile (TOC below article)
 - `components/TableOfContents.tsx` — active-section highlighting via IntersectionObserver, collapse toggle
@@ -49,7 +50,7 @@ Use plain language: "We could not get a definitive answer on X — check [offici
 - Continue UI polish on the member page (typography, spacing, mobile feel)
 - Review the CV template and refine it
 - Test full flow end-to-end on mobile
-- Eventually: build guides for other categories (IT/tech, accounting)
+- Eventually: build guides for other categories (accounting)
 
 ### Test token (healthcare, local dev)
 `http://localhost:3000/members/d2e097bc-47b4-4db2-b55a-d0886ce65d3c`
