@@ -384,7 +384,7 @@ export const recruiters: Recruiter[] = [
     categories: ["TEFL"],
     type: "TEFL programme provider",
     destinations: ["Spain", "China", "South Korea", "Thailand", "Vietnam"],
-    website: "https://www.ciee.org/",
+    website: "https://www.ciee.org/go-abroad/work/teach-english-abroad",
     email: "contact@ciee.org",
     phone: "",
     evidence: "confirmed" as Recruiter['evidence'],
