@@ -6,6 +6,7 @@ import { FARMING_STEPS } from './farming';
 import { HOSPITALITY_STEPS } from './hospitality';
 import { TEFL_STEPS } from './tefl';
 import { AU_PAIR_STEPS } from './au-pair';
+import { ENGINEERING_STEPS } from './engineering';
 
 const REGISTRY: Record<string, StepDef[]> = {
   healthcare: HEALTHCARE_STEPS,
@@ -15,6 +16,7 @@ const REGISTRY: Record<string, StepDef[]> = {
   hospitality: HOSPITALITY_STEPS,
   tefl: TEFL_STEPS,
   'au-pair': AU_PAIR_STEPS,
+  engineering: ENGINEERING_STEPS,
 };
 
 export function getStepsForCategory(category: string): StepDef[] | null {

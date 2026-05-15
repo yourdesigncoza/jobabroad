@@ -11,6 +11,7 @@ const FILTERS: { label: string; match: (r: Recruiter) => boolean }[] = [
   { label: 'Hospitality',            match: r => r.categories.includes('Hospitality') },
   { label: 'TEFL',                   match: r => r.categories.includes('TEFL') },
   { label: 'Au Pair',                match: r => r.categories.includes('Au Pair') },
+  { label: 'Engineering',            match: r => r.categories.includes('Engineering') },
   { label: 'Migration consultants',  match: r => r.categories.includes('Migration consultants') },
 ];
 
@@ -21,6 +22,7 @@ const TYPE_COLOUR: Record<string, string> = {
   Hospitality: '#ff751f',
   TEFL: '#1B4D3E',
   'Au Pair': '#C9A84C',
+  Engineering: '#1B4D3E',
   'Migration consultants': '#6B6B6B',
 };
 

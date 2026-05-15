@@ -123,12 +123,25 @@ Run shared vaults first — nursing prompts cross-reference them.
 
 ---
 
+## Engineering (separate vaults per prompt)
+
+| Status | Prompt | Section | Iter | Notes |
+|---|---|---|---|---|
+| [x] | [01 — Destination Options](engineering/01-destination-options.md) | Where can I actually go? | 4/8 | completed — vault: wa-engineering-01-destinations (34 notes) |
+| [x] | [02 — Document Checklist](engineering/02-document-checklist.md) | What papers do I need? | 7/6 | completed — vault: wa-engineering-02-documents (58 notes) |
+| [x] | [03 — Realistic Costs](engineering/03-realistic-costs.md) | How much will it cost? | 5/6 | completed — vault: wa-engineering-03-costs (42 notes) |
+| [x] | [04 — Visa Route Overview](engineering/04-visa-routes.md) | What's the actual process? | 6/10 | completed — vault: wa-engineering-04-visa-routes (48 notes) |
+| [x] | [05 — Scam Red Flags](engineering/05-scam-red-flags.md) | Will I get scammed? | 8/6 | completed — vault: wa-engineering-05-scams (32 notes) |
+| [x] | [06 — Legitimate Contacts](engineering/06-legitimate-contacts.md) | Who do I actually call? | 7/6 | completed — vault: wa-engineering-06-contacts (47 notes) |
+
+---
+
 ## Other Categories (prompts not yet built)
 
 | Status | Category | Vault | Prompts Built |
 |---|---|---|---|
 | [ ] | IT / Tech | `wa-it-tech` | No |
-| [ ] | Engineering | `wa-engineering` | No |
+| [~] | Engineering | `wa-engineering` | Yes — 6 prompts written, vaults pending |
 | [x] | Teaching | `wa-teaching` | Yes — 6 prompts written, 6 vaults complete |
 | [ ] | Accounting | `wa-accounting` | No |
 | [x] | Seasonal | `wa-seasonal` | Yes — 6 prompts written, vaults pending |

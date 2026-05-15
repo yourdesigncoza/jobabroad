@@ -1,0 +1,42 @@
+{
+  "category": "engineering",
+  "created_at": "2026-05-14T14:39:57+02:00",
+  "vaults": [
+    {
+      "section": "01-destinations",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-engineering-01-destinations/FINAL_REPORT.md",
+      "sha256": "f9042d24bd290a3676dbc8d9d094b0c40e199dbcba71ef5f052d443cc57d5f7d",
+      "size_bytes": 9062
+    },
+    {
+      "section": "02-documents",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-engineering-02-documents/FINAL_REPORT.md",
+      "sha256": "955b96fad168c1d1d920572d9330183d881aabde589a806c534d47c19a9bdb35",
+      "size_bytes": 9288
+    },
+    {
+      "section": "03-costs",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-engineering-03-costs/FINAL_REPORT.md",
+      "sha256": "e9625a18b2f3e14da9f0ec1e032904ff706f3006a374d8e8a39efc25002fbb78",
+      "size_bytes": 8255
+    },
+    {
+      "section": "04-visa-routes",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-engineering-04-visa-routes/FINAL_REPORT.md",
+      "sha256": "dee08e13b37021eb02ea6c36e85a9de24ade2a4852ebda9bff2685a6b9e163c1",
+      "size_bytes": 8993
+    },
+    {
+      "section": "05-scams",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-engineering-05-scams/FINAL_REPORT.md",
+      "sha256": "d559d6423b190629c1a44f8af4f9d4c1f22ec0f5561de985a0e002105524161d",
+      "size_bytes": 8073
+    },
+    {
+      "section": "06-contacts",
+      "final_report_path": "/home/laudes/zoot/projects/wiki-builds/work-abroad-web/wa-engineering-06-contacts/FINAL_REPORT.md",
+      "sha256": "450596b1b751a56c22676d48aa7deeb1830f0ac90b871b9560cb7bfd792eae5b",
+      "size_bytes": 7185
+    }
+  ]
+}
