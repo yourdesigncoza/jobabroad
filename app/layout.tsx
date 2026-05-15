@@ -1,7 +1,17 @@
 import type { Metadata } from "next";
 import { Oswald, DM_Sans } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
-import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from "@/lib/site";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import JsonLd from "@/components/JsonLd";
+import {
+  SITE_URL,
+  SITE_NAME,
+  SITE_DESCRIPTION,
+  SITE_AUTHOR,
+  OG_IMAGE_WIDTH,
+  OG_IMAGE_HEIGHT,
+  OG_IMAGE_TYPE,
+} from "@/lib/site";
 import "./globals.css";
 
 const oswald = Oswald({
@@ -20,6 +30,14 @@ const dmSans = DM_Sans({
 
 const DEFAULT_TITLE = "Jobabroad — Work Abroad from South Africa";
 
+const DEFAULT_OG_IMAGE = {
+  url: `${SITE_URL}/opengraph-image`,
+  width: OG_IMAGE_WIDTH,
+  height: OG_IMAGE_HEIGHT,
+  type: OG_IMAGE_TYPE,
+  alt: `${SITE_NAME}: ${DEFAULT_TITLE}`,
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
@@ -28,6 +46,7 @@ export const metadata: Metadata = {
   },
   description: SITE_DESCRIPTION,
   applicationName: SITE_NAME,
+  authors: [{ name: SITE_AUTHOR }],
   keywords: [
     "work abroad",
     "jobs abroad South Africa",
@@ -38,6 +57,7 @@ export const metadata: Metadata = {
     "work visa pathways",
     "recruitment scams",
   ],
+  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     locale: "en_ZA",
@@ -45,18 +65,18 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     title: DEFAULT_TITLE,
     description: SITE_DESCRIPTION,
+    images: [DEFAULT_OG_IMAGE],
   },
   twitter: {
     card: "summary_large_image",
     title: DEFAULT_TITLE,
     description: SITE_DESCRIPTION,
+    images: [DEFAULT_OG_IMAGE],
   },
 };
 
 // Static JSON-LD — every value is a hardcoded constant (no request data, no
-// user input). Injected via dangerouslySetInnerHTML because that is the only
-// way to emit a raw <script type="application/ld+json"> in React; the
-// serialized output is escaped against </script> breakout below.
+// user input). Rendered via the JsonLd helper component.
 const jsonLd = {
   "@context": "https://schema.org",
   "@graph": [
@@ -87,14 +107,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${oswald.variable} ${dmSans.variable}`}>
       <body className="antialiased" suppressHydrationWarning>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
-          }}
-        />
+        <JsonLd data={jsonLd} />
         {children}
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

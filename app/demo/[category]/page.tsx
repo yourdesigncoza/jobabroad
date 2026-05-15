@@ -1,15 +1,34 @@
+import fs from 'fs';
+import path from 'path';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import BackToTop from '@/components/BackToTop';
+import JsonLd from '@/components/JsonLd';
 import PathwaySearch from '@/components/PathwaySearch';
 import TableOfContents from '@/components/TableOfContents';
 import StickyNav from '@/components/StickyNav';
 import { getPathwayContent, listPathwaySlugs } from '@/lib/pathway-content';
 import { CATEGORIES, buildWhatsAppLink } from '@/lib/categories';
-import { pageMetadata } from '@/lib/site';
+import { pageMetadata, SITE_URL, SITE_NAME, SITE_AUTHOR } from '@/lib/site';
 
 export async function generateStaticParams() {
   return listPathwaySlugs().map(category => ({ category }));
+}
+
+/** Last edit time of the underlying markdown — used as datePublished. */
+function pathwayMtime(category: string): Date | null {
+  const filePath = path.join(process.cwd(), 'content', 'pathways', `${category}.md`);
+  try {
+    return fs.statSync(filePath).mtime;
+  } catch {
+    return null;
+  }
+}
+
+function buildCategoryCopy(categoryDef: (typeof CATEGORIES)[number]) {
+  const title = `${categoryDef.label} Jobs Abroad — ${categoryDef.destinations.join(', ')} pathways`;
+  const description = `Work-abroad guide for ${categoryDef.audience}. ${categoryDef.description}. Visa routes, realistic costs, scam red flags, vetted recruiters.`;
+  return { title, description };
 }
 
 export async function generateMetadata({
@@ -21,9 +40,15 @@ export async function generateMetadata({
   const categoryDef = CATEGORIES.find(c => c.id === category);
   if (!categoryDef) return { robots: { index: false, follow: false } };
 
-  const title = `${categoryDef.label} Jobs Abroad — ${categoryDef.destinations.join(', ')} pathways`;
-  const description = `Work-abroad guide for ${categoryDef.audience}. ${categoryDef.description}. Visa routes, realistic costs, scam red flags, vetted recruiters.`;
-  return pageMetadata({ title, description, path: `/demo/${category}` });
+  const { title, description } = buildCategoryCopy(categoryDef);
+  const publishedTime = pathwayMtime(category) ?? undefined;
+  return pageMetadata({
+    title,
+    description,
+    path: `/demo/${category}`,
+    type: 'article',
+    publishedTime,
+  });
 }
 
 export default async function DemoPage({
@@ -43,8 +68,30 @@ export default async function DemoPage({
   const audience = categoryDef.audience;
   const waLink = buildWhatsAppLink(categoryLabel, `demo-${category}`);
 
+  const { title: articleTitle, description: articleDescription } = buildCategoryCopy(categoryDef);
+  const datePublished = pathwayMtime(category)?.toISOString();
+  const canonical = `${SITE_URL}/demo/${category}`;
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: articleTitle,
+    description: articleDescription,
+    image: `${canonical}/opengraph-image`,
+    url: canonical,
+    ...(datePublished ? { datePublished, dateModified: datePublished } : {}),
+    author: { '@type': 'Organization', name: SITE_AUTHOR, url: SITE_URL },
+    publisher: {
+      '@type': 'Organization',
+      name: SITE_NAME,
+      url: SITE_URL,
+      logo: { '@type': 'ImageObject', url: `${SITE_URL}/icon-512.png` },
+    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+  };
+
   return (
     <main className="min-h-screen" style={{ backgroundColor: '#F8F5F0' }}>
+      <JsonLd data={articleSchema} />
       <StickyNav items={pathway.toc} whatsappNumber={whatsappNumber} />
 
       <div className="max-w-6xl mx-auto px-4 lg:px-8 py-10">
