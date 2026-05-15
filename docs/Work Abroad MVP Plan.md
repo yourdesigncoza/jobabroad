@@ -12,7 +12,9 @@ status: active
 
 > **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
 
-**Goal:** Launch a single-page work-abroad lead generation site with interest-based WhatsApp intake, a R199 PayShap-gated members area, and an online CV builder/uploader.
+> **2026-05-15 — CV scope dropped.** Sections in this plan that describe CV upload, CV templates, CV builder, the `cvs` Supabase bucket, `components/CVSection.tsx`, and `app/api/cv/*` are **no longer in scope**. We do not offer CV as a service. Treat all CV-related references in this doc as historical only — do not implement them.
+
+**Goal:** Launch a single-page work-abroad lead generation site with interest-based WhatsApp intake and a R199 PayShap-gated members area serving pathway guides + eligibility assessment.
 
 **Architecture:** Static Next.js landing page captures interest via category selector, pre-filling WhatsApp messages so users always initiate contact (free service conversations). After human-in-the-loop drip via WhatsApp Business App, John sends a PayShap Request to Pay. On payment confirmation, John uses a simple admin tool to generate and send a unique member link. The members area is a token-gated Next.js route backed by Supabase.
 

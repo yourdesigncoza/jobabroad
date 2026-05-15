@@ -131,7 +131,7 @@ function DemoBanner({ categoryLabel, waLink }: { categoryLabel: string; waLink: 
         </p>
         <p className="font-body text-[13px] leading-snug" style={{ color: '#2C2C2C' }}>
           This is a public preview of the {categoryLabel.toLowerCase()} guide — search included.
-          The eligibility check and personal CV upload unlock once you have your own access link.
+          The eligibility check unlocks once you have your own access link.
           Daily preview searches are limited; tap <strong>Get your own access</strong> to remove limits.
         </p>
         <p className="font-body text-[13px] leading-snug" style={{ color: '#2C2C2C' }}>
@@ -158,8 +158,7 @@ function DemoUnlockCTA({ categoryLabel, waLink }: { categoryLabel: string; waLin
           Ready for your own {categoryLabel} pathway?
         </h2>
         <p className="font-body text-sm" style={{ color: 'rgba(255,255,255,0.7)' }}>
-          Get the full guide plus the eligibility check, semantic search across our research vault,
-          and a CV toolkit tailored to your destination.
+          Get the full guide plus the eligibility check and semantic search across our research vault.
         </p>
       </div>
       <a

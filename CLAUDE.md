@@ -34,21 +34,18 @@ Use plain language: "We could not get a definitive answer on X — check [offici
 - `lib/pathway-content.ts` — reads markdown, renders to sanitized HTML, extracts TOC from h2 headings
 - `app/members/[token]/page.tsx` — token-gated page: two-column desktop (sticky TOC left, article right), single column mobile (TOC below article)
 - `components/TableOfContents.tsx` — active-section highlighting via IntersectionObserver, collapse toggle
-- `components/CVSection.tsx` — CV template download + file upload
-- `app/api/cv/upload/route.ts` — uploads to Supabase `cvs` bucket
-- `public/cv-template.docx` — basic CV template (8 sections, colour-coded)
-- Supabase schema applied + `cvs` bucket created ✅
+- Supabase schema applied ✅
 - All external links open in new tab (enforced in marked renderer + CLAUDE.md rule)
+
+**CV service removed (2026-05-15).** Not offering CV review/template/upload — out of scope. Do not reintroduce `CVSection`, `/api/cv/*`, `public/cv-template.*`, or any "My CV" nav entry.
 
 ### UI state (polish in progress)
 - Table cell padding ✅
 - Table horizontal scroll on mobile (min-width 1000px) ✅
 - Page width widened to `max-w-6xl` ✅
-- "My CV" anchor link in top nav ✅
 
 ### What to do next
 - Continue UI polish on the member page (typography, spacing, mobile feel)
-- Review the CV template and refine it
 - Test full flow end-to-end on mobile
 - Eventually: build guides for other categories (accounting)
 
@@ -133,7 +130,7 @@ See `docs/semantic-search.md` for: when to re-run the index, how to add a new ca
 2. John handles WhatsApp conversations manually using drip templates
 3. John sends a PayShap R199 Request to Pay
 4. After payment, John opens `/admin`, generates a unique member link, sends it via WhatsApp
-5. Member link is a Supabase-token-gated route serving pathway content + CV upload
+5. Member link is a Supabase-token-gated route serving pathway content + eligibility assessment
 
 See `docs/Work Abroad MVP Plan.md` for the full flow and what is deliberately deferred.
 
@@ -163,11 +160,6 @@ lib/
 ```
 
 **What's not built yet** (next phases per MVP plan):
-- `app/admin/page.tsx` — manual token generator for John
-- `app/api/admin/generate-token/route.ts`
-- `app/members/[token]/page.tsx` — token-gated pathway content
-- `lib/pathway-content.ts` — content per category
-- `app/api/cv/upload/route.ts` + `components/CVSection.tsx`
 - `app/privacy/page.tsx`
 
 ## Design tokens

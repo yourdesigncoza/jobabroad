@@ -60,15 +60,6 @@ export default function MobileNav({ items }: { items: TocItem[] }) {
                 </button>
               </li>
             ))}
-            <li>
-              <button
-                onClick={() => go('cv')}
-                className="w-full text-left px-6 py-4 font-body text-sm font-semibold"
-                style={{ backgroundColor: '#1B4D3E', color: '#F8F5F0' }}
-              >
-                My CV
-              </button>
-            </li>
           </ul>
         </div>
       )}

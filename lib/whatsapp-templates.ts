@@ -17,7 +17,7 @@ The Jobabroad Playbook covers:
 • Scam red flags to avoid
 • Official government and programme links
 
-Includes a CV template and WhatsApp feedback.
+Includes WhatsApp feedback.
 
 R199 once-off. Ready to see the actual routes and costs? I'll send the PayShap details.`,
 
@@ -30,7 +30,7 @@ The Jobabroad Playbook covers:
 • Scam red flags to avoid
 • Official government and programme links
 
-Includes a CV template and WhatsApp feedback.
+Includes WhatsApp feedback.
 
 R199 once-off. Ready to see the actual routes and costs? I'll send the PayShap details.`,
 
@@ -43,7 +43,7 @@ The Jobabroad Playbook covers:
 • Scam red flags to avoid
 • Official government and programme links
 
-Includes a CV template and WhatsApp feedback.
+Includes WhatsApp feedback.
 
 R199 once-off. Ready to see the actual routes and costs? I'll send the PayShap details.`,
 
@@ -56,7 +56,7 @@ The Jobabroad Playbook covers:
 • Scam red flags to avoid
 • Official government and programme links
 
-Includes a CV template and WhatsApp feedback.
+Includes WhatsApp feedback.
 
 R199 once-off. Ready to see the actual routes and costs? I'll send the PayShap details.`,
 
@@ -69,7 +69,7 @@ The Jobabroad Playbook covers:
 • Scam red flags to avoid
 • Official government and professional body links
 
-Includes a CV template and WhatsApp feedback.
+Includes WhatsApp feedback.
 
 R199 once-off. Ready to see the actual routes and costs? I'll send the PayShap details.`,
 
@@ -82,7 +82,7 @@ The Jobabroad Playbook covers:
 • Scam red flags to avoid
 • Official programme pages and application links
 
-Includes a CV template and WhatsApp feedback.
+Includes WhatsApp feedback.
 
 R199 once-off. Ready to see the actual routes and costs? I'll send the PayShap details.`,
 
@@ -95,7 +95,7 @@ The Jobabroad Playbook covers:
 • Scam red flags to avoid
 • Official programme pages and application links
 
-Includes a CV template and WhatsApp feedback.
+Includes WhatsApp feedback.
 
 R199 once-off. Ready to see the actual routes and costs? I'll send the PayShap details.`,
 
@@ -108,7 +108,7 @@ The Jobabroad Playbook covers:
 • Scam red flags to avoid
 • Official government and programme links
 
-Includes a CV template and WhatsApp feedback.
+Includes WhatsApp feedback.
 
 R199 once-off. Ready to see the actual routes and costs? I'll send the PayShap details.`,
 
@@ -121,7 +121,7 @@ The Jobabroad Playbook covers:
 • Scam red flags to avoid
 • Official government and programme links
 
-Includes a CV template and WhatsApp feedback.
+Includes WhatsApp feedback.
 
 R199 once-off. Ready to see the actual routes and costs? I'll send the PayShap details.`,
 
@@ -134,7 +134,7 @@ The Jobabroad Playbook covers:
 • Scam red flags to avoid (upfront fee, fake EPIK recruiters, passport-holding)
 • Official government and programme links
 
-Includes a CV template and WhatsApp feedback.
+Includes WhatsApp feedback.
 
 R199 once-off. Ready to see the actual routes and costs? I'll send the PayShap details.`,
 
@@ -147,7 +147,7 @@ The Jobabroad Playbook covers:
 • Scam red flags to avoid
 • Official programme and host-family vetting links
 
-Includes a CV template and WhatsApp feedback.
+Includes WhatsApp feedback.
 
 R199 once-off. Ready to see the actual routes and costs? I'll send the PayShap details.`,
 
@@ -160,7 +160,7 @@ The Jobabroad Playbook covers:
 • Scam red flags to avoid
 • Official government and programme links
 
-Includes a CV template and WhatsApp feedback.
+Includes WhatsApp feedback.
 
 R199 once-off. Ready to see the actual routes and costs? I'll send the PayShap details.`,
 };
