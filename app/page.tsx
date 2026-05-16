@@ -124,7 +124,7 @@ export default async function Home({ searchParams }: Props) {
               className="font-body font-semibold leading-relaxed text-center"
               style={{ fontSize: 'clamp(1rem, 2vw, 1.2rem)', color: '#C9A84C' }}
             >
-              My R199 Work Abroad Playbook is the only thing you&apos;ll ever pay Jobabroad for.<br />
+              The Work Abroad Playbook is free. Register, confirm your email, and your guide unlocks immediately.<br />
               No monthly fees, no hidden costs. No fake recruiter taking R5,000 from you.
             </p>
 

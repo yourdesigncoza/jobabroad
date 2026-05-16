@@ -1,4 +1,19 @@
 import { defineConfig, devices } from '@playwright/test';
+import { readFileSync, existsSync } from 'node:fs';
+import { resolve } from 'node:path';
+
+// Load .env.local so tests share Supabase credentials with the dev server.
+// Next.js loads this for the app code automatically; Playwright does not.
+const envFile = resolve(__dirname, '.env.local');
+if (existsSync(envFile)) {
+  for (const line of readFileSync(envFile, 'utf8').split('\n')) {
+    const m = line.match(/^\s*([A-Z0-9_]+)\s*=\s*(.*)$/);
+    if (!m) continue;
+    const [, key, raw] = m;
+    if (process.env[key]) continue;
+    process.env[key] = raw.replace(/^['"]|['"]$/g, '');
+  }
+}
 
 export default defineConfig({
   testDir: './tests',

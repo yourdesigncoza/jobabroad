@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react';
-import { PAYSHAP } from '@/lib/payshap';
 
 const issuedFormatter = new Intl.DateTimeFormat('en-ZA', {
   day: 'numeric',
@@ -8,25 +7,26 @@ const issuedFormatter = new Intl.DateTimeFormat('en-ZA', {
 });
 
 export default function AccessBadge({
-  token,
   categoryLabel,
   createdAt,
   children,
 }: {
-  token: string;
+  /**
+   * Identifier kept in the prop signature for backwards compatibility with
+   * existing callers; not rendered.
+   */
+  token?: string;
   categoryLabel: string;
   createdAt: string | null;
   children?: ReactNode;
 }) {
   const issued = createdAt ? issuedFormatter.format(new Date(createdAt)) : '—';
-  const tokenPreview = `${token.slice(0, 8)}…`;
 
   return (
     <div
       className="rounded-2xl overflow-hidden"
       style={{ backgroundColor: '#FFFFFF', border: '1px solid #EDE8E0' }}
     >
-      {/* Top accent stripe */}
       <div style={{ height: 3, backgroundColor: '#C9A84C' }} aria-hidden />
 
       <div className="px-5 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
@@ -38,33 +38,9 @@ export default function AccessBadge({
           Access active
         </span>
 
-        <details className="font-body text-xs sm:text-right" style={{ color: '#6B6B6B' }}>
-          <summary className="cursor-pointer select-none font-semibold" style={{ color: '#1B4D3E' }}>
-            Access &amp; Payment Reference
-          </summary>
-          <dl
-            className="mt-3 grid grid-cols-[max-content_1fr] gap-x-4 gap-y-1.5 text-left"
-            style={{ color: '#2C2C2C' }}
-          >
-            <dt className="font-semibold" style={{ color: '#6B6B6B' }}>PayShap proxy</dt>
-            <dd>{PAYSHAP.proxy}</dd>
-
-            <dt className="font-semibold" style={{ color: '#6B6B6B' }}>Receiver</dt>
-            <dd>{PAYSHAP.name}</dd>
-
-            <dt className="font-semibold" style={{ color: '#6B6B6B' }}>Amount</dt>
-            <dd>{PAYSHAP.amount}</dd>
-
-            <dt className="font-semibold" style={{ color: '#6B6B6B' }}>Recipient reference</dt>
-            <dd>[Your name] — {categoryLabel}</dd>
-
-            <dt className="font-semibold" style={{ color: '#6B6B6B' }}>Access link issued</dt>
-            <dd>{issued}</dd>
-
-            <dt className="font-semibold" style={{ color: '#6B6B6B' }}>Token</dt>
-            <dd className="font-mono">{tokenPreview}</dd>
-          </dl>
-        </details>
+        <p className="font-body text-xs sm:text-right" style={{ color: '#6B6B6B' }}>
+          {categoryLabel} guide · unlocked {issued}
+        </p>
       </div>
 
       {children && (

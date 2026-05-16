@@ -1,3 +1,17 @@
+/**
+ * WhatsApp message templates.
+ *
+ * STATUS: Retained as data, NOT currently wired into any UI or automation.
+ *
+ * Originally powered the manual 3-message onboarding drip (qualifier →
+ * category pitch → PayShap R199 request). Onboarding was migrated to
+ * Supabase Auth on 2026-05-16.
+ *
+ * Planned re-use: post-assessment nurture, paid-tier upsell (15-min call),
+ * re-engagement of registered-but-inactive users.
+ *
+ * Do not wire back into the onboarding path.
+ */
 import type { CategoryId } from './categories';
 import { PAYSHAP } from './payshap';
 

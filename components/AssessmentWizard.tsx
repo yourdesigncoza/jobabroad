@@ -8,7 +8,6 @@ import AssessmentStep from './AssessmentStep';
 import AssessmentConfirmation from './AssessmentConfirmation';
 
 interface Props {
-  token: string;
   category: string;
   whatsappNumber: string;
   initialData: Record<string, unknown>;
@@ -23,7 +22,7 @@ function toPayload(fieldId: string, version: number, value: unknown) {
 }
 
 export default function AssessmentWizard({
-  token, category, whatsappNumber,
+  category, whatsappNumber,
   initialData, initialSlugs, initialAssessmentId,
   initialStatus, leadPhone,
 }: Props) {
@@ -70,13 +69,13 @@ export default function AssessmentWizard({
     const res = await fetch('/api/assessment/save', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ token, stepSlug: slug, stepData, schemaVersion: SCHEMA_VERSION }),
+      body: JSON.stringify({ stepSlug: slug, stepData, schemaVersion: SCHEMA_VERSION }),
     });
     if (!res.ok) { setSaveError('Auto-save failed. Your progress may not be saved.'); return assessId; }
     setSaveError(null);
     const json = await res.json();
     return json.assessmentId as string;
-  }, [token, steps]);
+  }, [steps]);
 
   useEffect(() => {
     if (!currentStep) return;
@@ -107,7 +106,6 @@ export default function AssessmentWizard({
       await fetch('/api/assessment/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token }),
       });
       setSubmitted(true);
       setSubmitting(false);

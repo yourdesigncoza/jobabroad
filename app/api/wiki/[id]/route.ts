@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
+import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { renderWikiMarkdown } from '@/lib/render-wiki';
 import { gateDemoRequest, isValidDemoCategory } from '@/lib/demo-mode';
 
@@ -13,11 +14,7 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params;
-  const token = req.nextUrl.searchParams.get('token')?.trim();
   const demo = req.nextUrl.searchParams.get('demo')?.trim();
-  if (!token && !demo) {
-    return NextResponse.json({ error: 'token or demo required' }, { status: 400 });
-  }
 
   const numericId = Number(id);
   if (!Number.isFinite(numericId)) {
@@ -34,16 +31,20 @@ export async function GET(
     if (rejection) return rejection;
     allowedCategory = demo;
   } else {
-    const { data: tokenRow } = await supabase
-      .from('member_tokens')
-      .select('interest_category')
-      .eq('token', token!)
-      .single();
-
-    if (!tokenRow) {
+    const ssr = await createSupabaseServerClient();
+    const { data: { user } } = await ssr.auth.getUser();
+    if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-    allowedCategory = tokenRow.interest_category as string;
+    const { data: profile } = await ssr
+      .from('profiles')
+      .select('category')
+      .eq('user_id', user.id)
+      .single();
+    if (!profile) {
+      return NextResponse.json({ error: 'No profile' }, { status: 401 });
+    }
+    allowedCategory = profile.category as string;
   }
 
   const { data: chunk } = await supabase

@@ -14,9 +14,9 @@ function pathwayLastModified(slug: string, fallback: Date): Date {
   }
 }
 
-// Public, indexable routes only. Deliberately excludes /admin, /api,
-// /members/[token] (private). Demo pathway previews are included — they
-// carry full guide content and are intended for organic discovery.
+// Public, indexable routes only. Deliberately excludes /admin, /api, and the
+// gated /members/[category] (and auth routes). Demo pathway previews are
+// included — they carry full guide content for organic discovery.
 export default function sitemap(): MetadataRoute.Sitemap {
   const buildTime = new Date();
 

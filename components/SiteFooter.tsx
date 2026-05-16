@@ -23,16 +23,15 @@ export default function SiteFooter({ src }: { src?: string }) {
             Jobabroad is an information service. We don&apos;t place candidates, act as recruiters or guarantee employment.
           </p>
           <p className="font-body text-xs" style={{ color: 'rgba(248,245,240,0.45)' }}>
-            Already paid? Lost your link?{' '}
-            <TrackedLink
-              href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}?text=${encodeURIComponent('I lost my link. My number is [your number].')}`}
-              event="cta_click"
-              data={{ location: 'lost_link', source: src ?? 'direct' }}
+            Forgot your password?{' '}
+            <Link
+              href="/forgot-password"
               className="underline"
               style={{ color: 'rgba(248,245,240,0.6)' }}
             >
-              WhatsApp us and we&apos;ll resend it.
-            </TrackedLink>
+              Reset it here
+            </Link>
+            .
           </p>
         </div>
 

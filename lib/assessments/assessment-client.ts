@@ -9,7 +9,7 @@ function getClient() {
 
 export interface AssessmentRow {
   id: string;
-  member_token_id: string;
+  user_id: string;
   category: string;
   schema_version: number;
   completed_step_slugs: string[];
@@ -19,11 +19,11 @@ export interface AssessmentRow {
   updated_at: string;
 }
 
-export async function getLatestAssessment(memberTokenId: string): Promise<AssessmentRow | null> {
+export async function getLatestAssessment(userId: string): Promise<AssessmentRow | null> {
   const { data } = await getClient()
     .from('assessments')
     .select('*')
-    .eq('member_token_id', memberTokenId)
+    .eq('user_id', userId)
     .order('updated_at', { ascending: false })
     .limit(1)
     .single();
@@ -32,7 +32,7 @@ export async function getLatestAssessment(memberTokenId: string): Promise<Assess
 
 export async function saveAssessmentStep(params: {
   assessmentId: string | null;
-  memberTokenId: string;
+  userId: string;
   category: string;
   schemaVersion: number;
   stepSlug: string;
@@ -55,7 +55,7 @@ export async function saveAssessmentStep(params: {
   const { data } = await supabase
     .from('assessments')
     .insert({
-      member_token_id: params.memberTokenId,
+      user_id: params.userId,
       category: params.category,
       schema_version: params.schemaVersion,
       completed_step_slugs: slugs,

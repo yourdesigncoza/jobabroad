@@ -5,5 +5,6 @@ initBotId({
     { path: '/api/search', method: 'POST' },
     { path: '/api/search/answer', method: 'POST' },
     { path: '/api/wiki/*', method: 'GET' },
+    { path: '/register', method: 'POST' },
   ],
 });

@@ -3,13 +3,13 @@ const STEPS = [
     number: "1",
     title: "Pick your field",
     description:
-      "Tap a category tile. WhatsApp opens with your interest pre-filled. No forms, no sign-up. Just tap and send.",
+      "Tap a category tile, register with email + SA mobile, and pick the pathway that fits you. Free, no payment.",
   },
   {
     number: "2",
-    title: "A real conversation",
+    title: "Confirm + log in",
     description:
-      "I'll reply with honest, scam-free guidance for your field: which countries are realistic, what it actually costs, and what red flags to watch for.",
+      "Click the confirmation link in your inbox, then log in. Your dashboard shows your guide, eligibility check, recruiter list, and scam warnings.",
   },
 ] as const;
 
@@ -47,7 +47,7 @@ export default function HowItWorks() {
             className="font-body text-sm mt-2 max-w-lg"
             style={{ color: "#6B6B6B" }}
           >
-            No confusing forms. Start with a free WhatsApp conversation.
+            Register free, confirm your email, and read your guide. No payment required.
           </p>
         </div>
 
@@ -131,7 +131,7 @@ export default function HowItWorks() {
                 className="font-body text-sm leading-relaxed text-center"
                 style={{ color: "#FFFFFF" }}
               >
-                One payment. No monthly fees, no hidden costs.
+                Free access. No monthly fees, no hidden costs.
               </p>
               <div
                 className="inline-flex items-baseline gap-1 px-4 py-2 rounded-full self-start"
@@ -141,13 +141,13 @@ export default function HowItWorks() {
                   className="font-display font-bold text-xl"
                   style={{ color: "#FFFFFF" }}
                 >
-                  R199
+                  Free
                 </span>
                 <span
                   className="font-body text-xs"
                   style={{ color: "rgba(255,255,255,0.8)" }}
                 >
-                  once-off
+                  after registration
                 </span>
               </div>
             </div>

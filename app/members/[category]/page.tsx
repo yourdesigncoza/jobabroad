@@ -1,5 +1,5 @@
-import { createClient } from '@supabase/supabase-js';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
+import Link from 'next/link';
 import AssessmentCTA from '@/components/AssessmentCTA';
 import BackToTop from '@/components/BackToTop';
 import PathwaySearch from '@/components/PathwaySearch';
@@ -8,76 +8,85 @@ import StickyNav from '@/components/StickyNav';
 import AccessBadge from '@/components/AccessBadge';
 import { getPathwayContent } from '@/lib/pathway-content';
 import { CATEGORIES } from '@/lib/categories';
+import { requireProfile } from '@/lib/auth-guards';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
-
-export default async function MembersPage({
+export default async function MembersCategoryPage({
   params,
 }: {
-  params: Promise<{ token: string }>;
+  params: Promise<{ category: string }>;
 }) {
-  const { token } = await params;
+  const { category } = await params;
 
-  const { data: tokenRow } = await supabase
-    .from('member_tokens')
-    .select('id, lead_id, interest_category, accessed_at, created_at')
-    .eq('token', token)
-    .single();
+  if (!CATEGORIES.some((c) => c.id === category)) notFound();
 
-  if (!tokenRow) notFound();
+  const { user, profile } = await requireProfile(`/members/${category}`);
+  if (!profile) redirect('/dashboard');
 
-  if (!tokenRow.accessed_at) {
-    await supabase
-      .from('member_tokens')
-      .update({ accessed_at: new Date().toISOString() })
-      .eq('id', tokenRow.id);
+  const cat = CATEGORIES.find((c) => c.id === category);
+  const categoryLabel = cat?.label ?? category;
+  const audience = cat?.audience ?? 'South African work-abroad applicants';
+
+  if (profile.category !== category) {
+    const ownLabel =
+      CATEGORIES.find((c) => c.id === profile.category)?.label ?? profile.category;
+    return (
+      <main className="min-h-screen" style={{ backgroundColor: '#F8F5F0' }}>
+        <div className="max-w-md mx-auto px-6 py-20 flex flex-col gap-6">
+          <h1
+            className="font-display font-bold uppercase tracking-wide text-2xl"
+            style={{ color: '#2C2C2C' }}
+          >
+            Different category access
+          </h1>
+          <p className="font-body" style={{ color: '#2C2C2C' }}>
+            Your account is for the <strong>{ownLabel}</strong> guide. Access to other
+            guides is not available.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Link
+              href={`/members/${profile.category}`}
+              className="inline-flex items-center justify-center font-display uppercase tracking-wider text-sm font-semibold px-6 py-3 rounded-md"
+              style={{ backgroundColor: '#1B4D3E', color: '#F8F5F0' }}
+            >
+              Go to your guide →
+            </Link>
+            <Link
+              href="/dashboard"
+              className="inline-flex items-center justify-center font-body text-sm underline"
+              style={{ color: '#1B4D3E' }}
+            >
+              Back to dashboard
+            </Link>
+          </div>
+        </div>
+      </main>
+    );
   }
 
-  const pathway = getPathwayContent(tokenRow.interest_category);
-
-  const { data: latestAssessment } = await supabase
-    .from('assessments')
-    .select('status')
-    .eq('member_token_id', tokenRow.id)
-    .order('updated_at', { ascending: false })
-    .limit(1)
-    .maybeSingle();
-
-  const assessmentSubmitted = latestAssessment?.status === 'submitted';
-
+  const pathway = getPathwayContent(category);
   const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '';
-
-  const category = CATEGORIES.find(c => c.id === tokenRow.interest_category);
-  const categoryLabel = category?.label ?? tokenRow.interest_category;
-  const audience = category?.audience ?? 'South African work-abroad applicants';
 
   return (
     <main className="min-h-screen" style={{ backgroundColor: '#F8F5F0' }}>
-      {/* Top bar */}
       <StickyNav items={pathway?.toc ?? []} whatsappNumber={whatsappNumber} />
 
       <div className="max-w-6xl mx-auto px-4 lg:px-8 py-10">
         {pathway ? (
-          /* Two-column on desktop: sticky TOC left, article right */
           <div className="lg:grid lg:grid-cols-[260px_1fr] lg:gap-12 lg:items-start">
-
-            {/* Desktop TOC — sticky left sidebar */}
             <aside
               className="hidden lg:block sticky top-20 self-start rounded-2xl p-5"
               style={{ backgroundColor: '#FFFFFF', border: '1.5px solid #EDE8E0' }}
             >
-              <TableOfContents items={pathway.toc} assessmentHref={`/members/${token}/assessment`} />
+              <TableOfContents
+                items={pathway.toc}
+                assessmentHref={`/members/${category}/assessment`}
+              />
             </aside>
 
-            {/* Main content */}
             <div className="flex flex-col gap-10 min-w-0">
               <AccessBadge
-                token={token}
                 categoryLabel={categoryLabel}
-                createdAt={tokenRow.created_at}
+                createdAt={user.created_at ?? null}
               >
                 <div className="flex flex-col gap-2">
                   <p
@@ -86,18 +95,12 @@ export default async function MembersPage({
                   >
                     Last checked: May 2026
                   </p>
-                  <p
-                    className="font-body text-[13px] leading-snug"
-                    style={{ color: '#2C2C2C' }}
-                  >
+                  <p className="font-body text-[13px] leading-snug" style={{ color: '#2C2C2C' }}>
                     This guide is for planning and research only. Visa fees, salary thresholds,
                     and eligibility rules change — always confirm with the official regulator,
                     employer, or immigration authority before paying anyone.
                   </p>
-                  <p
-                    className="font-body text-[13px] leading-snug"
-                    style={{ color: '#2C2C2C' }}
-                  >
+                  <p className="font-body text-[13px] leading-snug" style={{ color: '#2C2C2C' }}>
                     <strong>What this guide does not do:</strong> we do not apply for you,
                     guarantee employment, arrange visas, replace a licensed immigration
                     adviser, or verify your personal eligibility. It helps you understand
@@ -107,12 +110,11 @@ export default async function MembersPage({
               </AccessBadge>
 
               <PathwaySearch
-                token={token}
                 whatsappNumber={whatsappNumber}
-                category={tokenRow.interest_category}
+                category={category}
               />
 
-              {/* sanitizeHtml in getPathwayContent ensures this is safe to render */}
+              {/* sanitizeHtml in getPathwayContent ensures pathway.html is safe to render. */}
               <article
                 className="prose prose-sm sm:prose-base max-w-none
                   prose-headings:font-display prose-headings:uppercase prose-headings:tracking-wide
@@ -130,7 +132,7 @@ export default async function MembersPage({
                 dangerouslySetInnerHTML={{ __html: pathway.html }}
               />
 
-              <AssessmentCTA token={token} isSubmitted={assessmentSubmitted} />
+              <AssessmentCTA category={category} isSubmitted={false} />
 
               <footer
                 className="border-t pt-6 pb-8 flex flex-col gap-4 font-body text-xs leading-relaxed"
@@ -150,15 +152,11 @@ export default async function MembersPage({
         ) : (
           <div className="flex flex-col gap-10">
             <AccessBadge
-              token={token}
               categoryLabel={categoryLabel}
-              createdAt={tokenRow.created_at}
+              createdAt={user.created_at ?? null}
             />
-            <ComingSoon
-              category={tokenRow.interest_category}
-              whatsappNumber={whatsappNumber}
-            />
-            <AssessmentCTA token={token} isSubmitted={assessmentSubmitted} />
+            <ComingSoon category={category} whatsappNumber={whatsappNumber} />
+            <AssessmentCTA category={category} isSubmitted={false} />
           </div>
         )}
       </div>
@@ -175,7 +173,9 @@ function ComingSoon({
   whatsappNumber: string;
 }) {
   const label = category.replace(/-/g, ' ');
-  const waLink = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(`Hi, I paid for the ${label} pathway guide. When will it be ready?`)}`;
+  const waLink = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+    `Hi, I'm registered for the ${label} pathway guide. When will it be ready?`,
+  )}`;
 
   return (
     <div
@@ -192,8 +192,9 @@ function ComingSoon({
         The{' '}
         <strong style={{ color: '#2C2C2C', textTransform: 'capitalize' }}>{label}</strong>{' '}
         guide has been updated with critical new information pertaining to your field.
-        We apologise for the interruption — but it&apos;s important you get the latest, most
-        up-to-date information. We will WhatsApp you the link within the next 12 hours.
+        We apologise for the interruption — but it&apos;s important you get the latest,
+        most up-to-date information. We will WhatsApp you the link within the next 12
+        hours.
       </p>
       <a
         href={waLink}

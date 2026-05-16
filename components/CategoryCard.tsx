@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { track } from '@vercel/analytics';
 import CategoryIcon from './CategoryIcon';
 
@@ -11,26 +12,24 @@ interface Props {
     destinations: readonly string[];
   };
   href: string;
+  external?: boolean;
   source?: string;
 }
 
-export default function CategoryCard({ category, href, source }: Props) {
-  return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      onClick={() =>
-        track('category_click', {
-          id: category.id,
-          label: category.label,
-          source: source ?? 'direct',
-        })
-      }
-      className="category-card group flex flex-col items-center gap-3 p-5 rounded-2xl text-center no-underline relative overflow-hidden"
-      style={{ backgroundColor: '#1B4D3E', minHeight: '190px' }}
-    >
-      {/* Gold hover fill */}
+export default function CategoryCard({ category, href, external = false, source }: Props) {
+  const handleClick = () =>
+    track('category_click', {
+      id: category.id,
+      label: category.label,
+      source: source ?? 'direct',
+    });
+
+  const className =
+    'category-card group flex flex-col items-center gap-3 p-5 rounded-2xl text-center no-underline relative overflow-hidden';
+  const style: React.CSSProperties = { backgroundColor: '#1B4D3E', minHeight: '190px' };
+
+  const inner = (
+    <>
       <div
         className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-200"
         style={{ backgroundColor: '#C9A84C' }}
@@ -38,13 +37,10 @@ export default function CategoryCard({ category, href, source }: Props) {
       />
 
       <div className="relative z-10 flex flex-col items-center gap-2.5 w-full">
-
-        {/* SVG icon — cream by default, charcoal on hover */}
         <div className="icon-wrap">
           <CategoryIcon id={category.id} size={38} color="#F8F5F0" />
         </div>
 
-        {/* Label */}
         <span
           className="card-label font-display font-bold text-sm uppercase tracking-wide leading-tight"
           style={{ color: '#F8F5F0' }}
@@ -52,7 +48,6 @@ export default function CategoryCard({ category, href, source }: Props) {
           {category.label}
         </span>
 
-        {/* Description */}
         <span
           className="card-desc font-body text-xs leading-relaxed"
           style={{ color: 'rgba(248,245,240,0.6)' }}
@@ -60,7 +55,6 @@ export default function CategoryCard({ category, href, source }: Props) {
           {category.description}
         </span>
 
-        {/* Destination badges */}
         <div className="flex flex-wrap justify-center gap-1 mt-0.5">
           {category.destinations.map((dest) => (
             <span
@@ -77,6 +71,27 @@ export default function CategoryCard({ category, href, source }: Props) {
           ))}
         </div>
       </div>
-    </a>
+    </>
+  );
+
+  if (external) {
+    return (
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={handleClick}
+        className={className}
+        style={style}
+      >
+        {inner}
+      </a>
+    );
+  }
+
+  return (
+    <Link href={href} onClick={handleClick} className={className} style={style}>
+      {inner}
+    </Link>
   );
 }

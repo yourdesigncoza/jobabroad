@@ -186,8 +186,7 @@ NEXT_PUBLIC_WHATSAPP_NUMBER   # e.g. 27821234567 — used in every wa.me link
 NEXT_PUBLIC_SUPABASE_URL
 NEXT_PUBLIC_SUPABASE_ANON_KEY
 SUPABASE_SERVICE_ROLE_KEY
-NEXT_PUBLIC_BASE_URL
-ADMIN_SECRET                  # 32-char random string for /admin auth
+NEXT_PUBLIC_BASE_URL          # http://localhost:3000 for dev; https://jobabroad.co.za for prod
 ```
 
 ## Domain

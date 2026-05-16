@@ -21,20 +21,20 @@ const PILLARS = [
 
 const QUESTIONS = [
   {
-    q: 'What do I get for R199?',
-    a: 'You get my Work Abroad Playbook for your field — researched, up to date and built around the questions scam recruiters hope you never ask. Inside: destination options, document checklist, realistic costs, visa route overview, scam red flags and legitimate contacts. Plus your own Personalised Eligibility Check — find out what\'s ready, what\'s missing, and what your next step is.',
+    q: 'Is it really free?',
+    a: 'Yes. Pick your category, register with email + SA mobile, confirm your email — and your Playbook unlocks. No payment, no card. Inside: destination options, document checklist, realistic costs, visa route overview, scam red flags, legitimate contacts, and a personalised eligibility check.',
   },
   {
     q: 'Are you a recruitment agency?',
-    a: "No. Jobabroad is an information service. I provide clear information from official sources. I don't place candidates, charge placement fees or guarantee employment.",
+    a: "No. Jobabroad is an information service. We provide clear information from official sources. We don't place candidates, charge placement fees or guarantee employment.",
   },
   {
     q: 'Is this legal in South Africa?',
-    a: "Yes. I operate under South African law and comply with POPIA (Protection of Personal Information Act). I'm not required to register as a recruitment agency — I don't place candidates or earn referral fees.",
+    a: "Yes. We operate under South African law and comply with POPIA (Protection of Personal Information Act). We're not required to register as a recruitment agency — we don't place candidates or earn referral fees.",
   },
   {
     q: "What if my job type isn't listed?",
-    a: "Tap the \"Other\" tile. WhatsApp opens and you can tell me exactly what you do. I'll tell you straight whether a real overseas route exists for your field.",
+    a: "Tap the \"Other\" tile. WhatsApp opens and you can tell us exactly what you do. We'll tell you straight whether a real overseas route exists for your field.",
   },
 ] as const;
 

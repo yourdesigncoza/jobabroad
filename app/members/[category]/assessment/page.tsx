@@ -1,56 +1,40 @@
-import { createClient } from '@supabase/supabase-js';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
+import Link from 'next/link';
 import StickyNav from '@/components/StickyNav';
 import AssessmentWizard from '@/components/AssessmentWizard';
 import BackToTop from '@/components/BackToTop';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+import { CATEGORIES } from '@/lib/categories';
+import { requireProfile } from '@/lib/auth-guards';
 
 export default async function AssessmentPage({
   params,
 }: {
-  params: Promise<{ token: string }>;
+  params: Promise<{ category: string }>;
 }) {
-  const { token } = await params;
+  const { category } = await params;
   const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '';
 
-  const { data: tokenRow } = await supabase
-    .from('member_tokens')
-    .select('id, lead_id, interest_category')
-    .eq('token', token)
-    .single();
+  if (!CATEGORIES.some((c) => c.id === category)) notFound();
 
-  if (!tokenRow) notFound();
+  const { user, profile } = await requireProfile(`/members/${category}/assessment`);
+  if (!profile) redirect('/dashboard');
 
-  const { data: lead } = await supabase
-    .from('leads')
-    .select('phone')
-    .eq('id', tokenRow.lead_id)
-    .single();
-
-  const { data: assessment } = await supabase
-    .from('assessments')
-    .select('*')
-    .eq('member_token_id', tokenRow.id)
-    .order('updated_at', { ascending: false })
-    .limit(1)
-    .maybeSingle();
+  if (profile.category !== category) {
+    redirect(`/members/${profile.category}/assessment`);
+  }
 
   return (
     <main className="min-h-screen" style={{ backgroundColor: '#F8F5F0' }}>
       <StickyNav items={[]} whatsappNumber={whatsappNumber} />
 
       <div className="max-w-lg mx-auto px-4 py-10">
-        <a
-          href={`/members/${token}`}
+        <Link
+          href={`/members/${category}`}
           className="inline-flex items-center gap-1 font-body text-sm mb-8"
           style={{ color: '#6B6B6B' }}
         >
           ← Back to guide
-        </a>
+        </Link>
 
         <div className="flex flex-col gap-2 mb-8">
           <h1
@@ -69,14 +53,13 @@ export default async function AssessmentPage({
           style={{ backgroundColor: '#FFFFFF', border: '1.5px solid #EDE8E0' }}
         >
           <AssessmentWizard
-            token={token}
-            category={tokenRow.interest_category}
+            category={category}
             whatsappNumber={whatsappNumber}
-            initialData={(assessment?.data as Record<string, unknown>) ?? {}}
-            initialSlugs={(assessment?.completed_step_slugs as string[]) ?? []}
-            initialAssessmentId={assessment?.id ?? null}
-            initialStatus={(assessment?.status as 'draft' | 'submitted') ?? null}
-            leadPhone={lead?.phone ?? ''}
+            initialData={{}}
+            initialSlugs={[]}
+            initialAssessmentId={null}
+            initialStatus={null}
+            leadPhone={profile.phone}
           />
         </div>
       </div>

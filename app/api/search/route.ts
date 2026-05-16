@@ -1,11 +1,6 @@
-import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
+import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { gateDemoRequest, isValidDemoCategory } from '@/lib/demo-mode';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-);
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SERVICE_ROLE = process.env.SUPABASE_SERVICE_ROLE_KEY!;
@@ -44,21 +39,17 @@ function snippet(text: string, max = 200): string {
 }
 
 export async function POST(req: NextRequest) {
-  let body: { token?: string; query?: string; demo?: string };
+  let body: { query?: string; demo?: string };
   try {
     body = await req.json();
   } catch {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
   }
 
-  const token = body.token?.trim();
   const demo = body.demo?.trim();
   const query = body.query?.trim();
-  if (!query || (!token && !demo)) {
-    return NextResponse.json(
-      { error: 'query and (token or demo) are required' },
-      { status: 400 },
-    );
+  if (!query) {
+    return NextResponse.json({ error: 'query is required' }, { status: 400 });
   }
 
   let category: string;
@@ -71,16 +62,20 @@ export async function POST(req: NextRequest) {
     if (rejection) return rejection;
     category = demo;
   } else {
-    const { data: tokenRow } = await supabase
-      .from('member_tokens')
-      .select('interest_category')
-      .eq('token', token!)
-      .single();
-
-    if (!tokenRow) {
+    const ssr = await createSupabaseServerClient();
+    const { data: { user } } = await ssr.auth.getUser();
+    if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-    category = tokenRow.interest_category as string;
+    const { data: profile } = await ssr
+      .from('profiles')
+      .select('category')
+      .eq('user_id', user.id)
+      .single();
+    if (!profile) {
+      return NextResponse.json({ error: 'No profile' }, { status: 401 });
+    }
+    category = profile.category as string;
   }
 
   const res = await fetch(`${SUPABASE_URL}/functions/v1/search-pathway`, {

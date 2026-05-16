@@ -21,7 +21,6 @@ interface AnswerResponse {
 }
 
 interface Props {
-  token?: string;
   demoCategory?: string;
   whatsappNumber: string;
   category: string;
@@ -34,10 +33,10 @@ type AnswerState =
   | { kind: 'refused' }
   | { kind: 'error' };
 
-export default function PathwaySearch({ token, demoCategory, whatsappNumber, category }: Props) {
+export default function PathwaySearch({ demoCategory, whatsappNumber, category }: Props) {
   const categoryLabel = category.charAt(0).toUpperCase() + category.slice(1);
   const isDemo = !!demoCategory;
-  const authBody = isDemo ? { demo: demoCategory } : { token };
+  const authBody: Record<string, string> = isDemo ? { demo: demoCategory! } : {};
   const [query, setQuery] = useState('');
   const [submittedQuery, setSubmittedQuery] = useState('');
   const [results, setResults] = useState<SearchResult[] | null>(null);
@@ -227,7 +226,7 @@ export default function PathwaySearch({ token, demoCategory, whatsappNumber, cat
                 onToggleWiki={() => setOpenWiki((cur) => (cur === r.id ? null : r.id))}
               />
               {r.source_type === 'wiki' && openWiki === r.id && (
-                <WikiNotePanel id={r.id} token={token} demoCategory={demoCategory} />
+                <WikiNotePanel id={r.id} demoCategory={demoCategory} />
               )}
             </li>
           ))}

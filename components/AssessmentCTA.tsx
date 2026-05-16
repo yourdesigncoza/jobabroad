@@ -1,9 +1,9 @@
 interface Props {
-  token: string;
+  category: string;
   isSubmitted: boolean;
 }
 
-export default function AssessmentCTA({ token, isSubmitted }: Props) {
+export default function AssessmentCTA({ category, isSubmitted }: Props) {
   return (
     <div
       className="rounded-2xl p-6 flex flex-col gap-4"
@@ -23,7 +23,7 @@ export default function AssessmentCTA({ token, isSubmitted }: Props) {
         </p>
       </div>
       <a
-        href={`/members/${token}/assessment`}
+        href={`/members/${category}/assessment`}
         className="inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 font-display font-bold uppercase text-sm tracking-wide self-start"
         style={{ backgroundColor: '#C9A84C', color: '#FFFFFF' }}
       >
