@@ -153,19 +153,24 @@ export default async function DashboardPage() {
           />
         </div>
 
-        <form action="/logout" method="POST">
-          <button
-            type="submit"
-            className="font-display uppercase tracking-wider text-xs font-semibold px-5 py-2 rounded-md cursor-pointer"
-            style={{
-              backgroundColor: '#F8F5F0',
-              border: '1px solid #EDE8E0',
-              color: '#6B6B6B',
-            }}
+        <div className="flex flex-col items-start gap-3">
+          <form action="/logout" method="POST">
+            <button
+              type="submit"
+              className="font-display uppercase tracking-wider text-sm font-semibold px-8 py-4 rounded-md cursor-pointer"
+              style={{ backgroundColor: '#1B4D3E', color: '#F8F5F0' }}
+            >
+              Log out
+            </button>
+          </form>
+          <Link
+            href="/forgot-password"
+            className="font-display uppercase tracking-wider text-xs font-semibold underline-offset-4 hover:underline"
+            style={{ color: '#ff751f' }}
           >
-            Log out
-          </button>
-        </form>
+            Reset password
+          </Link>
+        </div>
       </section>
 
       <SiteFooter />

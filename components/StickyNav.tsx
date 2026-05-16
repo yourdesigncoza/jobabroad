@@ -6,9 +6,10 @@ import type { TocItem } from '@/lib/pathway-content';
 interface Props {
   items: TocItem[];
   whatsappNumber: string;
+  isSignedIn?: boolean;
 }
 
-export default function StickyNav({ items, whatsappNumber }: Props) {
+export default function StickyNav({ items, whatsappNumber, isSignedIn = false }: Props) {
   const [open, setOpen] = useState(false);
   const [progress, setProgress] = useState(0);
   const [activeId, setActiveId] = useState('');
@@ -55,15 +56,37 @@ export default function StickyNav({ items, whatsappNumber }: Props) {
           <span className="font-body font-bold" style={{ color: '#F8F5F0' }}>job</span>
           <span className="font-body font-bold" style={{ color: '#ff751f' }}>abroad</span>
         </a>
-        <a
-          href={`https://wa.me/${whatsappNumber}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="font-body text-xs font-semibold rounded-lg px-3 py-1.5"
-          style={{ backgroundColor: '#C9A84C', color: '#FFFFFF' }}
-        >
-          WhatsApp us
-        </a>
+        <div className="flex items-center gap-4">
+          {isSignedIn && (
+            <>
+              <a
+                href="/dashboard"
+                className="font-body text-xs font-semibold leading-none hidden sm:inline"
+                style={{ color: '#F8F5F0' }}
+              >
+                Dashboard
+              </a>
+              <form action="/logout" method="POST" className="hidden sm:inline-flex items-center">
+                <button
+                  type="submit"
+                  className="font-body text-xs font-semibold leading-none cursor-pointer"
+                  style={{ color: 'rgba(248,245,240,0.7)' }}
+                >
+                  Log out
+                </button>
+              </form>
+            </>
+          )}
+          <a
+            href={`https://wa.me/${whatsappNumber}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-body text-xs font-semibold rounded-lg px-3 py-1.5"
+            style={{ backgroundColor: '#C9A84C', color: '#FFFFFF' }}
+          >
+            WhatsApp us
+          </a>
+        </div>
       </div>
 
       {/* Sub-bar — mobile only, below the green header */}

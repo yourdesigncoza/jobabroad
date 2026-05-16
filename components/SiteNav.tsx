@@ -24,10 +24,14 @@ export default async function SiteNav({ src }: { src?: string }) {
       <div className="flex items-center gap-3">
         {isSignedIn ? (
           <>
-            <Link href="/dashboard" className={linkClass} style={{ color: '#1B4D3E' }}>
+            <Link
+              href="/dashboard"
+              className={`${linkClass} hidden sm:inline`}
+              style={{ color: '#1B4D3E' }}
+            >
               Dashboard
             </Link>
-            <form action="/logout" method="POST">
+            <form action="/logout" method="POST" className="hidden sm:inline-flex items-center">
               <button
                 type="submit"
                 className={`${linkClass} cursor-pointer`}
