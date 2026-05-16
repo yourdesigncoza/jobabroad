@@ -2,7 +2,6 @@ import fs from 'fs';
 import path from 'path';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import BackToTop from '@/components/BackToTop';
 import JsonLd from '@/components/JsonLd';
 import PathwaySearch from '@/components/PathwaySearch';
 import TableOfContents from '@/components/TableOfContents';
@@ -149,7 +148,6 @@ export default async function DemoPage({
           </div>
         </div>
       </div>
-      <BackToTop />
     </main>
   );
 }

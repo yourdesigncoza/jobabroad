@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Oswald, DM_Sans } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import BackToTop from "@/components/BackToTop";
 import JsonLd from "@/components/JsonLd";
 import {
   SITE_URL,
@@ -109,6 +110,7 @@ export default function RootLayout({
       <body className="antialiased" suppressHydrationWarning>
         <JsonLd data={jsonLd} />
         {children}
+        <BackToTop />
         <Analytics />
         <SpeedInsights />
       </body>

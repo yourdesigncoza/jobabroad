@@ -1,7 +1,6 @@
 import { notFound, redirect } from 'next/navigation';
 import Link from 'next/link';
 import AssessmentCTA from '@/components/AssessmentCTA';
-import BackToTop from '@/components/BackToTop';
 import PathwaySearch from '@/components/PathwaySearch';
 import TableOfContents from '@/components/TableOfContents';
 import StickyNav from '@/components/StickyNav';
@@ -160,7 +159,6 @@ export default async function MembersCategoryPage({
           </div>
         )}
       </div>
-      <BackToTop />
     </main>
   );
 }

@@ -2,7 +2,6 @@ import { notFound, redirect } from 'next/navigation';
 import Link from 'next/link';
 import StickyNav from '@/components/StickyNav';
 import AssessmentWizard from '@/components/AssessmentWizard';
-import BackToTop from '@/components/BackToTop';
 import { CATEGORIES } from '@/lib/categories';
 import { requireProfile } from '@/lib/auth-guards';
 
@@ -63,7 +62,6 @@ export default async function AssessmentPage({
           />
         </div>
       </div>
-      <BackToTop />
     </main>
   );
 }
