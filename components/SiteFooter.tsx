@@ -1,8 +1,18 @@
 import Link from 'next/link';
 import TrackedLink from '@/components/TrackedLink';
 import WhatsAppIcon from '@/components/WhatsAppIcon';
+import { createSupabaseServerClient } from '@/lib/supabase/server';
 
-export default function SiteFooter({ src }: { src?: string }) {
+export default async function SiteFooter({ src }: { src?: string }) {
+  const supabase = await createSupabaseServerClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  const isSignedIn = Boolean(user?.email_confirmed_at);
+
+  const linkClass = 'font-body text-sm underline';
+  const linkStyle: React.CSSProperties = { color: '#F8F5F0' };
+
   return (
     <footer className="px-6 py-12" style={{ backgroundColor: '#2C2C2C' }}>
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 items-start">
@@ -22,33 +32,58 @@ export default function SiteFooter({ src }: { src?: string }) {
           <p className="font-body text-sm leading-relaxed" style={{ color: '#F8F5F0' }}>
             Jobabroad is an information service. We don&apos;t place candidates, act as recruiters or guarantee employment.
           </p>
-          <p className="font-body text-xs" style={{ color: 'rgba(248,245,240,0.45)' }}>
-            Forgot your password?{' '}
-            <Link
-              href="/forgot-password"
-              className="underline"
-              style={{ color: 'rgba(248,245,240,0.6)' }}
-            >
-              Reset it here
-            </Link>
-            .
-          </p>
         </div>
 
-        {/* Middle — resource links */}
-        <div className="flex flex-col gap-3">
-          <p className="font-display text-xs uppercase tracking-[0.15em]" style={{ color: 'rgba(248,245,240,0.55)' }}>
-            Free resources
-          </p>
-          <Link href="/recruiters" className="font-body text-sm underline" style={{ color: '#F8F5F0' }}>
-            Recruiters &amp; agencies
-          </Link>
-          <Link href="/scam-warnings" className="font-body text-sm underline" style={{ color: '#F8F5F0' }}>
-            Scam warnings
-          </Link>
-          <Link href="/privacy" className="font-body text-sm underline" style={{ color: '#F8F5F0' }}>
-            Privacy policy
-          </Link>
+        {/* Middle — resources + account */}
+        <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-3">
+            <p className="font-display text-xs uppercase tracking-[0.15em]" style={{ color: 'rgba(248,245,240,0.55)' }}>
+              Free resources
+            </p>
+            <Link href="/recruiters" className={linkClass} style={linkStyle}>
+              Recruiters &amp; agencies
+            </Link>
+            <Link href="/scam-warnings" className={linkClass} style={linkStyle}>
+              Scam warnings
+            </Link>
+            <Link href="/privacy" className={linkClass} style={linkStyle}>
+              Privacy policy
+            </Link>
+          </div>
+
+          <div className="flex flex-col gap-3">
+            <p className="font-display text-xs uppercase tracking-[0.15em]" style={{ color: 'rgba(248,245,240,0.55)' }}>
+              Account
+            </p>
+            {isSignedIn ? (
+              <>
+                <Link href="/dashboard" className={linkClass} style={linkStyle}>
+                  Dashboard
+                </Link>
+                <form action="/logout" method="POST">
+                  <button
+                    type="submit"
+                    className={`${linkClass} cursor-pointer text-left`}
+                    style={linkStyle}
+                  >
+                    Log out
+                  </button>
+                </form>
+              </>
+            ) : (
+              <>
+                <Link href="/login" className={linkClass} style={linkStyle}>
+                  Log in
+                </Link>
+                <Link href="/register" className={linkClass} style={linkStyle}>
+                  Register free
+                </Link>
+                <Link href="/forgot-password" className={linkClass} style={linkStyle}>
+                  Forgot password?
+                </Link>
+              </>
+            )}
+          </div>
         </div>
 
         {/* Right — logo + location */}

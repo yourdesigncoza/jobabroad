@@ -25,7 +25,7 @@ export default function ForgotForm() {
   const [state, action] = useActionState(requestReset, initial);
 
   const inputStyle: React.CSSProperties = {
-    backgroundColor: '#F8F5F0',
+    backgroundColor: '#FFFFFF',
     border: '1px solid #EDE8E0',
     color: '#2C2C2C',
   };

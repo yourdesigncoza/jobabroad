@@ -43,7 +43,7 @@ export default function RegisterForm({
   const [state, action] = useActionState(register, initial);
 
   const inputStyle: React.CSSProperties = {
-    backgroundColor: '#F8F5F0',
+    backgroundColor: '#FFFFFF',
     border: '1px solid #EDE8E0',
     color: '#2C2C2C',
   };
@@ -123,7 +123,7 @@ export default function RegisterForm({
               key={c.id}
               className="flex items-center gap-2 px-3 py-3 rounded-md cursor-pointer font-body text-sm has-[:checked]:font-semibold"
               style={{
-                backgroundColor: '#F8F5F0',
+                backgroundColor: '#FFFFFF',
                 border: '1px solid #EDE8E0',
                 color: '#2C2C2C',
               }}
