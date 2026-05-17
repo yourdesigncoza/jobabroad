@@ -3,7 +3,7 @@ import { waitUntil } from '@vercel/functions';
 import { CATEGORIES } from '@/lib/categories';
 import { requireProfile } from '@/lib/auth-guards';
 import { loadRubric, calculateScore } from '@/lib/scoring';
-import { generateWhatsWorking, generateWhatsBlocking } from '@/lib/scoring/narratives';
+import { getOrGenerateNarratives } from '@/lib/scoring/narratives';
 import { getLatestAssessment } from '@/lib/assessments/assessment-client';
 import { assessmentDataSchema } from '@/lib/assessments/schemas/assessment';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
@@ -47,12 +47,15 @@ export default async function ScorePage({
   const parsedAnswers = assessmentDataSchema.parse(assessment.data);
   const score = calculateScore(parsedAnswers, rubric);
 
-  // Generate the same narratives the PDF uses — page and PDF should read as
-  // one product. Parallel for latency.
-  const [whatsWorking, whatsBlocking] = await Promise.all([
-    generateWhatsWorking(score, category),
-    generateWhatsBlocking(score, category),
-  ]);
+  // Cached on the assessment row — first /score load runs the two LLM calls
+  // in parallel, every subsequent visit is a ~10ms DB read. The cache is
+  // invalidated when the user resubmits the assessment (wizard nulls the
+  // column on new submission).
+  const { whatsWorking, whatsBlocking } = await getOrGenerateNarratives(
+    assessment.id,
+    score,
+    category,
+  );
 
   const categoryLabel = CATEGORIES.find((c) => c.id === category)?.label ?? category;
 

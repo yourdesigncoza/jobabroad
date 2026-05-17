@@ -1,8 +1,71 @@
 import 'server-only';
 import OpenAI from 'openai';
+import { createClient } from '@supabase/supabase-js';
 import type { DimensionResult, ScoreResult } from './types';
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY ?? '' });
+
+function admin() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    { auth: { persistSession: false } },
+  );
+}
+
+export interface CachedNarratives {
+  whatsWorking: string;
+  whatsBlocking: string;
+  generatedAt: string;
+}
+
+/**
+ * Reads cached narratives for a submitted assessment, or generates + writes
+ * them on miss. Two LLM calls run in parallel on cold, ~0ms read on warm.
+ *
+ * Since submitted assessment answers are immutable, the cache is safe to
+ * trust until the user re-submits — which the wizard should signal by
+ * nulling assessments.cached_narratives on the new submission.
+ *
+ * Errors during generation fall back to the same raw-rule prose the LLM
+ * helpers produce as their own fallback, and DON'T write to cache (so the
+ * next request retries). Failure mode: slow but never broken.
+ */
+export async function getOrGenerateNarratives(
+  assessmentId: string,
+  score: ScoreResult,
+  category: string,
+): Promise<CachedNarratives> {
+  const sb = admin();
+
+  const { data: row } = await sb
+    .from('assessments')
+    .select('cached_narratives')
+    .eq('id', assessmentId)
+    .single();
+
+  const cached = row?.cached_narratives as CachedNarratives | null | undefined;
+  if (cached?.whatsWorking && cached?.whatsBlocking) return cached;
+
+  const [whatsWorking, whatsBlocking] = await Promise.all([
+    generateWhatsWorking(score, category),
+    generateWhatsBlocking(score, category),
+  ]);
+
+  const next: CachedNarratives = {
+    whatsWorking,
+    whatsBlocking,
+    generatedAt: new Date().toISOString(),
+  };
+
+  // Best-effort write — if Supabase blips, we just re-generate next visit.
+  await sb
+    .from('assessments')
+    .update({ cached_narratives: next })
+    .eq('id', assessmentId);
+
+  return next;
+}
 
 function topDims(score: ScoreResult, n = 2): DimensionResult[] {
   return [...score.dimensions].sort((a, b) => b.score - a.score).slice(0, n);

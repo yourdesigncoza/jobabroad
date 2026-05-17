@@ -5,7 +5,7 @@ import { createClient } from '@supabase/supabase-js';
 import OpenAI from 'openai';
 import { calculateScore, loadRubric } from '@/lib/scoring';
 import type { DimensionResult, ScoreResult } from '@/lib/scoring/types';
-import { generateWhatsWorking, generateWhatsBlocking } from '@/lib/scoring/narratives';
+import { getOrGenerateNarratives } from '@/lib/scoring/narratives';
 import { assessmentDataSchema } from '@/lib/assessments/schemas/assessment';
 import { CATEGORIES, type CategoryId } from '@/lib/categories';
 import { getPremiumRecruiters } from '@/lib/recruiters';
@@ -246,7 +246,7 @@ export async function generateReport(
 
   const { data: assessment, error: assessErr } = await sb
     .from('assessments')
-    .select('data, status, category')
+    .select('id, data, status, category')
     .eq('user_id', userId)
     .eq('category', category)
     .eq('status', 'submitted')
@@ -263,11 +263,14 @@ export async function generateReport(
   // consume corpus do their own slicing.
   const corpus = await searchCorpus(category, corpusQueryFromGaps(score));
 
-  const [whatsWorking, whatsBlocking, nextActions] = await Promise.all([
-    generateWhatsWorking(score, category),
-    generateWhatsBlocking(score, category),
+  // Narratives reuse the cached entry on assessments.cached_narratives so
+  // the PDF gen path doesn't pay the LLM tax twice when the user already
+  // visited /score (which is the normal flow).
+  const [narratives, nextActions] = await Promise.all([
+    getOrGenerateNarratives(assessment.id, score, category),
     generateNextActions(score, category, corpus),
   ]);
+  const { whatsWorking, whatsBlocking } = narratives;
 
   const userName = (profile.name as string) || 'There';
   const categoryLabel = CATEGORIES.find((c) => c.id === category)?.label ?? category;
