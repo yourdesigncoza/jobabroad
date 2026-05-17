@@ -115,14 +115,18 @@ export default function ScoreResult({
   return (
     <section style={{ backgroundColor: '#F8F5F0' }}>
       <div className="max-w-2xl mx-auto px-6 py-12 sm:py-16 flex flex-col gap-8">
-        {/* Kicker + page title */}
-        <div className="flex flex-col gap-2">
-          <p
-            className="font-display uppercase tracking-[0.2em] text-xs"
-            style={{ color: '#C9A84C' }}
-          >
-            {categoryLabel} eligibility
-          </p>
+        {/* Kicker + page title — matches the orange-dash pattern used across
+            the site (dashboard, login, register, recruiters, scam-warnings). */}
+        <div className="flex flex-col gap-3">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-px" style={{ backgroundColor: '#ff751f' }} />
+            <span
+              className="font-display text-[0.65rem] md:text-xs font-semibold uppercase tracking-[0.08em] md:tracking-[0.2em]"
+              style={{ color: '#ff751f' }}
+            >
+              {categoryLabel} eligibility
+            </span>
+          </div>
           <h1
             className="font-display font-bold uppercase tracking-wide text-3xl sm:text-4xl"
             style={{ color: '#2C2C2C' }}
