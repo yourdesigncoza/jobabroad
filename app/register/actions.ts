@@ -63,7 +63,7 @@ export async function register(
   const { name, email, phone, password, category } = parsed.data;
   const supabase = await createSupabaseServerClient();
 
-  const { error } = await supabase.auth.signUp({
+  const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
@@ -83,7 +83,28 @@ export async function register(
     if (msg.includes('password')) {
       return { ok: false, fieldErrors: { password: error.message } };
     }
+    // Supabase wraps profile-trigger failures (unique constraint violations on
+    // phone, etc.) as the opaque "database error saving new user". The actual
+    // constraint detail is buried in Supabase logs — for the form we fall back
+    // to a friendly default that points users at the most likely cause.
+    if (msg.includes('database error saving new user')) {
+      return {
+        ok: false,
+        fieldErrors: {
+          phone: 'This phone number may already be registered — try a different number, or log in.',
+        },
+      };
+    }
     return { ok: false, fieldErrors: { _form: error.message } };
+  }
+
+  // Supabase quirk: signing up an already-confirmed email returns no error
+  // and a user object that LOOKS fresh, but with an empty identities array.
+  // This is the anti-enumeration path — Supabase won't tell us the email
+  // exists, so we infer it from the empty identities and surface the same
+  // message the explicit error path uses.
+  if (data?.user && (data.user.identities?.length ?? 0) === 0) {
+    return { ok: false, fieldErrors: { email: 'That email is already registered. Try logging in.' } };
   }
 
   redirect('/auth/confirm-email');
