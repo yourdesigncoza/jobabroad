@@ -48,6 +48,29 @@ const BAND_PRESETS: Record<Band, BandPreset> = {
   },
 };
 
+// Band-aware upsell copy. Each variant acknowledges the result honestly, then
+// positions R495 as the specific answer to THAT situation rather than a one-
+// size pitch. Keep the closing "not just another auto-generated summary"
+// phrase across all three for consistency with the differentiator we've used
+// elsewhere.
+const BAND_UPSELL: Record<Band, { heading: string; intro: string }> = {
+  strong_potential: {
+    heading: "You've got a real shot. Want to move faster?",
+    intro:
+      "The headline says you're application-ready, but ready doesn't mean automatic. The R495 upgrade saves you time. We talk through your situation on a 15-minute call, then write a personalised action plan: which country to target first, which documents to apostille this week, which recruiters to actually contact. Tailored to you, not just another auto-generated summary.",
+  },
+  needs_prep: {
+    heading: "You've got potential. Now what?",
+    intro:
+      "The gaps above are fixable, but they need a plan made in the right order. The R495 upgrade is that plan. We talk through your situation on a 15-minute call, then write a personalised action plan that closes those gaps without you spending money on the wrong things first. Made for your situation, not just another auto-generated summary.",
+  },
+  high_blockers: {
+    heading: 'Not the result you wanted? Not the end of the road either.',
+    intro:
+      "The blockers above are real, but they're rarely permanent. The R495 upgrade gives you a clear next move. We talk through your situation on a 15-minute call, then write a personalised action plan: whether to close those gaps now or pivot to a different route, what NOT to spend money on, what's realistic in the next 12 months. Honest and specific to you, not just another auto-generated summary.",
+  },
+};
+
 function dimBarColour(score: number): string {
   if (score < 40) return '#B53A2B';
   if (score < 70) return '#C9A84C';
@@ -246,12 +269,10 @@ export default function ScoreResult({
             style={{ backgroundColor: '#1B4D3E', color: '#F8F5F0' }}
           >
             <h2 className="font-display font-bold uppercase tracking-wide text-lg">
-              Want the full picture?
+              {BAND_UPSELL[band].heading}
             </h2>
-            <p className="font-body text-sm" style={{ color: 'rgba(248,245,240,0.85)' }}>
-              You&apos;ve got the headline. The R495 upgrade adds depth: a
-              personalised action plan written after a live call, not just
-              another auto-generated summary.
+            <p className="font-body text-sm leading-relaxed" style={{ color: 'rgba(248,245,240,0.85)' }}>
+              {BAND_UPSELL[band].intro}
             </p>
 
             {/* Highlighted call panel — single biggest selling point. */}
