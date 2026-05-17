@@ -58,7 +58,8 @@ const BAND_UPSELL: Record<Band, { heading: string; intro: string[] }> = {
     heading: "You've got a real shot. Want to move faster?",
     intro: [
       "The headline says you're application-ready, but ready doesn't mean automatic.",
-      "The R495 upgrade saves you time. We talk through your situation on a 15-minute call, then write a personalised action plan: which country to target first, which documents to apostille this week, which recruiters to actually contact. Tailored to you, not just another auto-generated summary.",
+      "The R495 upgrade saves you time. We talk through your situation on a 15-minute call, then write a personalised action plan: which country to target first, which documents to apostille this week, which recruiters to actually contact.",
+      'Tailored to you, not just another auto-generated summary.',
     ],
   },
   needs_prep: {
@@ -72,7 +73,8 @@ const BAND_UPSELL: Record<Band, { heading: string; intro: string[] }> = {
     heading: 'Not the result you wanted? Not the end of the road either.',
     intro: [
       "The blockers above are real, but they're rarely permanent.",
-      "The R495 upgrade gives you a clear next move. We talk through your situation on a 15-minute call, then write a personalised action plan: whether to close those gaps now or pivot to a different route, what NOT to spend money on, what's realistic in the next 12 months. Honest and specific to you, not just another auto-generated summary.",
+      "The R495 upgrade gives you a clear next move. We talk through your situation on a 15-minute call, then write a personalised action plan: whether to close those gaps now or pivot to a different route, what NOT to spend money on, what's realistic in the next 12 months.",
+      'Honest and specific to you, not just another auto-generated summary.',
     ],
   },
 };
