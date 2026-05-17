@@ -115,3 +115,202 @@ If no (draft or not started), card stays as-is (current behaviour).
 **Pairs naturally with #7** — that rework + this navigation are both about treating the score page as a real destination rather than a one-shot teaser.
 
 ---
+
+# Batch 2 (post-deploy)
+
+## 9. Footer "Free resources" → eligibility-check CTA
+
+> "Update this section: Complete a free Personalised Eligibility Check To Get Access To our list of Preferred Recruiters and Agencies" *(re: footer "Free resources" section showing Recruiters & agencies / Scam warnings / Privacy policy)*
+
+**Read:** turn the footer column from a list of links into a single value-exchange CTA. Stops advertising direct access to /recruiters from the public footer (continuing the gradual phase-out per the existing [[project_outreach_scope]] / "recruiters page eventually private" stance).
+
+**Implementation:**
+- Replace the "Recruiters & agencies" link with the CTA copy + a button/link to `/register?next=/members/teaching/assessment` (or `/login` if already signed up).
+- Keep "Privacy policy" — required for legal/cookie reasons, never gate behind anything.
+- **Scam warnings:** keep or drop? It's a real safety resource that has SEO + safety value. Defaulting to **keep** as a separate item below the CTA (still free, visible to all).
+
+**Default layout:**
+```
+GET STARTED
+Complete a free Personalised Eligibility Check
+to access our preferred recruiters and agencies.
+[Start your check →]
+
+Scam warnings
+Privacy policy
+```
+
+**Question (defer if you say so):** is signed-in user behaviour different? A logged-in user clicking the CTA should go straight to `/members/<category>/assessment`, not the register flow. Defaulting to: link target is `/dashboard` for everyone, since middleware will route them appropriately.
+
+---
+
+## 10. Rethink "Work Abroad Playbook" tile (step 3 on landing)
+
+> "Let's rethink this section, sure it's free ... but not anything" *(re: HowItWorks step 3 "Work Abroad Playbook" tile on landing page)*
+
+**Read:** the tile leans hard on "Free" three times (tagline + sub-line + pill) but undersells the actual product. After today's score-page rebuild, the free tier delivers real value: numeric score, dimension bars, narrative paragraphs, emailed copy. The R495 tier is a step up, not the only paid thing. Today's tile mostly says "free" without showing what you GET free vs what's gated.
+
+**Current copy:**
+- Title: Work Abroad Playbook
+- Sub: Researched, up to date, and built around the questions scam recruiters hope you never ask.
+- Centred line: Free access. No monthly fees, no hidden costs.
+- Pill: **Free** after registration
+
+**Proposed shape (default — confirm or redirect):** convert the tile from "playbook = free thing" into a tier teaser that mirrors the real product:
+
+```
+Title: Your work-abroad plan, two ways
+Sub:   Start with the free eligibility check + pathway guide.
+       Upgrade for a personalised plan and a live review call.
+
+— Free, after registration —
+✓ Personalised eligibility score (5 dimensions)
+✓ Country-by-country pathway guide
+✓ Recruiter list + scam warnings
+
+— R495 one-off, optional —
+✓ Personalised PDF action plan
+✓ 15-minute review call
+✓ Vetted partner recommendations
+
+[Get started free →]
+```
+
+**Alternative — minimal patch:** keep current shape, just fix the value claim. Title stays "Work Abroad Playbook", sub gains "Personalised eligibility check + full pathway guide. R495 unlocks a live review call and your personalised action plan." Pill drops to a single "Free after registration" or "From free".
+
+**Question:** which direction — full two-tier reframe (default), minimal patch (faster), or something else? I'll mock either before committing.
+
+---
+
+## 11. Drop ", Free, no payment." from step 1
+
+> "remove free" *(re: HowItWorks step 1 "Pick your field")*
+
+**Read:** trivial copy fix. `components/HowItWorks.tsx:6` ends with ", Free, no payment." — strip those two clauses. Description becomes:
+> "Tap a category tile, register with email + SA mobile, and pick the pathway that fits you."
+
+**Pairs with #10:** part of the same "stop over-claiming free" theme. Could fold into the same commit when #10 lands.
+
+---
+
+## 12. Landing hero blurb — "Playbook is free" no longer rings true
+
+> "this does not ring true anymore, we have an upsell" *(re: gold paragraph below the hero on /, app/page.tsx:127)*
+
+**Read:** same "free is overclaimed" theme as #10 and #11. Current paragraph:
+> "The Work Abroad Playbook is free. Register, confirm your email, and your guide unlocks immediately.
+> No monthly fees, no hidden costs. No fake recruiter taking R5,000 from you."
+
+The "is free" + "no monthly fees, no hidden costs" + then R495 upsell elsewhere = inconsistent positioning. The "no fake recruiter taking R5,000" line is still valuable (anti-scam differentiator), so keep that flavour.
+
+**Proposed copy (default):**
+> "The pathway guide + eligibility check are free. Register, confirm your email, and your guide unlocks immediately.
+> The R495 upgrade adds a 15-min review call and your personalised action plan. No subscriptions. No fake recruiter taking R5,000 from you."
+
+**Pairs with #10 + #11:** all three are one coherent "stop over-claiming free, position the two-tier product honestly" pass. Fold into one commit.
+
+---
+
+## 13. FAQ "Is it really free?" — rewrite honestly
+
+> "rething & rewrite this section" *(re: FAQ first question on landing page)*
+
+**Read:** the answer says "Yes." flatly, then lists "destination options, document checklist, realistic costs, ... and a personalised eligibility check" as all included free. Now misleading: the personalised PDF action plan + live call are the R495 product. Rewriting needs to:
+1. Honestly split what's free vs paid
+2. Not lose the "we don't pull a hidden charge" reassurance (that's the real worry behind the question)
+3. Strip the em-dash (`—`) in the current copy, per project voice rules
+
+**Source:** `components/FAQ.tsx:24-26`
+
+**Proposed rewrite (default):**
+
+```
+Q: What's free, and what costs money?
+
+A: The pathway guide and the personalised eligibility check are
+   completely free, no card, no monthly fees. Register, confirm
+   your email, and you're in. Inside the free tier: destination
+   options, document checklist, realistic costs, visa route
+   overview, scam red flags, recruiter list, and a personalised
+   eligibility score.
+
+   The R495 upgrade is optional. It adds a 15-minute review call
+   and a personalised action plan written specifically for your
+   situation. One-off payment, no subscription.
+```
+
+**Why rephrase the Q too:** "Is it really free?" with a partial-yes answer reads evasive. "What's free, and what costs money?" lets you answer plainly.
+
+**Pairs with #10 + #11 + #12:** four-part honest-pricing pass on the landing page. All folded into one commit.
+
+---
+
+## 14. Privacy policy doesn't belong under "Free Resources"
+
+> "Privacy policy should not be under 'Free Resources'" *(re: footer left column)*
+
+**Read:** taxonomy fix. Privacy policy is a legal requirement, not a resource. Move it to its own grouping.
+
+**Pairs with #9** — both reshape the footer's left column. Folding into the same footer-restructure commit.
+
+**Default footer layout after #9 + #14 land together:**
+
+```
+GET STARTED                            ACCOUNT             LEGAL
+Complete a free Personalised           Dashboard           Privacy policy
+Eligibility Check to access            Log out
+our preferred recruiters
+and agencies.
+[Start your check →]
+
+Scam warnings
+```
+
+- The Get Started column carries the CTA + Scam warnings (which is the only true "free safety resource" left).
+- Account is unchanged.
+- New Legal column hosts Privacy policy (and future ToS, Cookie policy, etc).
+
+**Question:** keep Scam warnings in the Get Started column, OR move it to its own little "Safety" group, OR drop it from the footer entirely (it's still on /dashboard)? Defaulting to **keep where shown** (small, free, visible to all).
+
+---
+
+## 15. Band-aware upsell copy on /score
+
+> "Rework: You've got the headline. The R495 upgrade adds depth: a personalised action plan written after a live call, not just another auto-generated summary." *(user wants the upsell to acknowledge each band: pass / fail / middle)*
+
+**User's examples:**
+- Pass: "We just presented you with the basic assessment. According to our assessment it seems you have a legitimate chance for work abroad. If you want to save time and go deeper into your profile assessment, we have a R495 upgrade..."
+- Fail: "Unfortunately you don't seem to have a good profile for finding opportunities abroad. Not all is lost & if you need a rapid fire counselling, we have a R495 upgrade..."
+
+**Read:** static one-size pitch reads wrong when the user's actual result is at either extreme. Band-aware copy speaks to the situation.
+
+**Polished copy (3 variants, shipped):**
+
+- **strong_potential** — *"You've got a real shot. Want to move faster?"* + "The headline says you're application-ready, but ready doesn't mean automatic. The R495 upgrade saves you time. We talk through your situation on a 15-minute call, then write a personalised action plan: which country to target first, which documents to apostille this week, which recruiters to actually contact. Tailored to you, not just another auto-generated summary."
+
+- **needs_prep** — *"You've got potential. Now what?"* + "The gaps above are fixable, but they need a plan made in the right order. The R495 upgrade is that plan. We talk through your situation on a 15-minute call, then write a personalised action plan that closes those gaps without you spending money on the wrong things first. Made for your situation, not just another auto-generated summary."
+
+- **high_blockers** — *"Not the result you wanted? Not the end of the road either."* + "The blockers above are real, but they're rarely permanent. The R495 upgrade gives you a clear next move. We talk through your situation on a 15-minute call, then write a personalised action plan: whether to close those gaps now or pivot to a different route, what NOT to spend money on, what's realistic in the next 12 months. Honest and specific to you, not just another auto-generated summary."
+
+**Implementation:** `BAND_UPSELL: Record<Band, { heading, intro }>` lookup in `ScoreResult.tsx`. Same component, no new props. Renders the right variant based on the existing `band` prop.
+
+---
+
+## 16. Checkout button fails: "Couldn't start checkout: checkout_failed"
+
+> "Add to rapid fire" *(re: clicking UNLOCK FOR R495 → error message "Couldn't start checkout: checkout_failed. Please try again.")*
+
+**Read:** the `/api/payments/checkout` POST is returning a non-OK response or a body without `checkoutUrl`. The client surfaces whatever `error` the server returns; in this case the server is returning `error: 'checkout_failed'` (or no payload at all). Need to look at server logs / the route.
+
+**Likely causes (in order):**
+1. `PAYSTACK_SECRET_KEY` is wrong / missing for the current environment (server doesn't tell the user, just throws).
+2. The signed-in test user's email is `score-test-teacher@example.com` — Paystack init MIGHT reject `@example.com` as invalid (TLDs/MX checks).
+3. Webhook callback URL mismatch between local env and Paystack expectations.
+4. Amount-cents mismatch (PRICE_CENTS=49500 hard-coded).
+
+**Implementation when picking this up:**
+- Look at the dev-server stdout for the actual error returned from Paystack's API.
+- Surface the real reason to the client (sanitised — don't leak keys) so future failures show a useful message, not "checkout_failed".
+- If it's the @example.com issue, that's a test-account quirk; real users won't hit it.
+
+---

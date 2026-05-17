@@ -47,20 +47,28 @@ export default async function SiteFooter({ src }: { src?: string }) {
           </p>
         </div>
 
-        {/* Middle — resources + account */}
+        {/* Middle — value-exchange CTA + Account + Legal. The old "Free
+            resources" group is gone; Recruiters & Agencies no longer hangs
+            in the public footer (we route paid users to them via the PDF).
+            Scam warnings stays because it has real safety + SEO value. */}
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-3">
             <p className="font-display text-xs uppercase tracking-[0.15em]" style={{ color: 'rgba(248,245,240,0.55)' }}>
-              Free resources
+              Get started
             </p>
-            <Link href="/recruiters" className={linkClass} style={linkStyle}>
-              Recruiters &amp; agencies
+            <p className="font-body text-sm leading-relaxed" style={{ color: '#F8F5F0' }}>
+              Complete a free personalised eligibility check to access our
+              preferred recruiters and agencies.
+            </p>
+            <Link
+              href={isSignedIn ? '/dashboard' : '/register'}
+              className="inline-flex items-center gap-2 font-body font-semibold text-sm px-5 py-3 rounded-full self-start transition-all"
+              style={{ backgroundColor: '#ff751f', color: '#FFFFFF' }}
+            >
+              {isSignedIn ? 'Continue your check →' : 'Start your check →'}
             </Link>
             <Link href="/scam-warnings" className={linkClass} style={linkStyle}>
               Scam warnings
-            </Link>
-            <Link href="/privacy" className={linkClass} style={linkStyle}>
-              Privacy policy
             </Link>
           </div>
 
@@ -96,6 +104,16 @@ export default async function SiteFooter({ src }: { src?: string }) {
                 </Link>
               </>
             )}
+          </div>
+
+          {/* Legal — own group so Privacy policy isn't filed under "resources". */}
+          <div className="flex flex-col gap-3">
+            <p className="font-display text-xs uppercase tracking-[0.15em]" style={{ color: 'rgba(248,245,240,0.55)' }}>
+              Legal
+            </p>
+            <Link href="/privacy" className={linkClass} style={linkStyle}>
+              Privacy policy
+            </Link>
           </div>
         </div>
 
