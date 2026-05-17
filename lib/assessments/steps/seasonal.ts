@@ -108,7 +108,7 @@ export const SEASONAL_STEPS: StepDef[] = [
       {
         id: 'experience.sector',
         version: 1,
-        label: 'Sectors worked in (select all)',
+        label: 'Sectors worked in (select all that apply)',
         type: 'multiselect',
         options: ['Hospitality / restaurants', 'Retail', 'Theme park / resort', 'Lifeguarding / camp', 'Customer service / call centre', 'Agriculture / farming', 'None yet', 'Other'],
       },

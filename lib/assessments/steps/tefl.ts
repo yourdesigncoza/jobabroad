@@ -70,7 +70,7 @@ export const TEFL_STEPS: StepDef[] = [
       {
         id: 'credential.specialism',
         version: 1,
-        label: 'Specialism / additional training (select all)',
+        label: 'Specialism / additional training (select all that apply)',
         type: 'multiselect',
         options: ['Young Learners (YL)', 'Business English', 'IELTS / exam prep', 'Online teaching', 'One-to-one tutoring', 'None'],
       },
@@ -90,7 +90,7 @@ export const TEFL_STEPS: StepDef[] = [
       {
         id: 'experience.context',
         version: 1,
-        label: 'Where you have taught (select all)',
+        label: 'Where you have taught (select all that apply)',
         type: 'multiselect',
         options: ['Language centre / academy', 'Public school', 'Private / international school', 'University', 'Online (1-on-1)', 'Online (group)', 'Tutoring / freelance', 'None'],
       },
@@ -176,7 +176,7 @@ export const TEFL_STEPS: StepDef[] = [
       {
         id: 'readiness.target_destinations',
         version: 1,
-        label: 'Target destinations (select all)',
+        label: 'Target destinations (select all that apply)',
         type: 'multiselect',
         options: ['South Korea (EPIK / hagwon)', 'China', 'Vietnam', 'Japan (JET / Eikaiwa)', 'Saudi Arabia', 'UAE', 'Thailand', 'Hong Kong', 'Other Asia', 'Open to recommendations'],
       },

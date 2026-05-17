@@ -6,7 +6,6 @@ interface Props {
   step: StepDef;
   values: Record<string, unknown>;
   onChange: (fieldId: string, value: unknown) => void;
-  whatsappNumber: string;
 }
 
 const inputClass = 'w-full font-body text-sm rounded-xl px-4 py-3 outline-none transition-colors';
@@ -123,11 +122,7 @@ function Field({ field, value, onChange }: { field: FieldDef; value: unknown; on
   return null;
 }
 
-export default function AssessmentStep({ step, values, onChange, whatsappNumber }: Props) {
-  const waLink = step.supportHint
-    ? `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(step.supportHint + ' Can you help?')}`
-    : null;
-
+export default function AssessmentStep({ step, values, onChange }: Props) {
   return (
     <div className="flex flex-col gap-6">
       {step.fields.map((field) => {
@@ -152,17 +147,6 @@ export default function AssessmentStep({ step, values, onChange, whatsappNumber 
           </div>
         );
       })}
-      {waLink && (
-        <a
-          href={waLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="font-body text-xs underline self-start"
-          style={{ color: '#1B4D3E' }}
-        >
-          {step.supportHint} WhatsApp us.
-        </a>
-      )}
     </div>
   );
 }

@@ -279,7 +279,7 @@ export const TRADES_STEPS: StepDef[] = [
       {
         id: 'readiness.target_destinations',
         version: 1,
-        label: 'Target destinations (select all)',
+        label: 'Target destinations (select all that apply)',
         type: 'multiselect',
         options: ['Australia', 'New Zealand', 'United Kingdom', 'Canada', 'UAE (cash-flow stepping stone)', 'Open to recommendations'],
       },

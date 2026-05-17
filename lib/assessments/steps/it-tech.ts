@@ -140,7 +140,7 @@ export const IT_TECH_STEPS: StepDef[] = [
       {
         id: 'qualifications.industry_certs',
         version: 1,
-        label: 'Industry certifications you hold (select all)',
+        label: 'Industry certifications you hold (select all that apply)',
         type: 'multiselect',
         options: [
           'AWS (any level)',
@@ -303,7 +303,7 @@ export const IT_TECH_STEPS: StepDef[] = [
       {
         id: 'readiness.target_destinations',
         version: 1,
-        label: 'Target destinations (select all)',
+        label: 'Target destinations (select all that apply)',
         type: 'multiselect',
         options: ['Ireland', 'United Kingdom', 'Germany', 'Netherlands', 'Canada', 'Australia', 'Open to recommendations'],
         hint: 'Ireland and UK are the lowest-friction English-language starts. Germany Opportunity Card lets you arrive without a job offer',

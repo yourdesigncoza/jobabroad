@@ -57,7 +57,7 @@ export const AU_PAIR_STEPS: StepDef[] = [
       {
         id: 'experience.contexts',
         version: 1,
-        label: 'Where you have cared for children (select all)',
+        label: 'Where you have cared for children (select all that apply)',
         type: 'multiselect',
         options: ['Family (siblings, cousins)', 'Babysitting (paid)', 'Nanny / au pair (paid)', 'Crèche / preschool', 'After-school care', 'Holiday programmes', 'Sunday school / youth group', 'Sports coaching', 'None'],
       },
@@ -224,7 +224,7 @@ export const AU_PAIR_STEPS: StepDef[] = [
       {
         id: 'readiness.target_destinations',
         version: 1,
-        label: 'Target destinations (select all)',
+        label: 'Target destinations (select all that apply)',
         type: 'multiselect',
         options: ['USA (J-1 Au Pair)', 'Netherlands', 'Germany', 'France', 'Belgium', 'Denmark', 'Open to recommendations'],
       },

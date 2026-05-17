@@ -62,7 +62,7 @@ export const HOSPITALITY_STEPS: StepDef[] = [
       {
         id: 'experience.cuisine_specialisation',
         version: 1,
-        label: 'Cuisine speciality (select all)',
+        label: 'Cuisine speciality (select all that apply)',
         type: 'multiselect',
         options: [
           'Continental / European',
@@ -80,7 +80,7 @@ export const HOSPITALITY_STEPS: StepDef[] = [
       {
         id: 'experience.venue_type',
         version: 1,
-        label: 'Type of venue you\'ve worked in (select all)',
+        label: 'Type of venue you\'ve worked in (select all that apply)',
         type: 'multiselect',
         options: [
           '5-star hotel / resort',
@@ -97,7 +97,7 @@ export const HOSPITALITY_STEPS: StepDef[] = [
       {
         id: 'experience.prior_hospitality_abroad',
         version: 1,
-        label: 'Have you worked in hospitality abroad before? (select all)',
+        label: 'Have you worked in hospitality abroad before? (select all that apply)',
         type: 'multiselect',
         options: [
           'None',
@@ -260,7 +260,7 @@ export const HOSPITALITY_STEPS: StepDef[] = [
       {
         id: 'readiness.target_destinations',
         version: 1,
-        label: 'Target destinations (select all)',
+        label: 'Target destinations (select all that apply)',
         type: 'multiselect',
         options: ['UAE / Dubai', 'UK', 'Australia', 'Canada', 'Cruise ship', 'Open'],
         hint: 'UK is effectively closed to new SA hospitality applicants since 22 Jul 2025. UAE is the most accessible high-volume route.',

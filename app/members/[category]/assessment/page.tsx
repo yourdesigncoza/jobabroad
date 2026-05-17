@@ -72,7 +72,6 @@ export default async function AssessmentPage({
         >
           <AssessmentWizard
             category={category}
-            whatsappNumber={whatsappNumber}
             initialData={draft?.data ?? {}}
             initialSlugs={draft?.completed_step_slugs ?? []}
             initialAssessmentId={draft?.id ?? null}

@@ -41,7 +41,7 @@ export const FARMING_STEPS: StepDef[] = [
       {
         id: 'experience.experience_types',
         version: 1,
-        label: 'Type of farm work you\'ve done (select all)',
+        label: 'Type of farm work you\'ve done (select all that apply)',
         type: 'multiselect',
         options: [
           'Horticulture / orchard',
@@ -58,7 +58,7 @@ export const FARMING_STEPS: StepDef[] = [
       {
         id: 'experience.prior_farm_abroad',
         version: 1,
-        label: 'Have you worked on a farm abroad before? (select all)',
+        label: 'Have you worked on a farm abroad before? (select all that apply)',
         type: 'multiselect',
         options: [
           'None',
@@ -210,7 +210,7 @@ export const FARMING_STEPS: StepDef[] = [
       {
         id: 'readiness.target_destinations',
         version: 1,
-        label: 'Target destinations (select all)',
+        label: 'Target destinations (select all that apply)',
         type: 'multiselect',
         options: ['UK', 'USA', 'Canada', 'New Zealand', 'Australia', 'Open'],
         hint: 'Australia: skilled / management routes only for SA — no seasonal scheme.',

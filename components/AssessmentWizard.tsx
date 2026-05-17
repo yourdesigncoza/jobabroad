@@ -9,7 +9,6 @@ import AssessmentStep from './AssessmentStep';
 
 interface Props {
   category: string;
-  whatsappNumber: string;
   initialData: Record<string, unknown>;
   initialSlugs: string[];
   initialAssessmentId: string | null;
@@ -22,7 +21,7 @@ function toPayload(fieldId: string, version: number, value: unknown) {
 }
 
 export default function AssessmentWizard({
-  category, whatsappNumber,
+  category,
   initialData, initialSlugs, initialAssessmentId,
   initialStatus, leadPhone,
 }: Props) {
@@ -147,7 +146,6 @@ export default function AssessmentWizard({
         step={currentStep}
         values={values}
         onChange={handleChange}
-        whatsappNumber={whatsappNumber}
       />
 
       {saveError && (

@@ -66,14 +66,14 @@ export const TEACHING_STEPS: StepDef[] = [
       {
         id: 'qualifications.phase',
         version: 1,
-        label: 'Phase qualified to teach (select all)',
+        label: 'Phase qualified to teach (select all that apply)',
         type: 'multiselect',
         options: ['Foundation (Gr R–3)', 'Intermediate (Gr 4–6)', 'Senior (Gr 7–9)', 'FET (Gr 10–12)', 'Early Childhood', 'Adult / Tertiary'],
       },
       {
         id: 'qualifications.subjects',
         version: 1,
-        label: 'Subject specialisms (select all)',
+        label: 'Subject specialisms (select all that apply)',
         type: 'multiselect',
         options: ['English', 'Maths', 'Sciences', 'Languages', 'Humanities / Social Sciences', 'Tech / Computing', 'Arts / Music', 'Phys Ed', 'Special Needs', 'Other'],
       },
@@ -220,7 +220,7 @@ export const TEACHING_STEPS: StepDef[] = [
       {
         id: 'readiness.target_destinations',
         version: 1,
-        label: 'Target destinations (select all)',
+        label: 'Target destinations (select all that apply)',
         type: 'multiselect',
         options: ['UAE', 'Saudi Arabia', 'China', 'UK', 'Vietnam', 'Thailand', 'Qatar / Oman / Kuwait', 'Australia / NZ', 'Other'],
       },
