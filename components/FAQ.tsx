@@ -21,8 +21,8 @@ const PILLARS = [
 
 const QUESTIONS = [
   {
-    q: 'Is it really free?',
-    a: 'Yes. Pick your category, register with email + SA mobile, confirm your email — and your Playbook unlocks. No payment, no card. Inside: destination options, document checklist, realistic costs, visa route overview, scam red flags, legitimate contacts, and a personalised eligibility check.',
+    q: "What's free, and what costs money?",
+    a: "The pathway guide and the personalised eligibility check are completely free, no card, no monthly fees. Register, confirm your email, and you're in. Inside the free tier: destination options, document checklist, realistic costs, visa route overview, scam red flags, recruiter list, and a personalised eligibility score. The R495 upgrade is optional. It adds a 15-minute review call and a personalised action plan written specifically for your situation. One-off payment, no subscription.",
   },
   {
     q: 'Are you a recruitment agency?',

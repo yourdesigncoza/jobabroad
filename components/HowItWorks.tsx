@@ -3,7 +3,7 @@ const STEPS = [
     number: "1",
     title: "Pick your field",
     description:
-      "Tap a category tile, register with email + SA mobile, and pick the pathway that fits you. Free, no payment.",
+      "Tap a category tile, register with email + SA mobile, and pick the pathway that fits you.",
   },
   {
     number: "2",
@@ -127,12 +127,6 @@ export default function HowItWorks() {
               >
                 Researched, up to date, and built around the questions scam recruiters hope you never ask.
               </p>
-              <p
-                className="font-body text-sm leading-relaxed text-center"
-                style={{ color: "#FFFFFF" }}
-              >
-                Free access. No monthly fees, no hidden costs.
-              </p>
               <div
                 className="inline-flex items-baseline gap-1 px-4 py-2 rounded-full self-start"
                 style={{ backgroundColor: "#ff751f" }}
@@ -150,6 +144,12 @@ export default function HowItWorks() {
                   after registration
                 </span>
               </div>
+              <p
+                className="font-body text-xs leading-relaxed"
+                style={{ color: "rgba(248,245,240,0.55)" }}
+              >
+                Optional <strong style={{ color: "rgba(248,245,240,0.85)" }}>R495 upgrade</strong> adds a 15-min review call and your personalised action plan. One-off payment, no subscription.
+              </p>
             </div>
 
             {/* Right — what's inside */}

@@ -85,7 +85,7 @@ export default async function Home({ searchParams }: Props) {
               className="font-display font-bold uppercase text-lg tracking-[0.12em]"
               style={{ color: '#1B4D3E' }}
             >
-              What's your field?
+              What&apos;s your field?
             </h2>
             <div className="flex-1 h-px" style={{ backgroundColor: '#C9A84C', opacity: 0.4 }} />
           </div>
@@ -124,8 +124,8 @@ export default async function Home({ searchParams }: Props) {
               className="font-body font-semibold leading-relaxed text-center"
               style={{ fontSize: 'clamp(1rem, 2vw, 1.2rem)', color: '#C9A84C' }}
             >
-              The Work Abroad Playbook is free. Register, confirm your email, and your guide unlocks immediately.<br />
-              No monthly fees, no hidden costs. No fake recruiter taking R5,000 from you.
+              The pathway guide and personalised eligibility check are free. Register, confirm your email, and your guide unlocks immediately.<br />
+              The R495 upgrade adds a 15-min review call and your personalised action plan. No subscriptions. No fake recruiter taking R5,000 from you.
             </p>
 
             <a
