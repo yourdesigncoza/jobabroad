@@ -60,9 +60,9 @@ const BAND_UPSELL: Record<Band, { heading: string; intro: string }> = {
       "The headline says you're application-ready, but ready doesn't mean automatic. The R495 upgrade saves you time. We talk through your situation on a 15-minute call, then write a personalised action plan: which country to target first, which documents to apostille this week, which recruiters to actually contact. Tailored to you, not just another auto-generated summary.",
   },
   needs_prep: {
-    heading: "You've got potential. Now what?",
+    heading: "Don't spend money in the wrong order.",
     intro:
-      "The gaps above are fixable, but they need a plan made in the right order. The R495 upgrade is that plan. We talk through your situation on a 15-minute call, then write a personalised action plan that closes those gaps without you spending money on the wrong things first. Made for your situation, not just another auto-generated summary.",
+      "Your score shows real potential, but one or two gaps could block your application if you deal with them too late. For R495, we review your situation on a 15-minute call and then write a personalised action plan showing what to fix first, which route looks most realistic, and what not to waste money on.",
   },
   high_blockers: {
     heading: 'Not the result you wanted? Not the end of the road either.',
@@ -109,8 +109,11 @@ export default function ScoreResult({
     }
   }
 
+  // The wrapping <main> + SiteNav + SiteFooter come from the page server
+  // component so server-only chrome (auth-aware nav) stays out of this
+  // client component. Render as a plain section here.
   return (
-    <main className="min-h-screen" style={{ backgroundColor: '#F8F5F0' }}>
+    <section style={{ backgroundColor: '#F8F5F0' }}>
       <div className="max-w-2xl mx-auto px-6 py-12 sm:py-16 flex flex-col gap-8">
         {/* Kicker + page title */}
         <div className="flex flex-col gap-2">
@@ -352,6 +355,6 @@ export default function ScoreResult({
           ← Back to dashboard
         </Link>
       </div>
-    </main>
+    </section>
   );
 }

@@ -314,3 +314,64 @@ Scam warnings
 - If it's the @example.com issue, that's a test-account quirk; real users won't hit it.
 
 ---
+
+## 17. /score page kicker doesn't match the site-wide pattern
+
+> "Add orange sub-header, we have to be consistent" *(re: /score page shows "TEACHING ELIGIBILITY" in plain gold text vs the dashboard's orange dash + "YOUR ACCOUNT" pattern)*
+
+**Read:** every other page on the site uses the same kicker structure — a small horizontal orange dash + orange uppercase text — established in `app/page.tsx`, `app/dashboard/page.tsx`, `app/login/page.tsx`, `app/register/page.tsx`, `app/recruiters/page.tsx`, `app/scam-warnings/page.tsx`, `/forgot-password`, `/reset-password`, etc. The /score page kicker (`components/ScoreResult.tsx:121`) is the lone exception: no dash, gold colour instead of orange.
+
+**Source:** `components/ScoreResult.tsx:118-126` — the kicker is currently just a `<p>TEACHING ELIGIBILITY</p>` in gold.
+
+**Fix:** wrap in the standard div-with-dash structure used everywhere else:
+```tsx
+<div className="flex items-center gap-3">
+  <div className="w-8 h-px" style={{ backgroundColor: '#ff751f' }} />
+  <span
+    className="font-display text-[0.65rem] md:text-xs font-semibold uppercase tracking-[0.08em] md:tracking-[0.2em]"
+    style={{ color: '#ff751f' }}
+  >
+    {categoryLabel} eligibility
+  </span>
+</div>
+```
+
+Trivial. Could also extract the pattern into a shared `<Kicker>` component since it's now used in ~10 places, but that's a separate refactor — out of scope for this rapid-fire fix.
+
+---
+
+## 18. /score page is slow on every visit (no narrative cache)
+
+> "when https://www.jobabroad.co.za/members/teaching/score loads it takes forever, it seems like the page (score) is not cached"
+
+**Read:** every /score page render kicks off TWO OpenAI calls in parallel (`generateWhatsWorking` + `generateWhatsBlocking`, both gpt-4o-mini, each typically 3–8s). The score itself is fast (deterministic rubric), but the narratives are the latency culprit. They don't change between visits — once the assessment is submitted, the answers are frozen, so the narrative is stable.
+
+**Why not cached today:** the narratives were originally only generated inside the PDF flow (which is rare and intentional). The /score rebuild (item #7/#16 yesterday) put the same calls on the hot path of an HTML page that users actually revisit.
+
+**Fix (when picked up):**
+1. **Add `cached_narratives JSONB` column** to `assessments` (or a sibling `score_cache` table).
+2. **Cache key = the submitted assessment id.** Once `status='submitted'`, the answers are immutable until the user re-submits, so the cache never goes stale unsafely.
+3. **/score page logic:**
+   - If `assessment.cached_narratives` is non-null → use it directly (sub-100ms render).
+   - Else → call LLM, write back, render.
+4. **Re-submission invalidation:** the wizard's submit path already creates a new assessment row (or flips back to draft then submits again). On submit, set `cached_narratives = null` so the next /score load regenerates.
+
+**Bonus optimisation (cheap):** the score-email path also computes narratives. After this change, the email path becomes part of the same "generate or read cache" flow — even on first visit, the email send and the page render share one LLM call instead of competing for two.
+
+**Defer to me on priority:** trivial migration, ~40 lines of generator change. Could fold into the same commit as #16 follow-up work.
+
+---
+
+## 19. needs_prep upsell — sharper "wrong order" hook (shipped)
+
+> Updated to the user's polished version after they noted the original needs_prep variant explained the offer before creating desire.
+
+**Shipped copy:**
+- Heading: "Don't spend money in the wrong order."
+- Intro: "Your score shows real potential, but one or two gaps could block your application if you deal with them too late. For R495, we review your situation on a 15-minute call and then write a personalised action plan showing what to fix first, which route looks most realistic, and what not to waste money on."
+
+The hook now hits the real fear (wasting money in the wrong sequence) before pitching the solution. Closes without the "not just another auto-generated summary" tag — deliberate by the user; that phrase no longer earns its place in this variant.
+
+**Flag for follow-up:** the strong_potential and high_blockers variants from #15 are now stylistically softer than this one. Worth a future pass to sharpen both in the same direction if you want consistent voice across all three bands.
+
+---

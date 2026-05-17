@@ -9,6 +9,8 @@ import { assessmentDataSchema } from '@/lib/assessments/schemas/assessment';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { sendScoreEmailOnce } from '@/lib/notifications/score-email';
 import ScoreResult from '@/components/ScoreResult';
+import SiteNav from '@/components/SiteNav';
+import SiteFooter from '@/components/SiteFooter';
 
 export default async function ScorePage({
   params,
@@ -81,17 +83,21 @@ export default async function ScorePage({
   }
 
   return (
-    <ScoreResult
-      categoryLabel={categoryLabel}
-      overall={score.overall}
-      band={score.band}
-      dimensions={score.dimensions}
-      whatsWorking={whatsWorking}
-      whatsBlocking={whatsBlocking}
-      isPaid={isPaid}
-      // We say "we've emailed you a copy" on first load. After that, the row
-      // has score_email_sent_at set; user might revisit but already has it.
-      emailedCopy
-    />
+    <main className="min-h-screen" style={{ backgroundColor: '#F8F5F0' }}>
+      <SiteNav />
+      <ScoreResult
+        categoryLabel={categoryLabel}
+        overall={score.overall}
+        band={score.band}
+        dimensions={score.dimensions}
+        whatsWorking={whatsWorking}
+        whatsBlocking={whatsBlocking}
+        isPaid={isPaid}
+        // We say "we've emailed you a copy" on first load. After that, the row
+        // has score_email_sent_at set; user might revisit but already has it.
+        emailedCopy
+      />
+      <SiteFooter />
+    </main>
   );
 }
