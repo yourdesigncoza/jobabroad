@@ -22,10 +22,6 @@ export default async function RecruitersPage({ searchParams }: Props) {
     <main className="min-h-screen" style={{ backgroundColor: '#F8F5F0' }}>
       <SiteNav src={src} />
 
-      <div className="max-w-6xl mx-auto px-6">
-        <div className="h-px" style={{ backgroundColor: '#EDE8E0' }} />
-      </div>
-
       {/* Hero */}
       <section className="max-w-6xl mx-auto px-6 pt-12 pb-8">
         <div className="flex flex-col gap-5">

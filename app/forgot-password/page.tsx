@@ -14,10 +14,6 @@ export default function ForgotPasswordPage() {
     <main className="min-h-screen" style={{ backgroundColor: '#F8F5F0' }}>
       <SiteNav />
 
-      <div className="max-w-6xl mx-auto px-6">
-        <div className="h-px" style={{ backgroundColor: '#EDE8E0' }} />
-      </div>
-
       <section className="max-w-md mx-auto px-6 pt-12 pb-16">
         <div className="flex flex-col gap-6 mb-10">
           <div className="flex items-center gap-3">

@@ -24,11 +24,6 @@ export default async function Home({ searchParams }: Props) {
 
       <SiteNav src={src} />
 
-      {/* Divider */}
-      <div className="max-w-6xl mx-auto px-6">
-        <div className="h-px" style={{ backgroundColor: '#EDE8E0' }} />
-      </div>
-
       {/* Hero */}
       <section className="max-w-6xl mx-auto px-6 pt-14 pb-12">
         <div className="flex flex-col gap-6 max-w-3xl">

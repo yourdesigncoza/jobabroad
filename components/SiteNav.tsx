@@ -31,75 +31,84 @@ export default async function SiteNav({ src }: { src?: string }) {
     "Hi, I'm interested in working abroad. Can you help me?",
   )}`;
 
+  // Returns nav + the thin horizontal divider that sits under it on every page.
+  // Baking the divider in here keeps every consumer consistent (was previously
+  // duplicated in 10 page files, missing from /score and /not-found).
   return (
-    <nav className="px-6 py-5 flex items-center justify-between max-w-6xl mx-auto">
-      <Link href="/" className="flex items-center text-[1.5em] md:text-[2.2em]">
-        <span className="font-body font-bold" style={{ color: '#2C2C2C' }}>job</span>
-        <span className="font-body font-bold" style={{ color: '#ff751f' }}>abroad</span>
-      </Link>
+    <>
+      <nav className="px-6 py-5 flex items-center justify-between max-w-6xl mx-auto">
+        <Link href="/" className="flex items-center text-[1.5em] md:text-[2.2em]">
+          <span className="font-body font-bold" style={{ color: '#2C2C2C' }}>job</span>
+          <span className="font-body font-bold" style={{ color: '#ff751f' }}>abroad</span>
+        </Link>
 
-      {/* Desktop nav (≥sm) — full inline links + WhatsApp pill */}
-      <div className="hidden sm:flex items-center gap-3">
-        {isSignedIn ? (
-          <>
-            <Link href="/dashboard" className={linkClass} style={{ color: '#1B4D3E' }}>
-              Dashboard
-            </Link>
-            <form action="/logout" method="POST" className="inline-flex items-center">
-              <button
-                type="submit"
-                className={`${linkClass} cursor-pointer`}
-                style={{ color: '#6B6B6B' }}
+        {/* Desktop nav (≥sm) — full inline links + WhatsApp pill */}
+        <div className="hidden sm:flex items-center gap-3">
+          {isSignedIn ? (
+            <>
+              <Link href="/dashboard" className={linkClass} style={{ color: '#1B4D3E' }}>
+                Dashboard
+              </Link>
+              <form action="/logout" method="POST" className="inline-flex items-center">
+                <button
+                  type="submit"
+                  className={`${linkClass} cursor-pointer`}
+                  style={{ color: '#6B6B6B' }}
+                >
+                  Log out
+                </button>
+              </form>
+            </>
+          ) : (
+            <>
+              <Link href="/login" className={linkClass} style={{ color: '#1B4D3E' }}>
+                Log in
+              </Link>
+              <Link
+                href="/register"
+                className={primaryClass}
+                style={{ backgroundColor: '#1B4D3E', borderColor: '#1B4D3E', color: '#F8F5F0' }}
               >
-                Log out
-              </button>
-            </form>
-          </>
-        ) : (
-          <>
-            <Link href="/login" className={linkClass} style={{ color: '#1B4D3E' }}>
-              Log in
-            </Link>
-            <Link
-              href="/register"
-              className={primaryClass}
-              style={{ backgroundColor: '#1B4D3E', borderColor: '#1B4D3E', color: '#F8F5F0' }}
+                Register free
+              </Link>
+            </>
+          )}
+
+          {!isPaid && (
+            <TrackedLink
+              href={waHref}
+              event="cta_click"
+              data={{ location: 'nav', source: src ?? 'direct' }}
+              className={`${primaryClass} flex items-center gap-2`}
+              style={{ borderColor: '#1B4D3E', color: '#1B4D3E' }}
             >
-              Register free
-            </Link>
-          </>
-        )}
+              <WhatsAppIcon size={15} />
+              <span>WhatsApp</span>
+            </TrackedLink>
+          )}
+        </div>
 
-        {!isPaid && (
-          <TrackedLink
-            href={waHref}
-            event="cta_click"
-            data={{ location: 'nav', source: src ?? 'direct' }}
-            className={`${primaryClass} flex items-center gap-2`}
-            style={{ borderColor: '#1B4D3E', color: '#1B4D3E' }}
-          >
-            <WhatsAppIcon size={15} />
-            <span>WhatsApp</span>
-          </TrackedLink>
-        )}
-      </div>
+        {/* Mobile nav (<sm) — WhatsApp icon (free only) + hamburger user menu */}
+        <div className="flex sm:hidden items-center gap-3">
+          {!isPaid && (
+            <TrackedLink
+              href={waHref}
+              event="cta_click"
+              data={{ location: 'nav', source: src ?? 'direct' }}
+              aria-label="Chat on WhatsApp"
+              className="flex items-center justify-center w-9 h-9 rounded-full border-2"
+              style={{ borderColor: '#1B4D3E', color: '#1B4D3E' }}
+            >
+              <WhatsAppIcon size={16} />
+            </TrackedLink>
+          )}
+          <NavUserMenu isSignedIn={isSignedIn} />
+        </div>
+      </nav>
 
-      {/* Mobile nav (<sm) — WhatsApp icon (free only) + hamburger user menu */}
-      <div className="flex sm:hidden items-center gap-3">
-        {!isPaid && (
-          <TrackedLink
-            href={waHref}
-            event="cta_click"
-            data={{ location: 'nav', source: src ?? 'direct' }}
-            aria-label="Chat on WhatsApp"
-            className="flex items-center justify-center w-9 h-9 rounded-full border-2"
-            style={{ borderColor: '#1B4D3E', color: '#1B4D3E' }}
-          >
-            <WhatsAppIcon size={16} />
-          </TrackedLink>
-        )}
-        <NavUserMenu isSignedIn={isSignedIn} />
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="h-px" style={{ backgroundColor: '#EDE8E0' }} />
       </div>
-    </nav>
+    </>
   );
 }
