@@ -1,7 +1,8 @@
 'use client';
 
-import { useActionState } from 'react';
+import { useActionState, useEffect, useState } from 'react';
 import { useFormStatus } from 'react-dom';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import PasswordInput from '@/components/auth/PasswordInput';
 import { login, type LoginState } from './actions';
@@ -33,6 +34,18 @@ function ErrorText({ children }: { children?: string }) {
 
 export default function LoginForm() {
   const [state, action] = useActionState(login, initial);
+  const searchParams = useSearchParams();
+  const next = searchParams.get('next') ?? '';
+
+  // The fragment isn't sent server-side, but the URL the auth-guard wrote
+  // into `?next=...` strips it. Capture window.location.hash on mount so we
+  // can forward it as a hidden form field; the login action will append
+  // ?h=<anchor> to the redirect, and the destination page reads it and
+  // scrolls there on mount.
+  const [hash, setHash] = useState('');
+  useEffect(() => {
+    if (typeof window !== 'undefined') setHash(window.location.hash ?? '');
+  }, []);
 
   const inputStyle: React.CSSProperties = {
     backgroundColor: '#FFFFFF',
@@ -45,6 +58,8 @@ export default function LoginForm() {
 
   return (
     <form action={action} className="flex flex-col gap-6">
+      <input type="hidden" name="next" value={next} />
+      <input type="hidden" name="hash" value={hash} />
       <div className="flex flex-col gap-2">
         <label htmlFor="email" className={labelClass} style={labelStyle}>
           Email

@@ -10,6 +10,17 @@ export default async function SiteFooter({ src }: { src?: string }) {
   } = await supabase.auth.getUser();
   const isSignedIn = Boolean(user?.email_confirmed_at);
 
+  // Hide WhatsApp CTA for paid users (see SiteNav for rationale).
+  let isPaid = false;
+  if (user) {
+    const { data: tierRow } = await supabase
+      .from('profiles')
+      .select('tier')
+      .eq('user_id', user.id)
+      .single();
+    isPaid = tierRow?.tier === 'paid';
+  }
+
   const linkClass = 'font-body text-sm underline';
   const linkStyle: React.CSSProperties = { color: '#F8F5F0' };
 
@@ -19,16 +30,18 @@ export default async function SiteFooter({ src }: { src?: string }) {
 
         {/* Left — contact + legal */}
         <div className="flex flex-col gap-4 md:col-span-1">
-          <TrackedLink
-            href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}?text=${encodeURIComponent("Hi, I'm interested in working abroad. Can you help me?")}`}
-            event="cta_click"
-            data={{ location: 'footer', source: src ?? 'direct' }}
-            className="flex items-center gap-2 font-body font-semibold text-sm px-5 py-3 rounded-full self-start transition-all"
-            style={{ backgroundColor: '#C9A84C', color: '#FFFFFF' }}
-          >
-            <WhatsAppIcon size={16} color="#FFFFFF" />
-            WhatsApp Me
-          </TrackedLink>
+          {!isPaid && (
+            <TrackedLink
+              href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}?text=${encodeURIComponent("Hi, I'm interested in working abroad. Can you help me?")}`}
+              event="cta_click"
+              data={{ location: 'footer', source: src ?? 'direct' }}
+              className="flex items-center gap-2 font-body font-semibold text-sm px-5 py-3 rounded-full self-start transition-all"
+              style={{ backgroundColor: '#C9A84C', color: '#FFFFFF' }}
+            >
+              <WhatsAppIcon size={16} color="#FFFFFF" />
+              WhatsApp Me
+            </TrackedLink>
+          )}
           <p className="font-body text-sm leading-relaxed" style={{ color: '#F8F5F0' }}>
             Jobabroad is an information service. We don&apos;t place candidates, act as recruiters or guarantee employment.
           </p>

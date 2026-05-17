@@ -1,11 +1,11 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
 import { SCHEMA_VERSION } from '@/lib/assessments/types';
 import { getStepsForCategory } from '@/lib/assessments/steps';
 import AssessmentProgress from './AssessmentProgress';
 import AssessmentStep from './AssessmentStep';
-import AssessmentConfirmation from './AssessmentConfirmation';
 
 interface Props {
   category: string;
@@ -26,11 +26,12 @@ export default function AssessmentWizard({
   initialData, initialSlugs, initialAssessmentId,
   initialStatus, leadPhone,
 }: Props) {
+  const router = useRouter();
   const steps = useMemo(() => getStepsForCategory(category) ?? [], [category]);
   const hasSteps = steps.length > 0;
 
   const firstIncomplete = hasSteps ? steps.findIndex((s) => !initialSlugs.includes(s.slug)) : -1;
-  const startIndex = initialStatus === 'submitted' ? 0 : (firstIncomplete === -1 ? 0 : firstIncomplete);
+  const startIndex = firstIncomplete === -1 ? 0 : firstIncomplete;
 
   const [currentIndex, setCurrentIndex] = useState(startIndex);
   const [values, setValues] = useState<Record<string, unknown>>(() => {
@@ -47,9 +48,14 @@ export default function AssessmentWizard({
   });
   const [assessmentId, setAssessmentId] = useState<string | null>(initialAssessmentId);
   const [completedSlugs, setCompletedSlugs] = useState<string[]>(initialSlugs);
-  const [submitted, setSubmitted] = useState(initialStatus === 'submitted');
   const [submitting, setSubmitting] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (initialStatus === 'submitted') {
+      router.replace(`/members/${category}/score`);
+    }
+  }, [initialStatus, category, router]);
 
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const currentStep = hasSteps ? steps[currentIndex] : null;
@@ -103,12 +109,16 @@ export default function AssessmentWizard({
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
       setSubmitting(true);
-      await fetch('/api/assessment/submit', {
+      const res = await fetch('/api/assessment/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
       });
-      setSubmitted(true);
-      setSubmitting(false);
+      if (!res.ok) {
+        setSaveError('Submit failed. Please try again.');
+        setSubmitting(false);
+        return;
+      }
+      router.push(`/members/${category}/score`);
     }
   }
 
@@ -117,23 +127,12 @@ export default function AssessmentWizard({
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  function handleStartNew() {
-    setSubmitted(false);
-    setCurrentIndex(0);
-    setAssessmentId(null);
-    setCompletedSlugs([]);
-  }
-
   if (!hasSteps || !currentStep) {
     return (
       <p className="font-body text-sm" style={{ color: '#6B6B6B' }}>
         An Eligibility Check isn&apos;t available for this pathway yet. Reply to your WhatsApp thread and we&apos;ll work through it with you directly.
       </p>
     );
-  }
-
-  if (submitted) {
-    return <AssessmentConfirmation whatsappNumber={whatsappNumber} onStartNew={handleStartNew} />;
   }
 
   return (

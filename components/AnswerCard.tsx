@@ -16,6 +16,9 @@ interface Props {
   resultsById?: Map<number, CitationTarget>;
   query: string;
   whatsappLink: string;
+  /** Replace the WhatsApp "we'll get back to you" fallback with a dashboard
+   *  follow-up nudge — set true for paid users. */
+  hideWhatsApp?: boolean;
   onCitationClick?: (id: number) => void;
 }
 
@@ -25,6 +28,7 @@ export default function AnswerCard({
   chunkOrder = [],
   resultsById,
   whatsappLink,
+  hideWhatsApp = false,
   onCitationClick,
 }: Props) {
   return (
@@ -65,18 +69,35 @@ export default function AnswerCard({
 
       {state === 'refused' && (
         <div className="flex flex-col gap-2">
-          <p className="font-body text-sm" style={{ color: '#2C2C2C' }}>
-            We don&rsquo;t have a confident answer for that in your guide. Message us on WhatsApp and we&rsquo;ll get back to you directly.
-          </p>
-          <a
-            href={whatsappLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-display font-bold uppercase text-xs tracking-wide self-start px-4 py-2 rounded-full"
-            style={{ backgroundColor: '#1B4D3E', color: '#F8F5F0' }}
-          >
-            WhatsApp us
-          </a>
+          {hideWhatsApp ? (
+            <>
+              <p className="font-body text-sm" style={{ color: '#2C2C2C' }}>
+                We don&rsquo;t have a confident answer for that in your guide. Send a follow-up question from your dashboard and we&rsquo;ll get back to you by email.
+              </p>
+              <a
+                href="/dashboard"
+                className="font-display font-bold uppercase text-xs tracking-wide self-start px-4 py-2 rounded-full"
+                style={{ backgroundColor: '#1B4D3E', color: '#F8F5F0' }}
+              >
+                Open dashboard
+              </a>
+            </>
+          ) : (
+            <>
+              <p className="font-body text-sm" style={{ color: '#2C2C2C' }}>
+                We don&rsquo;t have a confident answer for that in your guide. Message us on WhatsApp and we&rsquo;ll get back to you directly.
+              </p>
+              <a
+                href={whatsappLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-display font-bold uppercase text-xs tracking-wide self-start px-4 py-2 rounded-full"
+                style={{ backgroundColor: '#1B4D3E', color: '#F8F5F0' }}
+              >
+                WhatsApp us
+              </a>
+            </>
+          )}
         </div>
       )}
 

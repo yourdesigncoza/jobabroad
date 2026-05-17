@@ -24,6 +24,8 @@ interface Props {
   demoCategory?: string;
   whatsappNumber: string;
   category: string;
+  /** Hide WhatsApp CTAs in the refused-answer fallback — set true for paid users. */
+  hideWhatsApp?: boolean;
 }
 
 type AnswerState =
@@ -33,7 +35,7 @@ type AnswerState =
   | { kind: 'refused' }
   | { kind: 'error' };
 
-export default function PathwaySearch({ demoCategory, whatsappNumber, category }: Props) {
+export default function PathwaySearch({ demoCategory, whatsappNumber, category, hideWhatsApp = false }: Props) {
   const categoryLabel = category.charAt(0).toUpperCase() + category.slice(1);
   const isDemo = !!demoCategory;
   const authBody: Record<string, string> = isDemo ? { demo: demoCategory! } : {};
@@ -197,6 +199,7 @@ export default function PathwaySearch({ demoCategory, whatsappNumber, category }
           resultsById={resultsById}
           query={submittedQuery}
           whatsappLink={waLink}
+          hideWhatsApp={hideWhatsApp}
           onCitationClick={handleCitationClick}
         />
       )}

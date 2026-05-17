@@ -19,6 +19,38 @@ export const TEACHING_STEPS: StepDef[] = [
     ],
   },
   {
+    slug: 'situation',
+    title: 'Your situation',
+    fields: [
+      {
+        id: 'situation.family_status',
+        version: 1,
+        label: 'Family status',
+        type: 'select',
+        options: [
+          'Single, no dependants',
+          'Married / partnered, no children',
+          'Married / partnered with children',
+          'Single parent with children',
+          'Supporting elderly parents in SA',
+        ],
+      },
+      {
+        id: 'situation.current_employment',
+        version: 1,
+        label: 'Current employment status',
+        type: 'select',
+        options: [
+          'Employed full-time in my field',
+          'Employed in a different field',
+          'Self-employed / contracting',
+          'Studying / recently qualified',
+          'Unemployed',
+        ],
+      },
+    ],
+  },
+  {
     slug: 'qualifications',
     title: 'Qualifications',
     fields: [
@@ -121,7 +153,7 @@ export const TEACHING_STEPS: StepDef[] = [
         version: 1,
         label: 'Passport status',
         type: 'select',
-        options: ['Valid — 2+ years remaining', 'Valid — under 2 years remaining', 'Expired', 'No passport'],
+        options: ['Valid, 2+ years remaining', 'Valid, under 2 years remaining', 'Expired', 'No passport'],
       },
       {
         id: 'documents.police_clearance',

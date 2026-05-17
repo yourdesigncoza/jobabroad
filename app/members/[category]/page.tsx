@@ -5,9 +5,12 @@ import PathwaySearch from '@/components/PathwaySearch';
 import TableOfContents from '@/components/TableOfContents';
 import StickyNav from '@/components/StickyNav';
 import AccessBadge from '@/components/AccessBadge';
+import HashScroller from '@/components/HashScroller';
 import { getPathwayContent } from '@/lib/pathway-content';
 import { CATEGORIES } from '@/lib/categories';
 import { requireProfile } from '@/lib/auth-guards';
+import { createSupabaseServerClient } from '@/lib/supabase/server';
+import { getLatestAssessment } from '@/lib/assessments/assessment-client';
 
 export default async function MembersCategoryPage({
   params,
@@ -65,9 +68,41 @@ export default async function MembersCategoryPage({
   const pathway = getPathwayContent(category);
   const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '';
 
+  // Paid users have self-service tools (download report, book call, follow-up form);
+  // hide WhatsApp CTAs so they don't route back into manual handoff.
+  const ssr = await createSupabaseServerClient();
+  const { data: tierRow } = await ssr
+    .from('profiles')
+    .select('tier')
+    .eq('user_id', user.id)
+    .single();
+  const isPaid = tierRow?.tier === 'paid';
+  const hideWhatsApp = isPaid;
+
+  // CTA state — drives both the sidebar pill and the in-page card:
+  //   not submitted        → "Start Eligibility Check"  → /assessment
+  //   submitted + free     → "Go Premium"               → /score (paywall)
+  //   submitted + paid     → "View Your Report"         → /score (paid view)
+  const latest = await getLatestAssessment(user.id);
+  const assessmentSubmitted = latest?.status === 'submitted' && latest.category === category;
+  const ctaHref = !assessmentSubmitted
+    ? `/members/${category}/assessment`
+    : `/members/${category}/score`;
+  const ctaLabel = !assessmentSubmitted
+    ? 'Eligibility Check'
+    : isPaid
+      ? 'View Your Report'
+      : 'Go Premium';
+  const ctaBlurb = !assessmentSubmitted
+    ? undefined
+    : isPaid
+      ? undefined
+      : 'Unlock your full personalised report, a 15-min review call, and 5 follow-up questions for R495.';
+
   return (
     <main className="min-h-screen" style={{ backgroundColor: '#F8F5F0' }}>
-      <StickyNav items={pathway?.toc ?? []} whatsappNumber={whatsappNumber} isSignedIn />
+      <HashScroller />
+      <StickyNav items={pathway?.toc ?? []} whatsappNumber={whatsappNumber} isSignedIn hideWhatsApp={hideWhatsApp} />
 
       <div className="max-w-6xl mx-auto px-4 lg:px-8 py-10">
         {pathway ? (
@@ -78,7 +113,9 @@ export default async function MembersCategoryPage({
             >
               <TableOfContents
                 items={pathway.toc}
-                assessmentHref={`/members/${category}/assessment`}
+                ctaHref={ctaHref}
+                ctaLabel={ctaLabel}
+                ctaBlurb={ctaBlurb}
               />
             </aside>
 
@@ -111,6 +148,7 @@ export default async function MembersCategoryPage({
               <PathwaySearch
                 whatsappNumber={whatsappNumber}
                 category={category}
+                hideWhatsApp={hideWhatsApp}
               />
 
               {/* sanitizeHtml in getPathwayContent ensures pathway.html is safe to render. */}
@@ -131,7 +169,7 @@ export default async function MembersCategoryPage({
                 dangerouslySetInnerHTML={{ __html: pathway.html }}
               />
 
-              <AssessmentCTA category={category} isSubmitted={false} />
+              <AssessmentCTA category={category} isSubmitted={assessmentSubmitted} isPaid={isPaid} />
 
               <footer
                 className="border-t pt-6 pb-8 flex flex-col gap-4 font-body text-xs leading-relaxed"
@@ -155,7 +193,7 @@ export default async function MembersCategoryPage({
               createdAt={user.created_at ?? null}
             />
             <ComingSoon category={category} whatsappNumber={whatsappNumber} />
-            <AssessmentCTA category={category} isSubmitted={false} />
+            <AssessmentCTA category={category} isSubmitted={assessmentSubmitted} isPaid={isPaid} />
           </div>
         )}
       </div>

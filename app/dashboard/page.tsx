@@ -2,8 +2,10 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import SiteNav from '@/components/SiteNav';
 import SiteFooter from '@/components/SiteFooter';
+import FollowUpForm from '@/components/FollowUpForm';
 import { requireSession } from '@/lib/auth-guards';
 import { CATEGORIES } from '@/lib/categories';
+import { getCachedReportPath } from '@/lib/reports/generator';
 
 export const dynamic = 'force-dynamic';
 
@@ -88,7 +90,7 @@ export default async function DashboardPage() {
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('name, category')
+    .select('name, category, tier, paid_email_credits')
     .eq('user_id', user.id)
     .single();
 
@@ -96,6 +98,12 @@ export default async function DashboardPage() {
 
   const categoryLabel =
     CATEGORIES.find((c) => c.id === profile.category)?.label ?? profile.category;
+  const isPaid = profile.tier === 'paid';
+  const bookHref = `/members/${profile.category}/book`;
+  // The PDF only exists AFTER the post-call admin action generates it. Until
+  // then, the dashboard shows a "ready after your call" state instead of a
+  // download link.
+  const reportReady = isPaid ? Boolean(await getCachedReportPath(user.id)) : false;
 
   return (
     <main className="min-h-screen" style={{ backgroundColor: '#F8F5F0' }}>
@@ -127,6 +135,97 @@ export default async function DashboardPage() {
             <strong style={{ color: '#1B4D3E' }}>{categoryLabel}</strong>
           </p>
         </div>
+
+        {isPaid && (
+          <section
+            className="rounded-2xl p-6 mb-10"
+            style={{ backgroundColor: '#FFFFFF', border: '1.5px solid #EDE8E0' }}
+          >
+            <div className="flex flex-col gap-1 mb-6">
+              <div className="flex items-center gap-2">
+                <div className="w-6 h-px" style={{ backgroundColor: '#1B4D3E' }} />
+                <span
+                  className="font-display text-xs font-semibold uppercase tracking-wider"
+                  style={{ color: '#1B4D3E' }}
+                >
+                  Paid tier
+                </span>
+              </div>
+              <h2
+                className="font-display font-bold uppercase text-xl"
+                style={{ color: '#2C2C2C' }}
+              >
+                Your full report &amp; call
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+              <Link
+                href={bookHref}
+                className="block rounded-xl p-5 transition-shadow hover:shadow-md"
+                style={{ backgroundColor: '#1B4D3E', color: '#F8F5F0' }}
+              >
+                <div className="flex flex-col gap-1">
+                  <span className="font-display font-bold uppercase tracking-wide text-sm">
+                    Book your 15-min call
+                  </span>
+                  <span
+                    className="font-body text-xs"
+                    style={{ color: 'rgba(248,245,240,0.75)' }}
+                  >
+                    Pick a slot that suits you
+                  </span>
+                </div>
+              </Link>
+              {reportReady ? (
+                <a
+                  href="/api/reports/download"
+                  className="block rounded-xl p-5 transition-shadow hover:shadow-md"
+                  style={{
+                    backgroundColor: '#FFFFFF',
+                    border: '1.5px solid #1B4D3E',
+                    color: '#1B4D3E',
+                  }}
+                >
+                  <div className="flex flex-col gap-1">
+                    <span className="font-display font-bold uppercase tracking-wide text-sm">
+                      Download report (PDF)
+                    </span>
+                    <span className="font-body text-xs" style={{ color: '#6B6B6B' }}>
+                      Your full personalised assessment
+                    </span>
+                  </div>
+                </a>
+              ) : (
+                <div
+                  className="block rounded-xl p-5"
+                  style={{
+                    backgroundColor: '#F8F5F0',
+                    border: '1.5px dashed #C9A84C',
+                    color: '#6B6B6B',
+                  }}
+                >
+                  <div className="flex flex-col gap-1">
+                    <span
+                      className="font-display font-bold uppercase tracking-wide text-sm"
+                      style={{ color: '#2C2C2C' }}
+                    >
+                      Report ready after your call
+                    </span>
+                    <span className="font-body text-xs">
+                      We write your personalised report right after we speak, then email it here.
+                    </span>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <FollowUpForm
+              credits={profile.paid_email_credits ?? 0}
+              bookHref={bookHref}
+            />
+          </section>
+        )}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10">
           <Card

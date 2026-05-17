@@ -7,9 +7,11 @@ interface Props {
   items: TocItem[];
   whatsappNumber: string;
   isSignedIn?: boolean;
+  /** Hide the "WhatsApp us" CTA — set true for paid users. */
+  hideWhatsApp?: boolean;
 }
 
-export default function StickyNav({ items, whatsappNumber, isSignedIn = false }: Props) {
+export default function StickyNav({ items, whatsappNumber, isSignedIn = false, hideWhatsApp = false }: Props) {
   const [open, setOpen] = useState(false);
   const [progress, setProgress] = useState(0);
   const [activeId, setActiveId] = useState('');
@@ -77,15 +79,17 @@ export default function StickyNav({ items, whatsappNumber, isSignedIn = false }:
               </form>
             </>
           )}
-          <a
-            href={`https://wa.me/${whatsappNumber}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-body text-xs font-semibold rounded-lg px-3 py-1.5"
-            style={{ backgroundColor: '#C9A84C', color: '#FFFFFF' }}
-          >
-            WhatsApp us
-          </a>
+          {!hideWhatsApp && (
+            <a
+              href={`https://wa.me/${whatsappNumber}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-body text-xs font-semibold rounded-lg px-3 py-1.5"
+              style={{ backgroundColor: '#C9A84C', color: '#FFFFFF' }}
+            >
+              WhatsApp us
+            </a>
+          )}
         </div>
       </div>
 

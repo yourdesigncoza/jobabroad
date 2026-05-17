@@ -1,0 +1,227 @@
+{
+  "category": "teaching",
+  "version": 1,
+  "bands": { "high_blockers_lt": 40, "needs_prep_lt": 70 },
+  "dimensions": [
+    {
+      "key": "credentials",
+      "label": "Credentials & Registration",
+      "weight": 0.30,
+      "rules": [
+        {
+          "field_id": "qualifications.highest_qualification",
+          "type": "match",
+          "match": {
+            "PGCE": 100,
+            "B.Ed": 100,
+            "B.Ed Honours": 100,
+            "M.Ed / Masters": 100,
+            "PhD": 100,
+            "Other": 40
+          },
+          "reason": {
+            "PGCE": "PGCE qualification is recognised internationally.",
+            "B.Ed": "B.Ed qualification is recognised internationally.",
+            "B.Ed Honours": "B.Ed Honours is well-regarded internationally.",
+            "M.Ed / Masters": "Masters-level qualification opens senior posts.",
+            "PhD": "Doctoral qualification, strong international applicant.",
+            "Other": "Non-standard qualification, may need credential evaluation."
+          }
+        },
+        {
+          "field_id": "registration.sace_status",
+          "type": "match",
+          "match": {
+            "Active (full)": 100,
+            "Provisional": 60,
+            "Pending renewal": 50,
+            "Lapsed": 25,
+            "Not registered": 0
+          },
+          "reason": {
+            "Active (full)": "Active SACE registration, most overseas pathways open.",
+            "Provisional": "Provisional SACE, some pathways require full registration.",
+            "Pending renewal": "SACE renewal in progress, clear up before applying.",
+            "Lapsed": "SACE lapsed, renew before applying overseas.",
+            "Not registered": "Not SACE-registered, most overseas pathways require it."
+          }
+        },
+        {
+          "field_id": "registration.qts_started",
+          "type": "match",
+          "match": {
+            "Completed": 100,
+            "In progress": 60,
+            "None started": 30
+          },
+          "reason": {
+            "Completed": "UK QTS / iQTS completed, UK roles open.",
+            "In progress": "QTS in progress, keep momentum.",
+            "None started": "No overseas teacher registration yet, required for UK and some Middle East roles."
+          }
+        }
+      ]
+    },
+    {
+      "key": "experience",
+      "label": "Teaching Experience",
+      "weight": 0.20,
+      "rules": [
+        {
+          "field_id": "experience.years_teaching",
+          "type": "range",
+          "ranges": [
+            { "lt": 2, "score": 30, "reason": "Under 2 years post-qualifying, most international schools require 2+ years." },
+            { "lt": 5, "score": 70, "reason": "2–5 years experience, meets the bar for most overseas roles." },
+            { "lt": 10, "score": 90, "reason": "5–10 years experience, strong applicant for competitive posts." },
+            { "score": 100, "reason": "10+ years experience, senior-level applicant." }
+          ]
+        },
+        {
+          "field_id": "experience.taught_abroad",
+          "type": "match",
+          "match": { "true": 100, "false": 50 },
+          "reason": {
+            "true": "Prior overseas experience significantly improves applications.",
+            "false": "No overseas experience yet, workable but agencies favour returners."
+          }
+        }
+      ]
+    },
+    {
+      "key": "language",
+      "label": "Language",
+      "weight": 0.15,
+      "rules": [
+        {
+          "field_id": "readiness.english_rating",
+          "type": "match",
+          "match": {
+            "Native / first language": 100,
+            "Fluent": 90,
+            "Conversational": 50,
+            "Basic": 20
+          },
+          "reason": {
+            "Native / first language": "English as first language, meets UK / Middle East language bar.",
+            "Fluent": "Fluent English, typically sufficient for most destinations.",
+            "Conversational": "Conversational level, most international roles require IELTS/TOEFL evidence.",
+            "Basic": "Basic English, significant blocker for English-medium teaching roles."
+          }
+        },
+        {
+          "field_id": "readiness.english_test",
+          "type": "match",
+          "match": {
+            "IELTS": 100,
+            "TOEFL": 100,
+            "Other / exempt": 80,
+            "Not yet": 30
+          },
+          "reason": {
+            "IELTS": "IELTS taken, accepted by most countries.",
+            "TOEFL": "TOEFL taken, accepted by most international employers.",
+            "Other / exempt": "Alternative qualification or exemption noted, confirm acceptance with target country.",
+            "Not yet": "No English test on record, UK / Middle East roles will require one."
+          }
+        }
+      ]
+    },
+    {
+      "key": "documents",
+      "label": "Documents & Finances",
+      "weight": 0.20,
+      "rules": [
+        {
+          "field_id": "documents.passport_status",
+          "type": "match",
+          "match": {
+            "Valid, 2+ years remaining": 100,
+            "Valid, under 2 years remaining": 50,
+            "Expired": 10,
+            "No passport": 0
+          },
+          "reason": {
+            "Valid, 2+ years remaining": "Passport valid, meets typical visa requirements.",
+            "Valid, under 2 years remaining": "Passport valid but renew soon, most work visas need 2+ years remaining.",
+            "Expired": "Passport expired, renew before applying.",
+            "No passport": "No passport, apply immediately; this is the first blocker."
+          }
+        },
+        {
+          "field_id": "documents.police_clearance",
+          "type": "match",
+          "match": {
+            "Current (within 6 months)": 100,
+            "Older than 6 months": 40,
+            "None": 0
+          },
+          "reason": {
+            "Current (within 6 months)": "Current police clearance, meets visa-ready bar.",
+            "Older than 6 months": "Police clearance older than 6 months, most visa applications require a fresh one.",
+            "None": "No police clearance, apply now; SAPS turnaround is typically 4–8 weeks."
+          }
+        },
+        {
+          "field_id": "documents.available_capital",
+          "type": "match",
+          "match": {
+            "Under R30k": 20,
+            "R30k – R70k": 50,
+            "R70k – R150k": 80,
+            "R150k+": 100,
+            "Prefer not to say": 50
+          },
+          "reason": {
+            "Under R30k": "Below the typical R30–70k pre-departure budget.",
+            "R30k – R70k": "Covers basic pre-departure costs but tight for family relocation.",
+            "R70k – R150k": "Comfortable pre-departure budget for most destinations.",
+            "R150k+": "Strong financial position for relocation.",
+            "Prefer not to say": "Budget not declared, share privately with us if it shapes your options."
+          }
+        }
+      ]
+    },
+    {
+      "key": "readiness",
+      "label": "Family & Timing",
+      "weight": 0.15,
+      "rules": [
+        {
+          "field_id": "situation.family_status",
+          "type": "match",
+          "match": {
+            "Single, no dependants": 100,
+            "Married / partnered, no children": 80,
+            "Married / partnered with children": 60,
+            "Single parent with children": 40,
+            "Supporting elderly parents in SA": 50
+          },
+          "reason": {
+            "Single, no dependants": "Single, easiest profile to relocate; no dependant visas needed.",
+            "Married / partnered, no children": "Partnered without children, partner visa adds a step but workable.",
+            "Married / partnered with children": "Relocating with children, dependant visas + schooling add complexity and cost.",
+            "Single parent with children": "Single parent, dependant visa rules vary by country; specialist guidance needed.",
+            "Supporting elderly parents in SA": "Caring for parents in SA, consider closer destinations or shorter contracts."
+          }
+        },
+        {
+          "field_id": "readiness.target_timeline",
+          "type": "match",
+          "match": {
+            "As soon as possible": 100,
+            "Within 6 months": 90,
+            "Within 1 year": 70,
+            "Just exploring": 40
+          },
+          "reason": {
+            "As soon as possible": "ASAP timeline, start applications now; recruitment cycles align.",
+            "Within 6 months": "6-month horizon, realistic for most destinations once documents are ready.",
+            "Within 1 year": "1-year horizon, ideal for credential preparation and visa processing.",
+            "Just exploring": "Exploring only, no urgency means you can plan strategically."
+          }
+        }
+      ]
+    }
+  ]
+}
