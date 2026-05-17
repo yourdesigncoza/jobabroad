@@ -6,6 +6,7 @@ import FollowUpForm from '@/components/FollowUpForm';
 import { requireSession } from '@/lib/auth-guards';
 import { CATEGORIES } from '@/lib/categories';
 import { getCachedReportPath } from '@/lib/reports/generator';
+import { getLatestAssessment } from '@/lib/assessments/assessment-client';
 
 export const dynamic = 'force-dynamic';
 
@@ -21,15 +22,31 @@ type CardProps = {
   title: string;
   body: string;
   accent?: string;
+  /** Open in a new tab. Used for reference cards (recruiters, scam warnings)
+   *  so the dashboard stays open behind them. */
+  newTab?: boolean;
+  /** Optional corner badge (e.g. "Start Here") drawn top-left. */
+  badge?: { label: string; tone?: 'orange' | 'green' };
 };
 
-function Card({ href, title, body, accent = '#1B4D3E' }: CardProps) {
+function Card({ href, title, body, accent = '#1B4D3E', newTab, badge }: CardProps) {
+  const badgeColour = badge?.tone === 'green' ? '#1B4D3E' : '#ff751f';
   return (
     <Link
       href={href}
-      className="block rounded-2xl p-6 transition-shadow hover:shadow-md"
+      target={newTab ? '_blank' : undefined}
+      rel={newTab ? 'noopener noreferrer' : undefined}
+      className="relative block rounded-2xl p-6 transition-shadow hover:shadow-md"
       style={{ backgroundColor: '#FFFFFF', border: '1.5px solid #EDE8E0' }}
     >
+      {badge && (
+        <span
+          className="absolute -top-2 left-4 font-display font-bold uppercase text-[0.65rem] tracking-[0.15em] px-3 py-1 rounded-full"
+          style={{ backgroundColor: badgeColour, color: '#FFFFFF' }}
+        >
+          {badge.label}
+        </span>
+      )}
       <div className="flex flex-col gap-2">
         <div className="w-8 h-px" style={{ backgroundColor: accent }} aria-hidden />
         <h2
@@ -104,6 +121,14 @@ export default async function DashboardPage() {
   // then, the dashboard shows a "ready after your call" state instead of a
   // download link.
   const reportReady = isPaid ? Boolean(await getCachedReportPath(user.id)) : false;
+
+  // If the user has already submitted the assessment, swap the "Eligibility
+  // assessment" card to "View your score" pointing at /score. Form -> result
+  // round-trip so users can return to their result rather than redo the form.
+  const latestAssessment = await getLatestAssessment(user.id);
+  const assessmentSubmitted =
+    latestAssessment?.status === 'submitted' &&
+    latestAssessment.category === profile.category;
 
   return (
     <main className="min-h-screen" style={{ backgroundColor: '#F8F5F0' }}>
@@ -232,23 +257,35 @@ export default async function DashboardPage() {
             href={`/members/${profile.category}`}
             title={`${categoryLabel} guide`}
             body="Field-tested pathway: countries, documents, costs, visa routes."
+            badge={{ label: 'Start here' }}
           />
-          <Card
-            href={`/members/${profile.category}/assessment`}
-            title="Eligibility assessment"
-            body="Find out what blockers stand between you and a job abroad."
-          />
+          {assessmentSubmitted ? (
+            <Card
+              href={`/members/${profile.category}/score`}
+              title="View your score"
+              body="See your eligibility band, what's working, and your biggest blocker. Retake the assessment anytime."
+              accent="#ff751f"
+            />
+          ) : (
+            <Card
+              href={`/members/${profile.category}/assessment`}
+              title="Eligibility assessment"
+              body="Find out what blockers stand between you and a job abroad."
+            />
+          )}
           <Card
             href="/recruiters"
             title="Vetted recruiters"
             body="Browse legitimate recruiters and placement agencies."
             accent="#C9A84C"
+            newTab
           />
           <Card
             href="/scam-warnings"
             title="Scam warnings"
             body="Patterns to avoid — protect yourself before you pay anyone."
             accent="#ff751f"
+            newTab
           />
         </div>
 
