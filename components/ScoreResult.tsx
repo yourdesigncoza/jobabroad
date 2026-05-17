@@ -282,7 +282,8 @@ export default function ScoreResult({
           </div>
         ) : (
           <div
-            className="rounded-2xl p-6 sm:p-8 flex flex-col gap-4"
+            id="premium"
+            className="rounded-2xl p-6 sm:p-8 flex flex-col gap-4 scroll-mt-24"
             style={{ backgroundColor: '#1B4D3E', color: '#F8F5F0' }}
           >
             <h2 className="font-display font-bold uppercase tracking-wide text-lg">

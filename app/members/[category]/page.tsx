@@ -85,9 +85,14 @@ export default async function MembersCategoryPage({
   //   submitted + paid     → "View Your Report"         → /score (paid view)
   const latest = await getLatestAssessment(user.id);
   const assessmentSubmitted = latest?.status === 'submitted' && latest.category === category;
+  // For the "Go Premium" state, deep-link straight to the upsell anchor on
+  // /score so the user lands at the offer card rather than having to scroll
+  // past the band, dim bars, and narratives first.
   const ctaHref = !assessmentSubmitted
     ? `/members/${category}/assessment`
-    : `/members/${category}/score`;
+    : isPaid
+      ? `/members/${category}/score`
+      : `/members/${category}/score#premium`;
   const ctaLabel = !assessmentSubmitted
     ? 'Eligibility Check'
     : isPaid
