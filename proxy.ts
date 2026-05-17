@@ -2,10 +2,12 @@ import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
 const AUTH_REQUIRED = [/^\/dashboard(\/|$)/, /^\/members\//];
+// /forgot-password is intentionally NOT in this list: signed-in users have
+// legitimate reasons to reset (forgot old password, want to rotate, etc).
+// The dashboard surfaces a "Reset password" link that lands here.
 const AUTH_FORBIDDEN_IF_SIGNED_IN = [
   /^\/login(\/|$)/,
   /^\/register(\/|$)/,
-  /^\/forgot-password(\/|$)/,
 ];
 
 export async function proxy(request: NextRequest) {
