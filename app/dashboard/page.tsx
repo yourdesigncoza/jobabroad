@@ -7,6 +7,10 @@ import { requireSession } from '@/lib/auth-guards';
 import { CATEGORIES } from '@/lib/categories';
 import { getCachedReportPath } from '@/lib/reports/generator';
 import { getLatestAssessment } from '@/lib/assessments/assessment-client';
+import { loadRubric, calculateScore } from '@/lib/scoring';
+import { assessmentDataSchema } from '@/lib/assessments/schemas/assessment';
+import PremiumUpsell from '@/components/PremiumUpsell';
+import type { Band } from '@/lib/scoring/types';
 
 export const dynamic = 'force-dynamic';
 
@@ -130,6 +134,23 @@ export default async function DashboardPage() {
     latestAssessment?.status === 'submitted' &&
     latestAssessment.category === profile.category;
 
+  // Surface the premium upsell on the dashboard once the user has scored,
+  // so the next step is visible without forcing a /score revisit. Compute
+  // the band so the copy speaks to their actual situation (rule-based,
+  // sub-100ms — no LLM call). Hide for paid users; they've already bought.
+  let upsellBand: Band | null = null;
+  if (assessmentSubmitted && !isPaid && latestAssessment) {
+    const rubric = await loadRubric(profile.category);
+    if (rubric) {
+      try {
+        const answers = assessmentDataSchema.parse(latestAssessment.data);
+        upsellBand = calculateScore(answers, rubric).band;
+      } catch {
+        // Schema mismatch (older draft format etc) — just skip the upsell.
+      }
+    }
+  }
+
   return (
     <main className="min-h-screen" style={{ backgroundColor: '#F8F5F0' }}>
       <SiteNav />
@@ -156,6 +177,15 @@ export default async function DashboardPage() {
             <strong style={{ color: '#1B4D3E' }}>{categoryLabel}</strong>
           </p>
         </div>
+
+        {/* Premium upsell — only for users who've completed the eligibility
+            check and haven't paid yet. Band-aware copy so the pitch speaks
+            to their actual situation. */}
+        {upsellBand && (
+          <div className="mb-10">
+            <PremiumUpsell band={upsellBand} />
+          </div>
+        )}
 
         {isPaid && (
           <section
