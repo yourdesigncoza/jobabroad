@@ -5,6 +5,7 @@ import { createClient } from '@supabase/supabase-js';
 import OpenAI from 'openai';
 import { calculateScore, loadRubric } from '@/lib/scoring';
 import type { DimensionResult, ScoreResult } from '@/lib/scoring/types';
+import { generateWhatsWorking, generateWhatsBlocking } from '@/lib/scoring/narratives';
 import { assessmentDataSchema } from '@/lib/assessments/schemas/assessment';
 import { CATEGORIES, type CategoryId } from '@/lib/categories';
 import { getPremiumRecruiters } from '@/lib/recruiters';
@@ -74,107 +75,8 @@ function tightenSnippet(text: string, max = 220): string {
   return s.slice(0, max).replace(/\s\S*$/, '') + '…';
 }
 
-function topDims(score: ScoreResult, n = 2): DimensionResult[] {
-  return [...score.dimensions].sort((a, b) => b.score - a.score).slice(0, n);
-}
 function bottomDims(score: ScoreResult, n = 2): DimensionResult[] {
   return [...score.dimensions].sort((a, b) => a.score - b.score).slice(0, n);
-}
-
-async function generateWhatsWorking(score: ScoreResult, category: string): Promise<string> {
-  const top = topDims(score, 2);
-  const findings = top.map((d) => ({
-    dimension: d.label,
-    score: d.score,
-    top_rules: [...d.contributing]
-      .sort((a, b) => b.points - a.points)
-      .slice(0, 2)
-      .map((c) => c.reason),
-  }));
-
-  const fallback = top
-    .map((d) => `${d.label}: ${d.contributing[0]?.reason ?? ''}`)
-    .join(' ');
-
-  if (!process.env.OPENAI_API_KEY) return fallback;
-
-  try {
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
-      temperature: 0.2,
-      max_tokens: 160,
-      response_format: { type: 'json_object' },
-      messages: [
-        {
-          role: 'system',
-          content: `You write one short paragraph (max 80 words, single paragraph) for a South African work-abroad assessment report. Name the dimensions explicitly. Cite the rule reasons near-verbatim, but smooth them into natural prose.
-
-Write exactly like a natural, smart human having a conversation. Be clear, concise, and direct. Vary your sentence lengths. Never, under any circumstances, use em dashes (—). Instead, use commas, periods, parentheses, or colons.
-
-No hedging ("might", "could", "should consider"). No new facts. Return JSON: { "paragraph": "..." }`,
-        },
-        {
-          role: 'user',
-          content: JSON.stringify({ category, top_dimensions: findings }),
-        },
-      ],
-    });
-    const raw = completion.choices[0]?.message?.content?.trim() ?? '';
-    const parsed = JSON.parse(raw) as { paragraph?: unknown };
-    return typeof parsed.paragraph === 'string' && parsed.paragraph.trim()
-      ? parsed.paragraph.trim()
-      : fallback;
-  } catch {
-    return fallback;
-  }
-}
-
-async function generateWhatsBlocking(score: ScoreResult, category: string): Promise<string> {
-  const bottom = bottomDims(score, 2);
-  const findings = bottom.map((d) => ({
-    dimension: d.label,
-    score: d.score,
-    worst_rules: [...d.contributing]
-      .sort((a, b) => a.points - b.points)
-      .slice(0, 2)
-      .map((c) => c.reason),
-  }));
-
-  const fallback = bottom
-    .map((d) => `${d.label}: ${d.contributing[0]?.reason ?? ''}`)
-    .join(' ');
-
-  if (!process.env.OPENAI_API_KEY) return fallback;
-
-  try {
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
-      temperature: 0.2,
-      max_tokens: 160,
-      response_format: { type: 'json_object' },
-      messages: [
-        {
-          role: 'system',
-          content: `You write one short paragraph (max 80 words, single paragraph) for a South African work-abroad assessment report. Describe the biggest blockers, naming the dimensions explicitly. Cite rule reasons near-verbatim, but smooth them into natural prose.
-
-Write exactly like a natural, smart human having a conversation. Be clear, concise, and direct. Vary your sentence lengths. Never, under any circumstances, use em dashes (—). Instead, use commas, periods, parentheses, or colons.
-
-No hedging ("might", "could", "should consider"). No new facts. Return JSON: { "paragraph": "..." }`,
-        },
-        {
-          role: 'user',
-          content: JSON.stringify({ category, bottom_dimensions: findings }),
-        },
-      ],
-    });
-    const raw = completion.choices[0]?.message?.content?.trim() ?? '';
-    const parsed = JSON.parse(raw) as { paragraph?: unknown };
-    return typeof parsed.paragraph === 'string' && parsed.paragraph.trim()
-      ? parsed.paragraph.trim()
-      : fallback;
-  } catch {
-    return fallback;
-  }
 }
 
 async function generateNextActions(
