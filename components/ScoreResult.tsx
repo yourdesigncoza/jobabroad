@@ -96,15 +96,17 @@ export default function ScoreResult({
     setCheckoutError(null);
     try {
       const r = await fetch('/api/payments/checkout', { method: 'POST' });
-      const j = (await r.json()) as { checkoutUrl?: string; error?: string };
+      const j = (await r.json()) as { checkoutUrl?: string; error?: string; detail?: string };
       if (!r.ok || !j.checkoutUrl) {
-        setCheckoutError(j.error ?? 'checkout_failed');
+        // Prefer the human-readable `detail` from the server. Fallback to the
+        // error code only if no detail was sent.
+        setCheckoutError(j.detail ?? j.error ?? "We couldn't start checkout. Please try again.");
         setCheckingOut(false);
         return;
       }
       window.location.href = j.checkoutUrl;
     } catch {
-      setCheckoutError('network_error');
+      setCheckoutError("Couldn't reach the payment provider. Check your connection and try again.");
       setCheckingOut(false);
     }
   }
@@ -342,7 +344,7 @@ export default function ScoreResult({
             </button>
             {checkoutError && (
               <p className="font-body text-xs" style={{ color: '#FFD1B8' }}>
-                Couldn&apos;t start checkout: {checkoutError}. Please try again.
+                {checkoutError}
               </p>
             )}
             <p className="font-body text-xs" style={{ color: 'rgba(248,245,240,0.65)' }}>
