@@ -1,8 +1,9 @@
-// One-shot fixture render: exercises the step-4 template branches
-// (callNotes section + trusted-partners block) without going through OpenAI
-// or Supabase. Partners flow through the live getTrustedPartnersForBuyer
-// matcher so the fixture also serves as an integration smoke test of the
-// trusted-partner matching pipeline. Writes a PDF to docs/prompt-tests/.
+// One-shot fixture render: exercises the post-Phase-2 PDF template (no call
+// notes; 5-7 next actions; red-flags block; trusted-partners cards + every-
+// page footer strip) without going through OpenAI or Supabase. Partners flow
+// through the live getTrustedPartnersForBuyer matcher so the fixture also
+// serves as an integration smoke test of the trusted-partner matching
+// pipeline. Writes a PDF to docs/prompt-tests/.
 
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -12,6 +13,7 @@ import type { ReactElement } from 'react';
 import { ReportTemplate } from '@/lib/reports/pdf-template';
 import type { ReportData } from '@/lib/reports/types';
 import { getTrustedPartnersForBuyer } from '@/lib/recruiters';
+import { getRedFlagsForCategory } from '@/lib/reports/red-flags';
 
 // Sarah's fixture buyer is a SA teacher targeting UK + UAE. Apostil serves
 // both, so the matcher should surface it in the partners block.
@@ -54,11 +56,23 @@ const data: ReportData = {
   nextActions: [
     {
       title: 'Renew SAPS police clearance now',
-      body: 'Apply online via SAPS eServices. 8 to 10 week turnaround so start this week, not after the rest is sorted.',
+      body: 'Apply online via SAPS eServices (saps.gov.za/eservices). 8 to 10 week turnaround so start this week, not after the rest is sorted. Fee is R150. Once you upload it to your UK Skilled Worker visa application, the Home Office accepts it for 6 months from issue date.',
     },
     {
       title: 'Apostille your degree + SACE certificate',
-      body: 'Use a DIRCO-registered concierge (Wednesday batch submissions cut the wait to ~2 weeks). Budget R650 per document.',
+      body: 'Use a DIRCO-registered concierge such as Apostil.co.za (Wednesday batch submissions cut the wait to roughly 2 weeks vs the 4-6 week DIRCO queue). Budget R650 per document; you need both your degree transcript and your SACE registration certificate.',
+    },
+    {
+      title: 'Apply for iQTS via the TRA',
+      body: 'Submit your application to the UK Teaching Regulation Agency (gov.uk/guidance/qualified-teacher-status-qts) using your B.Ed + 2+ years post-qualifying teaching. Fee £169, decision in 4 months. iQTS converts to full QTS once you have 2 years UK teaching.',
+    },
+    {
+      title: 'Format your CV to UK standards',
+      body: 'Strip the photo, ID number, marital status, and references. Lead with a 3-line personal statement, then most-recent-first roles with measurable outcomes (e.g. "Lifted Gr 11 Maths pass rate from 64% to 81% over 3 years"). Keep it to 2 pages.',
+    },
+    {
+      title: 'Get on TES Jobs and Eteach',
+      body: 'Both are free for candidates and cover roughly 80% of advertised UK teaching vacancies. Set alerts for "Secondary Maths" in your target counties. Apply to 3-5 schools per week — UK schools recruit on rolling intake, not just September.',
     },
   ],
   contacts: [
@@ -75,15 +89,7 @@ const data: ReportData = {
       url: 'https://jobabroad.co.za/members/teaching#4-visa-route-overview',
     },
   ],
-  callNotes: `On the call you mentioned you'd like to target the UK by September 2026, with secondary maths roles in mind. You also flagged that your husband would join you and the kids would need school places.
-
-Action items we agreed on:
-- You'll start the SAPS clearance this week (use the Cape Town Civic Centre office, faster than online)
-- You'll get a quote from Apostil.co.za for the apostille batch
-- We'll send you a UK-format CV template separately
-- You'll book a follow-up call in 4 weeks to review applications
-
-One concern raised: your maths PGCE is from 2008 — some UK academies prefer "recent" PGCE (last 10 years). We discussed framing your CPD and your IB workshop attendance to bridge that perception.`,
+  redFlags: getRedFlagsForCategory('teaching'),
   partners: livePartners,
 };
 

@@ -170,20 +170,11 @@ const styles = StyleSheet.create({
     textDecoration: 'underline',
     marginTop: 2,
   },
-  callNotesBlock: {
-    backgroundColor: '#FFF8E8',
-    borderLeftWidth: 3,
-    borderLeftColor: COLOURS.gold,
-    paddingTop: 10,
-    paddingBottom: 10,
-    paddingLeft: 12,
-    paddingRight: 12,
-    marginBottom: 8,
-  },
-  callNotesPara: {
+  redFlagBullet: {
     fontSize: 10,
     color: COLOURS.ink,
-    marginBottom: 6,
+    marginTop: 4,
+    marginLeft: 2,
   },
   partnerCard: {
     borderWidth: 1,
@@ -258,6 +249,17 @@ const styles = StyleSheet.create({
     color: COLOURS.muted,
     textAlign: 'center',
   },
+  footerPartnerStrip: {
+    position: 'absolute',
+    bottom: 32,
+    left: 40,
+    right: 40,
+    fontSize: 8,
+    color: COLOURS.orange,
+    fontWeight: 'bold',
+    letterSpacing: 0.5,
+    textAlign: 'center',
+  },
 });
 
 const BAND_PRESETS: Record<
@@ -292,6 +294,13 @@ function dimBarColour(score: number): string {
 
 export function ReportTemplate({ data }: { data: ReportData }) {
   const preset = BAND_PRESETS[data.score.band];
+
+  // Compact every-page footer strip — first 3 partner names joined with mid-
+  // dots. Strip is hidden when there are no trusted-partner matches, falling
+  // back to just the page-number footer.
+  const partnerStrip = data.partners?.length
+    ? `Trusted partners: ${data.partners.slice(0, 3).map((p) => p.name).join(' · ')}`
+    : null;
 
   return (
     <Document
@@ -352,42 +361,28 @@ export function ReportTemplate({ data }: { data: ReportData }) {
         <Text style={styles.h2}>What&apos;s blocking you</Text>
         <Text style={styles.para}>{lig(data.whatsBlocking)}</Text>
 
-        {/* From your review call — admin-captured notes from the 15-min call.
-            Preserve paragraph breaks: react-pdf doesn't honour \n inside a
-            single Text, so split on blank lines and render each block. */}
-        {data.callNotes && data.callNotes.trim() && (
-          <>
-            <Text style={styles.h2}>From your review call</Text>
-            <View style={styles.callNotesBlock}>
-              {data.callNotes
-                .trim()
-                .split(/\n\s*\n/)
-                .map((para, i, arr) => (
-                  <Text
-                    key={i}
-                    style={
-                      i === arr.length - 1
-                        ? [styles.callNotesPara, { marginBottom: 0 }]
-                        : styles.callNotesPara
-                    }
-                  >
-                    {lig(para.replace(/\n/g, ' '))}
-                  </Text>
-                ))}
-            </View>
-          </>
-        )}
-
         {/* Next actions */}
         <Text style={styles.h2}>Recommended next actions</Text>
         {data.nextActions.map((a, i) => (
-          <View key={i}>
+          <View key={i} wrap={false}>
             <Text style={styles.actionTitle}>
               {i + 1}. {lig(a.title)}
             </Text>
             <Text style={styles.actionBody}>{lig(a.body)}</Text>
           </View>
         ))}
+
+        {/* Red flags — category-specific scam patterns from red-flags.ts so
+            buyers see them inside the deliverable without bouncing to
+            /scam-warnings. Skipped silently when the category has no flags. */}
+        {data.redFlags.length > 0 && (
+          <View wrap={false}>
+            <Text style={styles.h2}>Red flags to avoid</Text>
+            {data.redFlags.map((flag, i) => (
+              <Text key={i} style={styles.redFlagBullet}>• {lig(flag)}</Text>
+            ))}
+          </View>
+        )}
 
         {/* Contacts & Resources */}
         {data.contacts.length > 0 && (
@@ -437,6 +432,12 @@ export function ReportTemplate({ data }: { data: ReportData }) {
             "Jobabroad is an information service. We don't place candidates, act as recruiters or guarantee employment. Always verify with official sources (SACE, NMC, AHPRA, embassies) before paying anyone or signing contracts.",
           )}
         </Text>
+
+        {partnerStrip && (
+          <Text style={styles.footerPartnerStrip} fixed>
+            {lig(partnerStrip)}
+          </Text>
+        )}
 
         <Text
           style={styles.footer}

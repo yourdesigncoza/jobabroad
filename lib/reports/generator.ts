@@ -9,6 +9,7 @@ import { getOrGenerateNarratives } from '@/lib/scoring/narratives';
 import { assessmentDataSchema } from '@/lib/assessments/schemas/assessment';
 import { CATEGORIES, type CategoryId } from '@/lib/categories';
 import { getTrustedPartnersForBuyer } from '@/lib/recruiters';
+import { getRedFlagsForCategory } from './red-flags';
 import type { AssessmentData } from '@/lib/assessments/schemas/assessment';
 import { ReportTemplate } from './pdf-template';
 import type { ReportData } from './types';
@@ -85,7 +86,9 @@ async function generateNextActions(
   category: string,
   corpus: CorpusChunk[],
 ): Promise<Array<{ title: string; body: string }>> {
-  const bottom = bottomDims(score, 3);
+  // Pull 5 bottom dims so the model has enough specific gaps to reach 5-7
+  // distinct, concrete actions instead of repeating itself.
+  const bottom = bottomDims(score, 5);
   const gaps = bottom.flatMap((d) =>
     [...d.contributing].sort((a, b) => a.points - b.points).slice(0, 1).map((c) => ({
       dimension: d.label,
@@ -93,9 +96,9 @@ async function generateNextActions(
     })),
   );
 
-  const fallback: Array<{ title: string; body: string }> = gaps.slice(0, 3).map((g) => ({
+  const fallback: Array<{ title: string; body: string }> = gaps.slice(0, 5).map((g) => ({
     title: g.dimension,
-    body: g.reason,
+    body: `Address this by working on your ${g.dimension.toLowerCase()}: ${g.reason}`,
   }));
 
   if (!process.env.OPENAI_API_KEY) return fallback;
@@ -104,25 +107,29 @@ async function generateNextActions(
     const completion = await openai.chat.completions.create({
       model: 'gpt-4o-mini',
       temperature: 0.2,
-      max_tokens: 280,
+      max_tokens: 1200,
       response_format: { type: 'json_object' },
       messages: [
         {
           role: 'system',
-          content: `You write exactly 3 concrete next actions for a South African work-abroad report. Each action: { "title": "<= 8 words, imperative", "body": "<= 35 words, plain English, one sentence" }. Each MUST address a specific gap from the input. Ground each in the corpus passages where relevant.
+          content: `You write 5 to 7 concrete next actions for a South African work-abroad report. Each action: { "title": "<= 10 words, imperative", "body": "<= 110 words, plain English, 1-3 sentences" }. Each MUST address a specific gap from the input. Ground each in the corpus passages where relevant.
+
+Each "body" MUST include at least one concrete first step the reader can take today: a URL, a fee in ZAR, a timeline ("4-6 weeks"), a specific document name, or a registration body name (e.g. SACE, AHPRA, NMC). No abstract advice. No "consider doing X" — say "do X by visiting Y, expect Z weeks".
+
+Prioritise actions in order: the lowest-scoring dimension's gap first, then the next, and so on. Skip a gap if the corpus has nothing useful on it.
 
 Write exactly like a natural, smart human having a conversation. Be clear, concise, and direct. Vary your sentence lengths. Never, under any circumstances, use em dashes (—). Instead, use commas, periods, parentheses, or colons.
 
-No hedging. No invented facts. Return JSON: { "actions": [{title, body}, {title, body}, {title, body}] }`,
+No hedging. No invented facts. Return JSON: { "actions": [{title, body}, ...] } with 5 to 7 items.`,
         },
         {
           role: 'user',
           content: JSON.stringify({
             category,
             gaps,
-            corpus: corpus.slice(0, 4).map((c) => ({
+            corpus: corpus.slice(0, 8).map((c) => ({
               heading: c.heading,
-              excerpt: tightenSnippet(c.content, 280),
+              excerpt: tightenSnippet(c.content, 350),
             })),
           }),
         },
@@ -138,8 +145,10 @@ No hedging. No invented facts. Return JSON: { "actions": [{title, body}, {title,
         body: typeof a.body === 'string' ? a.body.trim() : '',
       }))
       .filter((a) => a.title && a.body)
-      .slice(0, 3);
-    return actions.length ? actions : fallback;
+      .slice(0, 7);
+    // Need at least 5 actions to justify the section; below that, use the
+    // fallback which deterministically produces one action per gap.
+    return actions.length >= 5 ? actions : fallback;
   } catch {
     return fallback;
   }
@@ -164,10 +173,10 @@ function pickContactChunks(
     seen.add(c.anchor);
     out.push({
       heading: c.heading,
-      excerpt: tightenSnippet(c.content, 200),
+      excerpt: tightenSnippet(c.content, 400),
       url: `${baseUrl}/members/${category}#${c.anchor}`,
     });
-    if (out.length >= 4) break;
+    if (out.length >= 8) break;
   }
   return out;
 }
@@ -232,22 +241,9 @@ export interface GenerateReportResult {
   categoryLabel: string;
 }
 
-export interface GenerateReportOptions {
-  /**
-   * Post-call notes captured by the admin on /admin/post-call. When provided,
-   * persisted to paid_reports.call_notes and threaded into the PDF template.
-   * When omitted, the existing call_notes row (if any) is preserved so a
-   * re-generation without notes doesn't accidentally wipe an earlier capture.
-   */
-  callNotes?: string;
-}
-
-export async function generateReport(
-  userId: string,
-  opts: GenerateReportOptions = {},
-): Promise<GenerateReportResult> {
+export async function generateReport(userId: string): Promise<GenerateReportResult> {
   try {
-    return await generateReportInner(userId, opts);
+    return await generateReportInner(userId);
   } catch (err) {
     // Write the failure to paid_reports so the dashboard status surfaces it and
     // the user can hit "try again". We still rethrow — callers (webhook
@@ -272,10 +268,7 @@ export async function generateReport(
   }
 }
 
-async function generateReportInner(
-  userId: string,
-  opts: GenerateReportOptions = {},
-): Promise<GenerateReportResult> {
+async function generateReportInner(userId: string): Promise<GenerateReportResult> {
   const sb = admin();
 
   const { data: profile, error: profileErr } = await sb
@@ -327,19 +320,6 @@ async function generateReportInner(
   // be opened months later from any device; dev/preview URLs would 404.
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://jobabroad.co.za';
 
-  // If admin didn't pass notes on this run, fall back to whatever was last
-  // captured (lets the admin re-run the generator without losing context).
-  let callNotes = opts.callNotes?.trim() || undefined;
-  if (!callNotes) {
-    const { data: prior } = await sb
-      .from('paid_reports')
-      .select('call_notes')
-      .eq('user_id', userId)
-      .single();
-    const stored = (prior?.call_notes as string | null | undefined) ?? null;
-    if (stored?.trim()) callNotes = stored.trim();
-  }
-
   const data: ReportData = {
     userName,
     categoryLabel,
@@ -349,7 +329,7 @@ async function generateReportInner(
     whatsBlocking,
     nextActions,
     contacts: pickContactChunks(corpus, category, baseUrl),
-    callNotes,
+    redFlags: getRedFlagsForCategory(category as CategoryId),
     partners: pickPartners(category as CategoryId, answers),
   };
 
@@ -375,9 +355,6 @@ async function generateReportInner(
       generation_status: 'completed',
       generation_completed_at: now,
       generation_error: null,
-      // Persist whatever notes ended up in the report, so re-runs without
-      // fresh notes stay consistent with what's in the PDF on disk.
-      ...(callNotes !== undefined ? { call_notes: callNotes } : {}),
     },
     { onConflict: 'user_id' },
   );

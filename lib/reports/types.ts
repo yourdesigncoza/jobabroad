@@ -15,11 +15,10 @@ export interface ReportData {
     url: string;
   }>;
   /**
-   * Admin's post-call notes — captured on /admin/post-call and persisted on
-   * paid_reports.call_notes. Optional: undefined when the report is generated
-   * before the call (rare, manual override).
+   * Category-specific red flags surfaced from lib/reports/red-flags.ts. Empty
+   * when the category has no curated flags (PDF skips the section).
    */
-  callNotes?: string;
+  redFlags: string[];
   /**
    * Trusted partner recruiters/agencies sourced via getTrustedPartnersForBuyer()
    * — paid retainers, vetted by John, surfaced only in the R495 deliverable.
