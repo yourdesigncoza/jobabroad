@@ -2,7 +2,16 @@ import type { NextConfig } from "next";
 import { withBotId } from "botid/next/config";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  async redirects() {
+    return [
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'jobabroad.co.za' }],
+        destination: 'https://www.jobabroad.co.za/:path*',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default withBotId(nextConfig);

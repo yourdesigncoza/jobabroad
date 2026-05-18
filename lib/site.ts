@@ -1,9 +1,18 @@
 import type { Metadata } from 'next';
 
-/** Canonical origin, no trailing slash. Falls back to the production domain. */
-export const SITE_URL = (process.env.NEXT_PUBLIC_BASE_URL ?? 'https://jobabroad.co.za')
+/**
+ * Canonical origin, no trailing slash. Falls back to the production domain.
+ * The site is served on the www host; canonicals must match or PageRank
+ * splits between www and apex.
+ */
+const RAW_SITE_URL = (process.env.NEXT_PUBLIC_BASE_URL ?? 'https://www.jobabroad.co.za')
   .trim()
   .replace(/\/+$/, '');
+
+export const SITE_URL = RAW_SITE_URL.replace(
+  /^https:\/\/jobabroad\.co\.za(?=$|\/)/,
+  'https://www.jobabroad.co.za',
+);
 
 export const SITE_NAME = 'Jobabroad';
 
