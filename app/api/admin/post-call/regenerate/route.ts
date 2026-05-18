@@ -1,15 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import { waitUntil } from '@vercel/functions';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { createSupabaseServiceClient } from '@/lib/supabase/service';
-import { generateAndNotify } from '@/lib/notifications/report-ready';
+import { generateAndEmail } from '@/lib/reports/generate-and-email';
 
 export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
 export const maxDuration = 300;
 
 const Body = z.object({
   userId: z.string().uuid(),
-  callNotes: z.string().max(20_000).optional(),
 });
 
 function isAdmin(email: string | null | undefined): boolean {
@@ -24,12 +25,17 @@ function isAdmin(email: string | null | undefined): boolean {
   return allow.has(email.toLowerCase());
 }
 
+/**
+ * Admin force-regenerate. Same plumbing as /api/reports/regenerate but
+ * bypasses the user-facing 5-attempt cap — this is the escape hatch for
+ * subtle failures that the user retry button can't shake loose, or for
+ * regenerating after a template/prompt change.
+ */
 export async function POST(req: NextRequest) {
   const ssr = await createSupabaseServerClient();
   const {
     data: { user },
   } = await ssr.auth.getUser();
-  // Surface admin gate as 404 so the endpoint stays invisible to non-admins.
   if (!isAdmin(user?.email)) {
     return NextResponse.json({ error: 'not_found' }, { status: 404 });
   }
@@ -41,8 +47,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'invalid_body' }, { status: 400 });
   }
 
-  // Verify the target user is actually paid — refuse to generate for free users
-  // even though the admin theoretically could trigger anything.
   const svc = createSupabaseServiceClient();
   const { data: profile } = await svc
     .from('profiles')
@@ -53,24 +57,28 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'target_not_paid' }, { status: 409 });
   }
 
-  // Synchronous: admin needs to see success/failure inline, not fire-and-forget.
-  try {
-    await generateAndNotify(body.userId, { callNotes: body.callNotes });
-  } catch (err) {
-    console.error('[admin/post-call/generate]', err);
-    const reason = err instanceof Error ? err.message : 'generation_failed';
-    return NextResponse.json({ error: reason }, { status: 500 });
-  }
-
-  // Read back the timestamp the generator wrote so the client shows accurate state.
   const { data: report } = await svc
     .from('paid_reports')
-    .select('generated_at')
+    .select('generation_attempts')
     .eq('user_id', body.userId)
-    .single();
+    .maybeSingle();
+  const currentAttempts = (report?.generation_attempts as number) ?? 0;
 
-  return NextResponse.json({
-    ok: true,
-    generatedAt: report?.generated_at ?? new Date().toISOString(),
-  });
+  const { error: updateErr } = await svc.from('paid_reports').upsert(
+    {
+      user_id: body.userId,
+      generation_status: 'pending',
+      generation_attempts: currentAttempts + 1,
+      generation_started_at: new Date().toISOString(),
+      generation_error: null,
+    },
+    { onConflict: 'user_id' },
+  );
+  if (updateErr) {
+    console.error('[admin/regenerate] status update failed', updateErr);
+    return NextResponse.json({ error: 'db_error' }, { status: 500 });
+  }
+
+  waitUntil(generateAndEmail(body.userId));
+  return NextResponse.json({ ok: true, attempts: currentAttempts + 1 });
 }

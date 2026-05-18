@@ -2,23 +2,13 @@ import { NextResponse } from 'next/server';
 import { waitUntil } from '@vercel/functions';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { createSupabaseServiceClient } from '@/lib/supabase/service';
-import { generateReport } from '@/lib/reports/generator';
-import { sendReportReadyEmail } from '@/lib/notifications/report-ready-email';
+import { generateAndEmail } from '@/lib/reports/generate-and-email';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 export const maxDuration = 300;
 
 const MAX_USER_ATTEMPTS = 5;
-
-async function generateAndEmail(userId: string) {
-  try {
-    const { pdfBuffer, userName, categoryLabel } = await generateReport(userId);
-    await sendReportReadyEmail(userId, pdfBuffer, userName, categoryLabel);
-  } catch (err) {
-    console.error('[reports/regenerate] generate+email failed', { userId, err });
-  }
-}
 
 /**
  * User-facing retry for a failed report generation. Bumps generation_attempts

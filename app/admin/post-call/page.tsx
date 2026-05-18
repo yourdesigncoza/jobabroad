@@ -119,10 +119,12 @@ export default async function PostCallAdminPage() {
             Post-call reports
           </h1>
           <p className="font-body text-sm" style={{ color: '#6B6B6B' }}>
-            One row per paid user. Reports auto-generate at payment time;{' '}
-            <em>Generate &amp; send</em> only appears for users whose PDF didn&apos;t
-            land. Paste call notes for context — full save-notes-and-email rewrite
-            ships in Phase 4.
+            One row per paid user. Reports auto-generate at payment time. After
+            a review call, paste your notes and click <em>Save notes &amp;
+            email</em> — the buyer gets a plain-text follow-up email and the
+            notes appear on their dashboard. <em>Force regenerate</em> is an
+            escape hatch for stuck failures or post-template-change re-runs;
+            it bypasses the 5-attempt user cap.
           </p>
         </div>
 

@@ -52,13 +52,25 @@ async function main() {
   if (tierErr) throw tierErr;
   console.log('✓ Flipped tier=paid');
 
-  // 2. Call generateAndNotify — same code path the admin endpoint hits.
+  // 2. Run the same generate + email pipeline the webhook / admin trigger.
   // Import inside main() so env vars are populated before module evaluation.
-  const { generateAndNotify } = await import('@/lib/notifications/report-ready');
-  console.log('→ Running generateAndNotify with call notes…');
+  const { generateAndEmail } = await import('@/lib/reports/generate-and-email');
+  console.log('→ Running generateAndEmail (PDF + report-ready email)…');
   const t0 = Date.now();
-  await generateAndNotify(TARGET_USER_ID, { callNotes: SAMPLE_NOTES });
-  console.log(`✓ generateAndNotify completed (${Date.now() - t0}ms)`);
+  await generateAndEmail(TARGET_USER_ID);
+  console.log(`✓ generateAndEmail completed (${Date.now() - t0}ms)`);
+
+  // 3. Exercise the new call-notes follow-up path (saves notes + plain-text
+  // email; no PDF attached). The admin save-notes endpoint is the live caller.
+  const { sendCallNotesEmail } = await import('@/lib/notifications/call-notes');
+  await sb.from('paid_reports').upsert(
+    { user_id: TARGET_USER_ID, call_notes: SAMPLE_NOTES },
+    { onConflict: 'user_id' },
+  );
+  console.log('→ Running sendCallNotesEmail…');
+  const t1 = Date.now();
+  await sendCallNotesEmail(TARGET_USER_ID, SAMPLE_NOTES);
+  console.log(`✓ sendCallNotesEmail completed (${Date.now() - t1}ms)`);
 
   // 3. Read back paid_reports row.
   const { data: report } = await sb

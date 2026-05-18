@@ -2,8 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { waitUntil } from '@vercel/functions';
 import { getPaymentProvider } from '@/lib/payments/provider';
 import { applySuccessfulPayment } from '@/lib/payments/apply';
-import { generateReport } from '@/lib/reports/generator';
-import { sendReportReadyEmail } from '@/lib/notifications/report-ready-email';
+import { generateAndEmail } from '@/lib/reports/generate-and-email';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -38,13 +37,3 @@ export async function POST(req: NextRequest) {
   );
 }
 
-async function generateAndEmail(userId: string) {
-  try {
-    const { pdfBuffer, userName, categoryLabel } = await generateReport(userId);
-    await sendReportReadyEmail(userId, pdfBuffer, userName, categoryLabel);
-  } catch (err) {
-    // generateReport already wrote status='failed' to paid_reports — the
-    // dashboard surfaces this and offers the user a retry. Just log here.
-    console.error('[webhook] generate+email failed', { userId, err });
-  }
-}

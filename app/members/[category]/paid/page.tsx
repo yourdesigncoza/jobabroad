@@ -5,19 +5,9 @@ import { CATEGORIES } from '@/lib/categories';
 import { requireProfile } from '@/lib/auth-guards';
 import { getPaymentProvider } from '@/lib/payments/provider';
 import { applySuccessfulPayment } from '@/lib/payments/apply';
-import { generateReport } from '@/lib/reports/generator';
-import { sendReportReadyEmail } from '@/lib/notifications/report-ready-email';
+import { generateAndEmail } from '@/lib/reports/generate-and-email';
 
 export const dynamic = 'force-dynamic';
-
-async function generateAndEmail(userId: string) {
-  try {
-    const { pdfBuffer, userName, categoryLabel } = await generateReport(userId);
-    await sendReportReadyEmail(userId, pdfBuffer, userName, categoryLabel);
-  } catch (err) {
-    console.error('[paid] generate+email fallback failed', { userId, err });
-  }
-}
 
 export default async function PaidLandingPage({
   params,

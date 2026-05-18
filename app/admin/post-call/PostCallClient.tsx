@@ -56,39 +56,83 @@ export default function PostCallClient({ rows }: Props) {
   );
 }
 
+type SaveStatus =
+  | { kind: 'idle' }
+  | { kind: 'saving' }
+  | { kind: 'saved'; emailed: boolean; at: string }
+  | { kind: 'err'; reason: string };
+
+type RegenStatus =
+  | { kind: 'idle' }
+  | { kind: 'regenerating' }
+  | { kind: 'queued'; attempts: number }
+  | { kind: 'err'; reason: string };
+
 function UserCard({ row }: { row: PaidUserRow }) {
   const router = useRouter();
   const [notes, setNotes] = useState(row.callNotes);
-  const [busy, setBusy] = useState(false);
-  const [status, setStatus] = useState<
-    | { kind: 'idle' }
-    | { kind: 'ok'; at: string }
-    | { kind: 'err'; reason: string }
-  >({ kind: 'idle' });
+  const [saveStatus, setSaveStatus] = useState<SaveStatus>({ kind: 'idle' });
+  const [regenStatus, setRegenStatus] = useState<RegenStatus>({ kind: 'idle' });
 
-  const hasReport = Boolean(row.reportGeneratedAt);
   const hasBooking = Boolean(row.bookingSlotAt);
+  const hasReport = Boolean(row.reportGeneratedAt);
 
-  async function onSend() {
-    setBusy(true);
-    setStatus({ kind: 'idle' });
+  async function onSaveNotes() {
+    if (!notes.trim()) return;
+    setSaveStatus({ kind: 'saving' });
     try {
-      const r = await fetch('/api/admin/post-call/generate', {
+      const r = await fetch('/api/admin/post-call/save-notes', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ userId: row.userId, callNotes: notes }),
       });
-      const j = (await r.json().catch(() => ({}))) as { error?: string; generatedAt?: string };
-      if (!r.ok) {
-        setStatus({ kind: 'err', reason: j.error ?? `http_${r.status}` });
+      const j = (await r.json().catch(() => ({}))) as {
+        ok?: boolean;
+        emailed?: boolean;
+        error?: string;
+        reason?: string;
+      };
+      if (!r.ok || !j.ok) {
+        setSaveStatus({ kind: 'err', reason: j.error ?? j.reason ?? `http_${r.status}` });
         return;
       }
-      setStatus({ kind: 'ok', at: j.generatedAt ?? new Date().toISOString() });
+      setSaveStatus({
+        kind: 'saved',
+        emailed: Boolean(j.emailed),
+        at: new Date().toISOString(),
+      });
       router.refresh();
     } catch {
-      setStatus({ kind: 'err', reason: 'network_error' });
-    } finally {
-      setBusy(false);
+      setSaveStatus({ kind: 'err', reason: 'network_error' });
+    }
+  }
+
+  async function onForceRegen() {
+    const ok = window.confirm(
+      `Force regenerate ${row.name || row.email}'s report?\n\nThis bumps the attempt counter and re-runs GPT + RAG + PDF rendering. Use when generation has failed past the user-facing 5-attempt cap, or after a template change.`,
+    );
+    if (!ok) return;
+    setRegenStatus({ kind: 'regenerating' });
+    try {
+      const r = await fetch('/api/admin/post-call/regenerate', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ userId: row.userId }),
+      });
+      const j = (await r.json().catch(() => ({}))) as {
+        ok?: boolean;
+        attempts?: number;
+        error?: string;
+      };
+      if (!r.ok || !j.ok) {
+        setRegenStatus({ kind: 'err', reason: j.error ?? `http_${r.status}` });
+        return;
+      }
+      setRegenStatus({ kind: 'queued', attempts: j.attempts ?? row.generationAttempts + 1 });
+      // Give the background job a head start before refreshing the list.
+      setTimeout(() => router.refresh(), 1500);
+    } catch {
+      setRegenStatus({ kind: 'err', reason: 'network_error' });
     }
   }
 
@@ -132,9 +176,9 @@ function UserCard({ row }: { row: PaidUserRow }) {
         <textarea
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
-          disabled={busy}
+          disabled={saveStatus.kind === 'saving'}
           rows={6}
-          placeholder="Paste transcript or write up the call. This becomes the &ldquo;From your review call&rdquo; section of their PDF."
+          placeholder="Paste transcript or write up the call. Saving emails this to the buyer and stores it on their dashboard."
           className="font-body text-sm rounded-xl p-3 outline-none"
           style={{
             backgroundColor: '#F8F5F0',
@@ -146,39 +190,55 @@ function UserCard({ row }: { row: PaidUserRow }) {
       </label>
 
       <div className="flex flex-wrap items-center justify-between gap-3">
-        {row.hasPdf ? (
-          <span
-            className="font-display font-bold uppercase tracking-wide text-xs px-3 py-2 rounded-xl"
-            style={{ backgroundColor: '#EDE8E0', color: '#1B4D3E' }}
-          >
-            ✓ PDF auto-generated · use Phase 4 tools for call-notes follow-up
-          </span>
-        ) : (
+        <div className="flex flex-wrap items-center gap-3">
           <button
             type="button"
-            onClick={onSend}
-            disabled={busy}
-            className="font-display font-bold uppercase tracking-wide text-xs px-5 py-2.5 rounded-xl"
+            onClick={onSaveNotes}
+            disabled={saveStatus.kind === 'saving' || !notes.trim()}
+            className="font-display font-bold uppercase tracking-wide text-xs px-5 py-2.5 rounded-xl disabled:opacity-50"
             style={{
-              backgroundColor: busy ? '#6B6B6B' : '#1B4D3E',
+              backgroundColor: saveStatus.kind === 'saving' ? '#6B6B6B' : '#1B4D3E',
               color: '#F8F5F0',
-              cursor: busy ? 'wait' : 'pointer',
+              cursor: saveStatus.kind === 'saving' ? 'wait' : 'pointer',
             }}
           >
-            {busy ? 'Generating…' : 'Generate & send'}
+            {saveStatus.kind === 'saving' ? 'Saving…' : 'Save notes & email'}
           </button>
-        )}
+          <button
+            type="button"
+            onClick={onForceRegen}
+            disabled={regenStatus.kind === 'regenerating'}
+            className="font-display font-bold uppercase tracking-wide text-xs px-5 py-2.5 rounded-xl"
+            style={{
+              backgroundColor: '#FFFFFF',
+              border: '1.5px solid #C9A84C',
+              color: '#8A6A1F',
+              cursor: regenStatus.kind === 'regenerating' ? 'wait' : 'pointer',
+            }}
+          >
+            {regenStatus.kind === 'regenerating' ? 'Queuing…' : 'Force regenerate'}
+          </button>
+        </div>
 
-        {status.kind === 'ok' && (
-          <span className="font-body text-xs" style={{ color: '#1B4D3E' }}>
-            ✓ Sent at {formatDateTime(status.at)}
-          </span>
-        )}
-        {status.kind === 'err' && (
-          <span className="font-body text-xs" style={{ color: '#B53A2B' }}>
-            Failed: {status.reason}
-          </span>
-        )}
+        <div className="flex flex-col items-end gap-1 font-body text-xs">
+          {saveStatus.kind === 'saved' && (
+            <span style={{ color: '#1B4D3E' }}>
+              ✓ Saved {formatDateTime(saveStatus.at)}
+              {saveStatus.emailed ? ' · email sent' : ' · email failed (notes saved)'}
+            </span>
+          )}
+          {saveStatus.kind === 'err' && (
+            <span style={{ color: '#B53A2B' }}>Save failed: {saveStatus.reason}</span>
+          )}
+          {regenStatus.kind === 'queued' && (
+            <span style={{ color: '#1B4D3E' }}>
+              ✓ Regeneration queued (attempt {regenStatus.attempts})
+            </span>
+          )}
+          {regenStatus.kind === 'err' && (
+            <span style={{ color: '#B53A2B' }}>Regen failed: {regenStatus.reason}</span>
+          )}
+        </div>
       </div>
     </article>
   );
