@@ -13,6 +13,9 @@ export interface PaidUserRow {
   bookingConsentedAt: string | null;
   reportGeneratedAt: string | null;
   callNotes: string;
+  generationStatus: 'pending' | 'completed' | 'failed' | null;
+  generationAttempts: number;
+  hasPdf: boolean;
 }
 
 interface Props {
@@ -115,6 +118,7 @@ function UserCard({ row }: { row: PaidUserRow }) {
             <strong style={{ color: '#2C2C2C' }}>Report:</strong>{' '}
             {hasReport ? formatDateTime(row.reportGeneratedAt) : 'not generated'}
           </span>
+          <StatusPill status={row.generationStatus} attempts={row.generationAttempts} />
         </div>
       </header>
 
@@ -142,19 +146,28 @@ function UserCard({ row }: { row: PaidUserRow }) {
       </label>
 
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <button
-          type="button"
-          onClick={onSend}
-          disabled={busy}
-          className="font-display font-bold uppercase tracking-wide text-xs px-5 py-2.5 rounded-xl"
-          style={{
-            backgroundColor: busy ? '#6B6B6B' : '#1B4D3E',
-            color: '#F8F5F0',
-            cursor: busy ? 'wait' : 'pointer',
-          }}
-        >
-          {busy ? 'Generating…' : hasReport ? 'Regenerate & resend' : 'Generate & send'}
-        </button>
+        {row.hasPdf ? (
+          <span
+            className="font-display font-bold uppercase tracking-wide text-xs px-3 py-2 rounded-xl"
+            style={{ backgroundColor: '#EDE8E0', color: '#1B4D3E' }}
+          >
+            ✓ PDF auto-generated · use Phase 4 tools for call-notes follow-up
+          </span>
+        ) : (
+          <button
+            type="button"
+            onClick={onSend}
+            disabled={busy}
+            className="font-display font-bold uppercase tracking-wide text-xs px-5 py-2.5 rounded-xl"
+            style={{
+              backgroundColor: busy ? '#6B6B6B' : '#1B4D3E',
+              color: '#F8F5F0',
+              cursor: busy ? 'wait' : 'pointer',
+            }}
+          >
+            {busy ? 'Generating…' : 'Generate & send'}
+          </button>
+        )}
 
         {status.kind === 'ok' && (
           <span className="font-body text-xs" style={{ color: '#1B4D3E' }}>
@@ -168,5 +181,36 @@ function UserCard({ row }: { row: PaidUserRow }) {
         )}
       </div>
     </article>
+  );
+}
+
+function StatusPill({
+  status,
+  attempts,
+}: {
+  status: 'pending' | 'completed' | 'failed' | null;
+  attempts: number;
+}) {
+  if (!status) {
+    return (
+      <span className="font-body text-[10px] uppercase tracking-wider" style={{ color: '#6B6B6B' }}>
+        no row yet
+      </span>
+    );
+  }
+  const tones: Record<typeof status & string, { bg: string; fg: string; label: string }> = {
+    pending: { bg: '#FFF3D6', fg: '#8A6A1F', label: 'Generating…' },
+    completed: { bg: '#DCEFE6', fg: '#1B4D3E', label: 'Completed' },
+    failed: { bg: '#F8D7D1', fg: '#B53A2B', label: 'Failed' },
+  };
+  const t = tones[status];
+  return (
+    <span
+      className="font-display font-bold text-[10px] uppercase tracking-wider px-2 py-1 rounded-full"
+      style={{ backgroundColor: t.bg, color: t.fg }}
+    >
+      {t.label}
+      {status !== 'completed' && attempts > 0 ? ` · ${attempts}/5` : ''}
+    </span>
   );
 }

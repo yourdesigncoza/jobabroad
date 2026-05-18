@@ -3,14 +3,15 @@ import Link from 'next/link';
 import SiteNav from '@/components/SiteNav';
 import SiteFooter from '@/components/SiteFooter';
 import FollowUpForm from '@/components/FollowUpForm';
+import ReportStatusCard from '@/components/ReportStatusCard';
 import { requireSession } from '@/lib/auth-guards';
 import { CATEGORIES } from '@/lib/categories';
-import { getCachedReportPath } from '@/lib/reports/generator';
 import { getLatestAssessment } from '@/lib/assessments/assessment-client';
 import { loadRubric, calculateScore } from '@/lib/scoring';
 import { assessmentDataSchema } from '@/lib/assessments/schemas/assessment';
 import PremiumUpsell from '@/components/PremiumUpsell';
 import type { Band } from '@/lib/scoring/types';
+import type { ReportStatusResponse } from '@/app/api/reports/status/route';
 
 export const dynamic = 'force-dynamic';
 
@@ -121,10 +122,33 @@ export default async function DashboardPage() {
     CATEGORIES.find((c) => c.id === profile.category)?.label ?? profile.category;
   const isPaid = profile.tier === 'paid';
   const bookHref = `/members/${profile.category}/book`;
-  // The PDF only exists AFTER the post-call admin action generates it. Until
-  // then, the dashboard shows a "ready after your call" state instead of a
-  // download link.
-  const reportReady = isPaid ? Boolean(await getCachedReportPath(user.id)) : false;
+
+  // Server-render the report status for first paint, then the client component
+  // takes over polling for the pending → completed transition. For free users
+  // we skip the read entirely.
+  let reportStatus: ReportStatusResponse | null = null;
+  if (isPaid) {
+    const { data: report } = await supabase
+      .from('paid_reports')
+      .select('pdf_path, generation_status, generation_attempts, generation_error')
+      .eq('user_id', user.id)
+      .maybeSingle();
+    if (!report) {
+      reportStatus = { status: 'missing', pdfUrl: null, attempts: 0, canRetry: false, error: null };
+    } else {
+      const status = (report.generation_status as ReportStatusResponse['status']) ?? 'pending';
+      const attempts = (report.generation_attempts as number) ?? 0;
+      reportStatus = {
+        status,
+        // /api/reports/download handles auth + fresh signing on click; safe to
+        // hand out even when the PDF object hasn't been uploaded yet.
+        pdfUrl: status === 'completed' && report.pdf_path ? '/api/reports/download' : null,
+        attempts,
+        canRetry: status === 'failed' && attempts < 5,
+        error: status === 'failed' ? ((report.generation_error as string | null) ?? null) : null,
+      };
+    }
+  }
 
   // If the user has already submitted the assessment, swap the "Eligibility
   // assessment" card to "View your score" pointing at /score. Form -> result
@@ -187,95 +211,40 @@ export default async function DashboardPage() {
           </div>
         )}
 
-        {isPaid && (
-          <section
-            className="rounded-2xl p-6 mb-10"
-            style={{ backgroundColor: '#FFFFFF', border: '1.5px solid #EDE8E0' }}
-          >
-            <div className="flex flex-col gap-1 mb-6">
-              <div className="flex items-center gap-2">
-                <div className="w-6 h-px" style={{ backgroundColor: '#1B4D3E' }} />
+        {isPaid && reportStatus && (
+          <div className="flex flex-col gap-4 mb-10">
+            <ReportStatusCard initial={reportStatus} />
+
+            <Link
+              href={bookHref}
+              className="block rounded-2xl p-5 transition-shadow hover:shadow-md"
+              style={{ backgroundColor: '#FFFFFF', border: '1.5px dashed #C9A84C' }}
+            >
+              <div className="flex items-center gap-2 mb-1">
+                <div className="w-6 h-px" style={{ backgroundColor: '#C9A84C' }} />
                 <span
                   className="font-display text-xs font-semibold uppercase tracking-wider"
-                  style={{ color: '#1B4D3E' }}
+                  style={{ color: '#C9A84C' }}
                 >
-                  Paid tier
+                  Optional
                 </span>
               </div>
-              <h2
-                className="font-display font-bold uppercase text-xl"
+              <span
+                className="font-display font-bold uppercase tracking-wide text-sm block"
                 style={{ color: '#2C2C2C' }}
               >
-                Your full report &amp; call
-              </h2>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-              <Link
-                href={bookHref}
-                className="block rounded-xl p-5 transition-shadow hover:shadow-md"
-                style={{ backgroundColor: '#1B4D3E', color: '#F8F5F0' }}
-              >
-                <div className="flex flex-col gap-1">
-                  <span className="font-display font-bold uppercase tracking-wide text-sm">
-                    Book your 15-min call
-                  </span>
-                  <span
-                    className="font-body text-xs"
-                    style={{ color: 'rgba(248,245,240,0.75)' }}
-                  >
-                    Pick a slot that suits you
-                  </span>
-                </div>
-              </Link>
-              {reportReady ? (
-                <a
-                  href="/api/reports/download"
-                  className="block rounded-xl p-5 transition-shadow hover:shadow-md"
-                  style={{
-                    backgroundColor: '#FFFFFF',
-                    border: '1.5px solid #1B4D3E',
-                    color: '#1B4D3E',
-                  }}
-                >
-                  <div className="flex flex-col gap-1">
-                    <span className="font-display font-bold uppercase tracking-wide text-sm">
-                      Download report (PDF)
-                    </span>
-                    <span className="font-body text-xs" style={{ color: '#6B6B6B' }}>
-                      Your full personalised assessment
-                    </span>
-                  </div>
-                </a>
-              ) : (
-                <div
-                  className="block rounded-xl p-5"
-                  style={{
-                    backgroundColor: '#F8F5F0',
-                    border: '1.5px dashed #C9A84C',
-                    color: '#6B6B6B',
-                  }}
-                >
-                  <div className="flex flex-col gap-1">
-                    <span
-                      className="font-display font-bold uppercase tracking-wide text-sm"
-                      style={{ color: '#2C2C2C' }}
-                    >
-                      Report ready after your call
-                    </span>
-                    <span className="font-body text-xs">
-                      We write your personalised report right after we speak, then email it here.
-                    </span>
-                  </div>
-                </div>
-              )}
-            </div>
+                Book a 15-min review call
+              </span>
+              <span className="font-body text-xs block mt-1" style={{ color: '#6B6B6B' }}>
+                Want to talk it through? Pick a slot whenever you&apos;re ready — no rush.
+              </span>
+            </Link>
 
             <FollowUpForm
               credits={profile.paid_email_credits ?? 0}
               bookHref={bookHref}
             />
-          </section>
+          </div>
         )}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10">

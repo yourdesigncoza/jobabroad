@@ -5,6 +5,7 @@ import {
   insertSubmittedTeachingAssessment,
   makePaid,
   registerAndLogin,
+  seedReport,
   uniqueEmail,
   uniquePhone,
 } from './helpers';
@@ -88,28 +89,105 @@ test.describe('Paid tier — score page', () => {
 // =========================================================================
 
 test.describe('Paid tier — dashboard surfaces', () => {
-  test('paid user sees report + book links + follow-up form with credits', async ({ page }) => {
-    const email = uniqueEmail('paid-dash');
+  test('paid user without paid_reports row sees pending skeleton + optional call CTA', async ({ page }) => {
+    const email = uniqueEmail('paid-pending');
     await registerAndLogin(page, {
       email,
       password: PASSWORD,
-      name: 'Paid Tester',
+      name: 'Paid Pending',
       phone: uniquePhone(),
       category: 'teaching',
     });
     try {
       const userId = await findUserIdByEmail(email);
       await makePaid(userId, 5);
+      // No seedReport call — exercises the 'missing' branch of /api/reports/status
 
       await page.goto('/dashboard');
-      await expect(page.getByRole('heading', { name: /your full report.*call/i })).toBeVisible();
-      // Pre-call state: download link is hidden behind the "report ready after
-      // your call" placeholder. The PDF only exists after the post-call admin
-      // action generates it.
-      await expect(page.getByRole('link', { name: /book your 15-min call/i })).toBeVisible();
-      await expect(page.getByText(/report ready after your call/i)).toBeVisible();
-      await expect(page.getByRole('link', { name: /download report.*pdf/i })).toHaveCount(0);
+      await expect(page.getByRole('heading', { name: /preparing your personalised report/i })).toBeVisible();
+      // Optional call CTA is always visible for paid users
+      await expect(page.getByRole('link', { name: /book a 15-min review call/i })).toBeVisible();
+      // Download CTA must NOT be present in pending state
+      await expect(page.getByRole('link', { name: /download report/i })).toHaveCount(0);
       await expect(page.getByText(/5 of 5 left/i)).toBeVisible();
+    } finally {
+      await deleteUser(email);
+    }
+  });
+
+  test('paid user with completed report sees download CTA', async ({ page }) => {
+    const email = uniqueEmail('paid-completed');
+    await registerAndLogin(page, {
+      email,
+      password: PASSWORD,
+      name: 'Paid Completed',
+      phone: uniquePhone(),
+      category: 'teaching',
+    });
+    try {
+      const userId = await findUserIdByEmail(email);
+      await makePaid(userId, 5);
+      // pdf_path doesn't need to point at a real object for the dashboard render
+      // — only createSignedUrl uses it, and Supabase will hand back a signed URL
+      // even for non-existent paths (404s on fetch, but render-time succeeds).
+      await seedReport(userId, { status: 'completed', pdfPath: `${userId}/report-test.pdf` });
+
+      await page.goto('/dashboard');
+      await expect(page.getByRole('heading', { name: /personalised report ready/i })).toBeVisible();
+      await expect(page.getByRole('link', { name: /download report.*pdf/i })).toBeVisible();
+      await expect(page.getByRole('link', { name: /book a 15-min review call/i })).toBeVisible();
+    } finally {
+      await deleteUser(email);
+    }
+  });
+
+  test('paid user with failed report (< 5 attempts) sees Try again button', async ({ page }) => {
+    const email = uniqueEmail('paid-failed');
+    await registerAndLogin(page, {
+      email,
+      password: PASSWORD,
+      name: 'Paid Failed',
+      phone: uniquePhone(),
+      category: 'teaching',
+    });
+    try {
+      const userId = await findUserIdByEmail(email);
+      await makePaid(userId, 5);
+      await seedReport(userId, {
+        status: 'failed',
+        attempts: 2,
+        error: 'openai_timeout',
+      });
+
+      await page.goto('/dashboard');
+      await expect(page.getByRole('heading', { name: /something went wrong/i })).toBeVisible();
+      await expect(page.getByRole('button', { name: /try again/i })).toBeVisible();
+    } finally {
+      await deleteUser(email);
+    }
+  });
+
+  test('paid user with failed report at retry cap sees support-needed copy, no Try again', async ({ page }) => {
+    const email = uniqueEmail('paid-locked');
+    await registerAndLogin(page, {
+      email,
+      password: PASSWORD,
+      name: 'Paid Locked',
+      phone: uniquePhone(),
+      category: 'teaching',
+    });
+    try {
+      const userId = await findUserIdByEmail(email);
+      await makePaid(userId, 5);
+      await seedReport(userId, {
+        status: 'failed',
+        attempts: 5,
+        error: 'persistent_failure',
+      });
+
+      await page.goto('/dashboard');
+      await expect(page.getByRole('heading', { name: /we need to fix this manually/i })).toBeVisible();
+      await expect(page.getByRole('button', { name: /try again/i })).toHaveCount(0);
     } finally {
       await deleteUser(email);
     }
@@ -126,7 +204,9 @@ test.describe('Paid tier — dashboard surfaces', () => {
     });
     try {
       await page.goto('/dashboard');
-      await expect(page.getByRole('heading', { name: /your full report.*call/i })).toHaveCount(0);
+      await expect(page.getByRole('heading', { name: /preparing your personalised report/i })).toHaveCount(0);
+      await expect(page.getByRole('heading', { name: /personalised report ready/i })).toHaveCount(0);
+      await expect(page.getByRole('link', { name: /book a 15-min review call/i })).toHaveCount(0);
       await expect(page.getByText(/of 5 left/i)).toHaveCount(0);
     } finally {
       await deleteUser(email);
@@ -233,6 +313,183 @@ test.describe('Paid tier — booking page', () => {
       ).toBeVisible();
       await expect(page.getByText(/tick the consent checkbox/i)).toBeVisible();
       await expect(page.locator('iframe')).toHaveCount(0);
+    } finally {
+      await deleteUser(email);
+    }
+  });
+});
+
+// =========================================================================
+// Status + regenerate API routes
+// =========================================================================
+
+test.describe('Paid tier — /api/reports/status', () => {
+  // page.request inherits the page's session cookies; the top-level `request`
+  // fixture does NOT, so unauthenticated assertions belong with `request` and
+  // every authenticated assertion uses `page.request`.
+  test('returns 401 for unauthenticated request', async ({ request }) => {
+    const res = await request.get('/api/reports/status');
+    expect(res.status()).toBe(401);
+  });
+
+  test('returns 403 for authenticated free user', async ({ page }) => {
+    const email = uniqueEmail('status-free');
+    await registerAndLogin(page, {
+      email,
+      password: PASSWORD,
+      name: 'Status Free',
+      phone: uniquePhone(),
+      category: 'teaching',
+    });
+    try {
+      const res = await page.request.get('/api/reports/status');
+      expect(res.status()).toBe(403);
+    } finally {
+      await deleteUser(email);
+    }
+  });
+
+  test('returns missing status for paid user with no paid_reports row', async ({ page }) => {
+    const email = uniqueEmail('status-missing');
+    await registerAndLogin(page, {
+      email,
+      password: PASSWORD,
+      name: 'Status Missing',
+      phone: uniquePhone(),
+      category: 'teaching',
+    });
+    try {
+      const userId = await findUserIdByEmail(email);
+      await makePaid(userId);
+
+      const res = await page.request.get('/api/reports/status');
+      expect(res.status()).toBe(200);
+      const body = await res.json();
+      expect(body.status).toBe('missing');
+      expect(body.pdfUrl).toBeNull();
+      expect(body.canRetry).toBe(false);
+    } finally {
+      await deleteUser(email);
+    }
+  });
+
+  test('returns completed status with download URL when report ready', async ({ page }) => {
+    const email = uniqueEmail('status-ready');
+    await registerAndLogin(page, {
+      email,
+      password: PASSWORD,
+      name: 'Status Ready',
+      phone: uniquePhone(),
+      category: 'teaching',
+    });
+    try {
+      const userId = await findUserIdByEmail(email);
+      await makePaid(userId);
+      // pdf_path can point at a non-existent object — the status route hands
+      // back /api/reports/download (which signs on click), so we don't need to
+      // upload anything to storage for this assertion.
+      await seedReport(userId, { status: 'completed', pdfPath: `${userId}/report-status-test.pdf` });
+
+      const res = await page.request.get('/api/reports/status');
+      expect(res.status()).toBe(200);
+      const body = await res.json();
+      expect(body.status).toBe('completed');
+      expect(body.pdfUrl).toBe('/api/reports/download');
+    } finally {
+      await deleteUser(email);
+    }
+  });
+
+  test('returns canRetry=false for failed status at attempt cap', async ({ page }) => {
+    const email = uniqueEmail('status-locked');
+    await registerAndLogin(page, {
+      email,
+      password: PASSWORD,
+      name: 'Status Locked',
+      phone: uniquePhone(),
+      category: 'teaching',
+    });
+    try {
+      const userId = await findUserIdByEmail(email);
+      await makePaid(userId);
+      await seedReport(userId, { status: 'failed', attempts: 5, error: 'cap_reached' });
+
+      const res = await page.request.get('/api/reports/status');
+      const body = await res.json();
+      expect(body.status).toBe('failed');
+      expect(body.canRetry).toBe(false);
+      expect(body.error).toBe('cap_reached');
+    } finally {
+      await deleteUser(email);
+    }
+  });
+});
+
+test.describe('Paid tier — /api/reports/regenerate', () => {
+  test('returns 401 for unauthenticated request', async ({ request }) => {
+    const res = await request.post('/api/reports/regenerate');
+    expect(res.status()).toBe(401);
+  });
+
+  test('returns 403 for free user', async ({ page }) => {
+    const email = uniqueEmail('regen-free');
+    await registerAndLogin(page, {
+      email,
+      password: PASSWORD,
+      name: 'Regen Free',
+      phone: uniquePhone(),
+      category: 'teaching',
+    });
+    try {
+      const res = await page.request.post('/api/reports/regenerate');
+      expect(res.status()).toBe(403);
+    } finally {
+      await deleteUser(email);
+    }
+  });
+
+  test('returns 429 when attempts already at cap', async ({ page }) => {
+    const email = uniqueEmail('regen-cap');
+    await registerAndLogin(page, {
+      email,
+      password: PASSWORD,
+      name: 'Regen Cap',
+      phone: uniquePhone(),
+      category: 'teaching',
+    });
+    try {
+      const userId = await findUserIdByEmail(email);
+      await makePaid(userId);
+      await seedReport(userId, { status: 'failed', attempts: 5 });
+
+      const res = await page.request.post('/api/reports/regenerate');
+      expect(res.status()).toBe(429);
+    } finally {
+      await deleteUser(email);
+    }
+  });
+});
+
+// =========================================================================
+// /paid landing redirect
+// =========================================================================
+
+test.describe('Paid tier — /paid landing', () => {
+  test('paid user visiting /paid redirects straight to /dashboard', async ({ page }) => {
+    const email = uniqueEmail('paid-redirect');
+    await registerAndLogin(page, {
+      email,
+      password: PASSWORD,
+      name: 'Paid Redirect',
+      phone: uniquePhone(),
+      category: 'teaching',
+    });
+    try {
+      const userId = await findUserIdByEmail(email);
+      await makePaid(userId);
+
+      await page.goto('/members/teaching/paid');
+      await expect(page).toHaveURL(/\/dashboard/);
     } finally {
       await deleteUser(email);
     }

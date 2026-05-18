@@ -47,6 +47,28 @@ export async function applySuccessfulPayment(evt: VerifiedWebhook): Promise<Appl
     return { ok: true, flipped: false, reason: 'duplicate' };
   }
 
+  // Insert the paid_reports row FIRST (status='pending'), then flip tier. If the
+  // tier flip fails, the stale pending row is benign: dashboard requires
+  // tier='paid' to render the status card, and last_payment_ref isn't set yet
+  // so webhook retry will re-attempt the flip. Upsert on user_id is idempotent.
+  const { error: reportErr } = await svc
+    .from('paid_reports')
+    .upsert(
+      {
+        user_id: evt.userId,
+        generation_status: 'pending',
+        generation_attempts: 1,
+        generation_started_at: new Date().toISOString(),
+        generation_error: null,
+        generation_completed_at: null,
+      },
+      { onConflict: 'user_id' },
+    );
+  if (reportErr) {
+    console.error('[applySuccessfulPayment] paid_reports insert failed', reportErr);
+    return { ok: false, status: 500, reason: 'db_error' };
+  }
+
   const { error: updateErr } = await svc
     .from('profiles')
     .update({

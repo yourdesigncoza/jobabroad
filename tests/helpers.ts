@@ -104,6 +104,37 @@ export async function makePaid(userId: string, credits = 5): Promise<void> {
 }
 
 /**
+ * Seed a paid_reports row in a specific generation_status. Use this to test the
+ * ReportStatusCard's pending / completed / failed branches without going
+ * through the full Paystack + waitUntil pipeline.
+ */
+export async function seedReport(
+  userId: string,
+  opts: {
+    status: 'pending' | 'completed' | 'failed';
+    pdfPath?: string | null;
+    attempts?: number;
+    error?: string | null;
+  },
+): Promise<void> {
+  // generated_at is NOT NULL with a default of now(); omit so the default
+  // applies for any state (the column predates the generation_status work
+  // and semantically tracks row creation, not completion).
+  const { error } = await svc().from('paid_reports').upsert(
+    {
+      user_id: userId,
+      pdf_path: opts.pdfPath ?? null,
+      generation_status: opts.status,
+      generation_attempts: opts.attempts ?? (opts.status === 'pending' ? 1 : 0),
+      generation_error: opts.error ?? null,
+      generation_completed_at: opts.status === 'completed' ? new Date().toISOString() : null,
+    },
+    { onConflict: 'user_id' },
+  );
+  if (error) throw error;
+}
+
+/**
  * Insert a submitted teaching assessment for the user. Uses a "Strong potential"
  * profile so the score page renders the upper band. Skips the wizard entirely
  * (form-fill is brittle and tested separately in auth-flow / member-page specs).

@@ -246,6 +246,36 @@ export async function generateReport(
   userId: string,
   opts: GenerateReportOptions = {},
 ): Promise<GenerateReportResult> {
+  try {
+    return await generateReportInner(userId, opts);
+  } catch (err) {
+    // Write the failure to paid_reports so the dashboard status surfaces it and
+    // the user can hit "try again". We still rethrow — callers (webhook
+    // generateAndEmail wrapper, /admin/post-call) decide what to do with the
+    // throw.
+    const sb = admin();
+    const msg = err instanceof Error ? err.message : String(err);
+    await sb
+      .from('paid_reports')
+      .upsert(
+        {
+          user_id: userId,
+          generation_status: 'failed',
+          generation_error: msg.slice(0, 1000),
+        },
+        { onConflict: 'user_id' },
+      )
+      .then(({ error }) => {
+        if (error) console.error('[generateReport] failed-status write errored', error);
+      });
+    throw err;
+  }
+}
+
+async function generateReportInner(
+  userId: string,
+  opts: GenerateReportOptions = {},
+): Promise<GenerateReportResult> {
   const sb = admin();
 
   const { data: profile, error: profileErr } = await sb
@@ -336,11 +366,15 @@ export async function generateReport(
     });
   if (uploadErr) throw new Error(`storage_upload_failed: ${uploadErr.message}`);
 
+  const now = new Date().toISOString();
   const { error: upsertErr } = await sb.from('paid_reports').upsert(
     {
       user_id: userId,
       pdf_path: pdfPath,
-      generated_at: new Date().toISOString(),
+      generated_at: now,
+      generation_status: 'completed',
+      generation_completed_at: now,
+      generation_error: null,
       // Persist whatever notes ended up in the report, so re-runs without
       // fresh notes stay consistent with what's in the PDF on disk.
       ...(callNotes !== undefined ? { call_notes: callNotes } : {}),

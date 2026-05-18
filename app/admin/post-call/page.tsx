@@ -30,7 +30,7 @@ export default async function PostCallAdminPage() {
       .in('user_id', userIds.length ? userIds : ['00000000-0000-0000-0000-000000000000']),
     svc
       .from('paid_reports')
-      .select('user_id, generated_at, call_notes')
+      .select('user_id, generated_at, call_notes, generation_status, generation_attempts, pdf_path')
       .in('user_id', userIds.length ? userIds : ['00000000-0000-0000-0000-000000000000']),
     svc.auth.admin.listUsers(),
   ]);
@@ -44,8 +44,25 @@ export default async function PostCallAdminPage() {
     if (!prev || curDate > prevDate) bookingsByUser.set(b.user_id, b);
   }
 
-  const reportsByUser = new Map<string, { generated_at: string; call_notes: string | null }>();
-  for (const r of reportsRes.data ?? []) reportsByUser.set(r.user_id, r);
+  const reportsByUser = new Map<
+    string,
+    {
+      generated_at: string | null;
+      call_notes: string | null;
+      generation_status: 'pending' | 'completed' | 'failed' | null;
+      generation_attempts: number | null;
+      pdf_path: string | null;
+    }
+  >();
+  for (const r of reportsRes.data ?? []) {
+    reportsByUser.set(r.user_id, {
+      generated_at: r.generated_at,
+      call_notes: r.call_notes,
+      generation_status: r.generation_status as 'pending' | 'completed' | 'failed' | null,
+      generation_attempts: r.generation_attempts,
+      pdf_path: r.pdf_path,
+    });
+  }
 
   const emailByUser = new Map<string, string>();
   for (const u of authRes.data?.users ?? []) {
@@ -66,6 +83,9 @@ export default async function PostCallAdminPage() {
       bookingConsentedAt: booking?.consented_at ?? null,
       reportGeneratedAt: report?.generated_at ?? null,
       callNotes: report?.call_notes ?? '',
+      generationStatus: report?.generation_status ?? null,
+      generationAttempts: report?.generation_attempts ?? 0,
+      hasPdf: Boolean(report?.pdf_path),
     };
   });
 
@@ -99,8 +119,10 @@ export default async function PostCallAdminPage() {
             Post-call reports
           </h1>
           <p className="font-body text-sm" style={{ color: '#6B6B6B' }}>
-            One row per paid user. After the review call, paste your notes and click
-            <em> Generate &amp; send</em> &mdash; the buyer gets the PDF by email.
+            One row per paid user. Reports auto-generate at payment time;{' '}
+            <em>Generate &amp; send</em> only appears for users whose PDF didn&apos;t
+            land. Paste call notes for context — full save-notes-and-email rewrite
+            ships in Phase 4.
           </p>
         </div>
 
