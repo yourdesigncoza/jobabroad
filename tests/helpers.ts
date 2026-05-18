@@ -115,6 +115,7 @@ export async function seedReport(
     pdfPath?: string | null;
     attempts?: number;
     error?: string | null;
+    callNotes?: string | null;
   },
 ): Promise<void> {
   // generated_at is NOT NULL with a default of now(); omit so the default
@@ -128,6 +129,7 @@ export async function seedReport(
       generation_attempts: opts.attempts ?? (opts.status === 'pending' ? 1 : 0),
       generation_error: opts.error ?? null,
       generation_completed_at: opts.status === 'completed' ? new Date().toISOString() : null,
+      ...(opts.callNotes !== undefined ? { call_notes: opts.callNotes } : {}),
     },
     { onConflict: 'user_id' },
   );

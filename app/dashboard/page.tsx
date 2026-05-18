@@ -125,12 +125,15 @@ export default async function DashboardPage() {
 
   // Server-render the report status for first paint, then the client component
   // takes over polling for the pending → completed transition. For free users
-  // we skip the read entirely.
+  // we skip the read entirely. We also pull call_notes here for Card 3 — Phase
+  // 4 will populate it via the admin save action; for now Card 3 only renders
+  // when a row already has notes (e.g. legacy admin runs from before Phase 1).
   let reportStatus: ReportStatusResponse | null = null;
+  let callNotes: string | null = null;
   if (isPaid) {
     const { data: report } = await supabase
       .from('paid_reports')
-      .select('pdf_path, generation_status, generation_attempts, generation_error')
+      .select('pdf_path, generation_status, generation_attempts, generation_error, call_notes')
       .eq('user_id', user.id)
       .maybeSingle();
     if (!report) {
@@ -147,6 +150,8 @@ export default async function DashboardPage() {
         canRetry: status === 'failed' && attempts < 5,
         error: status === 'failed' ? ((report.generation_error as string | null) ?? null) : null,
       };
+      const rawNotes = (report.call_notes as string | null) ?? null;
+      callNotes = rawNotes && rawNotes.trim() ? rawNotes.trim() : null;
     }
   }
 
@@ -239,6 +244,36 @@ export default async function DashboardPage() {
                 Want to talk it through? Pick a slot whenever you&apos;re ready — no rush.
               </span>
             </Link>
+
+            {callNotes && (
+              <section
+                className="rounded-2xl p-6 flex flex-col gap-3"
+                style={{ backgroundColor: '#FFF8E8', border: '1.5px solid #C9A84C' }}
+              >
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-px" style={{ backgroundColor: '#C9A84C' }} />
+                  <span
+                    className="font-display text-xs font-semibold uppercase tracking-wider"
+                    style={{ color: '#8A6A1F' }}
+                  >
+                    From your review call
+                  </span>
+                </div>
+                <h2
+                  className="font-display font-bold uppercase text-xl"
+                  style={{ color: '#2C2C2C' }}
+                >
+                  Notes from our session
+                </h2>
+                <div className="font-body text-sm flex flex-col gap-2" style={{ color: '#2C2C2C' }}>
+                  {callNotes.split(/\n\s*\n/).map((para, i) => (
+                    <p key={i} style={{ whiteSpace: 'pre-wrap' }}>
+                      {para}
+                    </p>
+                  ))}
+                </div>
+              </section>
+            )}
 
             <FollowUpForm
               credits={profile.paid_email_credits ?? 0}

@@ -141,6 +141,63 @@ test.describe('Paid tier — dashboard surfaces', () => {
     }
   });
 
+  test('paid user with completed report + call_notes sees Notes card', async ({ page }) => {
+    const email = uniqueEmail('paid-notes');
+    await registerAndLogin(page, {
+      email,
+      password: PASSWORD,
+      name: 'Paid Notes',
+      phone: uniquePhone(),
+      category: 'teaching',
+    });
+    try {
+      const userId = await findUserIdByEmail(email);
+      await makePaid(userId, 5);
+      await seedReport(userId, {
+        status: 'completed',
+        pdfPath: `${userId}/report-notes-test.pdf`,
+        callNotes:
+          'On the call we agreed you would start with SAPS clearance this week.\n\nNext steps: book a follow-up in 4 weeks once the apostille is back.',
+      });
+
+      await page.goto('/dashboard');
+      // All three primary cards visible together
+      await expect(page.getByRole('heading', { name: /personalised report ready/i })).toBeVisible();
+      await expect(page.getByRole('link', { name: /book a 15-min review call/i })).toBeVisible();
+      await expect(page.getByRole('heading', { name: /notes from our session/i })).toBeVisible();
+      await expect(page.getByText(/start with SAPS clearance this week/i)).toBeVisible();
+      await expect(page.getByText(/book a follow-up in 4 weeks/i)).toBeVisible();
+    } finally {
+      await deleteUser(email);
+    }
+  });
+
+  test('paid user without call_notes does not see Notes card', async ({ page }) => {
+    const email = uniqueEmail('paid-no-notes');
+    await registerAndLogin(page, {
+      email,
+      password: PASSWORD,
+      name: 'Paid NoNotes',
+      phone: uniquePhone(),
+      category: 'teaching',
+    });
+    try {
+      const userId = await findUserIdByEmail(email);
+      await makePaid(userId, 5);
+      await seedReport(userId, {
+        status: 'completed',
+        pdfPath: `${userId}/report-test.pdf`,
+        // no callNotes set
+      });
+
+      await page.goto('/dashboard');
+      await expect(page.getByRole('heading', { name: /personalised report ready/i })).toBeVisible();
+      await expect(page.getByRole('heading', { name: /notes from our session/i })).toHaveCount(0);
+    } finally {
+      await deleteUser(email);
+    }
+  });
+
   test('paid user with failed report (< 5 attempts) sees Try again button', async ({ page }) => {
     const email = uniqueEmail('paid-failed');
     await registerAndLogin(page, {
