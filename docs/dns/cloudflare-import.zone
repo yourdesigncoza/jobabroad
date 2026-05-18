@@ -1,0 +1,34 @@
+; BIND zone file for importing jobabroad.co.za DNS into Cloudflare.
+; Captured from live DNS (Xneelo nameservers) on 2026-05-18.
+;
+; HOW TO USE:
+;   1. Cloudflare dashboard -> jobabroad.co.za -> DNS -> Records
+;   2. Click "Import DNS Records" (or Import and Export -> Import records)
+;   3. Upload this file
+;   4. AFTER IMPORT: click each A / CNAME record and toggle the orange cloud
+;      to GRAY ("DNS only"). Vercel handles its own CDN/TLS and breaks behind
+;      Cloudflare proxy without extra config.
+;   5. Verify records in Cloudflare match the table in docs/whatsapp-notes/business-profile.md
+;   6. THEN switch nameservers at Xneelo to the two Cloudflare assigned.
+;
+; INTENTIONALLY OMITTED:
+;   - MX record for mail.jobabroad.co.za -- target does not resolve, mailbox
+;     never existed at Xneelo. Cloudflare Email Routing will add its own MX
+;     records once enabled.
+
+$ORIGIN jobabroad.co.za.
+$TTL 3600
+
+; --- Web (Vercel) ---------------------------------------------------------
+@                       IN  A       216.198.79.1
+www                     IN  A       216.198.79.1
+
+; --- Brevo / email auth ---------------------------------------------------
+@                       IN  TXT     "v=spf1 include:spf.brevo.com mx ~all"
+@                       IN  TXT     "brevo-code:bf7cacaec28290c849e6d7aaadf6daa5"
+_dmarc                  IN  TXT     "v=DMARC1; p=none; rua=mailto:rua@dmarc.brevo.com"
+brevo1._domainkey       IN  CNAME   b1.jobabroad-co-za.dkim.brevo.com.
+brevo2._domainkey       IN  CNAME   b2.jobabroad-co-za.dkim.brevo.com.
+
+; --- Google Search Console verification -----------------------------------
+@                       IN  TXT     "google-site-verification=F3hxuDb9dAnwYEmZvsAyzfMYZgTPQKNQw3WsU-F3D8I"
