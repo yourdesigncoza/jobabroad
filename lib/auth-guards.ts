@@ -50,6 +50,23 @@ export async function requireAdmin(returnTo: string) {
 }
 
 /**
+ * Pure predicate for admin-allow-list membership. Used by API routes that
+ * want a 404 response (not a redirect) for non-admins — call this against
+ * the authenticated user's email and return 404 on false.
+ */
+export function isAdminEmail(email: string | null | undefined): boolean {
+  if (!email) return false;
+  const raw = process.env.ADMIN_EMAILS ?? '';
+  const allow = new Set(
+    raw
+      .split(',')
+      .map((s) => s.trim().toLowerCase())
+      .filter(Boolean),
+  );
+  return allow.has(email.toLowerCase());
+}
+
+/**
  * Returns the current user's tier without redirecting. Used by site-wide
  * chrome (SiteNav, SiteFooter, StickyNav callers, AnswerCard) to hide
  * WhatsApp CTAs once a user has paid — they have self-service tools
