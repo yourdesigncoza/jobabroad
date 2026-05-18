@@ -1,6 +1,8 @@
-// One-shot fixture render: exercises the new step-4 template branches
-// (callNotes section + premium partners block) without going through OpenAI
-// or Supabase. Writes a PDF to docs/prompt-tests/ for visual review.
+// One-shot fixture render: exercises the step-4 template branches
+// (callNotes section + trusted-partners block) without going through OpenAI
+// or Supabase. Partners flow through the live getTrustedPartnersForBuyer
+// matcher so the fixture also serves as an integration smoke test of the
+// trusted-partner matching pipeline. Writes a PDF to docs/prompt-tests/.
 
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -9,6 +11,26 @@ import { renderToBuffer, type DocumentProps } from '@react-pdf/renderer';
 import type { ReactElement } from 'react';
 import { ReportTemplate } from '@/lib/reports/pdf-template';
 import type { ReportData } from '@/lib/reports/types';
+import { getTrustedPartnersForBuyer } from '@/lib/recruiters';
+
+// Sarah's fixture buyer is a SA teacher targeting UK + UAE. Apostil serves
+// both, so the matcher should surface it in the partners block.
+const matched = getTrustedPartnersForBuyer({
+  category: 'teaching',
+  targetDestinations: ['UK', 'UAE'],
+});
+const livePartners: ReportData['partners'] = matched.length
+  ? matched.slice(0, 4).map((r) => {
+      const destBit = r.destinations.length ? ` · ${r.destinations.slice(0, 3).join(', ')}` : '';
+      return {
+        name: r.name,
+        subline: `${r.type || 'Recruiter'}${destBit}`,
+        notes: r.notes,
+        bullets: r.trustedBullets,
+        url: r.website || undefined,
+      };
+    })
+  : undefined;
 
 const data: ReportData = {
   userName: 'Sarah van der Merwe',
@@ -62,22 +84,7 @@ Action items we agreed on:
 - You'll book a follow-up call in 4 weeks to review applications
 
 One concern raised: your maths PGCE is from 2008 — some UK academies prefer "recent" PGCE (last 10 years). We discussed framing your CPD and your IB workshop attendance to bridge that perception.`,
-  partners: [
-    {
-      name: 'Engage Education',
-      subline: 'Teaching recruiter · United Kingdom',
-      notes:
-        'Engage Education has a South Africa-specific arm and places SA teachers into UK secondary schools (including maths roles). They handle CoS sponsorship for shortage-subject candidates.',
-      url: 'https://engage-education.com/za/',
-    },
-    {
-      name: 'Apostil.co.za',
-      subline: 'Document concierge · Australia, United Kingdom, Canada, New Zealand, UAE',
-      notes:
-        'DIRCO-registered document concierge. Wednesday batch submissions to DIRCO mean a 1 to 2 week turnaround vs the public 3 to 4 week courier wait.',
-      url: 'https://apostil.co.za/',
-    },
-  ],
+  partners: livePartners,
 };
 
 async function main() {
@@ -88,6 +95,7 @@ async function main() {
   const outPath = join(outDir, 'step4-template-fixture.pdf');
   writeFileSync(outPath, buffer);
   console.log('wrote', outPath, `(${buffer.length} bytes)`);
+  console.log('matched partners:', (livePartners ?? []).map((p) => p.name));
 }
 
 main().catch((e) => {

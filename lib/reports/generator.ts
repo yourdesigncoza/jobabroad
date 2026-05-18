@@ -8,7 +8,8 @@ import type { DimensionResult, ScoreResult } from '@/lib/scoring/types';
 import { getOrGenerateNarratives } from '@/lib/scoring/narratives';
 import { assessmentDataSchema } from '@/lib/assessments/schemas/assessment';
 import { CATEGORIES, type CategoryId } from '@/lib/categories';
-import { getPremiumRecruiters } from '@/lib/recruiters';
+import { getTrustedPartnersForBuyer } from '@/lib/recruiters';
+import type { AssessmentData } from '@/lib/assessments/schemas/assessment';
 import { ReportTemplate } from './pdf-template';
 import type { ReportData } from './types';
 
@@ -171,8 +172,25 @@ function pickContactChunks(
   return out;
 }
 
-function pickPartners(category: CategoryId): ReportData['partners'] {
-  const matches = getPremiumRecruiters(category);
+/**
+ * Reads the assessment's destinations multiselect by field id. Returns [] when
+ * the field is absent or the buyer left it blank, which makes the partner
+ * matcher fall through to "no destination signal → no destination match".
+ */
+function readTargetDestinations(answers: AssessmentData): string[] {
+  const entry = answers['readiness.target_destinations'];
+  if (!entry) return [];
+  if (Array.isArray(entry.v)) return entry.v.map(String);
+  if (typeof entry.v === 'string' && entry.v.trim()) return [entry.v];
+  return [];
+}
+
+function pickPartners(
+  category: CategoryId,
+  answers: AssessmentData,
+): ReportData['partners'] {
+  const targetDestinations = readTargetDestinations(answers);
+  const matches = getTrustedPartnersForBuyer({ category, targetDestinations });
   if (matches.length === 0) return undefined;
   return matches.slice(0, 4).map((r) => {
     const destBit = r.destinations.length
@@ -182,6 +200,7 @@ function pickPartners(category: CategoryId): ReportData['partners'] {
       name: r.name,
       subline: `${r.type || 'Recruiter'}${destBit}`,
       notes: tightenSnippet(r.notes, 200),
+      bullets: r.trustedBullets,
       url: r.website || undefined,
     };
   });
@@ -301,7 +320,7 @@ export async function generateReport(
     nextActions,
     contacts: pickContactChunks(corpus, category, baseUrl),
     callNotes,
-    partners: pickPartners(category as CategoryId),
+    partners: pickPartners(category as CategoryId, answers),
   };
 
   const element = React.createElement(ReportTemplate, { data }) as unknown as ReactElement<DocumentProps>;

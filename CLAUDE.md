@@ -48,7 +48,7 @@ npx playwright test -g "registers"      # single test by name
 **Public**
 - `/` — landing (category grid, FAQs, country stats)
 - `/demo/[category]` — public preview of paid content (rate-limited)
-- `/recruiters` — partner list (premium highlighted)
+- `/recruiters` — partner list (trusted partners highlighted)
 - `/scam-warnings` — safety guide
 
 **Auth**
@@ -92,7 +92,7 @@ Key files:
 - `lib/scoring/rubrics/teaching.json` — only teaching rubric exists; others return null (teaching-only pilot)
 - `lib/reports/generator.ts` — `searchCorpus()` → GPT → `<ReportTemplate>` PDF → cache to `paid-reports` bucket
 - `lib/payments/provider.ts` — Paystack adapter (swap point if changing provider)
-- `lib/recruiters.ts` + `lib/premium-partners.ts` — recruiter directory + R495-tier overlay
+- `lib/recruiters.ts` + `lib/trusted-partners.ts` — recruiter directory + trusted-partner overlay
 
 ### Assessment system
 

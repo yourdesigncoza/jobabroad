@@ -21,15 +21,17 @@ export interface ReportData {
    */
   callNotes?: string;
   /**
-   * Premium partner recruiters/agencies sourced via getPremiumRecruiters() —
-   * paid retainers, vetted by John, surfaced only in the R495 deliverable.
-   * Empty when no premium partner is mapped to the buyer's category.
+   * Trusted partner recruiters/agencies sourced via getTrustedPartnersForBuyer()
+   * — paid retainers, vetted by John, surfaced only in the R495 deliverable.
+   * Empty when no trusted partner matches the buyer's category + destinations.
    */
   partners?: Array<{
     name: string;
     /** "Type · destination 1, destination 2" — single subline below the name. */
     subline: string;
     notes: string;
+    /** Optional 1-3 short value bullets from the trusted-partners overlay. */
+    bullets?: string[];
     /** Optional clickable site URL. */
     url?: string;
   }>;

@@ -36,6 +36,7 @@ const COLOURS = {
   muted: '#6B6B6B',
   green: '#1B4D3E',
   gold: '#C9A84C',
+  orange: '#ff751f',
   red: '#B53A2B',
   rule: '#EDE8E0',
 };
@@ -184,26 +185,64 @@ const styles = StyleSheet.create({
     color: COLOURS.ink,
     marginBottom: 6,
   },
-  partnerName: {
-    fontSize: 10,
+  partnerCard: {
+    borderWidth: 1,
+    borderStyle: 'dashed',
+    borderColor: COLOURS.orange,
+    borderRadius: 6,
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 12,
+    paddingRight: 12,
+    marginBottom: 8,
+  },
+  partnerBadgeRow: {
+    flexDirection: 'row',
+    marginBottom: 6,
+  },
+  partnerBadge: {
+    fontSize: 7,
     fontWeight: 'bold',
-    color: COLOURS.green,
-    marginTop: 8,
+    color: '#FFFFFF',
+    backgroundColor: COLOURS.orange,
+    letterSpacing: 1.5,
+    textTransform: 'uppercase',
+    // lineHeight: 1 collapses the page's inherited 1.45 leading so the
+    // all-caps glyphs sit on the badge's vertical centre. Asymmetric
+    // padding nudges them down to compensate for DM Sans Bold's high
+    // cap-height (no descenders in "TRUSTED PARTNER").
+    lineHeight: 1,
+    paddingTop: 3,
+    paddingBottom: 5,
+    paddingLeft: 9,
+    paddingRight: 9,
+    borderRadius: 10,
+  },
+  partnerName: {
+    fontSize: 11,
+    fontWeight: 'bold',
+    color: COLOURS.ink,
   },
   partnerSubline: {
     fontSize: 9,
     color: COLOURS.muted,
-    marginBottom: 2,
+    marginBottom: 4,
+  },
+  partnerBullet: {
+    fontSize: 9,
+    color: COLOURS.ink,
+    marginTop: 2,
   },
   partnerNotes: {
     fontSize: 9,
     color: COLOURS.ink,
+    marginTop: 4,
   },
   partnerLink: {
     fontSize: 9,
-    color: COLOURS.green,
+    color: COLOURS.orange,
     textDecoration: 'underline',
-    marginTop: 2,
+    marginTop: 4,
   },
   disclaimer: {
     fontSize: 8,
@@ -366,14 +405,21 @@ export function ReportTemplate({ data }: { data: ReportData }) {
           </>
         )}
 
-        {/* Recommended partners — premium-only vetted recruiters for this category. */}
+        {/* Trusted partners — vetted recruiters/service providers matched to the
+            buyer's category + target destinations via getTrustedPartnersForBuyer. */}
         {data.partners && data.partners.length > 0 && (
           <>
             <Text style={styles.h2}>Recommended partners</Text>
             {data.partners.map((p, i) => (
-              <View key={i}>
+              <View key={i} style={styles.partnerCard} wrap={false}>
+                <View style={styles.partnerBadgeRow}>
+                  <Text style={styles.partnerBadge}>Trusted partner</Text>
+                </View>
                 <Text style={styles.partnerName}>{lig(p.name)}</Text>
                 <Text style={styles.partnerSubline}>{lig(p.subline)}</Text>
+                {p.bullets?.map((b, bi) => (
+                  <Text key={bi} style={styles.partnerBullet}>• {lig(b)}</Text>
+                ))}
                 <Text style={styles.partnerNotes}>{lig(p.notes)}</Text>
                 {p.url && (
                   <Link src={p.url} style={styles.partnerLink}>

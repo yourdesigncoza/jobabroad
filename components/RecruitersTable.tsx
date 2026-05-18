@@ -1,9 +1,11 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { recruiters as ALL, type Recruiter } from '@/lib/outreach-data';
+import { getAllRecruiters, type RecruiterWithFlags } from '@/lib/recruiters';
 
-const FILTERS: { label: string; match: (r: Recruiter) => boolean }[] = [
+const ALL: RecruiterWithFlags[] = getAllRecruiters();
+
+const FILTERS: { label: string; match: (r: RecruiterWithFlags) => boolean }[] = [
   { label: 'All',                    match: () => true },
   { label: 'Healthcare',             match: r => r.categories.includes('Healthcare') },
   { label: 'Teaching',               match: r => r.categories.includes('Teaching') },
@@ -30,7 +32,7 @@ const TYPE_COLOUR: Record<string, string> = {
   'Migration consultants': '#6B6B6B',
 };
 
-function categoryColour(r: Recruiter): string {
+function categoryColour(r: RecruiterWithFlags): string {
   for (const cat of r.categories) {
     if (TYPE_COLOUR[cat]) return TYPE_COLOUR[cat];
   }
@@ -52,7 +54,7 @@ export default function RecruitersTable() {
   const filtered = useMemo(() => {
     const f = FILTERS.find(x => x.label === activeFilter) ?? FILTERS[0];
     const q = query.trim().toLowerCase();
-    return ALL.filter(r => f.match(r)).filter(r => {
+    const matched = ALL.filter(r => f.match(r)).filter(r => {
       if (!q) return true;
       return (
         r.name.toLowerCase().includes(q) ||
@@ -61,6 +63,8 @@ export default function RecruitersTable() {
         r.type.toLowerCase().includes(q)
       );
     });
+    // Trusted partners surface first within the filtered view.
+    return [...matched].sort((a, b) => Number(b.trusted) - Number(a.trusted));
   }, [activeFilter, query]);
 
   return (
@@ -111,9 +115,23 @@ export default function RecruitersTable() {
             <article
               key={r.name}
               className="flex flex-col gap-3 p-6 rounded-2xl border bg-white"
-              style={{ borderColor: '#EDE8E0' }}
+              style={{
+                borderColor: r.trusted ? '#ff751f' : '#EDE8E0',
+                borderWidth: 1,
+                borderStyle: r.trusted ? 'dashed' : 'solid',
+                boxShadow: r.trusted ? '0 2px 12px rgba(255, 117, 31, 0.15)' : undefined,
+              }}
             >
               <div className="flex flex-wrap items-center gap-2">
+                {r.trusted && (
+                  <span
+                    className="font-display text-[0.65rem] uppercase tracking-[0.15em] px-3 py-1 rounded-full"
+                    style={{ backgroundColor: '#ff751f', color: '#FFFFFF' }}
+                    title="Trusted partner — verified by Jobabroad."
+                  >
+                    ★ Trusted partner
+                  </span>
+                )}
                 <span
                   className="font-display text-[0.65rem] uppercase tracking-[0.15em] px-3 py-1 rounded-full"
                   style={{ backgroundColor: colour, color: '#FFFFFF' }}
