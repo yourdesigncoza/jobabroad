@@ -216,8 +216,8 @@ export default function ScoreResult({
               Your full report is ready
             </h2>
             <p className="font-body text-sm" style={{ color: '#6B6B6B' }}>
-              Book your 15-minute review call from the dashboard. Your personalised
-              PDF report lands in your inbox right after we speak.
+              Open your dashboard to download your personalised action plan. Want to
+              talk it through? Book an optional 15-minute review call from there.
             </p>
             <Link
               href="/dashboard"

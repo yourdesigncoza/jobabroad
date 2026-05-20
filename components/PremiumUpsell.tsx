@@ -13,29 +13,28 @@ interface Props {
   withAnchor?: boolean;
 }
 
-const BAND_UPSELL: Record<Band, { heading: string; intro: string[] }> = {
+/** Shared R495 pitch — band-agnostic so the copy reads identically wherever
+ *  the upsell appears (score page, dashboard). */
+const PLAN_INTRO =
+  "For R495, we'll review your profile and give you a clear, personalised action plan, emailed to you immediately and available inside your personal dashboard. You'll know what to fix first, which work-abroad routes look most realistic for you, what to avoid wasting money on, and which trusted partners may be worth speaking to.";
+const CALL_INTRO =
+  "When you're ready, you can also book a 15-minute call so we can walk through your situation properly and make sure your next steps are clear.";
+
+/** Band-specific opener — speaks to the user's actual score before the
+ *  shared R495 pitch. */
+const BAND_UPSELL: Record<Band, { heading: string; opener: string }> = {
   strong_potential: {
     heading: "You've got a real shot. Want to move faster?",
-    intro: [
-      "The headline says you're application-ready, but ready doesn't mean automatic.",
-      "The R495 upgrade saves you time. We talk through your situation on a 15-minute call, then write a personalised action plan: which country to target first, which documents to apostille this week, which recruiters to actually contact.",
-      'Tailored to you, not just another auto-generated summary.',
-    ],
+    opener: "The headline says you're application-ready, but ready doesn't mean automatic.",
   },
   needs_prep: {
     heading: "Don't spend money in the wrong order.",
-    intro: [
+    opener:
       'Your score shows real potential, but one or two gaps could block your application if you deal with them too late.',
-      'For R495, we review your situation on a 15-minute call and then write a personalised action plan showing what to fix first, which route looks most realistic, and what not to waste money on.',
-    ],
   },
   high_blockers: {
     heading: 'Not the result you wanted? Not the end of the road either.',
-    intro: [
-      "The blockers above are real, but they're rarely permanent.",
-      "The R495 upgrade gives you a clear next move. We talk through your situation on a 15-minute call, then write a personalised action plan: whether to close those gaps now or pivot to a different route, what NOT to spend money on, what's realistic in the next 12 months.",
-      'Honest and specific to you, not just another auto-generated summary.',
-    ],
+    opener: "The blockers above are real, but they're rarely permanent.",
   },
 };
 
@@ -70,7 +69,7 @@ export default function PremiumUpsell({ band, withAnchor }: Props) {
       <h2 className="font-display font-bold uppercase tracking-wide text-lg">
         {BAND_UPSELL[band].heading}
       </h2>
-      {BAND_UPSELL[band].intro.map((para, i) => (
+      {[BAND_UPSELL[band].opener, PLAN_INTRO, CALL_INTRO].map((para, i) => (
         <p
           key={i}
           className="font-body text-sm leading-relaxed"
@@ -106,13 +105,13 @@ export default function PremiumUpsell({ band, withAnchor }: Props) {
             className="font-display uppercase tracking-wider text-[0.65rem] font-bold"
             style={{ color: '#C9A84C' }}
           >
-            Includes a live call
+            Optional
           </p>
           <p className="font-body text-sm font-semibold" style={{ color: '#F8F5F0' }}>
-            15-minute review call to talk through your plan
+            Book a 15-minute call after reading your plan
           </p>
           <p className="font-body text-xs" style={{ color: 'rgba(248,245,240,0.75)' }}>
-            We use the call to understand your specific situation, then write your personalised report right after.
+            Your personalised action plan is emailed to you immediately. When you&apos;re ready, book a short call and we&apos;ll walk through your next steps together.
           </p>
         </div>
       </div>
@@ -121,9 +120,13 @@ export default function PremiumUpsell({ band, withAnchor }: Props) {
         className="font-body text-sm flex flex-col gap-1.5"
         style={{ color: 'rgba(248,245,240,0.85)' }}
       >
-        <li>• Personalised PDF report with next steps</li>
-        <li>• Recommended vetted partners for your category</li>
+        <li>• Personalised action plan</li>
+        <li>• Immediate email delivery</li>
+        <li>• Saved in your dashboard</li>
+        <li>• Realistic work-abroad route suggestions</li>
+        <li>• Trusted partner recommendations</li>
         <li>• 5 written follow-up questions</li>
+        <li>• Optional 15-minute review call</li>
       </ul>
       <button
         type="button"
@@ -132,7 +135,7 @@ export default function PremiumUpsell({ band, withAnchor }: Props) {
         className="inline-flex self-start items-center justify-center px-6 py-3 rounded-xl font-display font-bold uppercase tracking-wide text-sm disabled:opacity-60"
         style={{ backgroundColor: '#ff751f', color: '#FFFFFF' }}
       >
-        {checkingOut ? 'Loading checkout…' : 'Unlock for R495 →'}
+        {checkingOut ? 'Loading checkout…' : 'Get My Action Plan – R495'}
       </button>
       {checkoutError && (
         <p className="font-body text-xs" style={{ color: '#FFD1B8' }}>

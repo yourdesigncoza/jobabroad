@@ -148,7 +148,7 @@ export default function HowItWorks() {
                 className="font-body text-xs leading-relaxed"
                 style={{ color: "rgba(248,245,240,0.55)" }}
               >
-                Optional <strong style={{ color: "rgba(248,245,240,0.85)" }}>R495 upgrade</strong> adds a 15-min review call and your personalised action plan. One-off payment, no subscription.
+                Optional <strong style={{ color: "rgba(248,245,240,0.85)" }}>R495 upgrade</strong> — a personalised action plan, emailed immediately, plus a 15-min review call when you want one. One-off payment, no subscription.
               </p>
             </div>
 

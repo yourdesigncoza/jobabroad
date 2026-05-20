@@ -19,7 +19,7 @@ export default function AssessmentCTA({ category, isSubmitted, isPaid }: Props) 
     href = `/members/${category}/assessment`;
   } else if (!isPaid) {
     title = 'Unlock Your Full Report';
-    body = "You've completed your check. Upgrade to see your full personalised assessment, book a 15-min review call, and get 5 follow-up questions.";
+    body = "You've completed your check. Upgrade for a personalised action plan emailed immediately, 5 follow-up questions, and an optional 15-min review call.";
     buttonLabel = 'Go Premium';
     href = `/members/${category}/score`;
   } else {
