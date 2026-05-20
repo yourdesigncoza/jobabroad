@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
 import {
   deleteUser,
   findUserIdByEmail,
@@ -17,6 +17,28 @@ const PASSWORD = 'Test12345!';
 // ADMIN_EMAILS (then restart the dev server). Without it, only the gate
 // tests run.
 const ADMIN_EMAIL = process.env.PLAYWRIGHT_ADMIN_EMAIL ?? '';
+
+/**
+ * Seed an admin user via the service-role API and sign in through the /login
+ * form. The profiles.handle_new_user trigger writes a NOT-NULL phone, so the
+ * phone must be present in user_metadata or createUser fails with a database
+ * error — and createUser does not throw on error, it returns it.
+ */
+async function seedAndLoginAdmin(adminPage: Page): Promise<void> {
+  const { error } = await svc().auth.admin.createUser({
+    email: ADMIN_EMAIL,
+    password: PASSWORD,
+    email_confirm: true,
+    user_metadata: { name: 'Admin', phone: `27${uniquePhone().slice(1)}`, category: 'teaching' },
+  });
+  if (error) throw new Error(`admin createUser failed: ${error.message}`);
+
+  await adminPage.goto('/login');
+  await adminPage.locator('input[name="email"]').fill(ADMIN_EMAIL);
+  await adminPage.locator('input[name="password"]').fill(PASSWORD);
+  await adminPage.getByRole('button', { name: /sign in/i }).click();
+  await expect(adminPage).toHaveURL(/\/dashboard/);
+}
 
 // =========================================================================
 // /api/admin/post-call/save-notes — auth + validation gates
@@ -111,19 +133,7 @@ test.describe('Admin save-notes — happy path', () => {
     const adminCtx = await browser.newContext();
     const adminPage = await adminCtx.newPage();
     try {
-      // Admin seeded directly via service role (real-world: admin already exists)
-      await svc().auth.admin.createUser({
-        email: ADMIN_EMAIL,
-        password: PASSWORD,
-        email_confirm: true,
-        user_metadata: { name: 'Admin', category: 'teaching' },
-      });
-
-      await adminPage.goto('/login');
-      await adminPage.locator('input[name="email"]').fill(ADMIN_EMAIL);
-      await adminPage.locator('input[name="password"]').fill(PASSWORD);
-      await adminPage.getByRole('button', { name: /sign in/i }).click();
-      await expect(adminPage).toHaveURL(/\/dashboard/);
+      await seedAndLoginAdmin(adminPage);
 
       // Mock Brevo so the test doesn't actually send mail
       await adminPage.route('https://api.brevo.com/**', (route) =>
@@ -182,18 +192,7 @@ test.describe('Admin force-regenerate — happy path', () => {
     const adminCtx = await browser.newContext();
     const adminPage = await adminCtx.newPage();
     try {
-      await svc().auth.admin.createUser({
-        email: ADMIN_EMAIL,
-        password: PASSWORD,
-        email_confirm: true,
-        user_metadata: { name: 'Admin', category: 'teaching' },
-      });
-
-      await adminPage.goto('/login');
-      await adminPage.locator('input[name="email"]').fill(ADMIN_EMAIL);
-      await adminPage.locator('input[name="password"]').fill(PASSWORD);
-      await adminPage.getByRole('button', { name: /sign in/i }).click();
-      await expect(adminPage).toHaveURL(/\/dashboard/);
+      await seedAndLoginAdmin(adminPage);
 
       const res = await adminPage.request.post('/api/admin/post-call/regenerate', {
         data: { userId: buyerId },
