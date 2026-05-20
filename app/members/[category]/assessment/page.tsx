@@ -77,6 +77,7 @@ export default async function AssessmentPage({
             initialAssessmentId={draft?.id ?? null}
             initialStatus={draft?.status ?? null}
             leadPhone={profile.phone}
+            leadName={profile.name}
           />
         </div>
       </div>

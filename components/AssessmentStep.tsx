@@ -1,28 +1,62 @@
 'use client';
 
 import type { StepDef, FieldDef } from '@/lib/assessments/types';
+import { isFieldVisible } from '@/lib/assessments/field-utils';
 
 interface Props {
   step: StepDef;
   values: Record<string, unknown>;
   onChange: (fieldId: string, value: unknown) => void;
+  /** Field IDs flagged as required-but-empty on the last advance attempt. */
+  errors: string[];
 }
 
+/** Fields prefilled from the user's registration — shown locked, not editable. */
+const LOCKED_FIELD_IDS = new Set(['personal.full_name']);
+
 const inputClass = 'w-full font-body text-sm rounded-xl px-4 py-3 outline-none transition-colors';
-const inputStyle = { backgroundColor: '#F8F5F0', border: '1.5px solid #EDE8E0', color: '#2C2C2C' };
 const labelStyle = { color: '#2C2C2C' };
 const hintStyle = { color: '#6B6B6B' };
+const errorColour = '#dc2626';
 
-function Field({ field, value, onChange }: { field: FieldDef; value: unknown; onChange: (v: unknown) => void }) {
+function inputStyle(invalid: boolean, readOnly: boolean) {
+  return {
+    backgroundColor: readOnly ? '#EDE8E0' : '#F8F5F0',
+    border: `1.5px solid ${invalid ? errorColour : '#EDE8E0'}`,
+    color: readOnly ? '#6B6B6B' : '#2C2C2C',
+  };
+}
+
+function Field({
+  field,
+  value,
+  onChange,
+  invalid,
+  readOnly,
+}: {
+  field: FieldDef;
+  value: unknown;
+  onChange: (v: unknown) => void;
+  invalid: boolean;
+  readOnly: boolean;
+}) {
   if (field.type === 'text' || field.type === 'number') {
     return (
       <input
         type={field.type === 'number' ? 'number' : 'text'}
         placeholder={field.placeholder}
         value={(value as string) ?? ''}
-        onChange={(e) => onChange(field.type === 'number' ? Number(e.target.value) : e.target.value)}
-        className={inputClass}
-        style={inputStyle}
+        readOnly={readOnly}
+        aria-readonly={readOnly || undefined}
+        onChange={(e) => {
+          if (field.type === 'number') {
+            onChange(e.target.value === '' ? undefined : Number(e.target.value));
+          } else {
+            onChange(e.target.value);
+          }
+        }}
+        className={`${inputClass}${readOnly ? ' cursor-not-allowed' : ''}`}
+        style={inputStyle(invalid, readOnly)}
       />
     );
   }
@@ -34,7 +68,7 @@ function Field({ field, value, onChange }: { field: FieldDef; value: unknown; on
         value={(value as string) ?? ''}
         onChange={(e) => onChange(e.target.value)}
         className={inputClass}
-        style={inputStyle}
+        style={inputStyle(invalid, false)}
       />
     );
   }
@@ -54,7 +88,7 @@ function Field({ field, value, onChange }: { field: FieldDef; value: unknown; on
               style={{
                 backgroundColor: active ? '#1B4D3E' : '#F8F5F0',
                 color: active ? '#F8F5F0' : '#2C2C2C',
-                border: `1.5px solid ${active ? '#1B4D3E' : '#EDE8E0'}`,
+                border: `1.5px solid ${active ? '#1B4D3E' : invalid ? errorColour : '#EDE8E0'}`,
               }}
             >
               {opt}
@@ -79,7 +113,7 @@ function Field({ field, value, onChange }: { field: FieldDef; value: unknown; on
               style={{
                 backgroundColor: active ? '#1B4D3E' : '#F8F5F0',
                 color: active ? '#F8F5F0' : '#2C2C2C',
-                border: `1.5px solid ${active ? '#1B4D3E' : '#EDE8E0'}`,
+                border: `1.5px solid ${active ? '#1B4D3E' : invalid ? errorColour : '#EDE8E0'}`,
               }}
             >
               {opt}
@@ -108,7 +142,7 @@ function Field({ field, value, onChange }: { field: FieldDef; value: unknown; on
               style={{
                 backgroundColor: active ? '#1B4D3E' : '#F8F5F0',
                 color: active ? '#F8F5F0' : '#2C2C2C',
-                border: `1.5px solid ${active ? '#1B4D3E' : '#EDE8E0'}`,
+                border: `1.5px solid ${active ? '#1B4D3E' : invalid ? errorColour : '#EDE8E0'}`,
               }}
             >
               {opt}
@@ -122,28 +156,39 @@ function Field({ field, value, onChange }: { field: FieldDef; value: unknown; on
   return null;
 }
 
-export default function AssessmentStep({ step, values, onChange }: Props) {
+export default function AssessmentStep({ step, values, onChange, errors }: Props) {
   return (
     <div className="flex flex-col gap-6">
       {step.fields.map((field) => {
-        if (field.showIf) {
-          const depValue = values[field.showIf.field];
-          if ('includes' in field.showIf) {
-            if (!Array.isArray(depValue) || !depValue.includes(field.showIf.includes)) {
-              return null;
-            }
-          } else if (depValue !== field.showIf.value) {
-            return null;
-          }
-        }
+        if (!isFieldVisible(field, values)) return null;
+
+        const invalid = errors.includes(field.id);
+        const locked = LOCKED_FIELD_IDS.has(field.id);
+
         return (
-          <div key={field.id} className="flex flex-col gap-2">
+          <div key={field.id} id={`field-${field.id}`} className="flex flex-col gap-2 scroll-mt-24">
             <label className="font-body text-sm font-semibold" style={labelStyle}>
               {field.label}
               {field.optional && <span className="font-normal ml-1" style={hintStyle}>(optional)</span>}
             </label>
             {field.hint && <p className="font-body text-xs" style={hintStyle}>{field.hint}</p>}
-            <Field field={field} value={values[field.id]} onChange={(v) => onChange(field.id, v)} />
+            {locked && (
+              <p className="font-body text-xs" style={hintStyle}>
+                From your registration — contact us if this needs to change.
+              </p>
+            )}
+            <Field
+              field={field}
+              value={values[field.id]}
+              onChange={(v) => onChange(field.id, v)}
+              invalid={invalid}
+              readOnly={locked}
+            />
+            {invalid && (
+              <p className="font-body text-xs" style={{ color: errorColour }}>
+                Please answer this before continuing.
+              </p>
+            )}
           </div>
         );
       })}

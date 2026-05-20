@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { SCHEMA_VERSION } from '@/lib/assessments/types';
 import { getStepsForCategory } from '@/lib/assessments/steps';
+import { getMissingRequiredFields } from '@/lib/assessments/field-utils';
 import AssessmentProgress from './AssessmentProgress';
 import AssessmentStep from './AssessmentStep';
 
@@ -14,6 +15,7 @@ interface Props {
   initialAssessmentId: string | null;
   initialStatus: 'draft' | 'submitted' | null;
   leadPhone: string;
+  leadName: string;
 }
 
 function toPayload(fieldId: string, version: number, value: unknown) {
@@ -23,7 +25,7 @@ function toPayload(fieldId: string, version: number, value: unknown) {
 export default function AssessmentWizard({
   category,
   initialData, initialSlugs, initialAssessmentId,
-  initialStatus, leadPhone,
+  initialStatus, leadPhone, leadName,
 }: Props) {
   const router = useRouter();
   const steps = useMemo(() => getStepsForCategory(category) ?? [], [category]);
@@ -43,12 +45,17 @@ export default function AssessmentWizard({
     if (!out['personal.whatsapp_number'] && leadPhone) {
       out['personal.whatsapp_number'] = leadPhone;
     }
+    // Full name is locked to the registration profile — always authoritative.
+    if (leadName) {
+      out['personal.full_name'] = leadName;
+    }
     return out;
   });
   const [assessmentId, setAssessmentId] = useState<string | null>(initialAssessmentId);
   const [completedSlugs, setCompletedSlugs] = useState<string[]>(initialSlugs);
   const [submitting, setSubmitting] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [errors, setErrors] = useState<string[]>([]);
 
   useEffect(() => {
     if (initialStatus === 'submitted') {
@@ -94,10 +101,23 @@ export default function AssessmentWizard({
 
   function handleChange(fieldId: string, value: unknown) {
     setValues((prev) => ({ ...prev, [fieldId]: value }));
+    // Clear a field's required-error as soon as the user answers it.
+    setErrors((prev) => (prev.includes(fieldId) ? prev.filter((id) => id !== fieldId) : prev));
   }
 
   async function handleNext() {
     if (!currentStep) return;
+
+    const missing = getMissingRequiredFields(currentStep, values);
+    if (missing.length > 0) {
+      setErrors(missing);
+      document
+        .getElementById(`field-${missing[0]}`)
+        ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    setErrors([]);
+
     const newId = await saveStep(currentStep.slug, values, assessmentId);
     if (newId) setAssessmentId(newId);
     const newSlugs = Array.from(new Set([...completedSlugs, currentStep.slug]));
@@ -122,6 +142,7 @@ export default function AssessmentWizard({
   }
 
   function handleBack() {
+    setErrors([]);
     setCurrentIndex((i) => Math.max(0, i - 1));
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
@@ -146,6 +167,7 @@ export default function AssessmentWizard({
         step={currentStep}
         values={values}
         onChange={handleChange}
+        errors={errors}
       />
 
       {saveError && (
