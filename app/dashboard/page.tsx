@@ -243,6 +243,12 @@ export default async function DashboardPage() {
               <span className="font-body text-xs block mt-1" style={{ color: '#6B6B6B' }}>
                 Want to talk it through? Pick a slot whenever you&apos;re ready — no rush.
               </span>
+              <span
+                className="inline-flex items-center gap-2 mt-4 px-5 py-2.5 rounded-xl font-display font-bold uppercase tracking-wide text-xs"
+                style={{ backgroundColor: '#1B4D3E', color: '#F8F5F0' }}
+              >
+                Pick a slot →
+              </span>
             </Link>
 
             {callNotes && (
