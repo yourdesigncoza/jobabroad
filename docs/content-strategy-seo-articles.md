@@ -61,11 +61,11 @@ Every page is bottom-of-funnel — it assumes the visitor already knows they wan
 
 ---
 
-## Content pillars
+## Content themes (the 4 strategic pillars)
 
-Four pillars. Each spawns a cluster; each article funnels to `/register?category=…` or the eligibility assessment.
+"Pillar" has two meanings. These are *strategic pillars* — the four themes the content program is built on. A *pillar page* is a different thing (a page type) — see the next section. Each theme spawns a cluster; each article funnels to `/register?category=…` or the eligibility assessment.
 
-| Pillar | Owns | Funnels to |
+| Theme | Owns | Funnels to |
 |---|---|---|
 | **1. Profession Pathways** — "How a [profession] works abroad" | Maps 1:1 to the 11 pathway categories + `/pathways/` previews | `/register?category=X` |
 | **2. Destination & Route Decision** — "Where should I go / which visa" | Comparative, route-agnostic content | `/register` + assessment |
@@ -74,26 +74,43 @@ Four pillars. Each spawns a cluster; each article funnels to `/register?category
 
 ---
 
+## Pillar pages & cluster structure
+
+A **pillar page** (a.k.a. hub) is the broad anchor page of a topic cluster. A **spoke** article goes deep on one narrow question and links *up* to its pillar. Google rewards this shape: a tight, interlinked cluster signals topical authority, and internal links pass ranking value up to the pillar.
+
+**Jobabroad already has its pillar pages — no need to build new ones:**
+
+| Pillar page (hub) | Role |
+|---|---|
+| `/` (homepage) | Top-level pillar — "work abroad from South Africa" |
+| `/pathways/[category]` × 11 | Category pillars — the comprehensive per-profession guides |
+| `/scam-warnings` | Safety pillar |
+| `[3]` Best Countries (new article) | A blog-level sub-hub for the destination-decision cluster |
+
+The 10 articles below are **spokes**, not pillars. Each links up to one pillar page — see the "Links up to" column — and the pillar links back down to it.
+
+---
+
 ## The 10 articles
 
-| # | Working title | Pillar | Primary keyword | Stage | Funnels to | Score |
-|---|---|---|---|---|---|---|
-| 1 | How SA Nurses Can Work in the UK in 2026 (Step-by-Step) | 1 | nursing jobs UK from South Africa | Consideration | healthcare | **9.4** |
-| 2 | Teach in the UK from SA: The Free QTS Route (2026) | 1 | teach in UK from South Africa | Consideration | teaching (paid pilot) | **8.7** |
-| 3 | Best Countries for South Africans to Work Abroad in 2026 (by Profession) | 2 | best countries for South Africans to work abroad | Awareness | all / hub | **8.5** |
-| 4 | Working Abroad Without a Degree: 6 Real Routes for South Africans | 2 | work abroad without a degree South Africa | Awareness | au-pair, tefl, seasonal, farming, trades, hospitality | **8.4** |
-| 5 | Au Pair in America from SA: Costs, Visa & How to Apply (2026) | 1 | au pair in America from South Africa | Consideration | au-pair | **8.3** |
-| 6 | Recruitment Scams Targeting South Africans: 9 Red Flags | 4 | work abroad recruitment scams South Africa | Awareness | scam-warnings | **8.3** |
-| 7 | How Much More Do SA Nurses Earn Abroad? Salary in Rands | 3 | nurse salary UK vs South Africa | Commercial | healthcare | **8.1** |
-| 8 | Best Route for SA IT Professionals: Ireland vs Germany vs Canada | 1 | IT jobs abroad from South Africa | Consideration | it-tech | **7.8** |
-| 9 | Police Clearance, Apostille & SAQA: The Document Checklist (2026) | 4 | police clearance certificate for working abroad | Implementation | assessment | **7.7** |
-| 10 | UK Ancestry Visa vs Skilled Worker Visa: Which Route Is Right? | 2 | UK ancestry visa vs skilled worker visa | Consideration | register | **7.6** |
+| # | Working title | Theme | Primary keyword | Stage | Links up to (pillar) | Funnels to | Score |
+|---|---|---|---|---|---|---|---|
+| 1 | How SA Nurses Can Work in the UK in 2026 (Step-by-Step) | 1 | nursing jobs UK from South Africa | Consideration | `/pathways/healthcare` | healthcare | **9.4** |
+| 2 | Teach in the UK from SA: The Free QTS Route (2026) | 1 | teach in UK from South Africa | Consideration | `/pathways/teaching` | teaching (paid pilot) | **8.7** |
+| 3 | Best Countries for South Africans to Work Abroad in 2026 (by Profession) | 2 | best countries for South Africans to work abroad | Awareness | `/` homepage *(is itself a sub-hub)* | all / hub | **8.5** |
+| 4 | Working Abroad Without a Degree: 6 Real Routes for South Africans | 2 | work abroad without a degree South Africa | Awareness | `[3]` Best Countries hub | au-pair, tefl, seasonal, farming, trades, hospitality | **8.4** |
+| 5 | Au Pair in America from SA: Costs, Visa & How to Apply (2026) | 1 | au pair in America from South Africa | Consideration | `/pathways/au-pair` | au-pair | **8.3** |
+| 6 | Recruitment Scams Targeting South Africans: 9 Red Flags | 4 | work abroad recruitment scams South Africa | Awareness | `/scam-warnings` | scam-warnings | **8.3** |
+| 7 | How Much More Do SA Nurses Earn Abroad? Salary in Rands | 3 | nurse salary UK vs South Africa | Commercial | `/pathways/healthcare` | healthcare | **8.1** |
+| 8 | Best Route for SA IT Professionals: Ireland vs Germany vs Canada | 1 | IT jobs abroad from South Africa | Consideration | `/pathways/it-tech` | it-tech | **7.8** |
+| 9 | Police Clearance, Apostille & SAQA: The Document Checklist (2026) | 4 | police clearance certificate for working abroad | Implementation | `/` homepage *(cross-cutting)* | assessment | **7.7** |
+| 10 | UK Ancestry Visa vs Skilled Worker Visa: Which Route Is Right? | 2 | UK ancestry visa vs skilled worker visa | Consideration | `[3]` Best Countries hub | register | **7.6** |
 
 ### Per-article detail
 
-**1. How SA Nurses Can Work in the UK in 2026 (Step-by-Step)** — *Searchable.* Hub/spoke spoke. Flagship: nursing is the #1 demand wedge (1 in 5 SA healthcare workers has taken steps to emigrate). Cover SANC Certificate of Good Standing → NMC CCPS → OSCE → IELTS/OET → Health & Care Worker Visa. Hook: NMC applications up 4×; SA not on the WHO Red List. CTA: free healthcare eligibility check.
+**1. How SA Nurses Can Work in the UK in 2026 (Step-by-Step)** — *Searchable.* Spoke of the `/pathways/healthcare` pillar. Flagship: nursing is the #1 demand wedge (1 in 5 SA healthcare workers has taken steps to emigrate). Cover SANC Certificate of Good Standing → NMC CCPS → OSCE → IELTS/OET → Health & Care Worker Visa. Hook: NMC applications up 4×; SA not on the WHO Red List. CTA: free healthcare eligibility check.
 
-**2. Teach in the UK from SA: The Free QTS Route (2026)** — *Searchable.* Strategically the highest-value funnel — teaching is the **R495 paid-pilot category**, so every registration here can monetise. Hook: DfE made QTS free (Aug 2025), removing the main barrier. Cover SACE Certificate of Good Standing → free QTS digital application → Licensed Sponsor school → Skilled Worker Visa.
+**2. Teach in the UK from SA: The Free QTS Route (2026)** — *Searchable.* Strategically the highest-value funnel — teaching is the **R495 paid-pilot category**, so every registration here can monetise. Hook: DfE made QTS applications free (Aug 2025), removing a major cost barrier. Cover SACE Certificate of Good Standing → "Apply for QTS in England" service → Licensed Sponsor school → Skilled Worker Visa. **Accuracy note:** QTS for SA teachers is *assessment-based, not automatic* — qualification level and subject matter, and live sources conflict on exactly who is eligible. Teachers can work as an Overseas Trained Teacher for up to 4 years and must gain QTS within that window. The article must verify current eligibility against gov.uk and frame it as "apply and be assessed", not guaranteed.
 
 **3. Best Countries for South Africans to Work Abroad in 2026 (by Profession)** — *Searchable + shareable.* **Cornerstone hub** — beats the generic listicles by being profession-aware. Ranks UK / Australia / Ireland / Canada / Germany / NZ / Gulf and says which profession each suits. Internal-links to every profession article. Big head-term traffic.
 
@@ -136,23 +153,28 @@ Customer Impact 40% · Content-Market Fit 30% · Search Potential 20% · Resourc
 
 ## Topic cluster map
 
+Pillar pages (hubs) on top; the 10 articles hang off them as spokes.
+
 ```
-                    [3] Best Countries to Work Abroad  ← cornerstone hub
-                    /        |          |          \
-       Pillar 1 ───/    Pillar 2        Pillar 3     Pillar 4
-       PROFESSION       DECISION        MONEY        GET READY
-        |                |               |             |
-  [1] Nurses → UK   [4] No-degree    [7] Nurse     [6] Scam red flags
-  [2] Teachers → UK     routes           salary    [9] Document checklist
-  [5] Au pair       [10] Ancestry vs     in rands
-  [8] IT route          Skilled Worker
+                        /  — homepage (top pillar: "work abroad from SA")
+                        │
+  ┌────────────┬────────┴────┬────────────┬────────────┬───────────────┐
+/pathways/   /pathways/   /pathways/   /pathways/    /scam-          [3] Best
+healthcare    teaching     it-tech      au-pair      warnings        Countries
+  │   │          │            │            │            │          (sub-hub)
+ [1] [7]        [2]          [8]          [5]           [6]            │   │
+spokes         spoke        spoke        spoke         spoke          [4] [10]
+
+  Cross-cutting: [9] Document checklist — every /pathways/ page links down to it.
 
 Internal linking rules:
-  • Every article links UP to the hub [3].
-  • Every article links to ONE primary CTA: /register?category=X (or the
-    eligibility assessment) + the matching /pathways/[category] preview.
-  • Profession articles cross-link to their salary/document siblings.
-  • [6] and [9] link to /scam-warnings.
+  • Every spoke links UP to its pillar page (the "Links up to" column).
+  • Each pillar page links DOWN to its spokes.
+  • Every article carries ONE primary CTA: /register?category=X
+    (or the eligibility assessment).
+  • Spokes cross-link to siblings — e.g. [1] Nurses ↔ [7] Nurse salary
+    ↔ [9] Documents.
+  • [3] is a sub-hub: links down to [4] and [10], up to the homepage.
 ```
 
 ---
