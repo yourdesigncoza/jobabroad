@@ -83,14 +83,6 @@ export default function NavUserMenu({ isSignedIn }: Props) {
           className="absolute right-0 top-full mt-2 min-w-44 rounded-xl shadow-lg z-50 overflow-hidden"
           style={{ backgroundColor: '#FFFFFF', border: '1.5px solid #EDE8E0' }}
         >
-          <Link
-            href="/blog"
-            className={`${itemClass} border-b`}
-            style={{ ...itemStyle, borderColor: '#EDE8E0' }}
-            onClick={() => setOpen(false)}
-          >
-            Blog
-          </Link>
           {isSignedIn ? (
             <>
               <Link href="/dashboard" className={itemClass} style={itemStyle} onClick={() => setOpen(false)}>

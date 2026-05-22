@@ -4,7 +4,6 @@ import { notFound } from 'next/navigation';
 import JsonLd from '@/components/JsonLd';
 import SiteNav from '@/components/SiteNav';
 import SiteFooter from '@/components/SiteFooter';
-import StickyNav from '@/components/StickyNav';
 import TableOfContents from '@/components/TableOfContents';
 import { getBlogPost, listBlogSlugs } from '@/lib/blog-content';
 import { pageMetadata, SITE_URL, SITE_NAME, SITE_AUTHOR } from '@/lib/site';
@@ -99,8 +98,11 @@ export default async function BlogArticlePage({
       <JsonLd data={articleSchema} />
       {faqSchema && <JsonLd data={faqSchema} />}
 
-      <SiteNav />
-      <StickyNav items={tocItems} />
+      {/* Wrapper keeps SiteNav out of the flex-item context, so its mx-auto
+          nav spans full width like on the home page (block <main>). */}
+      <div>
+        <SiteNav />
+      </div>
 
       <div className="flex-1 max-w-6xl w-full mx-auto px-4 lg:px-8 py-10">
         {/* Article header */}

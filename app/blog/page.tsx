@@ -25,15 +25,19 @@ export default function BlogIndexPage() {
 
   return (
     <main className="min-h-screen flex flex-col" style={{ backgroundColor: '#F8F5F0' }}>
-      <SiteNav />
+      {/* Wrapper keeps SiteNav out of the flex-item context, so its mx-auto
+          nav spans full width like on the home page (block <main>). */}
+      <div>
+        <SiteNav />
+      </div>
 
       <section className="flex-1 max-w-4xl w-full mx-auto px-6 py-16 flex flex-col gap-10">
         <header className="flex flex-col gap-4">
           <div className="flex items-center gap-3">
-            <span style={{ width: 56, height: 6, backgroundColor: '#ff751f' }} aria-hidden />
+            <div className="w-8 h-px" style={{ backgroundColor: '#ff751f' }} aria-hidden />
             <span
-              className="font-display font-bold uppercase tracking-[0.22em] text-xs"
-              style={{ color: '#C9A84C' }}
+              className="font-display text-[0.65rem] md:text-xs font-semibold uppercase tracking-[0.08em] md:tracking-[0.2em]"
+              style={{ color: '#ff751f' }}
             >
               Work Abroad Guides
             </span>

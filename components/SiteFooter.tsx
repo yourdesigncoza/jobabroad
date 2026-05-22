@@ -45,6 +45,9 @@ export default async function SiteFooter() {
             <Link href="/scam-warnings" className={linkClass} style={linkStyle}>
               Scam warnings
             </Link>
+            <Link href="/blog" className={linkClass} style={linkStyle}>
+              Blog
+            </Link>
             <p className="font-body text-xs leading-relaxed" style={{ color: 'rgba(248,245,240,0.55)' }}>
               <strong style={{ color: 'rgba(248,245,240,0.8)' }}>Optional upgrade:</strong> Get a more detailed personalised action plan and review call for R495 if you want deeper guidance.
             </p>
