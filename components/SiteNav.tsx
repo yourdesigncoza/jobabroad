@@ -1,35 +1,17 @@
 import Link from 'next/link';
-import TrackedLink from '@/components/TrackedLink';
-import WhatsAppIcon from '@/components/WhatsAppIcon';
 import NavUserMenu from '@/components/NavUserMenu';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 
-export default async function SiteNav({ src }: { src?: string }) {
+export default async function SiteNav() {
   const supabase = await createSupabaseServerClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
   const isSignedIn = Boolean(user?.email_confirmed_at);
 
-  // Hide WhatsApp CTA for paid users — they have self-service tools (download
-  // report, book call, follow-ups) and shouldn't be routed back into manual
-  // WhatsApp handoff.
-  let isPaid = false;
-  if (user) {
-    const { data: tierRow } = await supabase
-      .from('profiles')
-      .select('tier')
-      .eq('user_id', user.id)
-      .single();
-    isPaid = tierRow?.tier === 'paid';
-  }
-
   const linkClass = 'font-body text-sm font-semibold underline-offset-4 hover:underline';
   const primaryClass =
     'font-body text-sm font-semibold px-4 py-2 rounded-full border-2 transition-all';
-  const waHref = `https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}?text=${encodeURIComponent(
-    "Hi, I'm interested in working abroad. Can you help me?",
-  )}`;
 
   // Returns nav + the thin horizontal divider that sits under it on every page.
   // Baking the divider in here keeps every consumer consistent (was previously
@@ -73,35 +55,10 @@ export default async function SiteNav({ src }: { src?: string }) {
               </Link>
             </>
           )}
-
-          {!isPaid && (
-            <TrackedLink
-              href={waHref}
-              event="cta_click"
-              data={{ location: 'nav', source: src ?? 'direct' }}
-              className={`${primaryClass} flex items-center gap-2`}
-              style={{ borderColor: '#1B4D3E', color: '#1B4D3E' }}
-            >
-              <WhatsAppIcon size={15} />
-              <span>WhatsApp</span>
-            </TrackedLink>
-          )}
         </div>
 
-        {/* Mobile nav (<sm) — WhatsApp icon (free only) + hamburger user menu */}
+        {/* Mobile nav (<sm) — hamburger user menu */}
         <div className="flex sm:hidden items-center gap-3">
-          {!isPaid && (
-            <TrackedLink
-              href={waHref}
-              event="cta_click"
-              data={{ location: 'nav', source: src ?? 'direct' }}
-              aria-label="Chat on WhatsApp"
-              className="flex items-center justify-center w-9 h-9 rounded-full border-2"
-              style={{ borderColor: '#1B4D3E', color: '#1B4D3E' }}
-            >
-              <WhatsAppIcon size={16} />
-            </TrackedLink>
-          )}
           <NavUserMenu isSignedIn={isSignedIn} />
         </div>
       </nav>

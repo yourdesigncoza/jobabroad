@@ -1,13 +1,14 @@
 import fs from 'fs';
 import path from 'path';
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import JsonLd from '@/components/JsonLd';
 import PathwaySearch from '@/components/PathwaySearch';
 import TableOfContents from '@/components/TableOfContents';
 import StickyNav from '@/components/StickyNav';
 import { getPathwayContent, listPathwaySlugs } from '@/lib/pathway-content';
-import { CATEGORIES, buildWhatsAppLink } from '@/lib/categories';
+import { CATEGORIES } from '@/lib/categories';
 import { pageMetadata, SITE_URL, SITE_NAME, SITE_AUTHOR } from '@/lib/site';
 
 export async function generateStaticParams() {
@@ -65,7 +66,7 @@ export default async function DemoPage({
   const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '';
   const categoryLabel = categoryDef.label;
   const audience = categoryDef.audience;
-  const waLink = buildWhatsAppLink(categoryLabel, `demo-${category}`);
+  const registerHref = `/register?category=${category}`;
 
   const { title: articleTitle, description: articleDescription } = buildCategoryCopy(categoryDef);
   const datePublished = pathwayMtime(category)?.toISOString();
@@ -91,7 +92,7 @@ export default async function DemoPage({
   return (
     <main className="min-h-screen" style={{ backgroundColor: '#F8F5F0' }}>
       <JsonLd data={articleSchema} />
-      <StickyNav items={pathway.toc} whatsappNumber={whatsappNumber} />
+      <StickyNav items={pathway.toc} />
 
       <div className="max-w-6xl mx-auto px-4 lg:px-8 py-10">
         <div className="lg:grid lg:grid-cols-[260px_1fr] lg:gap-12 lg:items-start">
@@ -104,7 +105,7 @@ export default async function DemoPage({
           </aside>
 
           <div className="flex flex-col gap-10 min-w-0">
-            <DemoBanner categoryLabel={categoryLabel} waLink={waLink} />
+            <DemoBanner categoryLabel={categoryLabel} registerHref={registerHref} />
 
             <PathwaySearch
               demoCategory={category}
@@ -130,7 +131,7 @@ export default async function DemoPage({
               dangerouslySetInnerHTML={{ __html: pathway.html }}
             />
 
-            <DemoUnlockCTA categoryLabel={categoryLabel} waLink={waLink} />
+            <DemoUnlockCTA categoryLabel={categoryLabel} registerHref={registerHref} />
 
             <footer
               className="border-t pt-6 pb-8 flex flex-col gap-4 font-body text-xs leading-relaxed"
@@ -152,7 +153,7 @@ export default async function DemoPage({
   );
 }
 
-function DemoBanner({ categoryLabel, waLink }: { categoryLabel: string; waLink: string }) {
+function DemoBanner({ categoryLabel, registerHref }: { categoryLabel: string; registerHref: string }) {
   return (
     <div
       className="rounded-2xl overflow-hidden"
@@ -169,15 +170,13 @@ function DemoBanner({ categoryLabel, waLink }: { categoryLabel: string; waLink: 
           Preview — {categoryLabel}
         </span>
 
-        <a
-          href={waLink}
-          target="_blank"
-          rel="noopener noreferrer"
+        <Link
+          href={registerHref}
           className="inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 font-display font-bold uppercase text-xs tracking-wide self-start sm:self-auto"
           style={{ backgroundColor: '#1B4D3E', color: '#F8F5F0' }}
         >
           Get your own access
-        </a>
+        </Link>
       </div>
 
       <div style={{ height: 1, backgroundColor: '#EDE8E0' }} aria-hidden />
@@ -204,7 +203,7 @@ function DemoBanner({ categoryLabel, waLink }: { categoryLabel: string; waLink: 
   );
 }
 
-function DemoUnlockCTA({ categoryLabel, waLink }: { categoryLabel: string; waLink: string }) {
+function DemoUnlockCTA({ categoryLabel, registerHref }: { categoryLabel: string; registerHref: string }) {
   return (
     <div
       className="rounded-2xl p-6 flex flex-col gap-4"
@@ -221,15 +220,13 @@ function DemoUnlockCTA({ categoryLabel, waLink }: { categoryLabel: string; waLin
           Get the full guide plus the eligibility check and semantic search across our research vault.
         </p>
       </div>
-      <a
-        href={waLink}
-        target="_blank"
-        rel="noopener noreferrer"
+      <Link
+        href={registerHref}
         className="inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 font-display font-bold uppercase text-sm tracking-wide self-start"
         style={{ backgroundColor: '#C9A84C', color: '#FFFFFF' }}
       >
-        Start on WhatsApp
-      </a>
+        Register free →
+      </Link>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import WhatsAppIcon from './WhatsAppIcon';
+import Link from 'next/link';
 import { ShieldCheck, AlertTriangle, Ban } from 'lucide-react';
 
 const PILLARS = [
@@ -34,7 +34,7 @@ const QUESTIONS = [
   },
   {
     q: "What if my job type isn't listed?",
-    a: "Tap the \"Other\" tile. WhatsApp opens and you can tell us exactly what you do. We'll tell you straight whether a real overseas route exists for your field.",
+    a: "Pick the field closest to what you do — our guides are broad and cover related roles within each category. When you register, the personalised eligibility check is built around the details you give us, so it adapts to your exact background.",
   },
 ] as const;
 
@@ -120,19 +120,16 @@ export default function FAQ() {
               Still have a question?
             </p>
             <p className="font-body text-xs mt-1" style={{ color: 'rgba(248,245,240,0.65)' }}>
-              WhatsApp me. I reply to every message.
+              Register first so we can give you proper feedback based on your field and profile.
             </p>
           </div>
-          <a
-            href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}?text=${encodeURIComponent('Hi, I have a question about Jobabroad.')}`}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href="/register"
             className="flex items-center gap-2 font-display font-bold uppercase text-xs tracking-wide px-5 py-3 rounded-full shrink-0 transition-all"
-            style={{ backgroundColor: '#C9A84C', color: '#FFFFFF' }}
+            style={{ backgroundColor: '#ff751f', color: '#FFFFFF' }}
           >
-            <WhatsAppIcon size={15} color="#FFFFFF" />
-            WhatsApp Me
-          </a>
+            Register free →
+          </Link>
         </div>
       </div>
     </section>

@@ -22,7 +22,7 @@ export default async function Home({ searchParams }: Props) {
   return (
     <main className="min-h-screen" style={{ backgroundColor: '#F8F5F0' }}>
 
-      <SiteNav src={src} />
+      <SiteNav />
 
       {/* Hero */}
       <section className="max-w-6xl mx-auto px-6 pt-14 pb-12">
@@ -66,7 +66,7 @@ export default async function Home({ searchParams }: Props) {
           <div className="flex items-center gap-3 mt-2 self-start px-4 py-2 rounded-full" style={{ backgroundColor: '#EDE8E0' }}>
             <div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: '#ff751f' }} />
             <span className="font-body text-sm font-bold" style={{ color: '#2C2C2C' }}>
-              Pick your field below — WhatsApp opens automatically.
+              Pick your field below — register free and your guide unlocks.
             </span>
           </div>
         </div>
@@ -75,7 +75,7 @@ export default async function Home({ searchParams }: Props) {
       {/* Interest Selector */}
       <section id="interest-grid" className="px-6 py-14" style={{ backgroundColor: '#EDE8E0' }}>
         <div className="max-w-6xl mx-auto">
-          <div className="flex items-center gap-4 mb-8">
+          <div className="flex items-center gap-4 mb-3">
             <h2
               className="font-display font-bold uppercase text-lg tracking-[0.12em]"
               style={{ color: '#1B4D3E' }}
@@ -84,6 +84,9 @@ export default async function Home({ searchParams }: Props) {
             </h2>
             <div className="flex-1 h-px" style={{ backgroundColor: '#C9A84C', opacity: 0.4 }} />
           </div>
+          <p className="font-body text-sm leading-relaxed max-w-xl mb-8" style={{ color: '#6B6B6B' }}>
+            Choose the work category that best matches your background so we can guide you to the right route.
+          </p>
           <InterestGrid source={src} />
         </div>
       </section>
@@ -141,7 +144,7 @@ export default async function Home({ searchParams }: Props) {
       {/* Country stats */}
       <CountryStats />
 
-      <SiteFooter src={src} />
+      <SiteFooter />
     </main>
   );
 }

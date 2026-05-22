@@ -4,7 +4,6 @@ import StickyNav from '@/components/StickyNav';
 import AssessmentWizard from '@/components/AssessmentWizard';
 import { CATEGORIES } from '@/lib/categories';
 import { requireProfile } from '@/lib/auth-guards';
-import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { getLatestAssessment } from '@/lib/assessments/assessment-client';
 
 export default async function AssessmentPage({
@@ -13,7 +12,6 @@ export default async function AssessmentPage({
   params: Promise<{ category: string }>;
 }) {
   const { category } = await params;
-  const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '';
 
   if (!CATEGORIES.some((c) => c.id === category)) notFound();
 
@@ -31,19 +29,9 @@ export default async function AssessmentPage({
 
   const draft = existing?.category === category ? existing : null;
 
-  // Paid users shouldn't reach this page (post-submit they redirect to /score)
-  // but defense-in-depth: read tier so we can hide WhatsApp in chrome.
-  const ssr = await createSupabaseServerClient();
-  const { data: tierRow } = await ssr
-    .from('profiles')
-    .select('tier')
-    .eq('user_id', user.id)
-    .single();
-  const hideWhatsApp = tierRow?.tier === 'paid';
-
   return (
     <main className="min-h-screen" style={{ backgroundColor: '#F8F5F0' }}>
-      <StickyNav items={[]} whatsappNumber={whatsappNumber} isSignedIn hideWhatsApp={hideWhatsApp} />
+      <StickyNav items={[]} isSignedIn />
 
       <div className="max-w-lg mx-auto px-4 py-10">
         <Link

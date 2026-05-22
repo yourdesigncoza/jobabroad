@@ -107,7 +107,7 @@ export default async function MembersCategoryPage({
   return (
     <main className="min-h-screen" style={{ backgroundColor: '#F8F5F0' }}>
       <HashScroller />
-      <StickyNav items={pathway?.toc ?? []} whatsappNumber={whatsappNumber} isSignedIn hideWhatsApp={hideWhatsApp} />
+      <StickyNav items={pathway?.toc ?? []} isSignedIn />
 
       <div className="max-w-6xl mx-auto px-4 lg:px-8 py-10">
         {pathway ? (

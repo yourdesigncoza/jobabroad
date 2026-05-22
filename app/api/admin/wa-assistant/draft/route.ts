@@ -44,9 +44,10 @@ export async function POST(req: NextRequest) {
     });
 
     // Hard Rule 4: the reply must end with exactly one follow-up question.
-    // The model often drops it — patch deterministically by appending the
-    // followUpQuestion field if the draft doesn't end with '?'. Flag as a
-    // regex violation so the human knows the model misbehaved.
+    // The model sometimes drops it — patch deterministically by appending the
+    // followUpQuestion field if the draft doesn't end with '?'. This is a
+    // self-correction, not a problem with the reply, so it is surfaced as an
+    // 'auto' notice (neutral) rather than a violation (red).
     let finalDraft = draft.draftReply;
     const trimmed = finalDraft.trimEnd();
     const dropViolations: RuleViolation[] = [];
@@ -57,8 +58,8 @@ export async function POST(req: NextRequest) {
       finalDraft = `${trimmed}\n\n${question}`;
       dropViolations.push({
         rule: 4,
-        reason: 'Model dropped the follow-up question — auto-appended from followUpQuestion field',
-        source: 'regex',
+        reason: 'Follow-up question was added automatically — the reply is ready to send.',
+        source: 'auto',
       });
     }
 

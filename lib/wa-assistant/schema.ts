@@ -16,7 +16,10 @@ export type Pattern = z.infer<typeof PatternSchema>;
 export const RuleViolationSchema = z.object({
   rule: z.number().int().min(1).max(5),
   reason: z.string(),
-  source: z.enum(['model', 'regex']),
+  // 'model'/'regex' are genuine concerns to review before sending.
+  // 'auto' is a neutral notice that the system corrected the draft itself
+  // (e.g. a missing follow-up question was appended) — not a problem.
+  source: z.enum(['model', 'regex', 'auto']),
 });
 export type RuleViolation = z.infer<typeof RuleViolationSchema>;
 

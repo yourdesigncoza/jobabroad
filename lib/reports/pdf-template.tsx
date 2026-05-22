@@ -249,17 +249,6 @@ const styles = StyleSheet.create({
     color: COLOURS.muted,
     textAlign: 'center',
   },
-  footerPartnerStrip: {
-    position: 'absolute',
-    bottom: 32,
-    left: 40,
-    right: 40,
-    fontSize: 8,
-    color: COLOURS.orange,
-    fontWeight: 'bold',
-    letterSpacing: 0.5,
-    textAlign: 'center',
-  },
 });
 
 const BAND_PRESETS: Record<
@@ -292,15 +281,19 @@ function dimBarColour(score: number): string {
   return COLOURS.green;
 }
 
+// Section heading that won't be left stranded at the bottom of a page —
+// minPresenceAhead reserves space below it, so a heading near a page break is
+// pushed to the next page to stay with the content that follows.
+function SectionHeading({ children }: { children: React.ReactNode }) {
+  return (
+    <Text style={styles.h2} minPresenceAhead={72}>
+      {children}
+    </Text>
+  );
+}
+
 export function ReportTemplate({ data }: { data: ReportData }) {
   const preset = BAND_PRESETS[data.score.band];
-
-  // Compact every-page footer strip — first 3 partner names joined with mid-
-  // dots. Strip is hidden when there are no trusted-partner matches, falling
-  // back to just the page-number footer.
-  const partnerStrip = data.partners?.length
-    ? `Trusted partners: ${data.partners.slice(0, 3).map((p) => p.name).join(' · ')}`
-    : null;
 
   return (
     <Document
@@ -333,7 +326,7 @@ export function ReportTemplate({ data }: { data: ReportData }) {
         <View style={styles.divider} />
 
         {/* Score Breakdown */}
-        <Text style={styles.h2}>Your score breakdown</Text>
+        <SectionHeading>Your score breakdown</SectionHeading>
         {data.score.dimensions.map((d) => (
           <View key={d.key}>
             <View style={styles.dimRow}>
@@ -353,16 +346,20 @@ export function ReportTemplate({ data }: { data: ReportData }) {
           </View>
         ))}
 
-        {/* What's working */}
-        <Text style={styles.h2}>What&apos;s working</Text>
-        <Text style={styles.para}>{lig(data.whatsWorking)}</Text>
+        {/* What's working — heading + summary kept on one page. */}
+        <View wrap={false}>
+          <SectionHeading>What&apos;s working</SectionHeading>
+          <Text style={styles.para}>{lig(data.whatsWorking)}</Text>
+        </View>
 
-        {/* What's blocking */}
-        <Text style={styles.h2}>What&apos;s blocking you</Text>
-        <Text style={styles.para}>{lig(data.whatsBlocking)}</Text>
+        {/* What's blocking — heading + summary kept on one page. */}
+        <View wrap={false}>
+          <SectionHeading>What&apos;s blocking you</SectionHeading>
+          <Text style={styles.para}>{lig(data.whatsBlocking)}</Text>
+        </View>
 
         {/* Next actions */}
-        <Text style={styles.h2}>Recommended next actions</Text>
+        <SectionHeading>Recommended next actions</SectionHeading>
         {data.nextActions.map((a, i) => (
           <View key={i} wrap={false}>
             <Text style={styles.actionTitle}>
@@ -377,7 +374,7 @@ export function ReportTemplate({ data }: { data: ReportData }) {
             /scam-warnings. Skipped silently when the category has no flags. */}
         {data.redFlags.length > 0 && (
           <View wrap={false}>
-            <Text style={styles.h2}>Red flags to avoid</Text>
+            <SectionHeading>Red flags to avoid</SectionHeading>
             {data.redFlags.map((flag, i) => (
               <Text key={i} style={styles.redFlagBullet}>• {lig(flag)}</Text>
             ))}
@@ -387,9 +384,9 @@ export function ReportTemplate({ data }: { data: ReportData }) {
         {/* Contacts & Resources */}
         {data.contacts.length > 0 && (
           <>
-            <Text style={styles.h2}>Helpful sections in your guide</Text>
+            <SectionHeading>Helpful sections in your guide</SectionHeading>
             {data.contacts.map((c, i) => (
-              <View key={i}>
+              <View key={i} wrap={false}>
                 <Text style={styles.contactHeading}>{lig(c.heading)}</Text>
                 <Text style={styles.contactExcerpt}>{lig(c.excerpt)}</Text>
                 <Link src={c.url} style={styles.contactLink}>
@@ -404,7 +401,7 @@ export function ReportTemplate({ data }: { data: ReportData }) {
             buyer's category + target destinations via getTrustedPartnersForBuyer. */}
         {data.partners && data.partners.length > 0 && (
           <>
-            <Text style={styles.h2}>Recommended partners</Text>
+            <SectionHeading>Recommended partners</SectionHeading>
             {data.partners.map((p, i) => (
               <View key={i} style={styles.partnerCard} wrap={false}>
                 <View style={styles.partnerBadgeRow}>
@@ -432,12 +429,6 @@ export function ReportTemplate({ data }: { data: ReportData }) {
             "Jobabroad is an information service. We don't place candidates, act as recruiters or guarantee employment. Always verify with official sources (SACE, NMC, AHPRA, embassies) before paying anyone or signing contracts.",
           )}
         </Text>
-
-        {partnerStrip && (
-          <Text style={styles.footerPartnerStrip} fixed>
-            {lig(partnerStrip)}
-          </Text>
-        )}
 
         <Text
           style={styles.footer}

@@ -1,25 +1,12 @@
 import Link from 'next/link';
-import TrackedLink from '@/components/TrackedLink';
-import WhatsAppIcon from '@/components/WhatsAppIcon';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 
-export default async function SiteFooter({ src }: { src?: string }) {
+export default async function SiteFooter() {
   const supabase = await createSupabaseServerClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
   const isSignedIn = Boolean(user?.email_confirmed_at);
-
-  // Hide WhatsApp CTA for paid users (see SiteNav for rationale).
-  let isPaid = false;
-  if (user) {
-    const { data: tierRow } = await supabase
-      .from('profiles')
-      .select('tier')
-      .eq('user_id', user.id)
-      .single();
-    isPaid = tierRow?.tier === 'paid';
-  }
 
   const linkClass = 'font-body text-sm underline';
   const linkStyle: React.CSSProperties = { color: '#F8F5F0' };
@@ -28,20 +15,8 @@ export default async function SiteFooter({ src }: { src?: string }) {
     <footer className="px-6 py-12" style={{ backgroundColor: '#2C2C2C' }}>
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 items-start">
 
-        {/* Left — contact + legal */}
+        {/* Left — legal */}
         <div className="flex flex-col gap-4 md:col-span-1">
-          {!isPaid && (
-            <TrackedLink
-              href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}?text=${encodeURIComponent("Hi, I'm interested in working abroad. Can you help me?")}`}
-              event="cta_click"
-              data={{ location: 'footer', source: src ?? 'direct' }}
-              className="flex items-center gap-2 font-body font-semibold text-sm px-5 py-3 rounded-full self-start transition-all"
-              style={{ backgroundColor: '#C9A84C', color: '#FFFFFF' }}
-            >
-              <WhatsAppIcon size={16} color="#FFFFFF" />
-              WhatsApp Me
-            </TrackedLink>
-          )}
           <p className="font-body text-sm leading-relaxed" style={{ color: '#F8F5F0' }}>
             Jobabroad is an information service. We don&apos;t place candidates, act as recruiters or guarantee employment.
           </p>
@@ -70,6 +45,9 @@ export default async function SiteFooter({ src }: { src?: string }) {
             <Link href="/scam-warnings" className={linkClass} style={linkStyle}>
               Scam warnings
             </Link>
+            <p className="font-body text-xs leading-relaxed" style={{ color: 'rgba(248,245,240,0.55)' }}>
+              <strong style={{ color: 'rgba(248,245,240,0.8)' }}>Optional upgrade:</strong> Get a more detailed personalised action plan and review call for R495 if you want deeper guidance.
+            </p>
           </div>
 
           <div className="flex flex-col gap-3">

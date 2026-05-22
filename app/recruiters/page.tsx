@@ -11,16 +11,10 @@ export const metadata: Metadata = pageMetadata({
   path: '/recruiters',
 });
 
-interface Props {
-  searchParams: Promise<{ src?: string }>;
-}
-
-export default async function RecruitersPage({ searchParams }: Props) {
-  const { src } = await searchParams;
-
+export default async function RecruitersPage() {
   return (
     <main className="min-h-screen" style={{ backgroundColor: '#F8F5F0' }}>
-      <SiteNav src={src} />
+      <SiteNav />
 
       {/* Hero */}
       <section className="max-w-6xl mx-auto px-6 pt-12 pb-8">
@@ -80,7 +74,7 @@ export default async function RecruitersPage({ searchParams }: Props) {
         <RecruitersTable />
       </section>
 
-      <SiteFooter src={src} />
+      <SiteFooter />
     </main>
   );
 }

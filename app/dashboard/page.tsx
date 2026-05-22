@@ -32,9 +32,12 @@ type CardProps = {
   newTab?: boolean;
   /** Optional corner badge (e.g. "Start Here") drawn top-left. */
   badge?: { label: string; tone?: 'orange' | 'green' };
+  /** Orange dashed border + glow — marks the card as the next action.
+   *  Matches the "Trusted partner" card style on /recruiters. */
+  highlight?: boolean;
 };
 
-function Card({ href, title, body, accent = '#1B4D3E', newTab, badge }: CardProps) {
+function Card({ href, title, body, accent = '#1B4D3E', newTab, badge, highlight }: CardProps) {
   const badgeColour = badge?.tone === 'green' ? '#1B4D3E' : '#ff751f';
   return (
     <Link
@@ -42,7 +45,11 @@ function Card({ href, title, body, accent = '#1B4D3E', newTab, badge }: CardProp
       target={newTab ? '_blank' : undefined}
       rel={newTab ? 'noopener noreferrer' : undefined}
       className="relative block rounded-2xl p-6 transition-shadow hover:shadow-md"
-      style={{ backgroundColor: '#FFFFFF', border: '1.5px solid #EDE8E0' }}
+      style={{
+        backgroundColor: '#FFFFFF',
+        border: highlight ? '1px dashed #ff751f' : '1.5px solid #EDE8E0',
+        boxShadow: highlight ? '0 2px 12px rgba(255, 117, 31, 0.15)' : undefined,
+      }}
     >
       {badge && (
         <span
@@ -205,6 +212,33 @@ export default async function DashboardPage() {
             Your pathway:{' '}
             <strong style={{ color: '#1B4D3E' }}>{categoryLabel}</strong>
           </p>
+
+          {!isPaid && (
+            <div
+              className="rounded-xl px-5 py-4 mt-1"
+              style={{ backgroundColor: '#EDE8E0', borderLeft: '3px solid #ff751f' }}
+            >
+              <p className="font-body text-sm leading-relaxed" style={{ color: '#2C2C2C' }}>
+                Thank you for registering. You&apos;ve taken the first step toward
+                exploring your work-abroad options. We&apos;ll help you understand
+                where you stand, what to fix, and which route may make the most
+                sense for your background.
+              </p>
+            </div>
+          )}
+
+          {isPaid && (
+            <div
+              className="rounded-xl px-5 py-4 mt-1"
+              style={{ backgroundColor: '#FFF8E8', borderLeft: '3px solid #C9A84C' }}
+            >
+              <p className="font-body text-sm leading-relaxed" style={{ color: '#2C2C2C' }}>
+                Thank you for taking the next step with us. Your premium profile
+                helps us give you clearer guidance, better next steps, and a more
+                focused work-abroad plan.
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Premium upsell — only for users who've completed the eligibility
@@ -307,6 +341,8 @@ export default async function DashboardPage() {
               href={`/members/${profile.category}/assessment`}
               title="Eligibility assessment"
               body="Find out what blockers stand between you and a job abroad."
+              accent="#ff751f"
+              highlight
             />
           )}
           <Card

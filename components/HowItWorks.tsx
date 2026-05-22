@@ -127,29 +127,13 @@ export default function HowItWorks() {
               >
                 Researched, up to date, and built around the questions scam recruiters hope you never ask.
               </p>
-              <div
-                className="inline-flex items-baseline gap-1 px-4 py-2 rounded-full self-start"
-                style={{ backgroundColor: "#ff751f" }}
+              <a
+                href="#interest-grid"
+                className="inline-flex items-center gap-1 px-5 py-3 rounded-full self-start font-display font-bold uppercase text-sm tracking-wide transition-all"
+                style={{ backgroundColor: "#ff751f", color: "#FFFFFF" }}
               >
-                <span
-                  className="font-display font-bold text-xl"
-                  style={{ color: "#FFFFFF" }}
-                >
-                  Free
-                </span>
-                <span
-                  className="font-body text-xs"
-                  style={{ color: "rgba(255,255,255,0.8)" }}
-                >
-                  after registration
-                </span>
-              </div>
-              <p
-                className="font-body text-xs leading-relaxed"
-                style={{ color: "rgba(248,245,240,0.55)" }}
-              >
-                Optional <strong style={{ color: "rgba(248,245,240,0.85)" }}>R495 upgrade</strong> — a personalised action plan, emailed immediately, plus a 15-min review call when you want one. One-off payment, no subscription.
-              </p>
+                Register using your field →
+              </a>
             </div>
 
             {/* Right — what's inside */}

@@ -75,6 +75,7 @@ export async function sendScoreEmailOnce(input: SendScoreEmailInput): Promise<vo
   const fromName = process.env.BREVO_FROM_NAME || FROM_NAME_DEFAULT;
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://jobabroad.co.za';
   const scoreUrl = `${baseUrl}/members/${input.categoryId}/score`;
+  const dashboardUrl = `${baseUrl}/dashboard`;
 
   try {
     await sendEmail({
@@ -90,6 +91,7 @@ export async function sendScoreEmailOnce(input: SendScoreEmailInput): Promise<vo
         whatsWorking: input.whatsWorking,
         whatsBlocking: input.whatsBlocking,
         scoreUrl,
+        dashboardUrl,
       }),
     });
   } catch (err) {
@@ -109,6 +111,7 @@ function emailHtml({
   whatsWorking,
   whatsBlocking,
   scoreUrl,
+  dashboardUrl,
 }: {
   userName: string;
   categoryLabel: string;
@@ -118,6 +121,7 @@ function emailHtml({
   whatsWorking: string;
   whatsBlocking: string;
   scoreUrl: string;
+  dashboardUrl: string;
 }): string {
   const dimsHtml = dimensions
     .map((d) => {
@@ -165,7 +169,7 @@ function emailHtml({
 
       <p style="font-size:14px;">Want the full picture? Upgrade to the R495 plan: a personalised PDF action plan written after a 15-min live call with us.</p>
       <p>
-        <a href="${scoreUrl}" style="display:inline-block;background:#1B4D3E;color:#F8F5F0;padding:12px 24px;border-radius:10px;text-decoration:none;font-weight:bold;text-transform:uppercase;font-size:13px;letter-spacing:0.5px;">View your full score &rarr;</a>
+        <a href="${dashboardUrl}" style="display:inline-block;background:#1B4D3E;color:#F8F5F0;padding:12px 24px;border-radius:10px;text-decoration:none;font-weight:bold;text-transform:uppercase;font-size:13px;letter-spacing:0.5px;">Return to dashboard &rarr;</a>
       </p>
       <p style="font-size:12px;color:#6B6B6B;">&mdash; The Jobabroad team</p>
     </div>

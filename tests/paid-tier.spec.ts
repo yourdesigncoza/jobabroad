@@ -554,11 +554,13 @@ test.describe('Paid tier — /paid landing', () => {
 });
 
 // =========================================================================
-// WhatsApp visibility (paid vs free)
+// WhatsApp visibility — general WhatsApp CTAs were removed from public
+// surfaces (header, footer, demo, FAQ). The nav no longer carries a WhatsApp
+// pill for any user; the dashboard has no wa.me links for a normal account.
 // =========================================================================
 
-test.describe('Paid tier — WhatsApp CTAs hidden site-wide for paid', () => {
-  test('free user dashboard: WhatsApp pill visible in nav', async ({ page }) => {
+test.describe('WhatsApp CTAs removed from nav + dashboard', () => {
+  test('free user dashboard: no WhatsApp pill in nav', async ({ page }) => {
     const email = uniqueEmail('wa-free');
     await registerAndLogin(page, {
       email,
@@ -571,7 +573,7 @@ test.describe('Paid tier — WhatsApp CTAs hidden site-wide for paid', () => {
       await page.goto('/dashboard');
       await expect(
         page.locator('nav').getByRole('link', { name: /whatsapp/i }),
-      ).toBeVisible();
+      ).toHaveCount(0);
     } finally {
       await deleteUser(email);
     }

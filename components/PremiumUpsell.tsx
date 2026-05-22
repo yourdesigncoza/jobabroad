@@ -18,7 +18,7 @@ interface Props {
 const PLAN_INTRO =
   "For R495, we'll review your profile and give you a clear, personalised action plan, emailed to you immediately and available inside your personal dashboard. You'll know what to fix first, which work-abroad routes look most realistic for you, what to avoid wasting money on, and which trusted partners may be worth speaking to.";
 const CALL_INTRO =
-  "When you're ready, you can also book a 15-minute call so we can walk through your situation properly and make sure your next steps are clear.";
+  "When you're ready, book a 15-minute call and we'll walk through your profile together, so your next steps are clear.";
 
 /** Band-specific opener — speaks to the user's actual score before the
  *  shared R495 pitch. */

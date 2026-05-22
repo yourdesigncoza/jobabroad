@@ -1,78 +1,73 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { ReportStatusResponse } from '@/app/api/reports/status/route';
 
 interface Props {
   initial: ReportStatusResponse;
 }
 
-// Backoff schedule: 3s, 5s, 8s, 13s, then capped at 15s. Total elapsed cap is
-// ~90s before we stop polling and tell the user to come back later. The buyer
-// receives an email when the PDF lands regardless of whether they keep this
-// page open, so giving up here is safe.
+// Poll fast at first (the report usually lands within ~1 min), then settle to
+// a steady 15s. We keep polling for as long as the tab is open, so the card
+// flips to "ready" (or "failed") on its own — the buyer never has to refresh.
+// After ~90s we show a softer "taking longer" message but DO NOT stop polling.
 const POLL_INTERVALS_MS = [3_000, 5_000, 8_000, 13_000, 15_000];
-const MAX_ELAPSED_MS = 90_000;
+const SLOW_NOTICE_AFTER_MS = 90_000;
+
+function isPending(status: ReportStatusResponse['status']): boolean {
+  return status === 'pending' || status === 'missing';
+}
 
 export default function ReportStatusCard({ initial }: Props) {
   const [state, setState] = useState<ReportStatusResponse>(initial);
-  const [exhausted, setExhausted] = useState(false);
+  const [takingLong, setTakingLong] = useState(false);
   const [retrying, setRetrying] = useState(false);
-  const elapsedRef = useRef(0);
-  const pollIndexRef = useRef(0);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const aliveRef = useRef(true);
 
-  const clearTimer = useCallback(() => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-      timeoutRef.current = null;
-    }
-  }, []);
-
-  const fetchStatus = useCallback(async () => {
-    try {
-      const res = await fetch('/api/reports/status', { cache: 'no-store' });
-      if (!res.ok) return;
-      const next = (await res.json()) as ReportStatusResponse;
-      if (!aliveRef.current) return;
-      setState(next);
-    } catch {
-      // Transient — let the next tick retry.
-    }
-  }, []);
-
-  const scheduleNextPoll = useCallback(() => {
-    clearTimer();
-    if (!aliveRef.current) return;
-    if (elapsedRef.current >= MAX_ELAPSED_MS) {
-      setExhausted(true);
-      return;
-    }
-    const idx = Math.min(pollIndexRef.current, POLL_INTERVALS_MS.length - 1);
-    const delay = POLL_INTERVALS_MS[idx];
-    pollIndexRef.current += 1;
-    timeoutRef.current = setTimeout(async () => {
-      elapsedRef.current += delay;
-      await fetchStatus();
-    }, delay);
-  }, [clearTimer, fetchStatus]);
-
-  // Drive polling: schedule next tick whenever we observe a pending/missing state.
+  // Drive polling while the report is still being prepared. setState with an
+  // unchanged status does NOT re-run this effect, so the loop self-continues
+  // via the recursive `loop()` call; setState with a resolved status (ready /
+  // failed) DOES re-run it, the cleanup tears the timer down, and the early
+  // return stops polling.
   useEffect(() => {
-    aliveRef.current = true;
-    if (state.status === 'pending' || state.status === 'missing') {
-      scheduleNextPoll();
-    } else {
-      clearTimer();
-    }
-    return () => {
-      aliveRef.current = false;
-      clearTimer();
-    };
-  }, [state.status, scheduleNextPoll, clearTimer]);
+    if (!isPending(state.status)) return;
 
-  const onRetry = useCallback(async () => {
+    let alive = true;
+    let timer: ReturnType<typeof setTimeout> | null = null;
+    let elapsed = 0;
+    let tick = 0;
+
+    const loop = () => {
+      const delay = POLL_INTERVALS_MS[Math.min(tick, POLL_INTERVALS_MS.length - 1)];
+      tick += 1;
+      timer = setTimeout(async () => {
+        elapsed += delay;
+        if (elapsed >= SLOW_NOTICE_AFTER_MS && alive) setTakingLong(true);
+        try {
+          const res = await fetch('/api/reports/status', { cache: 'no-store' });
+          if (!alive) return;
+          if (res.ok) {
+            const next = (await res.json()) as ReportStatusResponse;
+            if (!alive) return;
+            setState(next);
+            if (isPending(next.status)) loop();
+          } else {
+            loop(); // transient error — retry next tick
+          }
+        } catch {
+          if (alive) loop(); // transient network error — retry next tick
+        }
+      }, delay);
+    };
+
+    loop();
+
+    return () => {
+      alive = false;
+      if (timer) clearTimeout(timer);
+    };
+  }, [state.status]);
+
+  async function onRetry() {
     setRetrying(true);
     try {
       const res = await fetch('/api/reports/regenerate', { method: 'POST' });
@@ -82,17 +77,16 @@ export default function ReportStatusCard({ initial }: Props) {
         setRetrying(false);
         return;
       }
-      // Reset polling state and put us back into pending mode.
-      elapsedRef.current = 0;
-      pollIndexRef.current = 0;
-      setExhausted(false);
+      // Back into pending mode — the effect restarts polling with a fresh
+      // elapsed/tick counter, so the "taking longer" notice resets too.
+      setTakingLong(false);
       setState((prev) => ({ ...prev, status: 'pending', error: null }));
     } catch (err) {
       console.error('[ReportStatusCard] regenerate threw', err);
     } finally {
       setRetrying(false);
     }
-  }, []);
+  }
 
   if (state.status === 'completed' && state.pdfUrl) {
     return (
@@ -158,21 +152,19 @@ export default function ReportStatusCard({ initial }: Props) {
       <Kicker tone="pending">Your report</Kicker>
       <Title>Preparing your personalised report</Title>
       <Body aria-live="polite">
-        {exhausted
-          ? 'Still working — we’ll email you when it’s ready. You can close this page.'
+        {takingLong
+          ? 'This is taking a little longer than usual — hang tight. This page updates automatically when your report is ready, and we’ll email you a copy too.'
           : 'Usually ready within a minute. We’ll email you a copy too.'}
       </Body>
-      {!exhausted && (
-        <div
-          className="mt-3 inline-block w-4 h-4 rounded-full"
-          style={{
-            border: '2px solid #1B4D3E',
-            borderTopColor: 'transparent',
-            animation: 'reportSpin 0.9s linear infinite',
-          }}
-          aria-hidden
-        />
-      )}
+      <div
+        className="mt-3 inline-block w-4 h-4 rounded-full"
+        style={{
+          border: '2px solid #1B4D3E',
+          borderTopColor: 'transparent',
+          animation: 'reportSpin 0.9s linear infinite',
+        }}
+        aria-hidden
+      />
       <style>{`@keyframes reportSpin { to { transform: rotate(360deg); } }`}</style>
     </CardShell>
   );
