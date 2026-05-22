@@ -19,14 +19,14 @@ faqs:
   - q: "Can I work in the UK while I am still studying for the OSCE?"
     a: "Many internationally educated nurses arrive in the UK and work in a supervised role (often as a pre-registration nurse or healthcare assistant) while they prepare for and sit the OSCE. Your employer will explain the arrangement — confirm it in writing before you travel."
   - q: "How much does the visa itself cost?"
-    a: "The Health and Care Worker visa has a reduced application fee and is exempt from the Immigration Health Surcharge, which makes it far cheaper than the standard Skilled Worker visa. Fees change — check the current amounts on gov.uk before you budget, and note that UK visa fees rose across the board in April 2026."
+    a: "The Health and Care Worker visa application fee is £324 if your Certificate of Sponsorship is for up to three years, or £628 if it is for more than three years. It is also exempt from the Immigration Health Surcharge, which makes it far cheaper than a standard Skilled Worker visa. Fees were checked on gov.uk in May 2026; UK visa fees rose across the board in April 2026."
 ---
 
 South Africa is one of the few countries the United Kingdom can recruit nurses from without restriction. It is **not** on the World Health Organization's health workforce support and safeguards list, so NHS trusts and private healthcare providers actively hire South African nurses — and applications from overseas-trained nurses to the UK regulator have climbed steeply over the past few years.
 
 If you are a registered nurse in South Africa, the route to the UK is well-worn and structured. It is not quick and it is not free, but it is predictable. This guide walks every step — from your South African Nursing Council registration to landing in the UK on a Health and Care Worker visa — with realistic timelines and what each stage costs in rands.
 
-> **Quick answer:** Most South African nurses reach the UK in **6 to 12 months**. You register with the UK's Nursing and Midwifery Council (NMC), pass an English test and a two-part test of competence, and take up a job offer from a licensed employer on a Health and Care Worker visa. Budget roughly **R40,000–R90,000** in fees and travel — though NHS employers reimburse a meaningful share of it.
+> **Quick answer:** Most South African nurses reach the UK in **6 to 12 months**. You register with the UK's Nursing and Midwifery Council (NMC), pass an English test and a two-part test of competence, and take up a job offer from a licensed employer on a Health and Care Worker visa. The NMC's own fees total **£1,170**; with the visa, English test, documents and flights, budget roughly **R55,000–R85,000** — though NHS employers reimburse a meaningful share of it.
 
 ## Can South African nurses work in the UK in 2026?
 
@@ -57,23 +57,23 @@ You will request SANC to verify your registration and issue a Certificate of Goo
 
 ## Step 3 — Pass your English test (IELTS or OET)
 
-Because South Africa is not classed as a majority English-speaking country for NMC purposes, most South African nurses prove their English through an approved test. There are two:
+Because South Africa is not classed as a majority English-speaking country for NMC purposes, most South African nurses prove their English through an approved test. The NMC accepts two:
 
-| Test | What it is | Typical requirement |
+| Test | What it is | NMC requirement |
 |---|---|---|
-| **IELTS Academic** | General academic English test | A high overall score, with strong sub-scores across reading, writing, listening and speaking |
-| **OET** | Occupational English Test — healthcare-specific | A pass grade in each of the four sections |
+| **IELTS Academic** | General academic English test | **7.0** in reading, listening and speaking; **6.5** in writing |
+| **OET** | Occupational English Test — healthcare-specific | Grade **B** in all four sections |
 
-Many nurses find the **OET** easier because the material is healthcare-based — the reading and writing tasks look like a nursing shift, not an academic essay. Check the NMC's current minimum scores before you book, and note that the NMC may accept scores combined across two recent sittings. Leave time to re-sit if you need to.
+Many nurses find the **OET** easier because the material is healthcare-based — the reading and writing tasks look like a nursing shift, not an academic essay. If you narrowly miss on one sitting, the NMC lets you combine scores across two recent tests within set limits. Leave time to re-sit if you need to, and confirm the current thresholds with the NMC — they are reviewed periodically.
 
 ## Step 4 — Complete the NMC Test of Competence (CBT and OSCE)
 
 The Test of Competence has two parts:
 
-- **The CBT (computer-based test)** — a multiple-choice exam covering clinical knowledge and numeracy. You can sit this from South Africa before you travel.
-- **The OSCE (Objective Structured Clinical Examination)** — a practical exam where you work through simulated clinical scenarios. The OSCE is sat at a test centre **in the UK**, so it usually happens after you arrive.
+- **The CBT (computer-based test)** — a multiple-choice exam covering clinical knowledge and numeracy, currently **£83**. You can sit this from South Africa before you travel.
+- **The OSCE (Objective Structured Clinical Examination)** — a practical exam where you work through simulated clinical scenarios, currently **£794**. The OSCE is sat at a test centre **in the UK**, so it usually happens after you arrive.
 
-Passing the CBT first is what unlocks the rest of the process. Most internationally educated nurses then arrive in the UK, work in a supervised pre-registration role, and prepare for the OSCE with their employer's support. Plan for the possibility of a re-sit — it is common and not the end of the road.
+Passing the CBT first is what unlocks the rest of the process. Most internationally educated nurses then arrive in the UK, work in a supervised pre-registration role, and prepare for the OSCE with their employer's support. Plan for the possibility of a re-sit — it is common and not the end of the road. (Fees checked on the NMC website, May 2026.)
 
 ## Step 5 — Find an NHS employer and a Certificate of Sponsorship
 
@@ -90,10 +90,10 @@ With a Certificate of Sponsorship in hand, you apply for the Health and Care Wor
 - Your Certificate of Sponsorship reference.
 - A valid passport.
 - Proof of your English test result.
-- Proof you can support yourself on arrival (a set amount of savings) — unless your employer certifies maintenance for you.
+- At least **£1,270** in your bank account, held for 28 days, to show you can support yourself — unless your employer certifies they will cover your first month.
 - A tuberculosis test certificate from a clinic approved for UK visa applicants in South Africa.
 
-The Health and Care Worker visa is cheaper than a standard Skilled Worker visa and is exempt from the Immigration Health Surcharge. UK visa fees rose across all categories in April 2026, so confirm the current amount on [gov.uk](https://www.gov.uk/health-care-worker-visa) before you budget.
+The application fee is **£324** if your Certificate of Sponsorship is for up to three years, or **£628** if it is for more than three years. The visa is also exempt from the Immigration Health Surcharge — a saving of thousands of pounds against a standard Skilled Worker visa. UK visa fees rose across all categories in April 2026; the figures here were checked on [gov.uk](https://www.gov.uk/health-care-worker-visa/how-much-it-costs) in May 2026.
 
 ## How long does it really take?
 
@@ -112,15 +112,16 @@ The stages overlap — you can prepare documents while you wait for verification
 
 ## What it costs — in rands
 
-Treat these as planning ranges, not quotes. Exam and visa fees change, and exchange rates move — always check the official source, and confirm with your employer what they reimburse.
+The pound figures below are official — from the NMC and gov.uk, checked May 2026. Rand amounts are approximate, at roughly R23 to the pound; exchange rates move, so treat them as a guide. Confirm with your employer what they reimburse.
 
-| Item | Approximate cost |
+| Item | Cost |
 |---|---|
-| English test (IELTS or OET) | R3,000–R6,000 |
-| NMC application and test fees (eligibility, CBT, OSCE, registration) | R20,000–R35,000 |
+| English test (IELTS Academic or OET) | ~R3,500–R6,000 |
+| NMC fees — evaluation £140, CBT £83, OSCE £794, registration £153 | **£1,170 total** (~R27,000) |
 | SAPS police clearance | R190 |
-| Apostille / document legalisation (per document, via DIRCO) | ~R1,650 |
-| Health and Care Worker visa + TB test | Check gov.uk for current fees |
+| Apostille via DIRCO (per document) | ~R1,650 |
+| Health and Care Worker visa | £324 (up to 3 years) / £628 (over 3 years) — ~R7,500–R14,500 |
+| TB test (Home Office–approved clinic) | ~R1,500 |
 | Flights and initial settling-in | R12,000–R30,000+ |
 
 Many NHS employers reimburse exam fees, flights and early accommodation as part of their international recruitment package — so your real out-of-pocket cost is often well below the headline total. Get the reimbursement terms in writing before you commit.
