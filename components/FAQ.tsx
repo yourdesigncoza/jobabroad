@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { ShieldCheck, AlertTriangle, Ban } from 'lucide-react';
 
 const PILLARS = [
@@ -123,13 +122,13 @@ export default function FAQ() {
               Register first so we can give you proper feedback based on your field and profile.
             </p>
           </div>
-          <Link
-            href="/register"
+          <a
+            href="#interest-grid"
             className="flex items-center gap-2 font-display font-bold uppercase text-xs tracking-wide px-5 py-3 rounded-full shrink-0 transition-all"
             style={{ backgroundColor: '#ff751f', color: '#FFFFFF' }}
           >
-            Register free →
-          </Link>
+            Pick your field →
+          </a>
         </div>
       </div>
     </section>

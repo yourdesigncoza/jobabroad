@@ -26,7 +26,7 @@ export default function CategoryCard({ category, href, external = false, source 
 
   const className =
     'category-card group flex flex-col items-center gap-3 p-5 rounded-2xl text-center no-underline relative overflow-hidden';
-  const style: React.CSSProperties = { backgroundColor: '#1B4D3E', minHeight: '190px' };
+  const style: React.CSSProperties = { backgroundColor: '#1B4D3E', minHeight: '215px' };
 
   const inner = (
     <>
@@ -36,7 +36,7 @@ export default function CategoryCard({ category, href, external = false, source 
         aria-hidden="true"
       />
 
-      <div className="relative z-10 flex flex-col items-center gap-2.5 w-full">
+      <div className="relative z-10 flex flex-1 flex-col items-center gap-2.5 w-full">
         <div className="icon-wrap">
           <CategoryIcon id={category.id} size={38} color="#F8F5F0" />
         </div>
@@ -70,6 +70,14 @@ export default function CategoryCard({ category, href, external = false, source 
             </span>
           ))}
         </div>
+
+        {/* Click affordance — makes the card read as a CTA, not an info tile */}
+        <span
+          className="card-cta font-display font-bold uppercase tracking-wide mt-auto pt-2"
+          style={{ color: '#ff751f', fontSize: '12px' }}
+        >
+          Register free →
+        </span>
       </div>
     </>
   );
