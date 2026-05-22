@@ -58,6 +58,17 @@ h1, h2, h3, h4 {
   color: #2C2C2C !important;
 }
 
+.card-cta {
+  transition: color 0.2s ease;
+}
+
+/* CTA flips from brand orange (on the dark resting card) to white on the gold
+   hover state, where orange-on-gold is low-contrast. !important overrides the
+   inline orange set on the span. */
+.category-card:hover .card-cta {
+  color: #FFFFFF !important;
+}
+
 .card-emoji {
   transition: transform 0.2s ease;
   display: block;

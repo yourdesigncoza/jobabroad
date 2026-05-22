@@ -38,3 +38,45 @@ test.describe('Homepage — conversion path', () => {
     await expect(faqCta).toHaveAttribute('href', '#interest-grid');
   });
 });
+
+// Trust signals — guards the founder block and the official-source strip.
+test.describe('Homepage — trust signals', () => {
+  test('founder block shows a named, photographed, verifiable founder', async ({ page }) => {
+    await page.goto('/');
+
+    await expect(page.getByRole('img', { name: /john, founder of jobabroad/i })).toBeVisible();
+
+    const verifyLink = page.getByRole('link', { name: /more about john/i });
+    await expect(verifyLink).toHaveAttribute('href', 'https://www.devai.co.za/');
+    await expect(verifyLink).toHaveAttribute('target', '_blank');
+    await expect(verifyLink).toHaveAttribute('rel', /noopener/);
+  });
+
+  test('authority strip lists official sources', async ({ page }) => {
+    await page.goto('/');
+
+    await expect(page.getByText('Built from official sources')).toBeVisible();
+    await expect(page.getByText('GOV.UK', { exact: true })).toBeVisible();
+  });
+});
+
+// Mobile sticky CTA — keeps registration tappable once the hero scrolls away.
+test.describe('Homepage — mobile sticky CTA', () => {
+  test.use({ viewport: { width: 390, height: 844 } });
+
+  test('hidden at the top, revealed after scrolling past the hero', async ({ page }) => {
+    await page.goto('/');
+
+    // Located by test id, not role: when hidden the bar is aria-hidden, so
+    // its link is intentionally absent from the accessibility tree.
+    const stickyBar = page.getByTestId('sticky-cta');
+    await expect(stickyBar.locator('a')).toHaveAttribute('href', '/register');
+
+    // At the top, the hero CTA is on screen — the sticky bar stays hidden.
+    await expect(stickyBar).not.toBeInViewport();
+
+    // Scrolled past the hero and the grid, it slides into view.
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    await expect(stickyBar).toBeInViewport();
+  });
+});

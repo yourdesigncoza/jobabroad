@@ -1,11 +1,13 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import InterestGrid from '@/components/InterestGrid';
 import CountryStats from '@/components/CountryStats';
 import HowItWorks from '@/components/HowItWorks';
 import FAQ from '@/components/FAQ';
 import SiteNav from '@/components/SiteNav';
 import SiteFooter from '@/components/SiteFooter';
+import HomeStickyCta from '@/components/HomeStickyCta';
 
 // Title, description and Open Graph come from the root layout's defaults;
 // only the canonical URL is page-specific (?src= UTM params must not fork it).
@@ -21,6 +23,17 @@ const HERO_FREE_ITEMS = [
   'Which countries are realistic for your field',
   'Document checklist and realistic costs',
   'Scam red flags and a legitimate recruiter list',
+] as const;
+
+// Official-source authorities cited across the pathway guides — shown as a
+// credibility strip. Text wordmarks only (government crests are Crown
+// copyright / trademarked); every name is a real source used in the guides.
+const AUTHORITY_SOURCES = [
+  'GOV.UK',
+  'U.S. State Department',
+  'Dept. Home Affairs',
+  'NHS',
+  'Immigration NZ',
 ] as const;
 
 interface Props {
@@ -126,6 +139,40 @@ export default async function Home({ searchParams }: Props) {
         </div>
       </section>
 
+      {/* Authority strip — why the guides can be trusted, before the action */}
+      <section className="px-6" style={{ backgroundColor: '#F8F5F0' }}>
+        <div
+          className="max-w-6xl mx-auto flex flex-col sm:flex-row sm:items-center gap-x-4 gap-y-2 py-5"
+          style={{ borderTop: '1px solid #EDE8E0' }}
+        >
+          <span
+            className="font-display font-bold uppercase text-xs tracking-[0.15em] shrink-0"
+            style={{ color: '#1B4D3E' }}
+          >
+            Built from official sources
+          </span>
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+            {AUTHORITY_SOURCES.map((source, i) => (
+              <span key={source} className="contents">
+                {i > 0 && (
+                  <span
+                    className="hidden sm:inline-block w-1 h-1 rounded-full"
+                    style={{ backgroundColor: '#C9A84C' }}
+                    aria-hidden="true"
+                  />
+                )}
+                <span
+                  className="font-display font-semibold uppercase text-xs tracking-wide"
+                  style={{ color: '#6B6B6B' }}
+                >
+                  {source}
+                </span>
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Interest Selector */}
       <section id="interest-grid" className="px-6 py-14" style={{ backgroundColor: '#EDE8E0' }}>
         <div className="max-w-6xl mx-auto">
@@ -166,9 +213,46 @@ export default async function Home({ searchParams }: Props) {
               The information comes from official government, regulator, and programme sources. Not WhatsApp rumours. Not word of mouth. Not an agent guessing.
             </p>
 
-            <p className="font-body leading-relaxed text-center italic" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.25rem)', color: '#F8F5F0' }}>
-              I built Jobabroad because I watched too many South Africans hand money to fake recruiters and get nothing back.
-            </p>
+            {/* Founder — a real, named, verifiable person behind the promise */}
+            <div className="flex flex-col sm:flex-row items-center gap-5 sm:gap-6 w-full">
+              <Image
+                src="/founder.webp"
+                alt="John, founder of Jobabroad"
+                width={112}
+                height={112}
+                className="rounded-full shrink-0 object-cover"
+                style={{ border: '2px solid #C9A84C' }}
+              />
+              <div className="flex flex-col gap-3 text-center sm:text-left">
+                <p
+                  className="font-body leading-relaxed"
+                  style={{ fontSize: 'clamp(0.95rem, 2vw, 1.05rem)', color: '#F8F5F0' }}
+                >
+                  I&apos;m John — a software developer in Mossel Bay. For 22 years I&apos;ve built
+                  research and data tools with one job: telling verified fact apart from rumour.
+                  Jobabroad is that same discipline pointed at working abroad. Every guide is built
+                  from official government and regulator sources — because I watched too many South
+                  Africans pay fake recruiters and get nothing back.
+                </p>
+                <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-3">
+                  <span
+                    className="font-display font-bold uppercase text-sm tracking-wide"
+                    style={{ color: '#C9A84C' }}
+                  >
+                    John
+                  </span>
+                  <a
+                    href="https://www.devai.co.za/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-body text-xs font-semibold underline underline-offset-4"
+                    style={{ color: 'rgba(248,245,240,0.6)' }}
+                  >
+                    More about John →
+                  </a>
+                </div>
+              </div>
+            </div>
 
             <div className="w-16 h-px" style={{ backgroundColor: '#C9A84C' }} />
 
@@ -199,6 +283,9 @@ export default async function Home({ searchParams }: Props) {
       <CountryStats />
 
       <SiteFooter />
+
+      {/* Mobile sticky CTA — keeps registration tappable on the long scroll */}
+      <HomeStickyCta />
     </main>
   );
 }
