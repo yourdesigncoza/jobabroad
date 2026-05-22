@@ -137,6 +137,15 @@ Test what matters after every feature: happy path, state persistence after navig
 
 When adding a feature, write or update Playwright tests in the same session before marking done.
 
+## Research & Web Search
+
+For market, SEO, competitor, trend, or audience research, use the configured MCP tools — **not** the built-in `WebSearch`. `WebSearch` is US-only and mislocalises SERPs for this South-Africa-focused project.
+
+- **Brave Search** — `mcp__brave-search__brave_web_search` with `country: "ZA"` for SERPs and competitor analysis.
+- **Reddit** — `mcp__reddit-mcp-buddy__*` (r/southafrica, r/askSouthAfrica, r/expats) for voice-of-customer / forum research.
+- Load these via ToolSearch first. Built-in `WebSearch` is a fallback only.
+- To read a specific page, use `defuddle` then `interceptor` (see global CLAUDE.md).
+
 ## External Links — STRICT RULE
 
 **All external links must open in a new tab.** Never navigate the user away from the app.
