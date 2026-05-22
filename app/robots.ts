@@ -7,7 +7,7 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: '*',
       allow: '/',
       // Private surfaces: admin tooling, API routes, and token-gated member
-      // pages. /demo is left crawlable so its per-page noindex tag is honoured.
+      // pages. Public pathway previews stay crawlable for organic discovery.
       disallow: ['/admin', '/api/', '/members/'],
     },
     sitemap: `${SITE_URL}/sitemap.xml`,

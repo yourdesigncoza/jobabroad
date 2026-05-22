@@ -45,7 +45,7 @@ export async function generateMetadata({
   return pageMetadata({
     title,
     description,
-    path: `/demo/${category}`,
+    path: `/pathways/${category}`,
     type: 'article',
     publishedTime,
   });
@@ -70,7 +70,7 @@ export default async function DemoPage({
 
   const { title: articleTitle, description: articleDescription } = buildCategoryCopy(categoryDef);
   const datePublished = pathwayMtime(category)?.toISOString();
-  const canonical = `${SITE_URL}/demo/${category}`;
+  const canonical = `${SITE_URL}/pathways/${category}`;
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',

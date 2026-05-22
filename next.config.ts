@@ -10,6 +10,11 @@ const nextConfig: NextConfig = {
         destination: 'https://www.jobabroad.co.za/:path*',
         permanent: true,
       },
+      {
+        source: '/demo/:category',
+        destination: '/pathways/:category',
+        permanent: true,
+      },
     ];
   },
 };

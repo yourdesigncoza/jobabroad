@@ -15,7 +15,7 @@ function pathwayLastModified(slug: string, fallback: Date): Date {
 }
 
 // Public, indexable routes only. Deliberately excludes /admin, /api, and the
-// gated /members/[category] (and auth routes). Demo pathway previews are
+// gated /members/[category] (and auth routes). Pathway previews are
 // included — they carry full guide content for organic discovery.
 export default function sitemap(): MetadataRoute.Sitemap {
   const buildTime = new Date();
@@ -26,12 +26,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/scam-warnings`, lastModified: buildTime, changeFrequency: 'monthly', priority: 0.7 },
   ];
 
-  const demoRoutes: MetadataRoute.Sitemap = listPathwaySlugs().map(slug => ({
-    url: `${SITE_URL}/demo/${slug}`,
+  const pathwayRoutes: MetadataRoute.Sitemap = listPathwaySlugs().map(slug => ({
+    url: `${SITE_URL}/pathways/${slug}`,
     lastModified: pathwayLastModified(slug, buildTime),
     changeFrequency: 'weekly',
     priority: 0.8,
   }));
 
-  return [...staticRoutes, ...demoRoutes];
+  return [...staticRoutes, ...pathwayRoutes];
 }
