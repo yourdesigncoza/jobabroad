@@ -26,6 +26,9 @@ export default async function SiteNav() {
 
         {/* Desktop nav (≥sm) — full inline links + WhatsApp pill */}
         <div className="hidden sm:flex items-center gap-3">
+          <Link href="/blog" className={linkClass} style={{ color: '#1B4D3E' }}>
+            Blog
+          </Link>
           {isSignedIn ? (
             <>
               <Link href="/dashboard" className={linkClass} style={{ color: '#1B4D3E' }}>
