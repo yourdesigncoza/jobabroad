@@ -13,7 +13,8 @@ import { getJourney, updateJourney } from '@/lib/agent/journey';
 import { rollWindow, isWindowOpen } from '@/lib/agent/access';
 import type { MilestoneUpdate, MilestoneStatus } from '@/lib/agent/milestones';
 import { assessmentDataSchema, type AssessmentData } from '@/lib/assessments/schemas/assessment';
-import { CATEGORIES } from '@/lib/categories';
+import { CATEGORIES, type CategoryId } from '@/lib/categories';
+import { getTrustedRecruiters } from '@/lib/recruiters';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -192,12 +193,24 @@ export async function POST(req: NextRequest) {
   }
 
   const categoryLabel = CATEGORIES.find((c) => c.id === category)?.label ?? category;
+
+  // Vetted partners relevant to this category (cross-cutting services like
+  // document/apostille providers surface for everyone; recruiters are
+  // category-filtered). The coach references them only when they fit the question.
+  const partners = getTrustedRecruiters(category as CategoryId).map((p) => ({
+    name: p.name,
+    website: p.website,
+    serviceKind: p.serviceKind,
+    bullets: p.trustedBullets,
+  }));
+
   const { messages, numberedChunkIds } = buildCoachPrompt({
     categoryLabel,
     category,
     assessmentSummary: buildAssessmentSummary(summaryData),
     milestones: journeyState.milestones,
     corpusChunks: corpus,
+    partners,
     history,
     query,
   });
