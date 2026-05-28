@@ -15,6 +15,62 @@ const ROUTES = [
     registerHref: '/register?category=healthcare',
     pillarHref: '/pathways/healthcare',
   },
+  {
+    slug: '/routes/seasonal-farm-worker/united-kingdom',
+    title: /How South African Seasonal Farm Workers Can Work in the UK/i,
+    knownHeading: /Can South Africans do seasonal farm work in the UK/i,
+    registerHref: '/register?category=farming',
+    pillarHref: '/pathways/farming',
+  },
+  {
+    slug: '/routes/software-developer/ireland',
+    title: /How South African Software Developers Can Work in Ireland/i,
+    knownHeading: /Can South African software developers work in Ireland/i,
+    registerHref: '/register?category=it-tech',
+    pillarHref: '/pathways/it-tech',
+  },
+  {
+    slug: '/routes/electrician/australia',
+    title: /How South African Electricians Can Work in Australia/i,
+    knownHeading: /Can South African electricians work in Australia/i,
+    registerHref: '/register?category=trades',
+    pillarHref: '/pathways/trades',
+  },
+  {
+    slug: '/routes/tefl-teacher/south-korea',
+    title: /How South Africans Can Teach English in South Korea/i,
+    knownHeading: /Can South Africans teach English in South Korea/i,
+    registerHref: '/register?category=tefl',
+    pillarHref: '/pathways/tefl',
+  },
+  {
+    slug: '/routes/civil-engineer/australia',
+    title: /How South African Civil Engineers Can Work in Australia/i,
+    knownHeading: /Can South African civil engineers work in Australia/i,
+    registerHref: '/register?category=engineering',
+    pillarHref: '/pathways/engineering',
+  },
+  {
+    slug: '/routes/chef/uae',
+    title: /How South African Chefs Can Work in the UAE/i,
+    knownHeading: /Can South African chefs work in the UAE/i,
+    registerHref: '/register?category=hospitality',
+    pillarHref: '/pathways/hospitality',
+  },
+  {
+    slug: '/routes/accountant/canada',
+    title: /How South African Accountants Can Work in Canada/i,
+    knownHeading: /Can South African accountants work in Canada/i,
+    registerHref: '/register?category=accounting',
+    pillarHref: '/pathways/accounting',
+  },
+  {
+    slug: '/routes/carnival-worker/united-states',
+    title: /How South Africans Can Do Carnival & Seasonal Work in the USA/i,
+    knownHeading: /Can South Africans work at US carnivals or fairs/i,
+    registerHref: '/register?category=seasonal',
+    pillarHref: '/pathways/seasonal',
+  },
 ] as const;
 
 const GUIDES = [
