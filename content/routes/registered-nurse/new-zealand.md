@@ -1,6 +1,6 @@
 ---
 title: "How South African Registered Nurses Can Work in New Zealand (2026 Guide)"
-description: "The honest 2026 route for South African registered nurses to work in New Zealand: Nursing Council registration, the Green List Straight to Residence pathway, English, rand costs, and scams."
+description: "Why New Zealand is one of the best nursing moves for South Africans: Nursing Council registration, the Green List route straight to residence, English requirements, rand costs, and scams."
 primaryKeyword: "Registered Nurse jobs in New Zealand for South Africans"
 category: "healthcare"
 role: "Registered Nurse"

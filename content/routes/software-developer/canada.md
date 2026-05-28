@@ -1,6 +1,6 @@
 ---
 title: "How South African Software Developers Can Work in Canada (2026 Guide)"
-description: "The honest 2026 route for South African software developers to work in Canada: Express Entry, STEM category draws, no job offer needed, ECA, rand costs, and scams to avoid."
+description: "Developers in South Africa, here's the Canada play: Express Entry, STEM category draws, why you don't need a job offer, the ECA, real rand costs, and the scams to keep clear of."
 primaryKeyword: "Software developer jobs in Canada for South Africans"
 category: "it-tech"
 role: "Software Developer"

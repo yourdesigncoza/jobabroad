@@ -1,6 +1,6 @@
 ---
 title: "How South African Civil Engineers Can Work in Australia (2026 Guide)"
-description: "The honest 2026 route for South African civil engineers to work in Australia: the Engineers Australia skills assessment, Washington Accord vs CDR, English requirements, rand costs, and visas."
+description: "Civil engineers from South Africa, here's the Australia path: the Engineers Australia skills assessment, Washington Accord vs the CDR, the English test you'll need, rand costs, and how the visas fit in."
 primaryKeyword: "Civil engineer jobs in Australia for South Africans"
 category: "engineering"
 role: "Civil Engineer"

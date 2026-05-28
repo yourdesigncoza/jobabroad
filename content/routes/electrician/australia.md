@@ -1,6 +1,6 @@
 ---
 title: "How South African Electricians Can Work in Australia (2026 Guide)"
-description: "The honest 2026 route for South African electricians to work in Australia: the subclass 482 visa, the Trades Recognition Australia skills assessment, state electrical licensing, rand costs, and scams."
+description: "For South African electricians eyeing Australia: the subclass 482 visa, your Trades Recognition Australia skills assessment, state electrical licensing, rand costs, and scam warnings."
 primaryKeyword: "Electrician jobs in Australia for South Africans"
 category: "trades"
 role: "Electrician"

@@ -1,6 +1,6 @@
 ---
 title: "How South African Accountants Can Work in Canada (2026 Guide)"
-description: "The honest 2026 route for South African accountants to work in Canada: Express Entry and the Federal Skilled Worker program, ECA, language tests, the CPA designation, rand costs, and scams."
+description: "Thinking about accounting work in Canada? How South Africans actually get there — Express Entry and the Federal Skilled Worker program, the ECA, language tests, CPA status, rand costs, and scams."
 primaryKeyword: "Accountant jobs in Canada for South Africans"
 category: "accounting"
 role: "Accountant"

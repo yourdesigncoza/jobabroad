@@ -1,6 +1,6 @@
 ---
 title: "How South African Software Developers Can Work in Ireland (2026 Guide)"
-description: "The honest 2026 route for South African software developers to work in Ireland: the Critical Skills Employment Permit, the €40,904 salary threshold, the D visa, rand costs, and the path to Stamp 4."
+description: "What it takes for a South African developer to work in Ireland: the Critical Skills Employment Permit, the €40,904 salary threshold, the D visa, rand costs, and the path to Stamp 4."
 primaryKeyword: "Software developer jobs in Ireland for South Africans"
 category: "it-tech"
 role: "Software Developer"

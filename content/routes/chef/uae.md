@@ -1,6 +1,6 @@
 ---
 title: "How South African Chefs Can Work in the UAE (2026 Guide)"
-description: "The honest 2026 route for South African chefs to work in the UAE: the employer-sponsored MOHRE work permit, residence visa and Emirates ID, attestation, costs, and the scams to avoid."
+description: "Want to cook in Dubai or Abu Dhabi? How South African chefs land UAE work — the employer-sponsored MOHRE permit, residence visa and Emirates ID, certificate attestation, costs, and scams."
 primaryKeyword: "Chef jobs in the UAE for South Africans"
 category: "hospitality"
 role: "Chef"

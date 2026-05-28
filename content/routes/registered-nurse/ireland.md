@@ -1,6 +1,6 @@
 ---
 title: "How South African Registered Nurses Can Work in Ireland (2026 Guide)"
-description: "The honest 2026 route for South African registered nurses to work in Ireland: NMBI registration, the Critical Skills Employment Permit, real rand costs, timeline, and the scams to avoid."
+description: "A clear-eyed look at nursing in Ireland for South Africans: NMBI registration, the Critical Skills Employment Permit, what it really costs in rands, the timeline, and the scams to avoid."
 primaryKeyword: "Registered Nurse jobs in Ireland for South Africans"
 category: "healthcare"
 role: "Registered Nurse"

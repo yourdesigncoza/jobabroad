@@ -1,6 +1,6 @@
 ---
 title: "How South African Plumbers Can Work in the UK (2026 Guide)"
-description: "The honest 2026 route for South African plumbers to work in the UK: the Skilled Worker visa, the £41,700 salary rule, Gas Safe registration, rand costs, timelines, and scams to avoid."
+description: "Plumbers from South Africa eyeing the UK: how the Skilled Worker visa works, the £41,700 salary rule, when you need Gas Safe registration, rand costs, timelines, and the scams to watch for."
 primaryKeyword: "Plumber jobs in the UK for South Africans"
 category: "trades"
 role: "Plumber"

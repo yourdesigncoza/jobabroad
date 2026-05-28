@@ -1,6 +1,6 @@
 ---
 title: "How South African Seasonal Farm Workers Can Work in the UK (2026 Guide)"
-description: "The honest 2026 route for South Africans to do seasonal farm work in the UK: the Seasonal Worker visa, approved scheme operators, the £340 fee, savings rules, pay, and the scams to avoid."
+description: "Seasonal farm work in the UK, explained for South Africans: the Seasonal Worker visa, approved scheme operators, the £340 fee, the savings rule, what you'll earn, and the scams to avoid."
 primaryKeyword: "Seasonal farm worker jobs in the UK for South Africans"
 category: "farming"
 role: "Seasonal Farm Worker"

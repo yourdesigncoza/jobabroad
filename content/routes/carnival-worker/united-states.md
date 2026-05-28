@@ -1,6 +1,6 @@
 ---
 title: "How South Africans Can Do Carnival & Seasonal Work in the USA (2026 Guide)"
-description: "The honest 2026 reality for South Africans wanting US carnival or seasonal work: why J-1 excludes traveling fairs, how H-2B really works, the annual cap, costs, and the scams to avoid."
+description: "Straight talk on US carnival and seasonal work for South Africans: why J-1 rules out traveling fairs, how H-2B actually works, the annual cap, the real costs, and how to spot a scam."
 primaryKeyword: "Carnival and seasonal jobs in the USA for South Africans"
 category: "seasonal"
 role: "Carnival / Seasonal Worker"

@@ -1,6 +1,6 @@
 ---
 title: "How South African Electricians Can Work in the UK (2026 Guide)"
-description: "The honest 2026 route for South African electricians to work in the UK: the Skilled Worker visa, the £41,700 salary rule, sponsor licences, certification schemes, rand costs, and scams."
+description: "What a South African electrician needs to work in the UK: the Skilled Worker visa, the £41,700 salary rule, finding a licensed sponsor, certification schemes, rand costs, and scams to avoid."
 primaryKeyword: "Electrician jobs in the UK for South Africans"
 category: "trades"
 role: "Electrician"

@@ -1,6 +1,6 @@
 ---
 title: "How South Africans Can Teach English in South Korea (2026 EPIK & E-2 Guide)"
-description: "The honest 2026 route for South Africans to teach English in South Korea: E-2 visa, the EPIK programme, the English-schooling proof SA applicants must give, salary, costs, and scams."
+description: "Teaching English in South Korea as a South African: the E-2 visa, the EPIK programme, the English-schooling proof you'll need to give, what you'll earn, the costs, and the scams to watch."
 primaryKeyword: "Teach English in South Korea from South Africa"
 category: "tefl"
 role: "TEFL Teacher"

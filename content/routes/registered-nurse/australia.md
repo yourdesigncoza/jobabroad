@@ -1,6 +1,6 @@
 ---
 title: "How South African Registered Nurses Can Work in Australia (2026 Guide)"
-description: "The honest 2026 route for South African registered nurses to work in Australia: AHPRA/NMBA registration, the OSCE, English standards, rand costs, visa options, and scams to avoid."
+description: "For South African nurses set on Australia: AHPRA/NMBA registration and the OSCE, the English standard, what it all costs in rands, your visa options, and the recruitment scams to steer clear of."
 primaryKeyword: "Registered Nurse jobs in Australia for South Africans"
 category: "healthcare"
 role: "Registered Nurse"

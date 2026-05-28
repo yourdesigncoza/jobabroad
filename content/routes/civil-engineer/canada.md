@@ -1,6 +1,6 @@
 ---
 title: "How South African Civil Engineers Can Work in Canada (2026 Guide)"
-description: "The honest 2026 route for South African civil engineers to work in Canada: Express Entry, STEM category draws, the P.Eng licence, ECA, rand costs, and scams to avoid."
+description: "How a South African civil engineer can build a career in Canada: Express Entry and STEM draws, getting your P.Eng licence, the ECA, real rand costs, and the scams worth knowing about."
 primaryKeyword: "Civil engineer jobs in Canada for South Africans"
 category: "engineering"
 role: "Civil Engineer"

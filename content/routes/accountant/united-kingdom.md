@@ -1,6 +1,6 @@
 ---
 title: "How South African Accountants Can Work in the UK (2026 Guide)"
-description: "The honest 2026 route for South African accountants to work in the UK: the Skilled Worker visa, CA(SA)/ACCA recognition, why audit is regulated, rand costs, and scams to avoid."
+description: "What it really takes for a South African accountant to move to the UK: the Skilled Worker visa, getting your CA(SA) or ACCA recognised, why audit is different, rand costs, and scam red flags."
 primaryKeyword: "Accountant jobs in the UK for South Africans"
 category: "accounting"
 role: "Accountant"
