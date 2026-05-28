@@ -21,7 +21,7 @@ const PILLARS = [
 const QUESTIONS = [
   {
     q: "What's free, and what costs money?",
-    a: "The pathway guide and the personalised eligibility check are completely free, no card, no monthly fees. Register, confirm your email, and you're in. Inside the free tier: destination options, document checklist, realistic costs, visa route overview, scam red flags, recruiter list, and a personalised eligibility score. The R495 upgrade is optional. It gets you a personalised action plan written specifically for your situation, emailed to you immediately, plus 5 follow-up questions and a 15-minute review call whenever you're ready. One-off payment, no subscription.",
+    a: "The pathway guide and the personalised eligibility check are completely free, no card, no monthly fees. Register, confirm your email, and you're in. Inside the free tier: destination options, document checklist, realistic costs, visa route overview, scam red flags, recruiter list, and a personalised eligibility score. The R495 upgrade is optional. It gets you a personalised action plan written specifically for your situation, emailed to you immediately, plus your own AI coach to answer questions and track your next steps, and a 15-minute review call whenever you're ready. One-off payment, no subscription.",
   },
   {
     q: 'Are you a recruitment agency?',

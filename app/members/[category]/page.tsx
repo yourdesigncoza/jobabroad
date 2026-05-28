@@ -102,7 +102,7 @@ export default async function MembersCategoryPage({
     ? undefined
     : isPaid
       ? undefined
-      : 'Unlock your personalised action plan, emailed immediately, with 5 follow-up questions and an optional 15-min review call — R495.';
+      : 'Unlock your personalised action plan, emailed immediately, with your own AI coach and an optional 15-min review call — R495.';
 
   return (
     <main className="min-h-screen" style={{ backgroundColor: '#F8F5F0' }}>

@@ -11,6 +11,7 @@ import { CATEGORIES, type CategoryId } from '@/lib/categories';
 import { getTrustedPartnersForBuyer } from '@/lib/recruiters';
 import { getRedFlagsForCategory } from './red-flags';
 import type { AssessmentData } from '@/lib/assessments/schemas/assessment';
+import { searchCorpus, type CorpusChunk } from '@/lib/rag/corpus';
 import { ReportTemplate } from './pdf-template';
 import type { ReportData } from './types';
 
@@ -23,40 +24,6 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY! });
 
 function admin() {
   return createClient(SUPABASE_URL, SERVICE_ROLE, { auth: { persistSession: false } });
-}
-
-interface CorpusChunk {
-  id: number;
-  category: string;
-  source_type: 'guide' | 'wiki';
-  source_path: string;
-  heading: string;
-  anchor: string | null;
-  slug: string | null;
-  content: string;
-  similarity: number;
-}
-
-async function searchCorpus(
-  category: string,
-  query: string,
-  limit = 15,
-): Promise<CorpusChunk[]> {
-  try {
-    const res = await fetch(`${SUPABASE_URL}/functions/v1/search-pathway`, {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        'x-internal-key': SERVICE_ROLE,
-      },
-      body: JSON.stringify({ query, category, threshold: 0.4, limit: 25 }),
-    });
-    if (!res.ok) return [];
-    const { results } = (await res.json()) as { results: CorpusChunk[] };
-    return (results ?? []).slice(0, limit);
-  } catch {
-    return [];
-  }
 }
 
 function tightenSnippet(text: string, max = 220): string {

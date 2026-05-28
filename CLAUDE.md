@@ -72,7 +72,8 @@ npx playwright test -g "registers"      # single test by name
 - `/api/payments/checkout` (Paystack init), `/api/payments/webhook` (success → `tier='paid'`, then `waitUntil(generateAndEmail(userId))` pre-warms the PDF and emails it)
 - `/api/booking/consent` — POPIA consent record
 - `/api/reports/generate`, `/api/reports/download` — PDF gen via GPT + RAG, cached as 5-min signed URL; `/api/reports/status` polls `paid_reports.generation_status`
-- `/api/follow-up/send` — follow-up email
+- `/api/agent/*` — AI coach (paid): `chat` (RAG chat, idempotent via `requestId`, 30/day cap, rolls the 90-day window), `touch` (client-fired on coach mount → rolls window + seeds journey), `history`, `consent` (nudge opt-in + mints unsub token), `journey` (manual milestone edit), `unsubscribe?token=` (token opt-out)
+- `/api/cron/agent-nudge` — daily Vercel cron (Bearer `CRON_SECRET`); emails proactive nudges to consenting users idle 7+ days with incomplete milestones (zero LLM calls — templated from stored `last_topic`)
 - `/api/admin/post-call/generate` — admin saves call notes into `paid_reports.call_notes`
 - `/api/admin/wa-assistant/*` — `draft`, `thread/[phone]`, `contacts`, `log`, `add-pattern`
 - `/api/search/...`, `/api/wiki/[id]` — RAG corpus search + wiki fetch
@@ -209,10 +210,11 @@ NEXT_PUBLIC_BASE_URL              # http://localhost:3000 dev; https://jobabroad
 NEXT_PUBLIC_WHATSAPP_NUMBER       # bare digits, e.g. 27617114715 — used in wa.me links
 PAYSTACK_SECRET_KEY
 PAYSTACK_PUBLIC_KEY
-OPENAI_API_KEY                    # report generation + RAG
+OPENAI_API_KEY                    # report generation + RAG + AI coach
 BREVO_API_KEY                     # transactional email
 ADMIN_EMAILS                      # comma-separated; gates /admin and /api/admin/*
 CALCOM_LINK                       # booking embed
+CRON_SECRET                       # Bearer secret for /api/cron/agent-nudge (Vercel injects on cron requests)
 ```
 
 ## UTM tracking

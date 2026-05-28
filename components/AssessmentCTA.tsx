@@ -19,12 +19,12 @@ export default function AssessmentCTA({ category, isSubmitted, isPaid }: Props) 
     href = `/members/${category}/assessment`;
   } else if (!isPaid) {
     title = 'Unlock Your Full Report';
-    body = "You've completed your check. Upgrade for a personalised action plan emailed immediately, 5 follow-up questions, and an optional 15-min review call.";
+    body = "You've completed your check. Upgrade for a personalised action plan emailed immediately, your own AI coach, and an optional 15-min review call.";
     buttonLabel = 'Go Premium';
     href = `/members/${category}/score`;
   } else {
     title = 'Your Premium Report';
-    body = 'View your full assessment, download the PDF, book your call, or send a follow-up from your dashboard.';
+    body = 'View your full assessment, download the PDF, book your call, or chat with your coach from your dashboard.';
     buttonLabel = 'View Your Report';
     href = `/members/${category}/score`;
   }

@@ -8,6 +8,5 @@ initBotId({
     { path: '/register', method: 'POST' },
     { path: '/api/payments/checkout', method: 'POST' },
     { path: '/api/booking/consent', method: 'POST' },
-    { path: '/api/follow-up/send', method: 'POST' },
   ],
 });

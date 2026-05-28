@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import SiteNav from '@/components/SiteNav';
 import SiteFooter from '@/components/SiteFooter';
-import FollowUpForm from '@/components/FollowUpForm';
 import ReportStatusCard from '@/components/ReportStatusCard';
 import { requireSession } from '@/lib/auth-guards';
 import { CATEGORIES } from '@/lib/categories';
@@ -119,7 +118,7 @@ export default async function DashboardPage() {
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('name, category, tier, paid_email_credits')
+    .select('name, category, tier')
     .eq('user_id', user.id)
     .single();
 
@@ -255,6 +254,42 @@ export default async function DashboardPage() {
             <ReportStatusCard initial={reportStatus} />
 
             <Link
+              href={`/members/${profile.category}/coach`}
+              className="relative block rounded-2xl p-5 transition-shadow hover:shadow-md"
+              style={{
+                backgroundColor: '#FFFFFF',
+                border: '1px dashed #ff751f',
+                boxShadow: '0 2px 12px rgba(255, 117, 31, 0.15)',
+              }}
+            >
+              <div className="flex items-center gap-2 mb-1">
+                <div className="w-6 h-px" style={{ backgroundColor: '#ff751f' }} />
+                <span
+                  className="font-display text-xs font-semibold uppercase tracking-wider"
+                  style={{ color: '#ff751f' }}
+                >
+                  Your coach
+                </span>
+              </div>
+              <span
+                className="font-display font-bold uppercase tracking-wide text-sm block"
+                style={{ color: '#2C2C2C' }}
+              >
+                Chat with your {categoryLabel} coach
+              </span>
+              <span className="font-body text-xs block mt-1" style={{ color: '#6B6B6B' }}>
+                Ask anything about your move, and track your next steps. Grounded in your guide and
+                your situation.
+              </span>
+              <span
+                className="inline-flex items-center gap-2 mt-4 px-5 py-2.5 rounded-xl font-display font-bold uppercase tracking-wide text-xs"
+                style={{ backgroundColor: '#1B4D3E', color: '#F8F5F0' }}
+              >
+                Open coach →
+              </span>
+            </Link>
+
+            <Link
               href={bookHref}
               className="block rounded-2xl p-5 transition-shadow hover:shadow-md"
               style={{ backgroundColor: '#FFFFFF', border: '1.5px dashed #C9A84C' }}
@@ -314,11 +349,6 @@ export default async function DashboardPage() {
                 </div>
               </section>
             )}
-
-            <FollowUpForm
-              credits={profile.paid_email_credits ?? 0}
-              bookHref={bookHref}
-            />
           </div>
         )}
 

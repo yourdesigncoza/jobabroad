@@ -70,7 +70,7 @@ function emailHtml({
       </a>
     </p>
     <p>If you'd like to talk it through, you can book a 15-min call from your dashboard whenever you're ready &mdash; no rush, no pressure.</p>
-    <p>You also have 5 follow-up questions available from your dashboard, ready whenever you need clarification.</p>
+    <p>You also have your personal ${escapeHtml(categoryLabel)} coach in your dashboard — chat any time for grounded answers and to track your next steps.</p>
     <p>&mdash; The Jobabroad team</p>
   `;
 }
