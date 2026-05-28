@@ -24,6 +24,9 @@ URLs were buggy (see `02-source-map.md`).
    de-duped against the 10 existing blogs and balanced for intent diversity.
 6. **`05-editorial-geo-standard.md`** — the non-negotiable quality bar + GEO/schema
    checklist a page must pass before publish.
+7. **`06-category-flow-template.md`** — Teaching mapped as the gold-standard member/paid
+   flow, with the per-category "definition of done" for finalising the other categories
+   (the single gate is the scoring rubric; accounting also needs an assessment steps file).
 
 ## Assets
 
