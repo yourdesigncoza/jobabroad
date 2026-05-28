@@ -26,6 +26,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: SITE_URL, lastModified: buildTime, changeFrequency: 'weekly', priority: 1 },
     { url: `${SITE_URL}/blog`, lastModified: buildTime, changeFrequency: 'weekly', priority: 0.8 },
+    { url: `${SITE_URL}/directory`, lastModified: buildTime, changeFrequency: 'weekly', priority: 0.6 },
     { url: `${SITE_URL}/recruiters`, lastModified: buildTime, changeFrequency: 'weekly', priority: 0.7 },
     { url: `${SITE_URL}/scam-warnings`, lastModified: buildTime, changeFrequency: 'monthly', priority: 0.7 },
   ];

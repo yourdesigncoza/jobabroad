@@ -64,6 +64,11 @@ export function GET(): Response {
     lines.push('');
   }
 
+  // Directory
+  lines.push('## Browse');
+  lines.push(`- [Directory — every guide, route and article](${SITE_URL}/directory)`);
+  lines.push('');
+
   // Trust pages
   lines.push('## Trust & safety');
   lines.push(`- [Work-abroad scam warnings](${SITE_URL}/scam-warnings)`);

@@ -71,6 +71,62 @@ const ROUTES = [
     registerHref: '/register?category=seasonal',
     pillarHref: '/pathways/seasonal',
   },
+  {
+    slug: '/routes/electrician/united-kingdom',
+    title: /How South African Electricians Can Work in the UK/i,
+    knownHeading: /Can South African electricians work in the UK/i,
+    registerHref: '/register?category=trades',
+    pillarHref: '/pathways/trades',
+  },
+  {
+    slug: '/routes/plumber/united-kingdom',
+    title: /How South African Plumbers Can Work in the UK/i,
+    knownHeading: /Can South African plumbers work in the UK/i,
+    registerHref: '/register?category=trades',
+    pillarHref: '/pathways/trades',
+  },
+  {
+    slug: '/routes/accountant/united-kingdom',
+    title: /How South African Accountants Can Work in the UK/i,
+    knownHeading: /Can South African accountants work in the UK/i,
+    registerHref: '/register?category=accounting',
+    pillarHref: '/pathways/accounting',
+  },
+  {
+    slug: '/routes/software-developer/germany',
+    title: /How South African Software Developers Can Work in Germany/i,
+    knownHeading: /Can South African software developers work in Germany/i,
+    registerHref: '/register?category=it-tech',
+    pillarHref: '/pathways/it-tech',
+  },
+  {
+    slug: '/routes/software-developer/canada',
+    title: /How South African Software Developers Can Work in Canada/i,
+    knownHeading: /Can South African software developers work in Canada/i,
+    registerHref: '/register?category=it-tech',
+    pillarHref: '/pathways/it-tech',
+  },
+  {
+    slug: '/routes/civil-engineer/canada',
+    title: /How South African Civil Engineers Can Work in Canada/i,
+    knownHeading: /Can South African civil engineers work in Canada/i,
+    registerHref: '/register?category=engineering',
+    pillarHref: '/pathways/engineering',
+  },
+  {
+    slug: '/routes/registered-nurse/australia',
+    title: /How South African Registered Nurses Can Work in Australia/i,
+    knownHeading: /Can South African registered nurses work in Australia/i,
+    registerHref: '/register?category=healthcare',
+    pillarHref: '/pathways/healthcare',
+  },
+  {
+    slug: '/routes/registered-nurse/new-zealand',
+    title: /How South African Registered Nurses Can Work in New Zealand/i,
+    knownHeading: /Can South African registered nurses work in New Zealand/i,
+    registerHref: '/register?category=healthcare',
+    pillarHref: '/pathways/healthcare',
+  },
 ] as const;
 
 const GUIDES = [
@@ -137,6 +193,24 @@ test.describe('routes', () => {
   test('unknown guide returns 404', async ({ page }) => {
     const res = await page.goto('/guides/this-guide-does-not-exist');
     expect(res?.status()).toBe(404);
+  });
+
+  test('directory lists routes, guides and is linked from the footer', async ({ page }) => {
+    await page.goto('/directory');
+    await expect(page.getByRole('heading', { level: 1, name: 'Directory' })).toBeVisible();
+    // a known route link and a known guide link are present
+    await expect(
+      page.getByRole('link', { name: /Registered Nurses Can Work in Ireland/i }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole('link', { name: /Police Clearance Certificate/i }),
+    ).toBeVisible();
+    // footer link points here from any page
+    await page.goto('/blog');
+    await expect(page.getByRole('link', { name: 'Browse all guides' })).toHaveAttribute(
+      'href',
+      '/directory',
+    );
   });
 
   test('llms.txt lists the route and guides', async ({ page }) => {
