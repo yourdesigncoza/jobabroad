@@ -132,6 +132,23 @@ So on-page work alone wins AI Overviews but under-serves ChatGPT/Perplexity. A p
 This is a separate operating track from content production; flag it as a Sprint 2+ lever,
 not a blocker for shipping route pages.
 
+## Product dependency: finalise all category flows to match the teaching flow
+
+**Open item (added 2026-05-28):** the content layer now spans all 11 categories (pathways,
+routes, comparisons), but the **paid-tier funnel is only fully built for teaching**. The
+scoring rubric exists only at `lib/scoring/rubrics/teaching.json` (others return null), and
+the personalised paid report / score flow is a **teaching-only pilot** (see CLAUDE.md). So we
+are driving traffic across every category, while only teaching can currently complete the
+full **assessment → score → paid report** journey end to end.
+
+**What this means for the roadmap:** before (or as) we scale traffic to the non-teaching
+categories, the **per-category flows must be finalised to match the teaching flow** — i.e.
+each category needs its own scoring rubric, score-page logic, and report content so a
+healthcare/trades/IT/etc. user gets the same complete experience a teaching user does. Until
+then, treat non-teaching route/pathway pages as **top-of-funnel lead capture** (free
+eligibility check + nurture), not as a complete paid journey, and prioritise building out the
+category flows in step with whichever categories the content is actually pulling traffic for.
+
 ## KPIs
 
 - **Leading:** route pages published & verified; % of pages passing the editorial
