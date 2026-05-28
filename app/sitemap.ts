@@ -4,6 +4,8 @@ import type { MetadataRoute } from 'next';
 import { SITE_URL } from '@/lib/site';
 import { listPathwaySlugs } from '@/lib/pathway-content';
 import { getAllBlogPosts } from '@/lib/blog-content';
+import { listRouteParams, routeLastModified } from '@/lib/route-content';
+import { listGuideSlugs, guideLastModified } from '@/lib/guide-content';
 
 /** Last modified time of a pathway markdown file (falls back to build time). */
 function pathwayLastModified(slug: string, fallback: Date): Date {
@@ -42,5 +44,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  return [...staticRoutes, ...pathwayRoutes, ...blogRoutes];
+  const routePages: MetadataRoute.Sitemap = listRouteParams().map(({ role, country }) => ({
+    url: `${SITE_URL}/routes/${role}/${country}`,
+    lastModified: routeLastModified(role, country, buildTime),
+    changeFrequency: 'monthly',
+    priority: 0.8,
+  }));
+
+  const guideRoutes: MetadataRoute.Sitemap = listGuideSlugs().map(slug => ({
+    url: `${SITE_URL}/guides/${slug}`,
+    lastModified: guideLastModified(slug, buildTime),
+    changeFrequency: 'monthly',
+    priority: 0.6,
+  }));
+
+  return [...staticRoutes, ...pathwayRoutes, ...blogRoutes, ...routePages, ...guideRoutes];
 }
