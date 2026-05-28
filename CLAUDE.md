@@ -47,7 +47,8 @@ npx playwright test -g "registers"      # single test by name
 
 **Public**
 - `/` — landing (category grid, FAQs, country stats)
-- `/demo/[category]` — public preview of paid content (rate-limited)
+- `/pathways/[category]` — public preview of the pathway guide (was `/demo/[category]`; the page component is still named `DemoPage` internally, with a `DemoBanner` + `DemoUnlockCTA` register prompt). SEO pillar pages.
+- `/blog` + `/blog/[slug]` — SEO articles (see Blog below); each article links back to its pillar `/pathways/[category]`
 - `/recruiters` — partner list (trusted partners highlighted)
 - `/scam-warnings` — safety guide
 
@@ -64,14 +65,16 @@ npx playwright test -g "registers"      # single test by name
 
 **Admin (`ADMIN_EMAILS` env gated)**
 - `/admin/post-call` — paid-user list w/ booking + report + call-notes editor
+- `/admin/wa-assistant` — drafts WhatsApp replies grounded in a QA library (see WhatsApp assistant below)
 
 **API routes**
 - `/api/assessment/save`, `/api/assessment/submit`
-- `/api/payments/checkout` (Paystack init), `/api/payments/webhook` (success → `tier='paid'`)
+- `/api/payments/checkout` (Paystack init), `/api/payments/webhook` (success → `tier='paid'`, then `waitUntil(generateAndEmail(userId))` pre-warms the PDF and emails it)
 - `/api/booking/consent` — POPIA consent record
-- `/api/reports/generate`, `/api/reports/download` — PDF gen via GPT + RAG, cached as 5-min signed URL
-- `/api/follow-up/send` — Brevo follow-up email
+- `/api/reports/generate`, `/api/reports/download` — PDF gen via GPT + RAG, cached as 5-min signed URL; `/api/reports/status` polls `paid_reports.generation_status`
+- `/api/follow-up/send` — follow-up email
 - `/api/admin/post-call/generate` — admin saves call notes into `paid_reports.call_notes`
+- `/api/admin/wa-assistant/*` — `draft`, `thread/[phone]`, `contacts`, `log`, `add-pattern`
 - `/api/search/...`, `/api/wiki/[id]` — RAG corpus search + wiki fetch
 
 ### Auth guards (`lib/auth-guards.ts`)
@@ -85,13 +88,17 @@ Category cross-access is blocked in `app/members/[category]/page.tsx`; mismatche
 
 ### Paid tier flow
 
-`assessment submit → score → book → checkout → webhook flips tier → report generate (RAG-enhanced PDF) → admin adds call notes after Cal.com session`
+`assessment submit → score → checkout → webhook flips tier → report auto-generates + emails → (optional) Cal.com call → admin adds call notes`
+
+The report now auto-generates on payment (the webhook fires `generateAndEmail`); the Cal.com call is **optional**, not a gate. `generation_status` on `paid_reports` tracks PDF state so the UI can poll `/api/reports/status`.
 
 Key files:
 - `lib/scoring/index.ts` — `calculateScore(answers, rubric)` → dimensions + band (`high_blockers | needs_prep | strong_potential`)
+- `lib/scoring/narratives.ts` — LLM narratives for the score page, cached on `assessments.cached_narratives` (nulled on resubmit); ~15x speedup vs regenerating
 - `lib/scoring/rubrics/teaching.json` — only teaching rubric exists; others return null (teaching-only pilot)
-- `lib/reports/generator.ts` — `searchCorpus()` → GPT → `<ReportTemplate>` PDF → cache to `paid-reports` bucket
+- `lib/reports/generator.ts` → `lib/reports/pdf-template.tsx` — `searchCorpus()` → GPT → PDF → cache to `paid-reports` bucket; `lib/reports/generate-and-email.ts` wraps gen + email; `lib/reports/red-flags.ts` flags risk signals
 - `lib/payments/provider.ts` — Paystack adapter (swap point if changing provider)
+- `lib/notifications/` — `score-email.ts`, `report-ready-email.ts`, `call-notes.ts`
 - `lib/recruiters.ts` + `lib/trusted-partners.ts` — recruiter directory + trusted-partner overlay
 
 ### Assessment system
@@ -105,24 +112,34 @@ Key files:
 
 All 11 categories complete: `accounting`, `au-pair`, `engineering`, `farming`, `healthcare`, `hospitality`, `it-tech`, `seasonal`, `teaching`, `tefl`, `trades`.
 
-`lib/pathway-content.ts` reads the markdown, sanitizes via `sanitize-html`, renders via `marked` with a custom renderer (forces `target="_blank" rel="noopener noreferrer"` on every external link), and extracts a TOC from h2 headings.
+`lib/pathway-content.ts` reads the markdown, sanitizes via `sanitize-html`, renders via `marked` with a custom renderer (forces `target="_blank" rel="noopener noreferrer"` on every external link), and extracts a TOC from h2 headings. `lib/markdown.ts` is the shared render+TOC helper used by both pathways and blog.
+
+### Blog (`content/blog/`)
+
+SEO articles in a hub-and-spoke model: each post targets a keyword and links back to its pillar `/pathways/[category]` guide. `lib/blog-content.ts` parses frontmatter via `gray-matter` (`title`, `description`, `primaryKeyword`, `published`/`updated`, `category`, `pillarHref`, `pillarLabel`, `faqs[]`) and renders body via `lib/markdown.ts`. Surfaced at `/blog` (index) and `/blog/[slug]`. Tests in `tests/blog.spec.ts`.
+
+### WhatsApp assistant (`lib/wa-assistant/`)
+
+Admin-only tool at `/admin/wa-assistant` that drafts replies to inbound WhatsApp messages, grounded in a curated QA library (`qa-library.ts`) rather than freeform generation. Modules: `draft.ts` (compose), `thread.ts` (conversation state), `log.ts` (audit), `qa-library.ts` + `add-pattern.ts` (grow the answer set), `schema.ts`, `validate.ts`. Distinct from the retired WhatsApp drip onboarding — this is a human-in-the-loop reply drafter for John.
 
 ### Supabase migrations (`supabase/migrations/`)
 
-1. `20260504_assessments.sql` — assessments table
-2. `20260505_pathway_search.sql` — pgvector + `search-pathway` function for RAG
-3. `20260510_demo_rate_limits.sql` — public demo throttling
-4. `20260516_assessments_user_id.sql` — backfill user_id after auth migration
-5. `20260516_drop_legacy_onboarding.sql` — drop old member_tokens flow
-6. `20260516_paid_tier_tables.sql` — `profiles.tier`, `bookings`, `paid_reports`
-7. `20260516_profiles_and_auth.sql` — profiles table + `handle_new_user` trigger
-8. `20260517_paid_reports_call_notes.sql` — `paid_reports.call_notes` column
+The pre-2026-05-18 migrations were collapsed into a single snapshot — `supabase/db-may-18.md` documents the full schema as of that date (assessments, pgvector `search-pathway`, demo rate limits, profiles + `handle_new_user` trigger, `bookings`, `paid_reports`). Read that snapshot for the baseline schema; only migrations applied **after** the snapshot live as files:
+
+- `20260518_paid_reports_generation_status.sql` — `paid_reports.generation_status` for PDF auto-gen polling
+
+Add new schema changes as dated migration files on top of the snapshot.
 
 ### Scripts (`scripts/`)
 
-- `reindex.ts` — rebuild pathway corpus embeddings (run after publishing any pathway guide)
+- `reindex.ts` — rebuild pathway corpus embeddings (run after publishing any pathway guide); maps source vaults → categories via `VAULT_TO_CATEGORY`
 - `seed-score-test-user.ts` — create test user with submitted teaching assessment
 - `render-step4-fixture.ts` — generate sample assessment data
+- `e2e-post-call.ts` — exercise the post-call report/notes flow end to end
+- `bench-narratives.ts` — benchmark the cached score narratives
+- `inspect-user.ts`, `inspect-user-by-email.ts`, `inventory-users.ts` — read-only user/DB inspection
+- `wipe-all-users.ts` — destructive: clears users (dev/test only — confirm before running)
+- `extract-outreach-data.py` — builds `lib/outreach-data.ts` recruiter/outreach dataset
 - `outreach-drafts/` — per-batch Gmail draft generation (see `~/.claude/templates/outreach-drafts/`)
 
 ## Testing — Playwright First
