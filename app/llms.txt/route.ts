@@ -3,6 +3,7 @@ import { CATEGORIES } from '@/lib/categories';
 import { listPathwaySlugs } from '@/lib/pathway-content';
 import { listRouteParams, getRoutePage } from '@/lib/route-content';
 import { listGuideSlugs, getGuidePage } from '@/lib/guide-content';
+import { listCompareSlugs, getComparePage } from '@/lib/compare-content';
 import { getAllBlogPosts } from '@/lib/blog-content';
 
 // Serves /llms.txt — a clean, structured map of the site for AI crawlers
@@ -38,6 +39,18 @@ export function GET(): Response {
       const page = getRoutePage(role, country);
       const title = page?.frontmatter.title ?? `${role} in ${country}`;
       lines.push(`- [${title}](${SITE_URL}/routes/${role}/${country})`);
+    }
+    lines.push('');
+  }
+
+  // Comparisons
+  const compares = listCompareSlugs();
+  if (compares.length) {
+    lines.push('## Comparisons (which option to choose)');
+    for (const slug of compares) {
+      const page = getComparePage(slug);
+      const title = page?.frontmatter.title ?? slug;
+      lines.push(`- [${title}](${SITE_URL}/compare/${slug})`);
     }
     lines.push('');
   }

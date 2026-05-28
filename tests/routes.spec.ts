@@ -127,6 +127,41 @@ const ROUTES = [
     registerHref: '/register?category=healthcare',
     pillarHref: '/pathways/healthcare',
   },
+  {
+    slug: '/routes/au-pair/netherlands',
+    title: /How South Africans Can Au Pair in the Netherlands/i,
+    knownHeading: /Can South Africans au pair in the Netherlands/i,
+    registerHref: '/register?category=au-pair',
+    pillarHref: '/pathways/au-pair',
+  },
+  {
+    slug: '/routes/teacher/uae',
+    title: /How South African Teachers Can Work in the UAE/i,
+    knownHeading: /Can South African teachers work in the UAE/i,
+    registerHref: '/register?category=teaching',
+    pillarHref: '/pathways/teaching',
+  },
+] as const;
+
+const COMPARISONS = [
+  {
+    slug: '/compare/nursing-uk-vs-ireland-south-africa',
+    title: /Nursing in the UK vs Ireland for South Africans/i,
+    registerHref: '/register?category=healthcare',
+    optionHref: '/routes/registered-nurse/ireland',
+  },
+  {
+    slug: '/compare/software-developer-ireland-vs-germany-vs-canada-south-africa',
+    title: /Software Developer: Ireland vs Germany vs Canada/i,
+    registerHref: '/register?category=it-tech',
+    optionHref: '/routes/software-developer/germany',
+  },
+  {
+    slug: '/compare/electrician-uk-vs-australia-south-africa',
+    title: /Electrician: UK vs Australia for South Africans/i,
+    registerHref: '/register?category=trades',
+    optionHref: '/routes/electrician/australia',
+  },
 ] as const;
 
 const GUIDES = [
@@ -177,6 +212,30 @@ test.describe('routes', () => {
 
   test('unknown route returns 404', async ({ page }) => {
     const res = await page.goto('/routes/registered-nurse/narnia');
+    expect(res?.status()).toBe(404);
+  });
+
+  for (const cmp of COMPARISONS) {
+    test(`comparison ${cmp.slug} renders, links its routes, funnels to category`, async ({ page }) => {
+      await page.goto(cmp.slug);
+      await expect(page.getByRole('heading', { level: 1, name: cmp.title })).toBeVisible();
+      // links to a compared route guide
+      await expect(page.locator(`a[href="${cmp.optionHref}"]`).first()).toBeVisible();
+      // category-locked CTA
+      await expect(page.getByRole('link', { name: 'Register free →' })).toHaveAttribute(
+        'href',
+        cmp.registerHref,
+      );
+      // GEO schema stack
+      const html = await page.content();
+      expect(html).toContain('"@type":"Article"');
+      expect(html).toContain('"@type":"BreadcrumbList"');
+      expect(html).toContain('"@type":"FAQPage"');
+    });
+  }
+
+  test('unknown comparison returns 404', async ({ page }) => {
+    const res = await page.goto('/compare/this-comparison-does-not-exist');
     expect(res?.status()).toBe(404);
   });
 

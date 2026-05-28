@@ -6,6 +6,7 @@ import { listPathwaySlugs } from '@/lib/pathway-content';
 import { getAllBlogPosts } from '@/lib/blog-content';
 import { listRouteParams, routeLastModified } from '@/lib/route-content';
 import { listGuideSlugs, guideLastModified } from '@/lib/guide-content';
+import { listCompareSlugs, compareLastModified } from '@/lib/compare-content';
 
 /** Last modified time of a pathway markdown file (falls back to build time). */
 function pathwayLastModified(slug: string, fallback: Date): Date {
@@ -59,5 +60,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
-  return [...staticRoutes, ...pathwayRoutes, ...blogRoutes, ...routePages, ...guideRoutes];
+  const comparePages: MetadataRoute.Sitemap = listCompareSlugs().map(slug => ({
+    url: `${SITE_URL}/compare/${slug}`,
+    lastModified: compareLastModified(slug, buildTime),
+    changeFrequency: 'monthly',
+    priority: 0.7,
+  }));
+
+  return [
+    ...staticRoutes,
+    ...pathwayRoutes,
+    ...blogRoutes,
+    ...routePages,
+    ...guideRoutes,
+    ...comparePages,
+  ];
 }

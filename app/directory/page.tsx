@@ -7,6 +7,7 @@ import { CATEGORIES } from '@/lib/categories';
 import { listPathwaySlugs } from '@/lib/pathway-content';
 import { listRouteParams, getRoutePage } from '@/lib/route-content';
 import { listGuideSlugs, getGuidePage } from '@/lib/guide-content';
+import { listCompareSlugs, getComparePage } from '@/lib/compare-content';
 import { getAllBlogPosts } from '@/lib/blog-content';
 import { pageMetadata, SITE_URL } from '@/lib/site';
 
@@ -51,6 +52,9 @@ export default function DirectoryPage() {
   const guides = listGuideSlugs()
     .map(getGuidePage)
     .filter((g): g is NonNullable<typeof g> => g !== null);
+  const compares = listCompareSlugs()
+    .map(getComparePage)
+    .filter((c): c is NonNullable<typeof c> => c !== null);
   const posts = getAllBlogPosts();
 
   // Only real categories that have a published pathway guide (skip "other").
@@ -142,6 +146,31 @@ export default function DirectoryPage() {
             );
           })}
         </div>
+
+        {/* Comparisons */}
+        {compares.length > 0 && (
+          <div className="flex flex-col gap-4">
+            <h2
+              className="font-display font-bold uppercase tracking-wide text-xl border-b pb-2"
+              style={{ color: '#2C2C2C', borderColor: '#EDE8E0' }}
+            >
+              Compare your options
+            </h2>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {compares.map(c => (
+                <li key={c.slug}>
+                  <Link
+                    href={`/compare/${c.slug}`}
+                    className={cardLink}
+                    style={{ backgroundColor: '#FFFFFF', border: '1.5px solid #EDE8E0', color: '#2C2C2C' }}
+                  >
+                    <span style={{ color: '#1B4D3E' }}>{c.frontmatter.title}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         {/* Document guides */}
         {guides.length > 0 && (
