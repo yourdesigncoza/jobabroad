@@ -7,6 +7,7 @@ import { extractCitedIndexes } from '@/lib/rag/prompt';
 import {
   buildCoachPrompt,
   buildAssessmentSummary,
+  extractPersonalContext,
   type ChatMessage,
 } from '@/lib/agent/prompt';
 import { getJourney, updateJourney } from '@/lib/agent/journey';
@@ -213,6 +214,7 @@ export async function POST(req: NextRequest) {
     categoryLabel,
     category,
     assessmentSummary: buildAssessmentSummary(summaryData),
+    personalContext: extractPersonalContext(summaryData),
     milestones: journeyState.milestones,
     corpusChunks: corpus,
     partners,
