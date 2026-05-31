@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
 import { checkBotId } from 'botid/server';
@@ -6,12 +6,21 @@ import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { buildAnswerPrompt, extractCitedIndexes } from '@/lib/rag/prompt';
 import { isValidDemoCategory } from '@/lib/demo-mode';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-);
+// Lazy, cached singletons — built on first request, not at module load, so
+// `next build` (which imports this route to collect metadata) doesn't need the
+// secrets present at build time.
+let _supabase: SupabaseClient | null = null;
+function getSupabase() {
+  return (_supabase ??= createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  ));
+}
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY! });
+let _openai: OpenAI | null = null;
+function getOpenAI() {
+  return (_openai ??= new OpenAI({ apiKey: process.env.OPENAI_API_KEY! }));
+}
 
 const SIMILARITY_GATE = 0.8;
 const MAX_CHUNKS = 8;
@@ -120,7 +129,7 @@ export async function POST(req: NextRequest) {
 
   const ids = validRefs.map((c) => c.id);
 
-  const { data: dbChunks, error: dbErr } = await supabase
+  const { data: dbChunks, error: dbErr } = await getSupabase()
     .from('pathway_chunks')
     .select('id, category, source_type, heading, anchor, slug, content')
     .in('id', ids)
@@ -155,7 +164,7 @@ export async function POST(req: NextRequest) {
   );
 
   try {
-    const completion = await openai.chat.completions.create({
+    const completion = await getOpenAI().chat.completions.create({
       model: MODEL,
       max_tokens: 500,
       temperature: 0.2,

@@ -20,7 +20,12 @@ export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 export const maxDuration = 60;
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY! });
+// Lazy, cached singleton — built on first request, not at module load, so
+// `next build` doesn't need OPENAI_API_KEY present at build time.
+let _openai: OpenAI | null = null;
+function getOpenAI() {
+  return (_openai ??= new OpenAI({ apiKey: process.env.OPENAI_API_KEY! }));
+}
 const MODEL = 'gpt-4o-mini';
 const DAILY_CAP = 30;
 const MAX_MESSAGE_CHARS = 2000;
@@ -217,7 +222,7 @@ export async function POST(req: NextRequest) {
 
   let parsed: ParsedAnswer | null = null;
   try {
-    const completion = await openai.chat.completions.create({
+    const completion = await getOpenAI().chat.completions.create({
       model: MODEL,
       temperature: 0.3,
       max_tokens: 700,

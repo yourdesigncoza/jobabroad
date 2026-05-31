@@ -1,7 +1,12 @@
 import OpenAI from 'openai';
 import type { ScoreResult } from './types';
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY! });
+// Lazy, cached singleton — built on first call, not at module load, so
+// importing this during `next build` doesn't require OPENAI_API_KEY.
+let _openai: OpenAI | null = null;
+function getOpenAI() {
+  return (_openai ??= new OpenAI({ apiKey: process.env.OPENAI_API_KEY! }));
+}
 
 const SYSTEM_PROMPT = `You are summarising an assessment for Jobabroad, a service helping South Africans work overseas. You will be given two rubric findings, each with a dimension label and a reason. Rewrite each as a single sentence (max 22 words) in the "we" voice.
 
@@ -46,7 +51,7 @@ export async function generateScoreTeasers(
   });
 
   try {
-    const completion = await openai.chat.completions.create({
+    const completion = await getOpenAI().chat.completions.create({
       model: 'gpt-4o-mini',
       temperature: 0.2,
       max_tokens: 200,

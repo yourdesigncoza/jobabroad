@@ -20,7 +20,12 @@ const SERVICE_ROLE = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 const BUCKET = 'paid-reports';
 const SIGNED_URL_TTL = 60 * 5; // 5 minutes
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY! });
+// Lazy, cached singleton — built on first call, not at module load, so
+// importing this during `next build` doesn't require OPENAI_API_KEY.
+let _openai: OpenAI | null = null;
+function getOpenAI() {
+  return (_openai ??= new OpenAI({ apiKey: process.env.OPENAI_API_KEY! }));
+}
 
 function admin() {
   return createClient(SUPABASE_URL, SERVICE_ROLE, { auth: { persistSession: false } });
@@ -71,7 +76,7 @@ async function generateNextActions(
   if (!process.env.OPENAI_API_KEY) return fallback;
 
   try {
-    const completion = await openai.chat.completions.create({
+    const completion = await getOpenAI().chat.completions.create({
       model: 'gpt-4o-mini',
       temperature: 0.2,
       max_tokens: 1200,

@@ -1,13 +1,18 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { renderWikiMarkdown } from '@/lib/render-wiki';
 import { gateDemoRequest, isValidDemoCategory } from '@/lib/demo-mode';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-);
+// Lazy, cached singleton — built on first request, not at module load, so
+// `next build` doesn't need the secrets present at build time.
+let _supabase: SupabaseClient | null = null;
+function getSupabase() {
+  return (_supabase ??= createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  ));
+}
 
 export async function GET(
   req: NextRequest,
@@ -47,7 +52,7 @@ export async function GET(
     allowedCategory = profile.category as string;
   }
 
-  const { data: chunk } = await supabase
+  const { data: chunk } = await getSupabase()
     .from('pathway_chunks')
     .select('id, category, source_type, heading, slug, content')
     .eq('id', numericId)

@@ -7,7 +7,12 @@ import {
 } from './schema';
 import { loadLibraryRaw } from './qa-library';
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY ?? '' });
+// Lazy, cached singleton — built on first call, not at module load, so
+// importing this during `next build` doesn't require OPENAI_API_KEY.
+let _openai: OpenAI | null = null;
+function getOpenAI() {
+  return (_openai ??= new OpenAI({ apiKey: process.env.OPENAI_API_KEY ?? '' }));
+}
 
 const SYSTEM_PROMPT_HEADER = `You are the Jobabroad WhatsApp triage assistant. Your job is to read inbound WhatsApp messages from prospective customers and draft replies grounded in the Jobabroad qa-library.
 
@@ -76,7 +81,7 @@ export async function draftReply(input: DraftInput): Promise<DraftOutput> {
   userParts.push('', `Sender phone: ${input.phone}`);
   const userBlock = userParts.join('\n');
 
-  const completion = await openai.chat.completions.parse({
+  const completion = await getOpenAI().chat.completions.parse({
     model: 'gpt-4o-mini',
     temperature: 0.4,
     messages: [

@@ -1,13 +1,18 @@
 import { createHash } from 'crypto';
-import { createClient } from '@supabase/supabase-js';
+import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { checkBotId } from 'botid/server';
 import { CATEGORIES } from '@/lib/categories';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-);
+// Lazy, cached singleton — built on first call, not at module load, so
+// importing this module during `next build` doesn't require the secrets.
+let _supabase: SupabaseClient | null = null;
+function getSupabase() {
+  return (_supabase ??= createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  ));
+}
 
 const SEARCH_DAILY_LIMIT = Number(process.env.DEMO_SEARCH_DAILY_LIMIT ?? 25);
 const WIKI_DAILY_LIMIT = Number(process.env.DEMO_WIKI_DAILY_LIMIT ?? 75);
@@ -49,7 +54,7 @@ async function checkAndIncrement(
   action: DemoAction,
 ): Promise<RateLimitRow> {
   const limit = action === 'search' ? SEARCH_DAILY_LIMIT : WIKI_DAILY_LIMIT;
-  const { data, error } = await supabase.rpc('increment_demo_limit', {
+  const { data, error } = await getSupabase().rpc('increment_demo_limit', {
     p_ip_hash: ipHash,
     p_action: action,
     p_limit: limit,
