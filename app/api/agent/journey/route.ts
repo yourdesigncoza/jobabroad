@@ -3,6 +3,7 @@ import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { createSupabaseServiceClient } from '@/lib/supabase/service';
 import { updateJourney } from '@/lib/agent/journey';
 import { isWindowOpen } from '@/lib/agent/access';
+import { hasFullAccess } from '@/lib/access';
 import { milestonesForCategory, type MilestoneStatus } from '@/lib/agent/milestones';
 
 export const dynamic = 'force-dynamic';
@@ -36,9 +37,17 @@ export async function POST(req: NextRequest) {
     .select('category, tier, agent_access_expires_at')
     .eq('user_id', user.id)
     .single();
-  if (profile?.tier !== 'paid')
-    return NextResponse.json({ error: 'paid_only' }, { status: 403 });
-  if (!isWindowOpen(profile.agent_access_expires_at as string | null))
+  if (!profile)
+    return NextResponse.json({ error: 'no_profile' }, { status: 403 });
+  // The checklist now lives on the dashboard for every full-access user (free,
+  // while payments are shelved), not just paid coach users. Paid users keep the
+  // rolling-window "on hold" gate; free users have no window to enforce.
+  if (!hasFullAccess(profile.tier))
+    return NextResponse.json({ error: 'no_access' }, { status: 403 });
+  if (
+    profile.tier === 'paid' &&
+    !isWindowOpen(profile.agent_access_expires_at as string | null)
+  )
     return NextResponse.json({ error: 'on_hold' }, { status: 403 });
 
   const category = profile.category as string;

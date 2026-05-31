@@ -8,7 +8,6 @@ import { CATEGORIES } from '@/lib/categories';
 import { requireProfile } from '@/lib/auth-guards';
 import { PAYMENTS_ENABLED } from '@/lib/access';
 import { createSupabaseServiceClient } from '@/lib/supabase/service';
-import { getJourneyForDisplay } from '@/lib/agent/journey';
 import { extractCitedIndexes } from '@/lib/rag/prompt';
 
 export const dynamic = 'force-dynamic';
@@ -74,16 +73,15 @@ export default async function CoachPage({
   }
 
   // Read-only render — no DB writes here. The journey seed + window roll are
-  // persisted by AgentChat's /api/agent/touch on mount.
-  const [journey, msgsRes] = await Promise.all([
-    getJourneyForDisplay(user.id, category),
-    svc
-      .from('agent_messages')
-      .select('id, role, content')
-      .eq('user_id', user.id)
-      .order('created_at', { ascending: true })
-      .limit(200),
-  ]);
+  // persisted by AgentChat's /api/agent/touch on mount (the checklist itself now
+  // lives on the dashboard).
+  const { data: msgsData } = await svc
+    .from('agent_messages')
+    .select('id, role, content')
+    .eq('user_id', user.id)
+    .order('created_at', { ascending: true })
+    .limit(200);
+  const msgsRes = { data: msgsData };
 
   const initialMessages = (msgsRes.data ?? []).map((r) => ({
     id: r.id as string,
@@ -114,14 +112,13 @@ export default async function CoachPage({
           </h1>
           <p className="font-body text-sm" style={{ color: '#6B6B6B' }}>
             Grounded in your guide and your situation. Ask about visas, registration, documents,
-            costs, and timelines — and track your next steps on the right.
+            costs, and timelines. Track your next steps on your dashboard.
           </p>
         </div>
 
         <AgentChat
           categoryLabel={categoryLabel}
           initialMessages={initialMessages}
-          initialJourney={journey}
           consentGiven={agentProfile.agent_nudge_consent === true}
         />
 

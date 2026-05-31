@@ -41,19 +41,19 @@ async function seedAndLoginAdmin(adminPage: Page): Promise<void> {
 }
 
 // =========================================================================
-// /api/admin/post-call/save-notes — auth + validation gates
+// /api/admin/users/chat-summary — auth gate
 // =========================================================================
 
-test.describe('Admin save-notes — gates', () => {
+test.describe('Admin chat-summary — gates', () => {
   test('returns 404 for unauthenticated request', async ({ request }) => {
-    const res = await request.post('/api/admin/post-call/save-notes', {
-      data: { userId: '00000000-0000-0000-0000-000000000000', callNotes: 'x' },
+    const res = await request.post('/api/admin/users/chat-summary', {
+      data: { userId: '00000000-0000-0000-0000-000000000000' },
     });
     expect(res.status()).toBe(404);
   });
 
   test('returns 404 for authenticated non-admin', async ({ page }) => {
-    const email = uniqueEmail('savenotes-nonadmin');
+    const email = uniqueEmail('chatsummary-nonadmin');
     await registerAndLogin(page, {
       email,
       password: PASSWORD,
@@ -62,8 +62,8 @@ test.describe('Admin save-notes — gates', () => {
       category: 'teaching',
     });
     try {
-      const res = await page.request.post('/api/admin/post-call/save-notes', {
-        data: { userId: '00000000-0000-0000-0000-000000000000', callNotes: 'x' },
+      const res = await page.request.post('/api/admin/users/chat-summary', {
+        data: { userId: '00000000-0000-0000-0000-000000000000' },
       });
       expect(res.status()).toBe(404);
     } finally {
@@ -109,66 +109,60 @@ test.describe('Admin force-regenerate — gates', () => {
 // ADMIN_EMAILS in .env.local, with dev server restarted)
 // =========================================================================
 
-test.describe('Admin save-notes — happy path', () => {
+test.describe('Admin users dashboard — happy path', () => {
   test.skip(!ADMIN_EMAIL, 'PLAYWRIGHT_ADMIN_EMAIL not set');
 
-  test('admin saves notes → row populated → buyer dashboard shows Notes card', async ({ page, browser }) => {
-    // Buyer setup
-    const buyerEmail = uniqueEmail('savenotes-buyer');
+  test('admin sees registered members + chat-summary works for a chatter', async ({ page, browser }) => {
+    // A freshly registered member who has also chatted with the assistant.
+    const memberEmail = uniqueEmail('dash-member');
     await registerAndLogin(page, {
-      email: buyerEmail,
+      email: memberEmail,
       password: PASSWORD,
-      name: 'Notes Buyer',
+      name: 'Dash Member',
       phone: uniquePhone(),
       category: 'teaching',
     });
-    const buyerId = await findUserIdByEmail(buyerEmail);
-    await makePaid(buyerId, 5);
-    await seedReport(buyerId, {
-      status: 'completed',
-      pdfPath: `${buyerId}/report-test.pdf`,
-    });
+    const memberId = await findUserIdByEmail(memberEmail);
 
-    // Admin context (separate browser context so cookies don't collide)
+    // Seed a short transcript directly so the chat-summary endpoint has input.
+    await svc()
+      .from('agent_messages')
+      .insert([
+        { user_id: memberId, role: 'user', content: 'How do I get my SACE registration sorted for the UAE?' },
+        { user_id: memberId, role: 'assistant', content: 'You already hold an active SACE certificate, so focus next on your police clearance and passport renewal.' },
+      ]);
+
     const adminCtx = await browser.newContext();
     const adminPage = await adminCtx.newPage();
     try {
       await seedAndLoginAdmin(adminPage);
 
-      // Mock Brevo so the test doesn't actually send mail
-      await adminPage.route('https://api.brevo.com/**', (route) =>
-        route.fulfill({
-          status: 201,
-          contentType: 'application/json',
-          body: JSON.stringify({ messageId: 'mock' }),
-        }),
-      );
+      // Dashboard renders the registered-members view with this user on it.
+      await adminPage.goto('/admin/post-call');
+      await expect(
+        adminPage.getByRole('heading', { name: /registered members/i }),
+      ).toBeVisible();
+      await expect(adminPage.getByText(memberEmail)).toBeVisible();
 
-      const notes = 'Test notes from the call. We agreed on starting SAPS clearance this week.';
-      const res = await adminPage.request.post('/api/admin/post-call/save-notes', {
-        data: { userId: buyerId, callNotes: notes },
+      // Chat-summary endpoint returns a non-empty result for a user with turns.
+      const res = await adminPage.request.post('/api/admin/users/chat-summary', {
+        data: { userId: memberId },
       });
       expect(res.status()).toBe(200);
       const body = await res.json();
-      expect(body.ok).toBe(true);
-      expect(body.emailed).toBe(true);
+      expect(body.empty).toBe(false);
+      expect(body.userTurns).toBeGreaterThan(0);
 
-      // Verify DB write
-      const { data: report } = await svc()
-        .from('paid_reports')
-        .select('call_notes')
-        .eq('user_id', buyerId)
-        .single();
-      expect(report?.call_notes).toContain('SAPS clearance');
-
-      // Buyer reloads dashboard — Notes card should now appear
-      await page.goto('/dashboard');
-      await expect(page.getByRole('heading', { name: /notes from our session/i })).toBeVisible();
-      await expect(page.getByText(/SAPS clearance this week/i)).toBeVisible();
+      // A user with no messages summarises to empty.
+      const empty = await adminPage.request.post('/api/admin/users/chat-summary', {
+        data: { userId: '00000000-0000-0000-0000-000000000000' },
+      });
+      expect(empty.status()).toBe(200);
+      expect((await empty.json()).empty).toBe(true);
     } finally {
       await adminCtx.close();
       await deleteUser(ADMIN_EMAIL);
-      await deleteUser(buyerEmail);
+      await deleteUser(memberEmail);
     }
   });
 });

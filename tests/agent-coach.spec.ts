@@ -115,12 +115,15 @@ test.describe('Coach — page + journey', () => {
 
       await expect(page.getByRole('heading', { name: /teaching assistant/i })).toBeVisible();
       await expect(page.getByPlaceholder(/ask your assistant/i)).toBeVisible();
-      await expect(page.getByText(/your journey/i)).toBeVisible();
-      await expect(page.getByText('Valid passport')).toBeVisible();
 
       // Persist the seed deterministically (the page render is read-only; the
       // client touch on mount is async, so don't race it).
       await page.request.post('/api/agent/touch');
+
+      // The journey checklist now lives on the dashboard, not the chat page.
+      await page.goto('/dashboard');
+      await expect(page.getByText(/your journey/i)).toBeVisible();
+      await expect(page.getByText('Valid passport')).toBeVisible();
 
       // Strong-profile assessment seeds these milestones to done.
       const userId = await findUserIdByEmail(email);

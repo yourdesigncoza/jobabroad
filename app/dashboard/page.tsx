@@ -8,7 +8,12 @@ import { hasFullAccess, hasCoachAccess } from '@/lib/access';
 import { CATEGORIES } from '@/lib/categories';
 import { getLatestAssessment } from '@/lib/assessments/assessment-client';
 import { loadRubric, calculateScore } from '@/lib/scoring';
+import { getOrGenerateNarratives } from '@/lib/scoring/narratives';
+import { BAND_COPY } from '@/lib/scoring/bands';
 import { assessmentDataSchema } from '@/lib/assessments/schemas/assessment';
+import { getJourneyForDisplay } from '@/lib/agent/journey';
+import { milestonesForCategory } from '@/lib/agent/milestones';
+import DashboardJourney from '@/components/DashboardJourney';
 import PremiumUpsell from '@/components/PremiumUpsell';
 import type { Band } from '@/lib/scoring/types';
 import type { ReportStatusResponse } from '@/app/api/reports/status/route';
@@ -142,14 +147,12 @@ export default async function DashboardPage() {
   // Server-render the report status for first paint, then the client component
   // takes over polling for the pending → completed transition. We only read it
   // once the user has full access AND has submitted the check (the trigger for
-  // generation). We also pull call_notes here for the coach/call section, which
-  // only renders for true paid users (coach hidden while payments are off).
+  // generation).
   let reportStatus: ReportStatusResponse | null = null;
-  let callNotes: string | null = null;
   if (fullAccess) {
     const { data: report } = await supabase
       .from('paid_reports')
-      .select('pdf_path, generation_status, generation_attempts, generation_error, call_notes')
+      .select('pdf_path, generation_status, generation_attempts, generation_error')
       .eq('user_id', user.id)
       .maybeSingle();
     // Only surface the report card once there's a reason to: the user has done
@@ -172,8 +175,41 @@ export default async function DashboardPage() {
         canRetry: status === 'failed' && attempts < 5,
         error: status === 'failed' ? ((report.generation_error as string | null) ?? null) : null,
       };
-      const rawNotes = (report.call_notes as string | null) ?? null;
-      callNotes = rawNotes && rawNotes.trim() ? rawNotes.trim() : null;
+    }
+  }
+
+  // "Where you stand" summary — reuses the cached score narratives (band intro +
+  // what's working + what's blocking) so the dashboard, /score page and PDF all
+  // tell the same story. Warm reads are a single cached row; cold ones generate
+  // the two paragraphs once and cache them on the assessment. Only meaningful
+  // once the user has completed the eligibility check.
+  let standing: { band: Band; whatsWorking: string; whatsBlocking: string } | null = null;
+  // Journey/milestone checklist — surfaced here (moved off the assistant page)
+  // for every full-access user whose category has a milestone model (teaching
+  // pilot). The seed is computed read-only; the first manual toggle persists it.
+  let journey: Awaited<ReturnType<typeof getJourneyForDisplay>> | null = null;
+  if (fullAccess && assessmentSubmitted && latestAssessment) {
+    const rubric = await loadRubric(profile.category);
+    if (rubric) {
+      try {
+        const answers = assessmentDataSchema.parse(latestAssessment.data);
+        const score = calculateScore(answers, rubric);
+        const narr = await getOrGenerateNarratives(
+          latestAssessment.id,
+          score,
+          profile.category,
+        );
+        standing = {
+          band: score.band,
+          whatsWorking: narr.whatsWorking,
+          whatsBlocking: narr.whatsBlocking,
+        };
+      } catch {
+        // Schema mismatch (older draft format etc) — just skip the summary.
+      }
+    }
+    if (milestonesForCategory(profile.category)) {
+      journey = await getJourneyForDisplay(user.id, profile.category);
     }
   }
 
@@ -254,6 +290,51 @@ export default async function DashboardPage() {
             to their actual situation. */}
         {upsellBand && <PremiumUpsell band={upsellBand} />}
 
+        {/* Where you stand — short narrative summary + the milestone checklist
+            the user keeps current. Replaces the old hand-written session notes. */}
+        {(standing || (journey && journey.milestones.length > 0)) && (
+          <div className="flex flex-col gap-6">
+            {standing && (
+              <section
+                className="rounded-2xl p-6 flex flex-col gap-3"
+                style={{ backgroundColor: '#FFFFFF', border: '1.5px solid #EDE8E0' }}
+              >
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-px" style={{ backgroundColor: '#1B4D3E' }} />
+                  <span
+                    className="font-display text-xs font-semibold uppercase tracking-wider"
+                    style={{ color: '#1B4D3E' }}
+                  >
+                    Where you stand
+                  </span>
+                </div>
+                <div className="flex flex-wrap items-center gap-3">
+                  <h2
+                    className="font-display font-bold uppercase text-xl"
+                    style={{ color: '#2C2C2C' }}
+                  >
+                    {BAND_COPY[standing.band].label}
+                  </h2>
+                  <span className="font-body text-sm" style={{ color: '#6B6B6B' }}>
+                    {BAND_COPY[standing.band].tagline}
+                  </span>
+                </div>
+                <div
+                  className="font-body text-sm flex flex-col gap-2 leading-relaxed"
+                  style={{ color: '#2C2C2C' }}
+                >
+                  <p>{standing.whatsWorking}</p>
+                  <p>{standing.whatsBlocking}</p>
+                </div>
+              </section>
+            )}
+
+            {journey && journey.milestones.length > 0 && (
+              <DashboardJourney initial={journey} />
+            )}
+          </div>
+        )}
+
         {fullAccess && reportStatus && (
           <div className="flex flex-col gap-6">
             {coachAccess && (
@@ -328,38 +409,6 @@ export default async function DashboardPage() {
             )}
 
             <ReportStatusCard initial={reportStatus} />
-
-            {/* Notes John saved for this member — shown to everyone (free too),
-                not just the paid coach/call tier. */}
-            {callNotes && (
-              <section
-                className="rounded-2xl p-6 flex flex-col gap-3"
-                style={{ backgroundColor: '#FFF8E8', border: '1.5px solid #C9A84C' }}
-              >
-                <div className="flex items-center gap-2">
-                  <div className="w-6 h-px" style={{ backgroundColor: '#C9A84C' }} />
-                  <span
-                    className="font-display text-xs font-semibold uppercase tracking-wider"
-                    style={{ color: '#8A6A1F' }}
-                  >
-                    From Jobabroad
-                  </span>
-                </div>
-                <h2
-                  className="font-display font-bold uppercase text-xl"
-                  style={{ color: '#2C2C2C' }}
-                >
-                  Notes from our session
-                </h2>
-                <div className="font-body text-sm flex flex-col gap-2" style={{ color: '#2C2C2C' }}>
-                  {callNotes.split(/\n\s*\n/).map((para, i) => (
-                    <p key={i} style={{ whiteSpace: 'pre-wrap' }}>
-                      {para}
-                    </p>
-                  ))}
-                </div>
-              </section>
-            )}
           </div>
         )}
 

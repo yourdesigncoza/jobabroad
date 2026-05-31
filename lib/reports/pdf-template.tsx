@@ -9,6 +9,7 @@ import {
 } from '@react-pdf/renderer';
 import path from 'node:path';
 import type { ReportData } from './types';
+import { BAND_COPY } from '@/lib/scoring/bands';
 
 const FONTS_DIR = path.join(process.cwd(), 'public', 'fonts');
 
@@ -251,28 +252,15 @@ const styles = StyleSheet.create({
   },
 });
 
+// Label + tagline come from the shared BAND_COPY (single source of truth with
+// the dashboard summary); only the PDF-specific colours live here.
 const BAND_PRESETS: Record<
   ReportData['score']['band'],
   { label: string; tagline: string; colour: string; bg: string }
 > = {
-  high_blockers: {
-    label: 'High blockers',
-    tagline: 'Significant gaps to close before applying.',
-    colour: '#FFFFFF',
-    bg: COLOURS.red,
-  },
-  needs_prep: {
-    label: 'Needs prep',
-    tagline: 'Real potential, with clear gaps to address.',
-    colour: COLOURS.ink,
-    bg: COLOURS.gold,
-  },
-  strong_potential: {
-    label: 'Strong potential',
-    tagline: "You're application-ready in most respects.",
-    colour: '#FFFFFF',
-    bg: COLOURS.green,
-  },
+  high_blockers: { ...BAND_COPY.high_blockers, colour: '#FFFFFF', bg: COLOURS.red },
+  needs_prep: { ...BAND_COPY.needs_prep, colour: COLOURS.ink, bg: COLOURS.gold },
+  strong_potential: { ...BAND_COPY.strong_potential, colour: '#FFFFFF', bg: COLOURS.green },
 };
 
 function dimBarColour(score: number): string {

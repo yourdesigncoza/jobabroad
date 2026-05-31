@@ -1,8 +1,9 @@
 /**
  * End-to-end smoke: flips the existing "Score Test Teacher" user to paid,
- * invokes the same generator+notify path that /admin/post-call uses, and
- * reports back what landed in the DB + storage. Sends a real Brevo email to
- * the test user (gmail+ alias, lands in laudes.michael@gmail.com).
+ * invokes the report generate+email pipeline (the same path the payment webhook
+ * and admin force-regenerate use), and reports back what landed in the DB +
+ * storage. Sends a real Brevo email to the test user (gmail+ alias, lands in
+ * laudes.michael@gmail.com).
  */
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { resolve, join } from 'node:path';
@@ -26,16 +27,6 @@ for (const line of readFileSync(envFile, 'utf8').split('\n')) {
 }
 
 const TARGET_USER_ID = '925e2fa4-11c4-42b2-9828-85c18ca78652';
-const SAMPLE_NOTES = `On the call you confirmed UK is your primary target for September 2026.
-You're a registered SACE teacher with 5 years secondary maths experience.
-
-We agreed on:
-- You'll start SAPS clearance this week — Cape Town Civic Centre is faster than online
-- You'll get a quote from Apostil.co.za for the apostille batch
-- We'll send you a UK-format CV template separately
-- Book a follow-up call in 4 weeks to review applications
-
-One concern raised: your maths PGCE is from 2008. Some UK academies prefer "recent" PGCE (last 10 years). We discussed framing your CPD and IB workshop attendance to bridge that perception.`;
 
 async function main() {
   const sb = createClient(
@@ -60,29 +51,15 @@ async function main() {
   await generateAndEmail(TARGET_USER_ID);
   console.log(`✓ generateAndEmail completed (${Date.now() - t0}ms)`);
 
-  // 3. Exercise the new call-notes follow-up path (saves notes + plain-text
-  // email; no PDF attached). The admin save-notes endpoint is the live caller.
-  const { sendCallNotesEmail } = await import('@/lib/notifications/call-notes');
-  await sb.from('paid_reports').upsert(
-    { user_id: TARGET_USER_ID, call_notes: SAMPLE_NOTES },
-    { onConflict: 'user_id' },
-  );
-  console.log('→ Running sendCallNotesEmail…');
-  const t1 = Date.now();
-  await sendCallNotesEmail(TARGET_USER_ID, SAMPLE_NOTES);
-  console.log(`✓ sendCallNotesEmail completed (${Date.now() - t1}ms)`);
-
   // 3. Read back paid_reports row.
   const { data: report } = await sb
     .from('paid_reports')
-    .select('user_id, pdf_path, generated_at, call_notes')
+    .select('user_id, pdf_path, generated_at')
     .eq('user_id', TARGET_USER_ID)
     .single();
   console.log('paid_reports row:', JSON.stringify({
     pdf_path: report?.pdf_path,
     generated_at: report?.generated_at,
-    call_notes_len: report?.call_notes?.length ?? 0,
-    call_notes_preview: report?.call_notes?.slice(0, 80),
   }, null, 2));
 
   // 4. Download the PDF for visual inspection.

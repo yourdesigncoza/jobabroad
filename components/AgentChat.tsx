@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef, useState, type FormEvent } from 'react';
-import JourneyTracker, { type JourneyState } from './JourneyTracker';
 
 interface ChatMsg {
   id?: string;
@@ -16,16 +15,13 @@ const PENDING_ID = '__pending__';
 export default function AgentChat({
   categoryLabel,
   initialMessages,
-  initialJourney,
   consentGiven,
 }: {
   categoryLabel: string;
   initialMessages: ChatMsg[];
-  initialJourney: JourneyState;
   consentGiven: boolean;
 }) {
   const [messages, setMessages] = useState<ChatMsg[]>(initialMessages);
-  const [journey, setJourney] = useState<JourneyState>(initialJourney);
   const [input, setInput] = useState('');
   const [sending, setSending] = useState(false);
   const [limitHit, setLimitHit] = useState(false);
@@ -83,7 +79,6 @@ export default function AgentChat({
         error?: string;
         answer?: string;
         citations?: number[];
-        journey?: JourneyState;
       };
       if (r.status === 429) {
         setLimitHit(true);
@@ -107,7 +102,6 @@ export default function AgentChat({
             : x,
         ),
       );
-      if (j.journey) setJourney(j.journey);
     } catch {
       setError('Network error. Please try again.');
       dropPending();
@@ -117,8 +111,8 @@ export default function AgentChat({
   }
 
   return (
-    <div className="flex flex-col lg:flex-row gap-6 items-start">
-      {/* Chat column */}
+    <div className="flex flex-col gap-4">
+      {/* Chat column — the journey checklist now lives on the dashboard. */}
       <div className="flex flex-col gap-4 flex-1 min-w-0 w-full">
         <div
           ref={scrollRef}
@@ -215,11 +209,6 @@ export default function AgentChat({
             </span>
           </label>
         )}
-      </div>
-
-      {/* Journey column */}
-      <div className="w-full lg:w-72 lg:flex-shrink-0">
-        <JourneyTracker milestones={journey.milestones} onJourney={setJourney} />
       </div>
     </div>
   );
