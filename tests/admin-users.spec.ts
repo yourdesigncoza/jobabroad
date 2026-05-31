@@ -105,6 +105,31 @@ test.describe('Admin force-regenerate — gates', () => {
 });
 
 // =========================================================================
+// Admin page guard — the shared layout must hide admin chrome from non-admins
+// =========================================================================
+
+test.describe('Admin page — layout guard', () => {
+  test('authenticated non-admin visiting /admin gets no admin nav', async ({ page }) => {
+    const email = uniqueEmail('admin-page-nonadmin');
+    await registerAndLogin(page, {
+      email,
+      password: PASSWORD,
+      name: 'Non Admin',
+      phone: uniquePhone(),
+      category: 'teaching',
+    });
+    try {
+      await page.goto('/admin');
+      // requireAdmin in the layout notFound()s before the nav renders.
+      await expect(page.getByRole('navigation').getByRole('link', { name: 'Members' })).toHaveCount(0);
+      await expect(page.getByRole('heading', { name: /registered members/i })).toHaveCount(0);
+    } finally {
+      await deleteUser(email);
+    }
+  });
+});
+
+// =========================================================================
 // Happy paths — require PLAYWRIGHT_ADMIN_EMAIL (and it must be in
 // ADMIN_EMAILS in .env.local, with dev server restarted)
 // =========================================================================
@@ -143,6 +168,18 @@ test.describe('Admin users dashboard — happy path', () => {
         adminPage.getByRole('heading', { name: /registered members/i }),
       ).toBeVisible();
       await expect(adminPage.getByText(memberEmail)).toBeVisible();
+
+      // Admin header/nav is present: the admin nav links + log out.
+      const adminNav = adminPage.getByRole('navigation');
+      await expect(adminNav.getByRole('link', { name: 'Members' })).toBeVisible();
+      await expect(adminNav.getByRole('link', { name: 'WhatsApp' })).toBeVisible();
+      await expect(adminNav.getByRole('button', { name: /log out/i })).toBeVisible();
+      // The WhatsApp link navigates to the other admin page (same header).
+      await adminNav.getByRole('link', { name: 'WhatsApp' }).click();
+      await expect(adminPage).toHaveURL(/\/admin\/wa-assistant/);
+      await expect(
+        adminPage.getByRole('navigation').getByRole('link', { name: 'Members' }),
+      ).toBeVisible();
 
       // Chat-summary endpoint returns a non-empty result for a user with turns.
       const res = await adminPage.request.post('/api/admin/users/chat-summary', {
