@@ -12,12 +12,18 @@ import {
 
 const PASSWORD = 'Test12345!';
 
+// Payments are shelved by default (NEXT_PUBLIC_PAYMENTS_ENABLED unset). While
+// off, every registered user has full report access for free — the paywall and
+// the paid-only API gates flip to open. These tests branch on the flag so the
+// suite stays correct in both modes.
+const PAYMENTS_ENABLED = process.env.NEXT_PUBLIC_PAYMENTS_ENABLED === 'true';
+
 // =========================================================================
 // Score page
 // =========================================================================
 
 test.describe('Paid tier — score page', () => {
-  test('teaching: completed assessment → score page renders band + paywall', async ({ page }) => {
+  test('teaching: completed assessment → score page renders band + access state', async ({ page }) => {
     const email = uniqueEmail('score');
     await registerAndLogin(page, {
       email,
@@ -40,8 +46,14 @@ test.describe('Paid tier — score page', () => {
       // but the two labels are template-driven so we can assert on them.
       await expect(page.getByText(/^what's working$/i)).toBeVisible();
       await expect(page.getByText(/^biggest blocker$/i)).toBeVisible();
-      // Paywall CTA — free user
-      await expect(page.getByRole('button', { name: /get my action plan/i })).toBeVisible();
+      if (PAYMENTS_ENABLED) {
+        // Paywall CTA — unpaid user
+        await expect(page.getByRole('button', { name: /get my action plan/i })).toBeVisible();
+      } else {
+        // Payments shelved — registered user gets the full report free, no paywall
+        await expect(page.getByRole('heading', { name: /your full report is ready/i })).toBeVisible();
+        await expect(page.getByRole('button', { name: /get my action plan/i })).toHaveCount(0);
+      }
     } finally {
       await deleteUser(email);
     }
@@ -101,7 +113,9 @@ test.describe('Paid tier — dashboard surfaces', () => {
     try {
       const userId = await findUserIdByEmail(email);
       await makePaid(userId, 5);
-      // No seedReport call — exercises the 'missing' branch of /api/reports/status
+      // Submitted check but no seedReport — the realistic mid-generation state
+      // (the report card only shows once the eligibility check is in).
+      await insertSubmittedTeachingAssessment(userId);
 
       await page.goto('/dashboard');
       await expect(page.getByRole('heading', { name: /preparing your personalised report/i })).toBeVisible();
@@ -334,7 +348,7 @@ test.describe('Paid tier — /api/reports/status', () => {
     expect(res.status()).toBe(401);
   });
 
-  test('returns 403 for authenticated free user', async ({ page }) => {
+  test('registered user without report: 403 when payments on, 200 missing when shelved', async ({ page }) => {
     const email = uniqueEmail('status-free');
     await registerAndLogin(page, {
       email,
@@ -345,7 +359,12 @@ test.describe('Paid tier — /api/reports/status', () => {
     });
     try {
       const res = await page.request.get('/api/reports/status');
-      expect(res.status()).toBe(403);
+      if (PAYMENTS_ENABLED) {
+        expect(res.status()).toBe(403);
+      } else {
+        expect(res.status()).toBe(200);
+        expect((await res.json()).status).toBe('missing');
+      }
     } finally {
       await deleteUser(email);
     }
@@ -433,7 +452,7 @@ test.describe('Paid tier — /api/reports/regenerate', () => {
     expect(res.status()).toBe(401);
   });
 
-  test('returns 403 for free user', async ({ page }) => {
+  test('registered user without report: 403 when payments on, not gated when shelved', async ({ page }) => {
     const email = uniqueEmail('regen-free');
     await registerAndLogin(page, {
       email,
@@ -444,7 +463,13 @@ test.describe('Paid tier — /api/reports/regenerate', () => {
     });
     try {
       const res = await page.request.post('/api/reports/regenerate');
-      expect(res.status()).toBe(403);
+      if (PAYMENTS_ENABLED) {
+        expect(res.status()).toBe(403);
+      } else {
+        // Full access — no paywall gate. With no submitted assessment the
+        // background regen no-ops; the route still acks 200.
+        expect(res.status()).toBe(200);
+      }
     } finally {
       await deleteUser(email);
     }

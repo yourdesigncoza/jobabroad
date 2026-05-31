@@ -8,6 +8,7 @@ import FAQ from '@/components/FAQ';
 import SiteNav from '@/components/SiteNav';
 import SiteFooter from '@/components/SiteFooter';
 import HomeStickyCta from '@/components/HomeStickyCta';
+import { PAYMENTS_ENABLED } from '@/lib/access';
 
 // Title, description and Open Graph come from the root layout's defaults;
 // only the canonical URL is page-specific (?src= UTM params must not fork it).
@@ -261,7 +262,9 @@ export default async function Home({ searchParams }: Props) {
               style={{ fontSize: 'clamp(1rem, 2vw, 1.2rem)', color: '#C9A84C' }}
             >
               The pathway guide and personalised eligibility check are free. Register, confirm your email, and your guide unlocks immediately.<br />
-              The R495 upgrade gives you a personalised action plan, emailed immediately, with an optional 15-minute review call. No subscriptions. No fake recruiter taking R5,000 from you.
+              {PAYMENTS_ENABLED
+                ? 'The R495 upgrade gives you a personalised action plan, emailed immediately, with an optional 15-minute review call. No subscriptions. No fake recruiter taking R5,000 from you.'
+                : "Complete the quick eligibility check and we'll email you a personalised action plan — free. No subscriptions. No fake recruiter taking R5,000 from you."}
             </p>
 
             <a

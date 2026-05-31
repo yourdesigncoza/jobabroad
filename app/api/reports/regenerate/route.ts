@@ -3,6 +3,7 @@ import { waitUntil } from '@vercel/functions';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { createSupabaseServiceClient } from '@/lib/supabase/service';
 import { generateAndEmail } from '@/lib/reports/generate-and-email';
+import { hasFullAccess } from '@/lib/access';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -31,7 +32,7 @@ export async function POST() {
     .select('tier')
     .eq('user_id', user.id)
     .single();
-  if (profile?.tier !== 'paid') {
+  if (!hasFullAccess(profile?.tier)) {
     return NextResponse.json({ error: 'paid_only' }, { status: 403 });
   }
 

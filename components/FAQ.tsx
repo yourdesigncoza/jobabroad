@@ -1,4 +1,5 @@
 import { ShieldCheck, AlertTriangle, Ban } from 'lucide-react';
+import { PAYMENTS_ENABLED } from '@/lib/access';
 
 const PILLARS = [
   {
@@ -20,8 +21,10 @@ const PILLARS = [
 
 const QUESTIONS = [
   {
-    q: "What's free, and what costs money?",
-    a: "The pathway guide and the personalised eligibility check are completely free, no card, no monthly fees. Register, confirm your email, and you're in. Inside the free tier: destination options, document checklist, realistic costs, visa route overview, scam red flags, recruiter list, and a personalised eligibility score. The R495 upgrade is optional. It gets you a personalised action plan written specifically for your situation, emailed to you immediately, plus your own AI coach to answer questions and track your next steps, and a 15-minute review call whenever you're ready. One-off payment, no subscription.",
+    q: PAYMENTS_ENABLED ? "What's free, and what costs money?" : 'Is it really free?',
+    a: PAYMENTS_ENABLED
+      ? "The pathway guide and the personalised eligibility check are completely free, no card, no monthly fees. Register, confirm your email, and you're in. Inside the free tier: destination options, document checklist, realistic costs, visa route overview, scam red flags, recruiter list, and a personalised eligibility score. The R495 upgrade is optional. It gets you a personalised action plan written specifically for your situation, emailed to you immediately, plus your own AI coach to answer questions and track your next steps, and a 15-minute review call whenever you're ready. One-off payment, no subscription."
+      : "Yes — completely free, no card, no monthly fees. Register, confirm your email, and you're in. You get the full pathway guide: destination options, document checklist, realistic costs, visa route overview, scam red flags, and the recruiter list. Then complete the personalised eligibility check and we'll send you your personalised action plan and a private dashboard to track it — also free.",
   },
   {
     q: 'Are you a recruitment agency?',

@@ -9,6 +9,7 @@ import HashScroller from '@/components/HashScroller';
 import { getPathwayContent } from '@/lib/pathway-content';
 import { CATEGORIES } from '@/lib/categories';
 import { requireProfile } from '@/lib/auth-guards';
+import { hasFullAccess } from '@/lib/access';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { getLatestAssessment } from '@/lib/assessments/assessment-client';
 
@@ -76,31 +77,31 @@ export default async function MembersCategoryPage({
     .select('tier')
     .eq('user_id', user.id)
     .single();
+  // Truly-paid users have self-service tools, so we hide WhatsApp CTAs for them.
+  // Free-access users (payments shelved) still get WhatsApp nurture.
   const isPaid = tierRow?.tier === 'paid';
+  const fullAccess = hasFullAccess(tierRow?.tier);
   const hideWhatsApp = isPaid;
 
   // CTA state — drives both the sidebar pill and the in-page card:
-  //   not submitted        → "Start Eligibility Check"  → /assessment
-  //   submitted + free     → "Go Premium"               → /score (paywall)
-  //   submitted + paid     → "View Your Report"         → /score (paid view)
+  //   not submitted            → "Eligibility Check"  → /assessment
+  //   submitted + full access  → "View Your Report"   → /score (report view)
+  //   submitted + no access    → "Go Premium"         → /score#premium (paywall)
   const latest = await getLatestAssessment(user.id);
   const assessmentSubmitted = latest?.status === 'submitted' && latest.category === category;
-  // For the "Go Premium" state, deep-link straight to the upsell anchor on
-  // /score so the user lands at the offer card rather than having to scroll
-  // past the band, dim bars, and narratives first.
   const ctaHref = !assessmentSubmitted
     ? `/members/${category}/assessment`
-    : isPaid
+    : fullAccess
       ? `/members/${category}/score`
       : `/members/${category}/score#premium`;
   const ctaLabel = !assessmentSubmitted
     ? 'Eligibility Check'
-    : isPaid
+    : fullAccess
       ? 'View Your Report'
       : 'Go Premium';
   const ctaBlurb = !assessmentSubmitted
     ? undefined
-    : isPaid
+    : fullAccess
       ? undefined
       : 'Unlock your personalised action plan, emailed immediately, with your own AI coach and an optional 15-min review call — R495.';
 
@@ -174,7 +175,7 @@ export default async function MembersCategoryPage({
                 dangerouslySetInnerHTML={{ __html: pathway.html }}
               />
 
-              <AssessmentCTA category={category} isSubmitted={assessmentSubmitted} isPaid={isPaid} />
+              <AssessmentCTA category={category} isSubmitted={assessmentSubmitted} isPaid={fullAccess} />
 
               <footer
                 className="border-t pt-6 pb-8 flex flex-col gap-4 font-body text-xs leading-relaxed"
@@ -198,7 +199,7 @@ export default async function MembersCategoryPage({
               createdAt={user.created_at ?? null}
             />
             <ComingSoon category={category} whatsappNumber={whatsappNumber} />
-            <AssessmentCTA category={category} isSubmitted={assessmentSubmitted} isPaid={isPaid} />
+            <AssessmentCTA category={category} isSubmitted={assessmentSubmitted} isPaid={fullAccess} />
           </div>
         )}
       </div>

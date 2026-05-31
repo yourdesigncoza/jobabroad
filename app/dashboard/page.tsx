@@ -4,6 +4,7 @@ import SiteNav from '@/components/SiteNav';
 import SiteFooter from '@/components/SiteFooter';
 import ReportStatusCard from '@/components/ReportStatusCard';
 import { requireSession } from '@/lib/auth-guards';
+import { hasFullAccess, hasCoachAccess } from '@/lib/access';
 import { CATEGORIES } from '@/lib/categories';
 import { getLatestAssessment } from '@/lib/assessments/assessment-client';
 import { loadRubric, calculateScore } from '@/lib/scoring';
@@ -127,22 +128,38 @@ export default async function DashboardPage() {
   const categoryLabel =
     CATEGORIES.find((c) => c.id === profile.category)?.label ?? profile.category;
   const isPaid = profile.tier === 'paid';
+  const fullAccess = hasFullAccess(profile.tier);
+  const coachAccess = hasCoachAccess(profile.tier);
   const bookHref = `/members/${profile.category}/book`;
 
+  // Assessment status drives both the report card (generation now starts when
+  // the eligibility check is submitted — payments shelved) and the next-step
+  // card lower down.
+  const latestAssessment = await getLatestAssessment(user.id);
+  const assessmentSubmitted =
+    latestAssessment?.status === 'submitted' &&
+    latestAssessment.category === profile.category;
+
   // Server-render the report status for first paint, then the client component
-  // takes over polling for the pending → completed transition. For free users
-  // we skip the read entirely. We also pull call_notes here for Card 3 — Phase
-  // 4 will populate it via the admin save action; for now Card 3 only renders
-  // when a row already has notes (e.g. legacy admin runs from before Phase 1).
+  // takes over polling for the pending → completed transition. We only read it
+  // once the user has full access AND has submitted the check (the trigger for
+  // generation). We also pull call_notes here for the coach/call section, which
+  // only renders for true paid users (coach hidden while payments are off).
   let reportStatus: ReportStatusResponse | null = null;
   let callNotes: string | null = null;
-  if (isPaid) {
+  if (fullAccess) {
     const { data: report } = await supabase
       .from('paid_reports')
       .select('pdf_path, generation_status, generation_attempts, generation_error, call_notes')
       .eq('user_id', user.id)
       .maybeSingle();
-    if (!report) {
+    // Only surface the report card once there's a reason to: the user has done
+    // the eligibility check (generation is on its way) or a report row already
+    // exists. Otherwise a freshly-registered user would see a "preparing your
+    // report" card before they've even started the check.
+    if (!report && !assessmentSubmitted) {
+      reportStatus = null;
+    } else if (!report) {
       reportStatus = { status: 'missing', pdfUrl: null, attempts: 0, canRetry: false, error: null };
     } else {
       const status = (report.generation_status as ReportStatusResponse['status']) ?? 'pending';
@@ -161,20 +178,13 @@ export default async function DashboardPage() {
     }
   }
 
-  // If the user has already submitted the assessment, swap the "Eligibility
-  // assessment" card to "View your score" pointing at /score. Form -> result
-  // round-trip so users can return to their result rather than redo the form.
-  const latestAssessment = await getLatestAssessment(user.id);
-  const assessmentSubmitted =
-    latestAssessment?.status === 'submitted' &&
-    latestAssessment.category === profile.category;
-
   // Surface the premium upsell on the dashboard once the user has scored,
   // so the next step is visible without forcing a /score revisit. Compute
   // the band so the copy speaks to their actual situation (rule-based,
-  // sub-100ms — no LLM call). Hide for paid users; they've already bought.
+  // sub-100ms — no LLM call). Only shows when payments are ON and the user
+  // hasn't paid; with payments shelved fullAccess is true so it never renders.
   let upsellBand: Band | null = null;
-  if (assessmentSubmitted && !isPaid && latestAssessment) {
+  if (assessmentSubmitted && !fullAccess && latestAssessment) {
     const rubric = await loadRubric(profile.category);
     if (rubric) {
       try {
@@ -249,10 +259,12 @@ export default async function DashboardPage() {
           </div>
         )}
 
-        {isPaid && reportStatus && (
+        {fullAccess && reportStatus && (
           <div className="flex flex-col gap-4 mb-10">
             <ReportStatusCard initial={reportStatus} />
 
+            {coachAccess && (
+              <>
             <Link
               href={`/members/${profile.category}/coach`}
               className="relative block rounded-2xl p-5 transition-shadow hover:shadow-md"
@@ -348,6 +360,8 @@ export default async function DashboardPage() {
                   ))}
                 </div>
               </section>
+            )}
+              </>
             )}
           </div>
         )}

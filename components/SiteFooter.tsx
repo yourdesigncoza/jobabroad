@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
+import { PAYMENTS_ENABLED } from '@/lib/access';
 
 export default async function SiteFooter() {
   const supabase = await createSupabaseServerClient();
@@ -51,9 +52,15 @@ export default async function SiteFooter() {
             <Link href="/directory" className={linkClass} style={linkStyle}>
               Browse all guides
             </Link>
-            <p className="font-body text-xs leading-relaxed" style={{ color: 'rgba(248,245,240,0.55)' }}>
-              <strong style={{ color: 'rgba(248,245,240,0.8)' }}>Optional upgrade:</strong> Get a more detailed personalised action plan and review call for R495 if you want deeper guidance.
-            </p>
+            {PAYMENTS_ENABLED ? (
+              <p className="font-body text-xs leading-relaxed" style={{ color: 'rgba(248,245,240,0.55)' }}>
+                <strong style={{ color: 'rgba(248,245,240,0.8)' }}>Optional upgrade:</strong> Get a more detailed personalised action plan and review call for R495 if you want deeper guidance.
+              </p>
+            ) : (
+              <p className="font-body text-xs leading-relaxed" style={{ color: 'rgba(248,245,240,0.55)' }}>
+                <strong style={{ color: 'rgba(248,245,240,0.8)' }}>Free:</strong> Register, get your full pathway guide, then complete a quick eligibility check for your personalised action plan — no payment.
+              </p>
+            )}
           </div>
 
           <div className="flex flex-col gap-3">

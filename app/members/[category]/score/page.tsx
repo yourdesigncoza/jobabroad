@@ -7,6 +7,7 @@ import { getOrGenerateNarratives } from '@/lib/scoring/narratives';
 import { getLatestAssessment } from '@/lib/assessments/assessment-client';
 import { assessmentDataSchema } from '@/lib/assessments/schemas/assessment';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
+import { hasFullAccess } from '@/lib/access';
 import { sendScoreEmailOnce } from '@/lib/notifications/score-email';
 import ScoreResult from '@/components/ScoreResult';
 import SiteNav from '@/components/SiteNav';
@@ -42,7 +43,7 @@ export default async function ScorePage({
     .select('tier')
     .eq('user_id', user.id)
     .single();
-  const isPaid = tierRow?.tier === 'paid';
+  const isPaid = hasFullAccess(tierRow?.tier);
 
   const parsedAnswers = assessmentDataSchema.parse(assessment.data);
   const score = calculateScore(parsedAnswers, rubric);

@@ -1,12 +1,16 @@
+import { PAYMENTS_ENABLED } from '@/lib/access';
+
 interface Props {
   category: string;
   isSubmitted: boolean;
+  /** Has full report access. When payments are shelved this is true for every
+   *  registered user, so the "Go Premium" upsell branch never shows. */
   isPaid: boolean;
 }
 
 export default function AssessmentCTA({ category, isSubmitted, isPaid }: Props) {
-  // Three states: never-submitted (start), submitted + free (upsell to premium),
-  // submitted + paid (view the unlocked report).
+  // Three states: never-submitted (start), submitted + no access (upsell —
+  // payments-on only), submitted + full access (view the report).
   let title: string;
   let body: string;
   let buttonLabel: string;
@@ -14,7 +18,9 @@ export default function AssessmentCTA({ category, isSubmitted, isPaid }: Props) 
 
   if (!isSubmitted) {
     title = 'Start Your Eligibility Check';
-    body = 'Answer 6 short sections so we can assess your readiness and send you a personalised action plan.';
+    body = PAYMENTS_ENABLED
+      ? 'Answer 6 short sections so we can assess your readiness and send you a personalised action plan.'
+      : 'Answer 6 short sections to unlock your free personalised report and action plan.';
     buttonLabel = 'Start Eligibility Check';
     href = `/members/${category}/assessment`;
   } else if (!isPaid) {
@@ -23,8 +29,10 @@ export default function AssessmentCTA({ category, isSubmitted, isPaid }: Props) 
     buttonLabel = 'Go Premium';
     href = `/members/${category}/score`;
   } else {
-    title = 'Your Premium Report';
-    body = 'View your full assessment, download the PDF, book your call, or chat with your coach from your dashboard.';
+    title = 'Your Report';
+    body = PAYMENTS_ENABLED
+      ? 'View your full assessment, download the PDF, book your call, or chat with your coach from your dashboard.'
+      : 'View your full assessment and download your personalised report from your dashboard.';
     buttonLabel = 'View Your Report';
     href = `/members/${category}/score`;
   }

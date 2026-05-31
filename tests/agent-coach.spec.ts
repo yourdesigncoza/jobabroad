@@ -12,6 +12,11 @@ import {
 
 const PASSWORD = 'Test12345!';
 
+// Coach is paid-only. While payments are shelved nothing is for sale, so a
+// user without coach access is sent back to the dashboard rather than shown an
+// upsell. Branch on the flag so the gate test is correct in both modes.
+const PAYMENTS_ENABLED = process.env.NEXT_PUBLIC_PAYMENTS_ENABLED === 'true';
+
 async function setupPaidTeacher(page: import('@playwright/test').Page, email: string) {
   await registerAndLogin(page, {
     email,
@@ -49,7 +54,11 @@ test.describe('Coach — access gates', () => {
     });
     try {
       await page.goto('/members/teaching/coach');
-      await expect(page.getByText(/premium feature/i)).toBeVisible();
+      if (PAYMENTS_ENABLED) {
+        await expect(page.getByText(/premium feature/i)).toBeVisible();
+      } else {
+        await expect(page).toHaveURL(/\/dashboard/);
+      }
     } finally {
       await deleteUser(email);
     }

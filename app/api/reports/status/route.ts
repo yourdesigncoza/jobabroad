@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { createSupabaseServiceClient } from '@/lib/supabase/service';
+import { hasFullAccess } from '@/lib/access';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -34,7 +35,7 @@ export async function GET() {
     .select('tier')
     .eq('user_id', user.id)
     .single();
-  if (profile?.tier !== 'paid') {
+  if (!hasFullAccess(profile?.tier)) {
     return NextResponse.json({ error: 'paid_only' }, { status: 403 });
   }
 
