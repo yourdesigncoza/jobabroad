@@ -54,7 +54,7 @@ export default async function SiteFooter() {
             </Link>
             {PAYMENTS_ENABLED ? (
               <p className="font-body text-xs leading-relaxed" style={{ color: 'rgba(248,245,240,0.55)' }}>
-                <strong style={{ color: 'rgba(248,245,240,0.8)' }}>Optional upgrade:</strong> Get a more detailed personalised action plan and review call for R495 if you want deeper guidance.
+                <strong style={{ color: 'rgba(248,245,240,0.8)' }}>Optional upgrade:</strong> Get a more detailed personalised action plan for R495 if you want deeper guidance.
               </p>
             ) : (
               <p className="font-body text-xs leading-relaxed" style={{ color: 'rgba(248,245,240,0.55)' }}>

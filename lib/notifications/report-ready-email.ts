@@ -69,8 +69,7 @@ function emailHtml({
   // Coach + booking call are part of the (currently shelved) paid tier, so only
   // mention them when payments are on.
   const extras = PAYMENTS_ENABLED
-    ? `<p>If you'd like to talk it through, you can book a 15-min call from your dashboard whenever you're ready &mdash; no rush, no pressure.</p>
-    <p>You also have your personal ${escapeHtml(categoryLabel)} Abroad assistant in your dashboard — chat any time for grounded answers and to track your next steps.</p>`
+    ? `<p>You also have your personal ${escapeHtml(categoryLabel)} Abroad assistant in your dashboard — chat any time for grounded answers and to track your next steps.</p>`
     : '';
 
   return `

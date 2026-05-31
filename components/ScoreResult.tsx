@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import type { Band, DimensionResult } from '@/lib/scoring/types';
-import { PAYMENTS_ENABLED } from '@/lib/access';
 import PremiumUpsell from './PremiumUpsell';
 
 interface Props {
@@ -218,9 +217,6 @@ export default function ScoreResult({
             </h2>
             <p className="font-body text-sm" style={{ color: '#6B6B6B' }}>
               Open your dashboard to download your personalised action plan.
-              {PAYMENTS_ENABLED
-                ? ' Want to talk it through? Book an optional 15-minute review call from there.'
-                : ''}
             </p>
             <Link
               href="/dashboard"

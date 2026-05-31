@@ -9,9 +9,9 @@
  *
  * Two distinct gates so the "free" launch can withhold some perks:
  *   - hasFullAccess  → report PDF + evaluation. Open to all when payments off.
- *   - hasCoachAccess → AI coach + booking call. Kept paid-only (hidden for now)
+ *   - hasCoachAccess → the Abroad assistant. Kept paid-only (hidden for now)
  *                      even while payments are off, so re-enabling payments
- *                      restores them without further changes.
+ *                      restores it without further changes.
  */
 
 export const PAYMENTS_ENABLED =

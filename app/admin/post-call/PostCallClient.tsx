@@ -9,8 +9,6 @@ export interface PaidUserRow {
   email: string;
   categoryId: string;
   categoryLabel: string;
-  bookingSlotAt: string | null;
-  bookingConsentedAt: string | null;
   reportGeneratedAt: string | null;
   callNotes: string;
   generationStatus: 'pending' | 'completed' | 'failed' | null;
@@ -75,7 +73,6 @@ function UserCard({ row }: { row: PaidUserRow }) {
   const [saveStatus, setSaveStatus] = useState<SaveStatus>({ kind: 'idle' });
   const [regenStatus, setRegenStatus] = useState<RegenStatus>({ kind: 'idle' });
 
-  const hasBooking = Boolean(row.bookingSlotAt);
   const hasReport = Boolean(row.reportGeneratedAt);
 
   async function onSaveNotes() {
@@ -155,10 +152,6 @@ function UserCard({ row }: { row: PaidUserRow }) {
           </p>
         </div>
         <div className="flex flex-col items-end gap-1 font-body text-xs" style={{ color: '#6B6B6B' }}>
-          <span>
-            <strong style={{ color: '#2C2C2C' }}>Booking:</strong>{' '}
-            {hasBooking ? formatDateTime(row.bookingSlotAt) : 'not booked yet'}
-          </span>
           <span>
             <strong style={{ color: '#2C2C2C' }}>Report:</strong>{' '}
             {hasReport ? formatDateTime(row.reportGeneratedAt) : 'not generated'}

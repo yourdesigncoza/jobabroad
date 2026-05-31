@@ -263,7 +263,7 @@ export default async function Home({ searchParams }: Props) {
             >
               The pathway guide and personalised eligibility check are free. Register, confirm your email, and your guide unlocks immediately.<br />
               {PAYMENTS_ENABLED
-                ? 'The R495 upgrade gives you a personalised action plan, emailed immediately, with an optional 15-minute review call. No subscriptions. No fake recruiter taking R5,000 from you.'
+                ? 'The R495 upgrade gives you a personalised action plan, emailed immediately. No subscriptions. No fake recruiter taking R5,000 from you.'
                 : "Complete the quick eligibility check and we'll email you a personalised action plan — free. No subscriptions. No fake recruiter taking R5,000 from you."}
             </p>
 

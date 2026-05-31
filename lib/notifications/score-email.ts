@@ -170,7 +170,7 @@ function emailHtml({
 
       <p style="font-size:14px;">${
         PAYMENTS_ENABLED
-          ? 'Want the full picture? Upgrade to the R495 plan: a personalised PDF action plan written after a 15-min live call with us.'
+          ? 'Want the full picture? Upgrade to the R495 plan: a personalised PDF action plan written for your situation.'
           : "We're putting together your full personalised PDF action plan now — it'll land in your inbox shortly, free."
       }</p>
       <p>

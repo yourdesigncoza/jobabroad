@@ -119,8 +119,6 @@ test.describe('Paid tier — dashboard surfaces', () => {
 
       await page.goto('/dashboard');
       await expect(page.getByRole('heading', { name: /preparing your personalised report/i })).toBeVisible();
-      // Optional call CTA is always visible for paid users
-      await expect(page.getByRole('link', { name: /book a 15-min review call/i })).toBeVisible();
       // Download CTA must NOT be present in pending state
       await expect(page.getByRole('link', { name: /download report/i })).toHaveCount(0);
       // Assistant card replaces the old follow-up form for paid users
@@ -150,7 +148,6 @@ test.describe('Paid tier — dashboard surfaces', () => {
       await page.goto('/dashboard');
       await expect(page.getByRole('heading', { name: /personalised report ready/i })).toBeVisible();
       await expect(page.getByRole('link', { name: /download report.*pdf/i })).toBeVisible();
-      await expect(page.getByRole('link', { name: /book a 15-min review call/i })).toBeVisible();
     } finally {
       await deleteUser(email);
     }
@@ -176,9 +173,8 @@ test.describe('Paid tier — dashboard surfaces', () => {
       });
 
       await page.goto('/dashboard');
-      // All three primary cards visible together
+      // Report + notes cards visible together
       await expect(page.getByRole('heading', { name: /personalised report ready/i })).toBeVisible();
-      await expect(page.getByRole('link', { name: /book a 15-min review call/i })).toBeVisible();
       await expect(page.getByRole('heading', { name: /notes from our session/i })).toBeVisible();
       await expect(page.getByText(/start with SAPS clearance this week/i)).toBeVisible();
       await expect(page.getByText(/book a follow-up in 4 weeks/i)).toBeVisible();
@@ -278,57 +274,7 @@ test.describe('Paid tier — dashboard surfaces', () => {
       await page.goto('/dashboard');
       await expect(page.getByRole('heading', { name: /preparing your personalised report/i })).toHaveCount(0);
       await expect(page.getByRole('heading', { name: /personalised report ready/i })).toHaveCount(0);
-      await expect(page.getByRole('link', { name: /book a 15-min review call/i })).toHaveCount(0);
       await expect(page.getByText(/of 5 left/i)).toHaveCount(0);
-    } finally {
-      await deleteUser(email);
-    }
-  });
-});
-
-// =========================================================================
-// Booking gate
-// =========================================================================
-
-test.describe('Paid tier — booking page', () => {
-  test('free user → /book redirects to /dashboard', async ({ page }) => {
-    const email = uniqueEmail('book-free');
-    await registerAndLogin(page, {
-      email,
-      password: PASSWORD,
-      name: 'Book Free',
-      phone: uniquePhone(),
-      category: 'teaching',
-    });
-    try {
-      await page.goto('/members/teaching/book');
-      await expect(page).toHaveURL(/\/dashboard/);
-    } finally {
-      await deleteUser(email);
-    }
-  });
-
-  test('paid user sees consent checkbox + locked-overlay before tick', async ({ page }) => {
-    const email = uniqueEmail('book-paid');
-    await registerAndLogin(page, {
-      email,
-      password: PASSWORD,
-      name: 'Book Paid',
-      phone: uniquePhone(),
-      category: 'teaching',
-    });
-    try {
-      const userId = await findUserIdByEmail(email);
-      await makePaid(userId);
-
-      await page.goto('/members/teaching/book');
-      await expect(
-        page.getByText(
-          /I agree that this call may be recorded for the purpose of preparing or improving my work-abroad guidance/i,
-        ),
-      ).toBeVisible();
-      await expect(page.getByText(/tick the consent checkbox/i)).toBeVisible();
-      await expect(page.locator('iframe')).toHaveCount(0);
     } finally {
       await deleteUser(email);
     }

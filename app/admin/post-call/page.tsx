@@ -26,14 +26,10 @@ export default async function PostCallAdminPage() {
   const userIds = [...new Set((submitted ?? []).map((a) => a.user_id as string))];
   const idFilter = userIds.length ? userIds : ['00000000-0000-0000-0000-000000000000'];
 
-  const [profilesRes, bookingsRes, reportsRes, authRes] = await Promise.all([
+  const [profilesRes, reportsRes, authRes] = await Promise.all([
     svc
       .from('profiles')
       .select('user_id, name, category, tier')
-      .in('user_id', idFilter),
-    svc
-      .from('bookings')
-      .select('user_id, slot_at, consented_at')
       .in('user_id', idFilter),
     svc
       .from('paid_reports')
@@ -42,15 +38,6 @@ export default async function PostCallAdminPage() {
     svc.auth.admin.listUsers(),
   ]);
   const profiles = profilesRes.data;
-
-  const bookingsByUser = new Map<string, { slot_at: string | null; consented_at: string }>();
-  for (const b of bookingsRes.data ?? []) {
-    const prev = bookingsByUser.get(b.user_id);
-    // Keep the latest booking per user (by slot_at, falling back to consent ts).
-    const prevDate = prev ? Date.parse(prev.slot_at ?? prev.consented_at) : -Infinity;
-    const curDate = Date.parse(b.slot_at ?? b.consented_at);
-    if (!prev || curDate > prevDate) bookingsByUser.set(b.user_id, b);
-  }
 
   const reportsByUser = new Map<
     string,
@@ -78,7 +65,6 @@ export default async function PostCallAdminPage() {
   }
 
   const rows: PaidUserRow[] = (profiles ?? []).map((p) => {
-    const booking = bookingsByUser.get(p.user_id);
     const report = reportsByUser.get(p.user_id);
     return {
       userId: p.user_id,
@@ -87,8 +73,6 @@ export default async function PostCallAdminPage() {
       categoryId: p.category ?? '',
       categoryLabel:
         CATEGORIES.find((c) => c.id === p.category)?.label ?? (p.category ?? ''),
-      bookingSlotAt: booking?.slot_at ?? null,
-      bookingConsentedAt: booking?.consented_at ?? null,
       reportGeneratedAt: report?.generated_at ?? null,
       callNotes: report?.call_notes ?? '',
       generationStatus: report?.generation_status ?? null,

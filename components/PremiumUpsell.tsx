@@ -17,8 +17,6 @@ interface Props {
  *  the upsell appears (score page, dashboard). */
 const PLAN_INTRO =
   "For R495, we'll review your profile and give you a clear, personalised action plan, emailed to you immediately and available inside your personal dashboard. You'll know what to fix first, which work-abroad routes look most realistic for you, what to avoid wasting money on, and which trusted partners may be worth speaking to.";
-const CALL_INTRO =
-  "When you're ready, book a 15-minute call and we'll walk through your profile together, so your next steps are clear.";
 
 /** Band-specific opener — speaks to the user's actual score before the
  *  shared R495 pitch. */
@@ -69,7 +67,7 @@ export default function PremiumUpsell({ band, withAnchor }: Props) {
       <h2 className="font-display font-bold uppercase tracking-wide text-lg">
         {BAND_UPSELL[band].heading}
       </h2>
-      {[BAND_UPSELL[band].opener, PLAN_INTRO, CALL_INTRO].map((para, i) => (
+      {[BAND_UPSELL[band].opener, PLAN_INTRO].map((para, i) => (
         <p
           key={i}
           className="font-body text-sm leading-relaxed"
@@ -78,43 +76,6 @@ export default function PremiumUpsell({ band, withAnchor }: Props) {
           {para}
         </p>
       ))}
-
-      {/* Highlighted call panel — single biggest selling point. */}
-      <div
-        className="flex items-start gap-3 rounded-xl p-4"
-        style={{
-          backgroundColor: 'rgba(201,168,76,0.18)',
-          border: '1.5px solid #C9A84C',
-        }}
-      >
-        <span
-          aria-hidden
-          className="flex items-center justify-center rounded-full shrink-0"
-          style={{
-            width: 36,
-            height: 36,
-            backgroundColor: '#C9A84C',
-            color: '#1B4D3E',
-            fontSize: 18,
-          }}
-        >
-          ☎
-        </span>
-        <div className="flex flex-col gap-0.5">
-          <p
-            className="font-display uppercase tracking-wider text-[0.65rem] font-bold"
-            style={{ color: '#C9A84C' }}
-          >
-            Optional
-          </p>
-          <p className="font-body text-sm font-semibold" style={{ color: '#F8F5F0' }}>
-            Book a 15-minute call after reading your plan
-          </p>
-          <p className="font-body text-xs" style={{ color: 'rgba(248,245,240,0.75)' }}>
-            Your personalised action plan is emailed to you immediately. When you&apos;re ready, book a short call and we&apos;ll walk through your next steps together.
-          </p>
-        </div>
-      </div>
 
       <ul
         className="font-body text-sm flex flex-col gap-1.5"
@@ -126,7 +87,6 @@ export default function PremiumUpsell({ band, withAnchor }: Props) {
         <li>• Realistic work-abroad route suggestions</li>
         <li>• Trusted partner recommendations</li>
         <li>• Your personal Abroad assistant</li>
-        <li>• Optional 15-minute review call</li>
       </ul>
       <button
         type="button"

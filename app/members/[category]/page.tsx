@@ -103,7 +103,7 @@ export default async function MembersCategoryPage({
     ? undefined
     : fullAccess
       ? undefined
-      : 'Unlock your personalised action plan, emailed immediately, with your own Abroad assistant and an optional 15-min review call — R495.';
+      : 'Unlock your personalised action plan, emailed immediately, with your own Abroad assistant — R495.';
 
   return (
     <main className="min-h-screen" style={{ backgroundColor: '#F8F5F0' }}>
