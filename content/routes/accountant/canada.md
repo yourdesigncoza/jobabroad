@@ -152,5 +152,4 @@ and authorised representatives.
 
 Confirm the route fits and estimate your points before spending. Start with the
 [accounting work-abroad pathway guide](/pathways/accounting), then register for a free
-eligibility check. For personalised guidance, the R495 action plan includes a written report and
-a review of your situation.
+eligibility check. For personalised guidance, the free action plan includes a written report tailored to your situation.

@@ -143,5 +143,4 @@ themselves are your best scam filter — if an offer breaks them, walk away.
 Because this route is narrow, the most useful first step is an honest eligibility check before you
 spend anything. Start with the
 [seasonal work-abroad pathway guide](/pathways/seasonal), then register for a free eligibility
-check. For personalised guidance, the R495 action plan includes a written report and a review of
-your situation.
+check. For personalised guidance, the free action plan includes a written report tailored to your situation.

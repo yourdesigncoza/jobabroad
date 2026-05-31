@@ -194,5 +194,4 @@ your profile before you spend money on documents, exams, or recruiters.
 
 Start with the [healthcare work-abroad pathway guide](/pathways/healthcare) for the full
 picture, then register for a free eligibility check built for South African nurses. If you
-want deeper, personalised guidance, the R495 action plan includes a written report and a
-review of your specific situation.
+want deeper, personalised guidance, the free action plan includes a written report tailored to your specific situation.

@@ -155,5 +155,4 @@ verify them independently.
 
 Confirm the route fits before paying for an assessment. Start with the
 [engineering work-abroad pathway guide](/pathways/engineering), then register for a free
-eligibility check. For personalised guidance, the R495 action plan includes a written report and
-a review of your situation.
+eligibility check. For personalised guidance, the free action plan includes a written report tailored to your situation.

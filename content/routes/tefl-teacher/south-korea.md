@@ -154,5 +154,4 @@ you can verify.
 
 Confirm the route fits before paying for a TEFL course or documents. Start with the
 [TEFL work-abroad pathway guide](/pathways/tefl), then register for a free eligibility check.
-For personalised guidance, the R495 action plan includes a written report and a review of your
-situation.
+For personalised guidance, the free action plan includes a written report tailored to your situation.

@@ -159,5 +159,4 @@ official approved list on gov.uk. Legitimate operators do **not** charge workers
 
 The safest first move is to confirm the route fits you before paying anyone. Start with the
 [farming work-abroad pathway guide](/pathways/farming), then register for a free eligibility
-check. For deeper, personalised guidance, the R495 action plan includes a written report and
-a review of your situation.
+check. For deeper, personalised guidance, the free action plan includes a written report tailored to your situation.

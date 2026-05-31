@@ -137,5 +137,4 @@ verify.
 
 Confirm the route fits before paying anything. Start with the
 [au pair work-abroad pathway guide](/pathways/au-pair), then register for a free eligibility check.
-For personalised guidance, the R495 action plan includes a written report and a review of your
-situation.
+For personalised guidance, the free action plan includes a written report tailored to your situation.

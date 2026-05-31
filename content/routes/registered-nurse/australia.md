@@ -142,5 +142,4 @@ independently. Our [recruiter directory](/recruiters) flags partners we have che
 
 Confirm the route fits before paying for exams. Start with the
 [healthcare work-abroad pathway guide](/pathways/healthcare), then register for a free eligibility
-check. For personalised guidance, the R495 action plan includes a written report and a review of
-your situation.
+check. For personalised guidance, the free action plan includes a written report tailored to your situation.
