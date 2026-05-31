@@ -2,6 +2,7 @@ import 'server-only';
 import { createSupabaseServiceClient } from '@/lib/supabase/service';
 import { escapeHtml, sendEmail } from '@/lib/email/brevo';
 import type { Band, DimensionResult } from '@/lib/scoring/types';
+import { PAYMENTS_ENABLED } from '@/lib/access';
 
 const FROM_EMAIL_DEFAULT = 'no-reply@jobabroad.co.za';
 const FROM_NAME_DEFAULT = 'Jobabroad';
@@ -167,7 +168,11 @@ function emailHtml({
         <p style="margin:0;font-size:14px;line-height:1.5;">${escapeHtml(whatsBlocking)}</p>
       </div>
 
-      <p style="font-size:14px;">Want the full picture? Upgrade to the R495 plan: a personalised PDF action plan written after a 15-min live call with us.</p>
+      <p style="font-size:14px;">${
+        PAYMENTS_ENABLED
+          ? 'Want the full picture? Upgrade to the R495 plan: a personalised PDF action plan written after a 15-min live call with us.'
+          : "We're putting together your full personalised PDF action plan now — it'll land in your inbox shortly, free."
+      }</p>
       <p>
         <a href="${dashboardUrl}" style="display:inline-block;background:#1B4D3E;color:#F8F5F0;padding:12px 24px;border-radius:10px;text-decoration:none;font-weight:bold;text-transform:uppercase;font-size:13px;letter-spacing:0.5px;">Return to dashboard &rarr;</a>
       </p>

@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { createSupabaseServiceClient } from '@/lib/supabase/service';
 import { sendCallNotesEmail } from '@/lib/notifications/call-notes';
+import { hasFullAccess } from '@/lib/access';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -54,8 +55,8 @@ export async function POST(req: NextRequest) {
     .select('tier')
     .eq('user_id', body.userId)
     .single();
-  if (profile?.tier !== 'paid') {
-    return NextResponse.json({ error: 'target_not_paid' }, { status: 409 });
+  if (!hasFullAccess(profile?.tier)) {
+    return NextResponse.json({ error: 'target_no_access' }, { status: 409 });
   }
 
   const trimmed = body.callNotes.trim();

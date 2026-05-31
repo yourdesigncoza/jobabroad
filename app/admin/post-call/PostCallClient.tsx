@@ -42,7 +42,8 @@ export default function PostCallClient({ rows }: Props) {
         className="font-body text-sm rounded-2xl p-8 text-center"
         style={{ backgroundColor: '#FFFFFF', border: '1.5px solid #EDE8E0', color: '#6B6B6B' }}
       >
-        No paid users yet. They&apos;ll appear here after their R495 payment lands.
+        No completed eligibility checks yet. Members appear here once they submit
+        their assessment and their report generates.
       </p>
     );
   }
@@ -171,14 +172,14 @@ function UserCard({ row }: { row: PaidUserRow }) {
           className="font-display text-xs font-semibold uppercase tracking-wider"
           style={{ color: '#2C2C2C' }}
         >
-          Call notes
+          Notes
         </span>
         <textarea
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
           disabled={saveStatus.kind === 'saving'}
           rows={6}
-          placeholder="Paste transcript or write up the call. Saving emails this to the buyer and stores it on their dashboard."
+          placeholder="Write up your notes for this member. Saving emails this to them and stores it on their dashboard."
           className="font-body text-sm rounded-xl p-3 outline-none"
           style={{
             backgroundColor: '#F8F5F0',

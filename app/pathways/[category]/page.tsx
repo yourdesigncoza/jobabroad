@@ -175,7 +175,7 @@ function DemoBanner({ categoryLabel, registerHref }: { categoryLabel: string; re
           className="inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 font-display font-bold uppercase text-xs tracking-wide self-start sm:self-auto"
           style={{ backgroundColor: '#1B4D3E', color: '#F8F5F0' }}
         >
-          Get your own access
+          Register free
         </Link>
       </div>
 
@@ -190,8 +190,8 @@ function DemoBanner({ categoryLabel, registerHref }: { categoryLabel: string; re
         </p>
         <p className="font-body text-[13px] leading-snug" style={{ color: '#2C2C2C' }}>
           This is a public preview of the {categoryLabel.toLowerCase()} guide — search included.
-          The eligibility check unlocks once you have your own access link.
-          Daily preview searches are limited; tap <strong>Get your own access</strong> to remove limits.
+          The free eligibility check unlocks when you register.
+          Daily preview searches are limited; tap <strong>Register free</strong> to remove limits.
         </p>
         <p className="font-body text-[13px] leading-snug" style={{ color: '#2C2C2C' }}>
           <strong>What this guide does not do:</strong> we do not apply for you, guarantee

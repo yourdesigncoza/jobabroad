@@ -2,6 +2,7 @@ import 'server-only';
 import { createSupabaseServiceClient } from '@/lib/supabase/service';
 import { escapeHtml, sendEmail } from '@/lib/email/brevo';
 import { CATEGORIES } from '@/lib/categories';
+import { PAYMENTS_ENABLED } from '@/lib/access';
 
 const FROM_EMAIL_DEFAULT = 'no-reply@jobabroad.co.za';
 const FROM_NAME_DEFAULT = 'Jobabroad';
@@ -42,7 +43,9 @@ export async function sendCallNotesEmail(userId: string, notes: string): Promise
   await sendEmail({
     from: { email: fromEmail, name: fromName },
     to: [{ email: userEmail, name: profile.name ?? undefined }],
-    subject: `Notes from our ${categoryLabel} review call`,
+    subject: PAYMENTS_ENABLED
+      ? `Notes from our ${categoryLabel} review call`
+      : `Your ${categoryLabel} notes from Jobabroad`,
     htmlContent: emailHtml({ userName, categoryLabel, notes: trimmed, dashboardUrl }),
   });
 }
@@ -65,7 +68,11 @@ function emailHtml({
 
   return `
     <p>Hi ${escapeHtml(userName)},</p>
-    <p>Thanks for taking the time on our ${escapeHtml(categoryLabel)} review call. Here's a writeup of what we discussed and the next steps for you:</p>
+    <p>${
+      PAYMENTS_ENABLED
+        ? `Thanks for taking the time on our ${escapeHtml(categoryLabel)} review call. Here's a writeup of what we discussed and the next steps for you:`
+        : `Here are some notes on your ${escapeHtml(categoryLabel)} work-abroad plan, with the next steps for you:`
+    }</p>
     <div style="border-left:3px solid #C9A84C;padding:8px 16px;margin:16px 0;background:#FFF8E8;font-family:sans-serif;">
       ${paragraphs}
     </div>

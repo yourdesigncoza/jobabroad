@@ -16,24 +16,32 @@ export default async function PostCallAdminPage() {
 
   const svc = createSupabaseServiceClient();
 
-  const { data: profiles } = await svc
-    .from('profiles')
-    .select('user_id, name, category, tier')
-    .eq('tier', 'paid');
+  // Members who have completed the eligibility check (submitted an assessment).
+  // The report auto-generates on submit, so this is the set worth reviewing and
+  // adding notes to — not the old tier='paid' set (payments are shelved).
+  const { data: submitted } = await svc
+    .from('assessments')
+    .select('user_id')
+    .eq('status', 'submitted');
+  const userIds = [...new Set((submitted ?? []).map((a) => a.user_id as string))];
+  const idFilter = userIds.length ? userIds : ['00000000-0000-0000-0000-000000000000'];
 
-  const userIds = (profiles ?? []).map((p) => p.user_id);
-
-  const [bookingsRes, reportsRes, authRes] = await Promise.all([
+  const [profilesRes, bookingsRes, reportsRes, authRes] = await Promise.all([
+    svc
+      .from('profiles')
+      .select('user_id, name, category, tier')
+      .in('user_id', idFilter),
     svc
       .from('bookings')
       .select('user_id, slot_at, consented_at')
-      .in('user_id', userIds.length ? userIds : ['00000000-0000-0000-0000-000000000000']),
+      .in('user_id', idFilter),
     svc
       .from('paid_reports')
       .select('user_id, generated_at, call_notes, generation_status, generation_attempts, pdf_path')
-      .in('user_id', userIds.length ? userIds : ['00000000-0000-0000-0000-000000000000']),
+      .in('user_id', idFilter),
     svc.auth.admin.listUsers(),
   ]);
+  const profiles = profilesRes.data;
 
   const bookingsByUser = new Map<string, { slot_at: string | null; consented_at: string }>();
   for (const b of bookingsRes.data ?? []) {
@@ -89,13 +97,14 @@ export default async function PostCallAdminPage() {
     };
   });
 
-  // Sort: booked-but-no-report first, then everyone else by most recent booking.
+  // Sort: members whose report is ready but still has no notes first (they need
+  // attention), then everyone else by most recent report.
   rows.sort((a, b) => {
-    const aPending = a.bookingSlotAt && !a.reportGeneratedAt ? 0 : 1;
-    const bPending = b.bookingSlotAt && !b.reportGeneratedAt ? 0 : 1;
-    if (aPending !== bPending) return aPending - bPending;
-    const aTs = a.bookingSlotAt ? Date.parse(a.bookingSlotAt) : 0;
-    const bTs = b.bookingSlotAt ? Date.parse(b.bookingSlotAt) : 0;
+    const aNeeds = a.reportGeneratedAt && !a.callNotes.trim() ? 0 : 1;
+    const bNeeds = b.reportGeneratedAt && !b.callNotes.trim() ? 0 : 1;
+    if (aNeeds !== bNeeds) return aNeeds - bNeeds;
+    const aTs = a.reportGeneratedAt ? Date.parse(a.reportGeneratedAt) : 0;
+    const bTs = b.reportGeneratedAt ? Date.parse(b.reportGeneratedAt) : 0;
     return bTs - aTs;
   });
 
@@ -116,14 +125,14 @@ export default async function PostCallAdminPage() {
             className="font-display font-bold uppercase tracking-wide text-3xl"
             style={{ color: '#2C2C2C' }}
           >
-            Post-call reports
+            Member reports &amp; notes
           </h1>
           <p className="font-body text-sm" style={{ color: '#6B6B6B' }}>
-            One row per paid user. Reports auto-generate at payment time. After
-            a review call, paste your notes and click <em>Save notes &amp;
-            email</em> — the buyer gets a plain-text follow-up email and the
-            notes appear on their dashboard. <em>Force regenerate</em> is an
-            escape hatch for stuck failures or post-template-change re-runs;
+            One row per member who&apos;s completed the eligibility check. Reports
+            auto-generate when they submit. Paste your notes and click <em>Save
+            notes &amp; email</em> — the member gets a plain-text follow-up email
+            and the notes appear on their dashboard. <em>Force regenerate</em> is
+            an escape hatch for stuck failures or post-template-change re-runs;
             it bypasses the 5-attempt user cap.
           </p>
         </div>

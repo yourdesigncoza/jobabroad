@@ -1,6 +1,7 @@
 import 'server-only';
 import { createSupabaseServiceClient } from '@/lib/supabase/service';
 import { escapeHtml, sendEmail } from '@/lib/email/brevo';
+import { PAYMENTS_ENABLED } from '@/lib/access';
 
 const FROM_EMAIL_DEFAULT = 'no-reply@jobabroad.co.za';
 const FROM_NAME_DEFAULT = 'Jobabroad';
@@ -61,16 +62,26 @@ function emailHtml({
   categoryLabel: string;
   dashboardUrl: string;
 }): string {
+  const intro = PAYMENTS_ENABLED
+    ? `Thanks for upgrading. Your personalised <strong>${escapeHtml(categoryLabel)}</strong> report is attached to this email, and it's also waiting in your dashboard.`
+    : `Great news — your personalised <strong>${escapeHtml(categoryLabel)}</strong> report is ready. It's attached to this email and waiting in your dashboard. It's yours free for completing your eligibility check.`;
+
+  // Coach + booking call are part of the (currently shelved) paid tier, so only
+  // mention them when payments are on.
+  const extras = PAYMENTS_ENABLED
+    ? `<p>If you'd like to talk it through, you can book a 15-min call from your dashboard whenever you're ready &mdash; no rush, no pressure.</p>
+    <p>You also have your personal ${escapeHtml(categoryLabel)} Abroad assistant in your dashboard — chat any time for grounded answers and to track your next steps.</p>`
+    : '';
+
   return `
     <p>Hi ${escapeHtml(userName)},</p>
-    <p>Thanks for upgrading. Your personalised <strong>${escapeHtml(categoryLabel)}</strong> report is attached to this email, and it's also waiting in your dashboard.</p>
+    <p>${intro}</p>
     <p>
       <a href="${dashboardUrl}" style="display:inline-block;background:#1B4D3E;color:#F8F5F0;padding:12px 24px;border-radius:10px;text-decoration:none;font-family:sans-serif;font-weight:600;text-transform:uppercase;font-size:13px;letter-spacing:0.5px;">
         Open dashboard &rarr;
       </a>
     </p>
-    <p>If you'd like to talk it through, you can book a 15-min call from your dashboard whenever you're ready &mdash; no rush, no pressure.</p>
-    <p>You also have your personal ${escapeHtml(categoryLabel)} coach in your dashboard — chat any time for grounded answers and to track your next steps.</p>
+    ${extras}
     <p>&mdash; The Jobabroad team</p>
   `;
 }
