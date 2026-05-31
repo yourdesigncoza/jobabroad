@@ -9,7 +9,7 @@ import { sendReportReadyEmail } from '@/lib/notifications/report-ready-email';
  *   - app/api/payments/webhook/route.ts   (initial post-payment)
  *   - app/members/[category]/paid/page.tsx (fallback when webhook missed)
  *   - app/api/reports/regenerate/route.ts  (user-facing retry, capped)
- *   - app/api/admin/post-call/regenerate/route.ts (admin force-regen, uncapped)
+ *   - app/api/admin/users/regenerate/route.ts (admin force-regen, uncapped)
  *
  * Errors are caught here and logged. generateReport already writes
  * generation_status='failed' to paid_reports on caught throws, so callers

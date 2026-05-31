@@ -73,12 +73,12 @@ test.describe('Admin chat-summary — gates', () => {
 });
 
 // =========================================================================
-// /api/admin/post-call/regenerate — auth gate
+// /api/admin/users/regenerate — auth gate
 // =========================================================================
 
 test.describe('Admin force-regenerate — gates', () => {
   test('returns 404 for unauthenticated request', async ({ request }) => {
-    const res = await request.post('/api/admin/post-call/regenerate', {
+    const res = await request.post('/api/admin/users/regenerate', {
       data: { userId: '00000000-0000-0000-0000-000000000000' },
     });
     expect(res.status()).toBe(404);
@@ -94,7 +94,7 @@ test.describe('Admin force-regenerate — gates', () => {
       category: 'teaching',
     });
     try {
-      const res = await page.request.post('/api/admin/post-call/regenerate', {
+      const res = await page.request.post('/api/admin/users/regenerate', {
         data: { userId: '00000000-0000-0000-0000-000000000000' },
       });
       expect(res.status()).toBe(404);
@@ -138,7 +138,7 @@ test.describe('Admin users dashboard — happy path', () => {
       await seedAndLoginAdmin(adminPage);
 
       // Dashboard renders the registered-members view with this user on it.
-      await adminPage.goto('/admin/post-call');
+      await adminPage.goto('/admin');
       await expect(
         adminPage.getByRole('heading', { name: /registered members/i }),
       ).toBeVisible();
@@ -188,7 +188,7 @@ test.describe('Admin force-regenerate — happy path', () => {
     try {
       await seedAndLoginAdmin(adminPage);
 
-      const res = await adminPage.request.post('/api/admin/post-call/regenerate', {
+      const res = await adminPage.request.post('/api/admin/users/regenerate', {
         data: { userId: buyerId },
       });
       expect(res.status()).toBe(200);
