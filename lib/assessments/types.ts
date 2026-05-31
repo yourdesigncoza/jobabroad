@@ -1,5 +1,6 @@
 export type FieldType =
   | 'text'
+  | 'textarea'
   | 'number'
   | 'date'
   | 'select'
@@ -15,6 +16,8 @@ export interface FieldDef {
   placeholder?: string;
   hint?: string;
   optional?: boolean;
+  /** Character cap — currently honoured by the textarea renderer. */
+  maxLength?: number;
   showIf?:
     | { field: string; value: string | boolean }
     | { field: string; includes: string };

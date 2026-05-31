@@ -170,10 +170,14 @@ export async function insertSubmittedTeachingAssessment(userId: string): Promise
     'readiness.english_test': { q: 'English test', v: 'IELTS' },
     'readiness.target_destinations': { q: 'Destinations', v: ['UK'] },
     'readiness.target_timeline': { q: 'Timeline', v: 'As soon as possible' },
+    'about.summary': {
+      q: 'about.summary.v1',
+      v: 'I have a hearing impairment and would prefer a school experienced in supporting it.',
+    },
   };
   const slugs = [
     'personal', 'situation', 'qualifications', 'registration',
-    'experience', 'documents', 'readiness',
+    'experience', 'documents', 'readiness', 'about',
   ];
   const { error } = await svc().from('assessments').insert({
     user_id: userId,

@@ -57,6 +57,7 @@ async function generateNextActions(
   score: ScoreResult,
   category: string,
   corpus: CorpusChunk[],
+  personalContext: string,
 ): Promise<Array<{ title: string; body: string }>> {
   // Pull 5 bottom dims so the model has enough specific gaps to reach 5-7
   // distinct, concrete actions instead of repeating itself.
@@ -90,6 +91,8 @@ Each "body" MUST include at least one concrete first step the reader can take to
 
 Prioritise actions in order: the lowest-scoring dimension's gap first, then the next, and so on. Skip a gap if the corpus has nothing useful on it.
 
+If a "personal_context" note is present, treat it as authoritative information the applicant volunteered about themselves that our structured questions never asked. Factor it into your actions where it matters: a disability or health condition may need an accommodation step or rule out destinations; a family or financial tie may change the realistic destination or timeline; a stated preference should be respected. Never repeat the note verbatim, never speculate beyond it, and never make it a separate action unless it genuinely changes a next step.
+
 Write exactly like a natural, smart human having a conversation. Be clear, concise, and direct. Vary your sentence lengths. Never, under any circumstances, use em dashes (—). Instead, use commas, periods, parentheses, or colons.
 
 No hedging. No invented facts. Return JSON: { "actions": [{title, body}, ...] } with 5 to 7 items.`,
@@ -99,6 +102,7 @@ No hedging. No invented facts. Return JSON: { "actions": [{title, body}, ...] } 
           content: JSON.stringify({
             category,
             gaps,
+            personal_context: personalContext || undefined,
             corpus: corpus.slice(0, 8).map((c) => ({
               heading: c.heading,
               excerpt: tightenSnippet(c.content, 350),
@@ -158,6 +162,18 @@ function pickContactChunks(
  * the field is absent or the buyer left it blank, which makes the partner
  * matcher fall through to "no destination signal → no destination match".
  */
+/**
+ * The optional free-text "Tell us about yourself" answer (about.summary). This
+ * is context the structured questions never asked for, so we hand it to the
+ * next-actions model to factor in (disabilities, family/financial ties, strong
+ * preferences). Capped defensively even though the field already limits length.
+ */
+function readAboutSummary(answers: AssessmentData): string {
+  const entry = answers['about.summary'];
+  if (entry && typeof entry.v === 'string') return entry.v.trim().slice(0, 1500);
+  return '';
+}
+
 function readTargetDestinations(answers: AssessmentData): string[] {
   const entry = answers['readiness.target_destinations'];
   if (!entry) return [];
@@ -219,7 +235,7 @@ export async function generateReport(userId: string): Promise<GenerateReportResu
   } catch (err) {
     // Write the failure to paid_reports so the dashboard status surfaces it and
     // the user can hit "try again". We still rethrow — callers (webhook
-    // generateAndEmail wrapper, /admin/post-call) decide what to do with the
+    // generateAndEmail wrapper, /admin) decide what to do with the
     // throw.
     const sb = admin();
     const msg = err instanceof Error ? err.message : String(err);
@@ -280,9 +296,10 @@ async function generateReportInner(userId: string): Promise<GenerateReportResult
   // Narratives reuse the cached entry on assessments.cached_narratives so
   // the PDF gen path doesn't pay the LLM tax twice when the user already
   // visited /score (which is the normal flow).
+  const aboutSummary = readAboutSummary(answers);
   const [narratives, nextActions] = await Promise.all([
     getOrGenerateNarratives(assessment.id, score, category),
-    generateNextActions(score, category, corpus),
+    generateNextActions(score, category, corpus, aboutSummary),
   ]);
   const { whatsWorking, whatsBlocking } = narratives;
 

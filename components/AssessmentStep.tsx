@@ -61,6 +61,28 @@ function Field({
     );
   }
 
+  if (field.type === 'textarea') {
+    const text = (value as string) ?? '';
+    return (
+      <div className="flex flex-col gap-1">
+        <textarea
+          placeholder={field.placeholder}
+          value={text}
+          rows={5}
+          maxLength={field.maxLength}
+          onChange={(e) => onChange(e.target.value)}
+          className={`${inputClass} resize-y`}
+          style={inputStyle(invalid, false)}
+        />
+        {field.maxLength && (
+          <span className="font-body text-xs self-end" style={hintStyle}>
+            {text.length}/{field.maxLength}
+          </span>
+        )}
+      </div>
+    );
+  }
+
   if (field.type === 'date') {
     return (
       <input
