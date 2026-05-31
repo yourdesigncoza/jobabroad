@@ -114,7 +114,7 @@ test.describe('Coach — page + journey', () => {
       await page.goto('/members/teaching/coach');
 
       await expect(page.getByRole('heading', { name: /teaching coach/i })).toBeVisible();
-      await expect(page.getByPlaceholder(/ask your coach/i)).toBeVisible();
+      await expect(page.getByPlaceholder(/ask your assistant/i)).toBeVisible();
       await expect(page.getByText(/your journey/i)).toBeVisible();
       await expect(page.getByText('Valid passport')).toBeVisible();
 
@@ -311,7 +311,7 @@ test.describe('Coach — dashboard', () => {
     try {
       await setupPaidTeacher(page, email);
       await page.goto('/dashboard');
-      await expect(page.getByRole('link', { name: /open coach/i })).toBeVisible();
+      await expect(page.getByRole('link', { name: /open your assistant/i })).toBeVisible();
       await expect(page.locator('input[placeholder="Subject"]')).toHaveCount(0);
     } finally {
       await deleteUser(email);

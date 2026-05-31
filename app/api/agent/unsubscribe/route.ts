@@ -14,7 +14,7 @@ const CONFIRMATION = `<!doctype html>
 <body style="font-family:system-ui,sans-serif;background:#F8F5F0;color:#2C2C2C;margin:0;padding:48px 24px;">
 <div style="max-width:480px;margin:0 auto;background:#fff;border:1.5px solid #EDE8E0;border-radius:16px;padding:32px;">
 <h1 style="font-size:20px;margin:0 0 12px;">You're unsubscribed</h1>
-<p style="color:#6B6B6B;line-height:1.6;margin:0;">You won't receive any more coaching reminder emails. You can still chat with your coach any time from your dashboard.</p>
+<p style="color:#6B6B6B;line-height:1.6;margin:0;">You won't receive any more assistant reminder emails. You can still chat with your assistant any time from your dashboard.</p>
 </div></body></html>`;
 
 function render() {

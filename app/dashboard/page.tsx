@@ -130,7 +130,6 @@ export default async function DashboardPage() {
   const isPaid = profile.tier === 'paid';
   const fullAccess = hasFullAccess(profile.tier);
   const coachAccess = hasCoachAccess(profile.tier);
-  const bookHref = `/members/${profile.category}/book`;
 
   // Assessment status drives both the report card (generation now starts when
   // the eligibility check is submitted — payments shelved) and the next-step
@@ -200,8 +199,8 @@ export default async function DashboardPage() {
     <main className="min-h-screen" style={{ backgroundColor: '#F8F5F0' }}>
       <SiteNav />
 
-      <section className="max-w-3xl mx-auto px-6 pt-12 pb-16">
-        <div className="flex flex-col gap-3 mb-10">
+      <section className="max-w-3xl mx-auto px-6 pt-12 pb-16 flex flex-col gap-6">
+        <div className="flex flex-col gap-3">
           <div className="flex items-center gap-3">
             <div className="w-8 h-px" style={{ backgroundColor: '#ff751f' }} />
             <span
@@ -221,53 +220,78 @@ export default async function DashboardPage() {
             Your pathway:{' '}
             <strong style={{ color: '#1B4D3E' }}>{categoryLabel}</strong>
           </p>
-
-          {!isPaid && (
-            <div
-              className="rounded-xl px-5 py-4 mt-1"
-              style={{ backgroundColor: '#EDE8E0', borderLeft: '3px solid #ff751f' }}
-            >
-              <p className="font-body text-sm leading-relaxed" style={{ color: '#2C2C2C' }}>
-                Thank you for registering. You&apos;ve taken the first step toward
-                exploring your work-abroad options. We&apos;ll help you understand
-                where you stand, what to fix, and which route may make the most
-                sense for your background.
-              </p>
-            </div>
-          )}
-
-          {isPaid && (
-            <div
-              className="rounded-xl px-5 py-4 mt-1"
-              style={{ backgroundColor: '#FFF8E8', borderLeft: '3px solid #C9A84C' }}
-            >
-              <p className="font-body text-sm leading-relaxed" style={{ color: '#2C2C2C' }}>
-                Thank you for taking the next step with us. Your premium profile
-                helps us give you clearer guidance, better next steps, and a more
-                focused work-abroad plan.
-              </p>
-            </div>
-          )}
         </div>
+
+        {!isPaid && (
+          <div
+            className="rounded-xl px-5 py-4"
+            style={{ backgroundColor: '#EDE8E0', borderLeft: '3px solid #ff751f' }}
+          >
+            <p className="font-body text-sm leading-relaxed" style={{ color: '#2C2C2C' }}>
+              Thank you for registering. You&apos;ve taken the first step toward
+              exploring your work-abroad options. We&apos;ll help you understand
+              where you stand, what to fix, and which route may make the most
+              sense for your background.
+            </p>
+          </div>
+        )}
+
+        {isPaid && (
+          <div
+            className="rounded-xl px-5 py-4"
+            style={{ backgroundColor: '#FFF8E8', borderLeft: '3px solid #C9A84C' }}
+          >
+            <p className="font-body text-sm leading-relaxed" style={{ color: '#2C2C2C' }}>
+              Thank you for taking the next step with us. Your completed
+              profile helps us give you clearer guidance, better next steps,
+              and a more focused work-abroad plan.
+            </p>
+          </div>
+        )}
 
         {/* Premium upsell — only for users who've completed the eligibility
             check and haven't paid yet. Band-aware copy so the pitch speaks
             to their actual situation. */}
-        {upsellBand && (
-          <div className="mb-10">
-            <PremiumUpsell band={upsellBand} />
-          </div>
-        )}
+        {upsellBand && <PremiumUpsell band={upsellBand} />}
 
         {fullAccess && reportStatus && (
-          <div className="flex flex-col gap-4 mb-10">
-            <ReportStatusCard initial={reportStatus} />
-
+          <div className="flex flex-col gap-6">
             {coachAccess && (
               <>
+            <style>{`
+              @keyframes assistantCtaSheen {
+                0% { left: -160%; }
+                55%, 100% { left: 160%; }
+              }
+              @keyframes assistantCtaLift {
+                0%, 100% { transform: translateY(0); box-shadow: 0 2px 8px rgba(27, 77, 62, 0.25); }
+                50% { transform: translateY(-5px); box-shadow: 0 12px 22px rgba(27, 77, 62, 0.38); }
+              }
+              .assistant-cta {
+                position: relative;
+                overflow: hidden;
+                animation: assistantCtaLift 2.6s ease-in-out infinite;
+              }
+              .assistant-cta::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -160%;
+                width: 80%;
+                height: 100%;
+                transform: skewX(-20deg);
+                background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+                animation: assistantCtaSheen 2.6s ease-in-out infinite;
+                pointer-events: none;
+              }
+              @media (prefers-reduced-motion: reduce) {
+                .assistant-cta, .assistant-cta::before { animation: none !important; }
+                .assistant-cta::before { display: none; }
+              }
+            `}</style>
             <Link
               href={`/members/${profile.category}/coach`}
-              className="relative block rounded-2xl p-5 transition-shadow hover:shadow-md"
+              className="relative block rounded-2xl p-6 transition-shadow hover:shadow-md"
               style={{
                 backgroundColor: '#FFFFFF',
                 border: '1px dashed #ff751f',
@@ -280,58 +304,33 @@ export default async function DashboardPage() {
                   className="font-display text-xs font-semibold uppercase tracking-wider"
                   style={{ color: '#ff751f' }}
                 >
-                  Your coach
+                  Your private assistant
                 </span>
               </div>
               <span
-                className="font-display font-bold uppercase tracking-wide text-sm block"
+                className="font-display font-bold uppercase text-xl block mt-1"
                 style={{ color: '#2C2C2C' }}
               >
-                Chat with your {categoryLabel} coach
+                Your {categoryLabel} move, personally handled
               </span>
-              <span className="font-body text-xs block mt-1" style={{ color: '#6B6B6B' }}>
-                Ask anything about your move, and track your next steps. Grounded in your guide and
-                your situation.
+              <span className="font-body text-sm block mt-2" style={{ color: '#6B6B6B' }}>
+                Your own Abroad assistant — it knows your situation inside out, tracks your next
+                steps, and grows with you from your first question onward. Always on, always yours.
               </span>
               <span
-                className="inline-flex items-center gap-2 mt-4 px-5 py-2.5 rounded-xl font-display font-bold uppercase tracking-wide text-xs"
+                className="assistant-cta inline-flex items-center gap-2 mt-4 px-6 py-3 rounded-xl font-display font-bold uppercase tracking-wide text-sm"
                 style={{ backgroundColor: '#1B4D3E', color: '#F8F5F0' }}
               >
-                Open coach →
+                Open your assistant →
               </span>
             </Link>
+              </>
+            )}
 
-            <Link
-              href={bookHref}
-              className="block rounded-2xl p-5 transition-shadow hover:shadow-md"
-              style={{ backgroundColor: '#FFFFFF', border: '1.5px dashed #C9A84C' }}
-            >
-              <div className="flex items-center gap-2 mb-1">
-                <div className="w-6 h-px" style={{ backgroundColor: '#C9A84C' }} />
-                <span
-                  className="font-display text-xs font-semibold uppercase tracking-wider"
-                  style={{ color: '#C9A84C' }}
-                >
-                  Optional
-                </span>
-              </div>
-              <span
-                className="font-display font-bold uppercase tracking-wide text-sm block"
-                style={{ color: '#2C2C2C' }}
-              >
-                Book a 15-min review call
-              </span>
-              <span className="font-body text-xs block mt-1" style={{ color: '#6B6B6B' }}>
-                Want to talk it through? Pick a slot whenever you&apos;re ready — no rush.
-              </span>
-              <span
-                className="inline-flex items-center gap-2 mt-4 px-5 py-2.5 rounded-xl font-display font-bold uppercase tracking-wide text-xs"
-                style={{ backgroundColor: '#1B4D3E', color: '#F8F5F0' }}
-              >
-                Pick a slot →
-              </span>
-            </Link>
+            <ReportStatusCard initial={reportStatus} />
 
+            {/* Notes John saved for this member — shown to everyone (free too),
+                not just the paid coach/call tier. */}
             {callNotes && (
               <section
                 className="rounded-2xl p-6 flex flex-col gap-3"
@@ -343,7 +342,7 @@ export default async function DashboardPage() {
                     className="font-display text-xs font-semibold uppercase tracking-wider"
                     style={{ color: '#8A6A1F' }}
                   >
-                    From your review call
+                    From Jobabroad
                   </span>
                 </div>
                 <h2
@@ -361,12 +360,10 @@ export default async function DashboardPage() {
                 </div>
               </section>
             )}
-              </>
-            )}
           </div>
         )}
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <Card
             href={`/members/${profile.category}`}
             title={`${categoryLabel} guide`}

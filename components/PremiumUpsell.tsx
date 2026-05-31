@@ -125,7 +125,7 @@ export default function PremiumUpsell({ band, withAnchor }: Props) {
         <li>• Saved in your dashboard</li>
         <li>• Realistic work-abroad route suggestions</li>
         <li>• Trusted partner recommendations</li>
-        <li>• Your personal AI coach</li>
+        <li>• Your personal Abroad assistant</li>
         <li>• Optional 15-minute review call</li>
       </ul>
       <button

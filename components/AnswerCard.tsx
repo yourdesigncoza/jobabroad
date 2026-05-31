@@ -72,7 +72,7 @@ export default function AnswerCard({
           {hideWhatsApp ? (
             <>
               <p className="font-body text-sm" style={{ color: '#2C2C2C' }}>
-                We don&rsquo;t have a confident answer for that in your guide. Ask your coach from your dashboard for a more detailed, personalised answer.
+                We don&rsquo;t have a confident answer for that in your guide. Ask your assistant from your dashboard for a more detailed, personalised answer.
               </p>
               <a
                 href="/dashboard"

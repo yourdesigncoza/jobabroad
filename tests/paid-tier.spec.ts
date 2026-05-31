@@ -123,8 +123,8 @@ test.describe('Paid tier — dashboard surfaces', () => {
       await expect(page.getByRole('link', { name: /book a 15-min review call/i })).toBeVisible();
       // Download CTA must NOT be present in pending state
       await expect(page.getByRole('link', { name: /download report/i })).toHaveCount(0);
-      // Coach card replaces the old follow-up form for paid users
-      await expect(page.getByRole('link', { name: /open coach/i })).toBeVisible();
+      // Assistant card replaces the old follow-up form for paid users
+      await expect(page.getByRole('link', { name: /open your assistant/i })).toBeVisible();
     } finally {
       await deleteUser(email);
     }

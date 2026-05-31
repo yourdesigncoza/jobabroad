@@ -163,12 +163,12 @@ export default function AgentChat({
 
         {limitHit && (
           <p className="font-body text-sm" style={{ color: '#B53A2B' }}>
-            You&apos;ve reached today&apos;s message limit. Your coach will be ready again tomorrow.
+            You&apos;ve reached today&apos;s message limit. Your assistant will be ready again tomorrow.
           </p>
         )}
         {onHold && (
           <p className="font-body text-sm" style={{ color: '#B53A2B' }}>
-            Your coaching access is on hold. Please refresh the page to reactivate it.
+            Your assistant access is on hold. Please refresh the page to reactivate it.
           </p>
         )}
         {error && (
@@ -181,7 +181,7 @@ export default function AgentChat({
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask your coach…"
+            placeholder="Ask your assistant…"
             maxLength={2000}
             disabled={sending || limitHit || onHold}
             className="flex-1 px-4 py-3 rounded-xl font-body text-sm outline-none disabled:opacity-50"

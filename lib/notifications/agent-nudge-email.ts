@@ -55,7 +55,7 @@ function nudgeHtml(
     ? `<p>Last time we talked about <strong>${escapeHtml(p.lastTopic)}</strong>.</p>`
     : `<p>It's been a little while since we caught up on your plan.</p>`;
   const nextStep = p.nextMilestoneLabel
-    ? `<p>Your next step is <strong>${escapeHtml(p.nextMilestoneLabel)}</strong>. Want to tackle it together? Your coach is ready whenever you are.</p>`
+    ? `<p>Your next step is <strong>${escapeHtml(p.nextMilestoneLabel)}</strong>. Want to tackle it together? Your assistant is ready whenever you are.</p>`
     : `<p>You've made great progress. Come back any time if a new question comes up.</p>`;
 
   return `
@@ -64,7 +64,7 @@ function nudgeHtml(
     ${nextStep}
     <p>
       <a href="${p.coachUrl}" style="display:inline-block;background:#1B4D3E;color:#F8F5F0;padding:12px 24px;border-radius:10px;text-decoration:none;font-family:sans-serif;font-weight:600;text-transform:uppercase;font-size:13px;letter-spacing:0.5px;">
-        Chat with your coach &rarr;
+        Chat with your assistant &rarr;
       </a>
     </p>
     <p>&mdash; The Jobabroad team</p>

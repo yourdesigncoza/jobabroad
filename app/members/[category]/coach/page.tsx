@@ -14,8 +14,8 @@ import { extractCitedIndexes } from '@/lib/rag/prompt';
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: 'Your coach — Jobabroad',
-  description: 'Chat with your personal work-abroad coach.',
+  title: 'Your assistant — Jobabroad',
+  description: 'Your always-on personal work-abroad assistant.',
   alternates: { canonical: '/dashboard' },
   robots: { index: false, follow: false },
 };
@@ -54,10 +54,10 @@ export default async function CoachPage({
             className="font-display font-bold uppercase tracking-wide text-2xl"
             style={{ color: '#2C2C2C' }}
           >
-            Your coach is a premium feature
+            Your private assistant is a premium feature
           </h1>
           <p className="font-body" style={{ color: '#2C2C2C' }}>
-            Unlock your personal {categoryLabel} coach, your journey tracker, and a personalised
+            Unlock your personal {categoryLabel} Abroad assistant, your journey tracker, and a personalised
             report when you upgrade.
           </p>
           <Link
@@ -103,14 +103,14 @@ export default async function CoachPage({
               className="font-display text-[0.65rem] md:text-xs font-semibold uppercase tracking-[0.08em] md:tracking-[0.2em]"
               style={{ color: '#ff751f' }}
             >
-              Your coach
+              Your private assistant
             </span>
           </div>
           <h1
             className="font-display font-bold uppercase leading-tight"
             style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', color: '#2C2C2C' }}
           >
-            {categoryLabel} coach
+            Your {categoryLabel} assistant
           </h1>
           <p className="font-body text-sm" style={{ color: '#6B6B6B' }}>
             Grounded in your guide and your situation. Ask about visas, registration, documents,
