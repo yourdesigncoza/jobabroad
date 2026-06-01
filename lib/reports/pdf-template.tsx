@@ -452,7 +452,7 @@ export function ReportTemplate({ data }: { data: ReportData }) {
         {/* Disclaimer */}
         <Text style={styles.disclaimer}>
           {lig(
-            "Jobabroad is an information service. We don't place candidates, act as recruiters or guarantee employment. Always verify with official sources (SACE, NMC, AHPRA, embassies) before paying anyone or signing contracts.",
+            "Jobabroad is an information service. We don't place candidates, act as recruiters or guarantee employment. Always verify with the relevant professional body and official sources (regulators, embassies) before paying anyone or signing contracts.",
           )}
         </Text>
 
