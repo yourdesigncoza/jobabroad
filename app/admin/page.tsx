@@ -23,7 +23,7 @@ export default async function AdminUsersPage() {
   // status, chat activity, and the last journey topic.
   const [profilesRes, authRes, submittedRes, reportsRes, msgsRes, journeyRes] =
     await Promise.all([
-      svc.from('profiles').select('user_id, name, category, tier'),
+      svc.from('profiles').select('user_id, name, category, tier, phone'),
       svc.auth.admin.listUsers(),
       svc
         .from('assessments')
@@ -101,6 +101,7 @@ export default async function AdminUsersPage() {
       userId: p.user_id,
       name: p.name ?? '',
       email: auth?.email ?? '',
+      phone: p.phone ?? '',
       categoryId: p.category ?? '',
       categoryLabel: CATEGORIES.find((c) => c.id === p.category)?.label ?? (p.category ?? ''),
       registeredAt: auth?.createdAt ?? null,

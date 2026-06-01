@@ -324,3 +324,151 @@ test.describe('Admin force-regenerate — happy path', () => {
     }
   });
 });
+
+// =========================================================================
+// /api/admin/users/update + /delete — auth gates
+// =========================================================================
+
+test.describe('Admin user update/delete — gates', () => {
+  const FAKE_ID = '00000000-0000-0000-0000-000000000000';
+
+  test('update + delete return 404 for unauthenticated requests', async ({ request }) => {
+    const u = await request.post('/api/admin/users/update', { data: { userId: FAKE_ID, name: 'X' } });
+    expect(u.status()).toBe(404);
+    const d = await request.post('/api/admin/users/delete', { data: { userId: FAKE_ID } });
+    expect(d.status()).toBe(404);
+  });
+
+  test('update + delete return 404 for authenticated non-admin', async ({ page }) => {
+    const email = uniqueEmail('rud-nonadmin');
+    await registerAndLogin(page, {
+      email,
+      password: PASSWORD,
+      name: 'Non Admin',
+      phone: uniquePhone(),
+      category: 'teaching',
+    });
+    try {
+      const u = await page.request.post('/api/admin/users/update', { data: { userId: FAKE_ID, name: 'X' } });
+      expect(u.status()).toBe(404);
+      const d = await page.request.post('/api/admin/users/delete', { data: { userId: FAKE_ID } });
+      expect(d.status()).toBe(404);
+    } finally {
+      await deleteUser(email);
+    }
+  });
+});
+
+// =========================================================================
+// Admin user RUD — happy paths (require PLAYWRIGHT_ADMIN_EMAIL)
+// =========================================================================
+
+test.describe('Admin user RUD — happy path', () => {
+  test.skip(!ADMIN_EMAIL, 'PLAYWRIGHT_ADMIN_EMAIL not set');
+
+  test('admin edits a member name, phone, and email', async ({ page, browser }) => {
+    const email = uniqueEmail('rud-edit');
+    await registerAndLogin(page, {
+      email,
+      password: PASSWORD,
+      name: 'Edit Me',
+      phone: uniquePhone(),
+      category: 'teaching',
+    });
+    const userId = await findUserIdByEmail(email);
+    const newEmail = uniqueEmail('rud-edited');
+
+    const adminCtx = await browser.newContext();
+    const adminPage = await adminCtx.newPage();
+    try {
+      await seedAndLoginAdmin(adminPage);
+      const r = await adminPage.request.post('/api/admin/users/update', {
+        data: { userId, name: 'Renamed Person', phone: '061 000 0001', email: newEmail },
+      });
+      expect(r.status()).toBe(200);
+      expect((await r.json()).ok).toBe(true);
+
+      const { data: prof } = await svc().from('profiles').select('name, phone').eq('user_id', userId).single();
+      expect(prof?.name).toBe('Renamed Person');
+      expect(prof?.phone).toBe('27610000001'); // normalised from 061 000 0001
+
+      const { data: authUser } = await svc().auth.admin.getUserById(userId);
+      expect(authUser?.user?.email).toBe(newEmail.toLowerCase());
+    } finally {
+      await adminCtx.close();
+      await deleteUser(ADMIN_EMAIL);
+      await svc().auth.admin.deleteUser(userId); // email changed; delete by id
+    }
+  });
+
+  test('admin deletes a member — account + profile removed', async ({ page, browser }) => {
+    const email = uniqueEmail('rud-del');
+    await registerAndLogin(page, {
+      email,
+      password: PASSWORD,
+      name: 'Delete Me',
+      phone: uniquePhone(),
+      category: 'teaching',
+    });
+    const userId = await findUserIdByEmail(email);
+
+    const adminCtx = await browser.newContext();
+    const adminPage = await adminCtx.newPage();
+    try {
+      await seedAndLoginAdmin(adminPage);
+      const r = await adminPage.request.post('/api/admin/users/delete', { data: { userId } });
+      expect(r.status()).toBe(200);
+
+      const { data: prof } = await svc().from('profiles').select('user_id').eq('user_id', userId).maybeSingle();
+      expect(prof).toBeNull();
+      const { data: authUser } = await svc().auth.admin.getUserById(userId);
+      expect(authUser?.user).toBeFalsy();
+    } finally {
+      await adminCtx.close();
+      await deleteUser(ADMIN_EMAIL);
+    }
+  });
+
+  test('admin cannot delete their own account', async ({ browser }) => {
+    const adminCtx = await browser.newContext();
+    const adminPage = await adminCtx.newPage();
+    try {
+      await seedAndLoginAdmin(adminPage);
+      const adminId = await findUserIdByEmail(ADMIN_EMAIL);
+      const r = await adminPage.request.post('/api/admin/users/delete', { data: { userId: adminId } });
+      expect(r.status()).toBe(409);
+      expect((await r.json()).error).toBe('cannot_delete_self');
+    } finally {
+      await adminCtx.close();
+      await deleteUser(ADMIN_EMAIL);
+    }
+  });
+
+  test('members table shows Edit/Delete actions and an edit modal opens', async ({ page, browser }) => {
+    const email = uniqueEmail('rud-ui');
+    await registerAndLogin(page, {
+      email,
+      password: PASSWORD,
+      name: 'UI Member',
+      phone: uniquePhone(),
+      category: 'teaching',
+    });
+    const adminCtx = await browser.newContext();
+    const adminPage = await adminCtx.newPage();
+    try {
+      await seedAndLoginAdmin(adminPage);
+      await adminPage.goto('/admin');
+      await expect(adminPage.getByRole('button', { name: 'Edit' }).first()).toBeVisible();
+      await expect(adminPage.getByRole('button', { name: 'Delete' }).first()).toBeVisible();
+
+      await adminPage.getByRole('button', { name: 'Edit' }).first().click();
+      await expect(adminPage.getByRole('heading', { name: /edit member/i })).toBeVisible();
+      await adminPage.getByRole('button', { name: /^cancel$/i }).click();
+      await expect(adminPage.getByRole('heading', { name: /edit member/i })).toHaveCount(0);
+    } finally {
+      await adminCtx.close();
+      await deleteUser(ADMIN_EMAIL);
+      await deleteUser(email);
+    }
+  });
+});

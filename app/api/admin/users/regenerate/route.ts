@@ -5,6 +5,7 @@ import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { createSupabaseServiceClient } from '@/lib/supabase/service';
 import { generateAndEmail } from '@/lib/reports/generate-and-email';
 import { hasFullAccess } from '@/lib/access';
+import { isAdminEmail } from '@/lib/auth-guards';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -13,18 +14,6 @@ export const maxDuration = 300;
 const Body = z.object({
   userId: z.string().uuid(),
 });
-
-function isAdmin(email: string | null | undefined): boolean {
-  if (!email) return false;
-  const raw = process.env.ADMIN_EMAILS ?? '';
-  const allow = new Set(
-    raw
-      .split(',')
-      .map((s) => s.trim().toLowerCase())
-      .filter(Boolean),
-  );
-  return allow.has(email.toLowerCase());
-}
 
 /**
  * Admin force-regenerate. Same plumbing as /api/reports/regenerate but
@@ -37,7 +26,7 @@ export async function POST(req: NextRequest) {
   const {
     data: { user },
   } = await ssr.auth.getUser();
-  if (!isAdmin(user?.email)) {
+  if (!isAdminEmail(user?.email)) {
     return NextResponse.json({ error: 'not_found' }, { status: 404 });
   }
 
