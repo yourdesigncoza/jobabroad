@@ -1,0 +1,276 @@
+{
+  "category": "accounting",
+  "version": 1,
+  "bands": { "high_blockers_lt": 40, "needs_prep_lt": 70 },
+  "dimensions": [
+    {
+      "key": "credentials",
+      "label": "Designation & Recognition",
+      "weight": 0.30,
+      "rules": [
+        {
+          "field_id": "qualifications.designation",
+          "type": "match",
+          "match": {
+            "CA(SA) — SAICA": 100,
+            "AGA(SA) / Accounting Technician — SAICA": 55,
+            "Professional Accountant (SA) — SAIPA": 60,
+            "CIMA (CGMA)": 90,
+            "ACCA": 90,
+            "Degree only, no professional designation": 35,
+            "Studying / in articles": 30,
+            "Other": 40
+          },
+          "reason": {
+            "CA(SA) — SAICA": "CA(SA) is the gold standard: SAICA's recognition agreements open UK, Australian, NZ, Canadian and Irish membership with no further exams.",
+            "AGA(SA) / Accounting Technician — SAICA": "AGA(SA) is recognised but does not carry full CA(SA) reciprocity, so expect a destination-specific assessment.",
+            "Professional Accountant (SA) — SAIPA": "SAIPA has limited reciprocity (IFA UK, IPA Australia) and usually needs bridging exams in destination law and tax.",
+            "CIMA (CGMA)": "CIMA is an international designation in its own right, portable to the UK, Australia, Canada and Ireland without a SAICA agreement.",
+            "ACCA": "ACCA is globally portable through its own recognition network, so no SAICA agreement is needed.",
+            "Degree only, no professional designation": "A degree alone limits you to non-designated finance roles; a professional designation greatly widens your options.",
+            "Studying / in articles": "Still qualifying: completing your designation is the single biggest thing you can do for your mobility.",
+            "Other": "Confirm how your qualification is recognised in your target country before applying."
+          }
+        },
+        {
+          "field_id": "registration.membership_status",
+          "type": "match",
+          "match": {
+            "Active member in good standing": 100,
+            "Member, fees in arrears": 60,
+            "Lapsed": 30,
+            "Not a member / not yet admitted": 10
+          },
+          "reason": {
+            "Active member in good standing": "Active membership lets you request a Letter of Good Standing and start a recognition application now.",
+            "Member, fees in arrears": "Clear your fees first; a Letter of Good Standing needs an account in good standing.",
+            "Lapsed": "Reinstate your membership before applying, as recognition routes require current standing.",
+            "Not a member / not yet admitted": "Without professional membership the recognition routes are closed; admission is the first step."
+          }
+        },
+        {
+          "field_id": "registration.overseas_body_started",
+          "type": "match",
+          "match": {
+            "None started": 30,
+            "Researching / Letter of Good Standing requested": 50,
+            "Application submitted": 75,
+            "Completed / admitted": 100
+          },
+          "reason": {
+            "None started": "You have not begun destination recognition; request your Letter of Good Standing via my.saica.co.za to start (it is free).",
+            "Researching / Letter of Good Standing requested": "Good start; submit to the destination body (ICAEW, CA ANZ, CPA Canada or CPA Ireland) once your letter arrives.",
+            "Application submitted": "Your recognition application is in progress; follow up directly with the partner body, never through a paid intermediary.",
+            "Completed / admitted": "You already hold destination-body membership, so the hardest credential step is behind you."
+          }
+        }
+      ]
+    },
+    {
+      "key": "specialism",
+      "label": "Function Demand",
+      "weight": 0.18,
+      "rules": [
+        {
+          "field_id": "experience.specialisms",
+          "type": "best_match",
+          "match": {
+            "Tax": 95,
+            "External Audit": 90,
+            "Financial Accounting / Reporting": 90,
+            "Management Accounting / FP&A": 90,
+            "Advisory / Corporate Finance": 85,
+            "Internal Audit": 80,
+            "Forensic": 80,
+            "Insolvency / Restructuring": 75,
+            "Public Sector": 65,
+            "Other": 55
+          },
+          "reason": {
+            "Tax": "Tax specialists are in strong demand across the UK, Australia and Ireland.",
+            "External Audit": "Audit experience is highly portable and valued by international firms.",
+            "Financial Accounting / Reporting": "IFRS reporting skills transfer directly to most destinations.",
+            "Management Accounting / FP&A": "FP&A and commercial finance roles are in steady demand abroad.",
+            "Advisory / Corporate Finance": "Advisory and corporate finance experience opens senior commercial roles.",
+            "Internal Audit": "Internal audit is sought after in larger international organisations.",
+            "Forensic": "Forensic accounting is a niche but well-paid specialism abroad.",
+            "Insolvency / Restructuring": "Insolvency experience is valued but more jurisdiction-specific.",
+            "Public Sector": "Public-sector finance is more localised; private-sector roles travel more easily.",
+            "Other": "Confirm how your specialism maps to demand in your target market."
+          },
+          "empty_reason": "No function specialism recorded. Audit, tax and IFRS reporting experience travels best, so add yours."
+        }
+      ]
+    },
+    {
+      "key": "experience",
+      "label": "Experience & Seniority",
+      "weight": 0.17,
+      "rules": [
+        {
+          "field_id": "experience.years_experience",
+          "type": "range",
+          "ranges": [
+            { "lt": 2, "score": 35, "reason": "Under 2 years post-qualifying; most employer-sponsored visas favour more experience." },
+            { "lt": 5, "score": 70, "reason": "2 to 5 years post-qualifying meets the bar for most overseas finance roles." },
+            { "lt": 10, "score": 90, "reason": "5 to 10 years is a strong, sponsor-ready experience level." },
+            { "score": 100, "reason": "10+ years experience, a senior and highly employable profile." }
+          ]
+        },
+        {
+          "field_id": "experience.seniority",
+          "type": "match",
+          "match": {
+            "Trainee / in articles": 40,
+            "Newly qualified (0–2 years post)": 65,
+            "Manager / Senior": 85,
+            "Senior Manager / Associate Director": 95,
+            "Director / Partner / CFO": 100
+          },
+          "reason": {
+            "Trainee / in articles": "Still in training; finish your articles and qualify before applying abroad.",
+            "Newly qualified (0–2 years post)": "Newly qualified, workable but a year or two more post-qualifying experience strengthens applications.",
+            "Manager / Senior": "Manager-level experience is a sweet spot for sponsored overseas roles.",
+            "Senior Manager / Associate Director": "Senior experience opens competitive, well-paid roles abroad.",
+            "Director / Partner / CFO": "Executive-level profile; target senior commercial and leadership roles."
+          }
+        }
+      ]
+    },
+    {
+      "key": "documents",
+      "label": "Documents & Finances",
+      "weight": 0.20,
+      "rules": [
+        {
+          "field_id": "documents.passport_status",
+          "type": "match",
+          "match": {
+            "Valid, 2+ years remaining": 100,
+            "Valid, under 2 years remaining": 50,
+            "Expired": 10,
+            "No passport": 0
+          },
+          "reason": {
+            "Valid, 2+ years remaining": "Passport valid, meets typical work-visa requirements.",
+            "Valid, under 2 years remaining": "Renew soon, most work visas need 2+ years remaining on your passport.",
+            "Expired": "Passport expired, renew before applying.",
+            "No passport": "No passport; apply immediately, this is the first blocker."
+          }
+        },
+        {
+          "field_id": "documents.police_clearance",
+          "type": "match",
+          "match": {
+            "Current (within 6 months)": 100,
+            "Older than 6 months": 40,
+            "None": 0
+          },
+          "reason": {
+            "Current (within 6 months)": "Current police clearance, meets visa-ready standard.",
+            "Older than 6 months": "Most visa applications require a clearance issued within the last 6 months; renew it.",
+            "None": "No police clearance; apply now, SAPS turnaround is typically 4 to 8 weeks."
+          }
+        },
+        {
+          "field_id": "documents.available_capital",
+          "type": "match",
+          "match": {
+            "Under R30k": 30,
+            "R30k – R70k": 60,
+            "R70k – R150k": 85,
+            "R150k+": 100,
+            "Prefer not to say": 50
+          },
+          "reason": {
+            "Under R30k": "Tight: recognition fees, the apostille and relocation usually run higher, so build a buffer.",
+            "R30k – R70k": "Covers recognition fees and basic relocation costs but tight for a family move.",
+            "R70k – R150k": "Comfortable budget for recognition, visa and relocation for most destinations.",
+            "R150k+": "Strong financial position for relocation, including family routes.",
+            "Prefer not to say": "Budget not declared; share it privately with us if it shapes your options."
+          }
+        }
+      ]
+    },
+    {
+      "key": "language",
+      "label": "Language & Visa English",
+      "weight": 0.07,
+      "rules": [
+        {
+          "field_id": "readiness.english_rating",
+          "type": "match",
+          "match": {
+            "Basic": 30,
+            "Conversational": 55,
+            "Fluent": 90,
+            "Native / first language": 100
+          },
+          "reason": {
+            "Basic": "Basic English is a real blocker for client-facing finance roles; build fluency.",
+            "Conversational": "Conversational level works for some roles but most employers expect fluent business English.",
+            "Fluent": "Fluent English meets the bar for international finance roles.",
+            "Native / first language": "First-language English clears the language bar for all major destinations."
+          }
+        },
+        {
+          "field_id": "readiness.english_test",
+          "type": "match",
+          "match": {
+            "Not needed for my route": 90,
+            "Not yet": 40,
+            "IELTS / PTE done": 100,
+            "Exempt": 90
+          },
+          "reason": {
+            "Not needed for my route": "No test required for your route; confirm this with the destination's visa rules.",
+            "Not yet": "Some skilled-worker visas (UK, Australia, Canada) need an English test even for first-language speakers; check early.",
+            "IELTS / PTE done": "Test done, one less visa hurdle to clear.",
+            "Exempt": "Exemption noted; keep evidence of it for your visa application."
+          }
+        }
+      ]
+    },
+    {
+      "key": "readiness",
+      "label": "Family & Timing",
+      "weight": 0.08,
+      "rules": [
+        {
+          "field_id": "situation.family_status",
+          "type": "match",
+          "match": {
+            "Single, no dependants": 100,
+            "Married / partnered, no children": 80,
+            "Married / partnered with children": 60,
+            "Single parent with children": 40,
+            "Supporting elderly parents in SA": 50
+          },
+          "reason": {
+            "Single, no dependants": "Single, the easiest profile to relocate; no dependant visas needed.",
+            "Married / partnered, no children": "Partner visa adds a step but is workable.",
+            "Married / partnered with children": "Relocating with children adds dependant visas, schooling and cost; plan for it.",
+            "Single parent with children": "Single-parent dependant visa rules vary by country; get specialist guidance.",
+            "Supporting elderly parents in SA": "Caring for parents in SA; consider destinations with faster family-visa routes or shorter contracts."
+          }
+        },
+        {
+          "field_id": "readiness.target_timeline",
+          "type": "match",
+          "match": {
+            "As soon as possible": 100,
+            "Within 6 months": 90,
+            "Within 1 year": 70,
+            "Just exploring": 40
+          },
+          "reason": {
+            "As soon as possible": "ASAP timeline; start your recognition application and job search now.",
+            "Within 6 months": "6-month horizon is realistic once your Letter of Good Standing and documents are ready.",
+            "Within 1 year": "1-year horizon is ideal for recognition, the apostille and visa processing.",
+            "Just exploring": "Exploring only; no urgency means you can plan the recognition route strategically."
+          }
+        }
+      ]
+    }
+  ]
+}

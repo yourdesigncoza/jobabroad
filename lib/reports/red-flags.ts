@@ -89,6 +89,14 @@ const RED_FLAGS: Partial<Record<CategoryId, string[]>> = {
     'Vague terms on weekly hours, pocket money, days off, or your own room (programme rules cap hours for a reason)',
     'Host families who hold your passport or your return ticket',
   ],
+  accounting: [
+    'Any agency charging a fee to "facilitate" or "fast-track" your SAICA recognition — every partner-body fee (ICAEW, CA ANZ, CPA Canada) is paid directly to that body, never through a third party',
+    'Recruiters claiming your CA(SA) + ICAEW membership lets you sign UK statutory audits — it does not; that needs the ICAEW Audit Qualification, a practising certificate, and Registered Auditor status',
+    '"CPA Canada registration" services that won\'t name the specific provincial body (CPA Ontario, CPA BC, etc.) — registration is provincial and self-directed',
+    'Anyone offering to "upgrade" your ACCA or CIMA into a SAICA agreement — both are already internationally portable and SAICA has no MRA with ACCA',
+    'Requests for your SAICA certificate, membership number, or Letter of Good Standing instead of pointing you to my.saica.co.za, where the letter is free and self-service',
+    'Urgency tactics like "limited recognition spots this quarter" — the agreements are multi-year, publicly documented, and have no quotas',
+  ],
 };
 
 export function getRedFlagsForCategory(category: CategoryId): string[] {

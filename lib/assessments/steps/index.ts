@@ -9,6 +9,7 @@ import { AU_PAIR_STEPS } from './au-pair';
 import { ENGINEERING_STEPS } from './engineering';
 import { TRADES_STEPS } from './trades';
 import { IT_TECH_STEPS } from './it-tech';
+import { ACCOUNTING_STEPS } from './accounting';
 
 const REGISTRY: Record<string, StepDef[]> = {
   healthcare: HEALTHCARE_STEPS,
@@ -21,6 +22,7 @@ const REGISTRY: Record<string, StepDef[]> = {
   engineering: ENGINEERING_STEPS,
   trades: TRADES_STEPS,
   'it-tech': IT_TECH_STEPS,
+  accounting: ACCOUNTING_STEPS,
 };
 
 /**

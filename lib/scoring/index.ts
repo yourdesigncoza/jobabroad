@@ -35,6 +35,8 @@ export async function loadRubric(category: string): Promise<Rubric | null> {
       return (await import('./rubrics/seasonal.json')).default as Rubric;
     case 'au-pair':
       return (await import('./rubrics/au-pair.json')).default as Rubric;
+    case 'accounting':
+      return (await import('./rubrics/accounting.json')).default as Rubric;
     default:
       return null;
   }
