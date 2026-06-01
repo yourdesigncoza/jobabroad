@@ -44,6 +44,9 @@ function tightenSnippet(text: string, max = 220): string {
     .replace(/^#{1,6}\s+/gm, '')
     .replace(/^[\s>]*[-*+]\s+/gm, '')
     .replace(/\|/g, ' ')
+    // Strip markdown horizontal rules + table delimiter rows (|---|:--:|) so a
+    // table-sourced chunk doesn't render as "--- --- ---" run-on noise.
+    .replace(/[-:]{3,}/g, ' ')
     .replace(/\s+/g, ' ')
     .trim();
   if (s.length <= max) return s;

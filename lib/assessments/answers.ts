@@ -16,11 +16,26 @@ export function readTargetDestinations(answers: AssessmentData): string[] {
   return readMultiBySuffix(answers, 'target_destinations');
 }
 
-/** The applicant's specialism selections (subjects / disciplines / tickets).
- *  Vertical-agnostic: matches the first field whose id ends in `subjects`,
- *  `specialisms`, `disciplines`, or `trades`. */
+/** The applicant's specialism/discipline selection — the field that drives the
+ *  "demand" scoring dimension. Vertical-agnostic: matches the first field whose
+ *  id ends in one of the known demand-field suffixes used across the verticals
+ *  (subjects, speciality, discipline, occupation, sector, primary_role, etc.).
+ *  Feeds only the cosmetic "Specialism" line on the report — never scoring. */
 export function readSpecialisms(answers: AssessmentData): string[] {
-  for (const suffix of ['subjects', 'specialisms', 'specialism', 'disciplines', 'trades']) {
+  const suffixes = [
+    'subjects',
+    'specialisms',
+    'specialism',
+    'speciality',
+    'disciplines',
+    'discipline',
+    'occupation',
+    'primary_role',
+    'experience_types',
+    'sector',
+    'trades',
+  ];
+  for (const suffix of suffixes) {
     const hit = readMultiBySuffix(answers, suffix);
     if (hit.length) return hit;
   }
