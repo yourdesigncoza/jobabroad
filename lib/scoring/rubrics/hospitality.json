@@ -1,0 +1,259 @@
+{
+  "category": "hospitality",
+  "version": 1,
+  "bands": { "high_blockers_lt": 40, "needs_prep_lt": 70 },
+  "dimensions": [
+    {
+      "key": "qualifications",
+      "label": "Qualifications",
+      "weight": 0.20,
+      "rules": [
+        {
+          "field_id": "qualifications.formal_qualification",
+          "type": "match",
+          "match": {
+            "Occupational Certificate: Chef (QCTO, NQF 5)": 100,
+            "National Certificate: Professional Cookery (CATHSSETA, NQF 2–4)": 75,
+            "Diploma in Culinary Arts / Hotel Management": 90,
+            "Degree in Hospitality / Culinary Arts": 95,
+            "In-house training only — no formal qualification": 35,
+            "None": 15
+          },
+          "reason": {
+            "Occupational Certificate: Chef (QCTO, NQF 5)": "An NQF 5 Chef certificate is the safest baseline for skilled hospitality visas and VETASSESS assessment.",
+            "National Certificate: Professional Cookery (CATHSSETA, NQF 2–4)": "A CATHSSETA cookery certificate is a solid start but may need topping up to NQF 5 for skilled visa routes.",
+            "Diploma in Culinary Arts / Hotel Management": "A culinary or hotel-management diploma is well regarded by Gulf hotel groups and supports skilled-visa applications.",
+            "Degree in Hospitality / Culinary Arts": "A hospitality or culinary degree is a strong credential that opens senior and management routes abroad.",
+            "In-house training only — no formal qualification": "On-the-job training alone limits skilled-visa options; a recognised qualification would widen your routes.",
+            "None": "No formal qualification is a significant blocker for skilled-visa routes; consider an NQF 5 Chef certificate first."
+          }
+        },
+        {
+          "field_id": "qualifications.trade_test",
+          "type": "match",
+          "match": {
+            "Yes — current": 100,
+            "In progress": 60,
+            "No": 30,
+            "Not sure": 40
+          },
+          "reason": {
+            "Yes — current": "A current trade test certificate meets the VETASSESS Pathway 1 requirement and strengthens Gulf hotel applications.",
+            "In progress": "Your trade test in progress; completing it unlocks the Australian VETASSESS route.",
+            "No": "No trade test certificate; this is a hard requirement for the Australian skilled route and helps UAE 5-star applications.",
+            "Not sure": "Confirm your trade test status, as it is decisive for the Australian skilled route."
+          }
+        }
+      ]
+    },
+    {
+      "key": "role_demand",
+      "label": "Role Demand",
+      "weight": 0.25,
+      "rules": [
+        {
+          "field_id": "experience.primary_role",
+          "type": "match",
+          "match": {
+            "Head Chef / Executive Chef": 100,
+            "Sous Chef / Senior Chef de Partie": 100,
+            "Chef de Partie / Line Chef": 95,
+            "Commis Chef / Junior Cook": 80,
+            "Pastry / Bakery": 95,
+            "Restaurant / F&B Manager": 78,
+            "Bartender / Mixologist": 72,
+            "Hotel Reception / Concierge": 70,
+            "Waiter / Front of House": 55,
+            "Housekeeping": 55,
+            "Kitchen Porter / Steward": 55,
+            "Other": 55
+          },
+          "reason": {
+            "Head Chef / Executive Chef": "Senior chefs are in acute global shortage and open the strongest routes, including the Australian skilled visa and Gulf 5-star hotels.",
+            "Sous Chef / Senior Chef de Partie": "Senior chef roles are in acute demand and qualify for the Australian skilled visa and Gulf hotel recruitment.",
+            "Chef de Partie / Line Chef": "Line chefs are widely recruited by Gulf hotels and cruise lines; very strong demand abroad.",
+            "Commis Chef / Junior Cook": "Junior kitchen roles hire steadily abroad, though they offer fewer skilled-visa pathways than senior chef posts.",
+            "Pastry / Bakery": "Pastry specialists are scarce and heavily recruited by Gulf 5-star hotels and cruise lines.",
+            "Restaurant / F&B Manager": "F&B and restaurant management is in solid demand at Gulf hotels, though more competitive than senior kitchen roles.",
+            "Bartender / Mixologist": "Skilled bartenders are recruited by Gulf hotels and cruise lines, though competition is higher than for chefs.",
+            "Hotel Reception / Concierge": "Front-office roles hire at Gulf hotels and on cruise lines, but demand is steadier rather than acute.",
+            "Waiter / Front of House": "Front-of-house roles are more competitive and often seasonal; pairing with a qualification or 5-star experience helps you stand out.",
+            "Housekeeping": "Housekeeping roles are widely available but competitive and lower-paid; cruise lines and Gulf hotels are your best route.",
+            "Kitchen Porter / Steward": "Steward roles are entry-level and competitive; consider upskilling toward a commis or chef role to widen your options.",
+            "Other": "Confirm how your role maps to in-demand hospitality jobs abroad, as demand varies sharply by position."
+          }
+        }
+      ]
+    },
+    {
+      "key": "experience",
+      "label": "Experience",
+      "weight": 0.18,
+      "rules": [
+        {
+          "field_id": "experience.years_hospitality_experience",
+          "type": "range",
+          "ranges": [
+            { "lt": 2, "score": 35, "reason": "Under 2 years experience; most Gulf 5-star hotels and skilled routes expect at least 2 years." },
+            { "lt": 5, "score": 70, "reason": "2 to 5 years experience meets the bar for most Gulf hotel and cruise-line roles." },
+            { "lt": 8, "score": 90, "reason": "5 to 8 years experience is a strong profile for senior posts and skilled-visa routes." },
+            { "score": 100, "reason": "8+ years experience marks you as a senior, highly employable candidate abroad." }
+          ]
+        },
+        {
+          "field_id": "experience.prior_hospitality_abroad",
+          "type": "best_match",
+          "match": {
+            "UAE / Dubai": 100,
+            "UK": 100,
+            "Saudi Arabia / Qatar / Bahrain": 100,
+            "Australia": 100,
+            "Canada": 100,
+            "Cruise ship": 100,
+            "Other country": 90,
+            "None": 50
+          },
+          "reason": {
+            "UAE / Dubai": "Prior experience in the UAE is a major advantage; Gulf hotel groups favour candidates who know the market.",
+            "UK": "Prior UK hospitality experience strengthens applications and signals international standards.",
+            "Saudi Arabia / Qatar / Bahrain": "Prior Gulf experience is a strong advantage for hotel-group recruitment.",
+            "Australia": "Prior Australian experience supports skilled-visa applications and signals international standards.",
+            "Canada": "Prior Canadian experience strengthens your profile for international employers.",
+            "Cruise ship": "Prior cruise-ship experience is highly valued and reopens cruise-line and hotel routes quickly.",
+            "Other country": "Prior international experience improves applications; agencies favour candidates who have worked abroad.",
+            "None": "No overseas experience yet; this is workable, but Gulf hotels and cruise lines favour returners."
+          },
+          "empty_reason": "No prior overseas hospitality experience recorded. Any international experience improves applications, so add it if you have any."
+        }
+      ]
+    },
+    {
+      "key": "documents",
+      "label": "Documents & Finances",
+      "weight": 0.17,
+      "rules": [
+        {
+          "field_id": "documents.passport_status",
+          "type": "match",
+          "match": {
+            "Valid — 18+ months remaining": 100,
+            "Valid — under 18 months remaining": 50,
+            "Expired": 10,
+            "No passport": 0
+          },
+          "reason": {
+            "Valid — 18+ months remaining": "Passport valid, meets typical work-visa requirements.",
+            "Valid — under 18 months remaining": "Passport valid but renew soon; most work visas need a longer validity window.",
+            "Expired": "Passport expired; renew before applying abroad.",
+            "No passport": "No passport; apply immediately, as this is the first blocker."
+          }
+        },
+        {
+          "field_id": "documents.police_clearance",
+          "type": "match",
+          "match": {
+            "Current (within 6 months)": 100,
+            "Older than 6 months": 40,
+            "Applied — waiting": 70,
+            "None": 0
+          },
+          "reason": {
+            "Current (within 6 months)": "Current SAPS police clearance, meets the visa-ready bar.",
+            "Older than 6 months": "Police clearance older than 6 months; most visa applications require a fresh one.",
+            "Applied — waiting": "Police clearance applied for; keep the receipt handy while SAPS processes it.",
+            "None": "No police clearance; apply now, as SAPS turnaround is typically 4 to 8 weeks."
+          }
+        },
+        {
+          "field_id": "documents.available_capital",
+          "type": "match",
+          "match": {
+            "Under R10k": 20,
+            "R10k – R30k": 50,
+            "R30k – R60k": 80,
+            "R60k+": 100,
+            "Prefer not to say": 50
+          },
+          "reason": {
+            "Under R10k": "Below the typical pre-departure budget; the UAE route is most accessible as employers usually cover costs.",
+            "R10k – R30k": "Covers a UK-style move but tight for the Australian skilled route's upfront fees.",
+            "R30k – R60k": "A comfortable budget for most hospitality routes other than the costlier Australian skilled visa.",
+            "R60k+": "A strong financial position that covers even the upfront Australian VETASSESS and visa costs.",
+            "Prefer not to say": "Budget not declared; share it privately with us if it shapes your destination options."
+          }
+        }
+      ]
+    },
+    {
+      "key": "language",
+      "label": "Language",
+      "weight": 0.10,
+      "rules": [
+        {
+          "field_id": "qualifications.english_rating",
+          "type": "match",
+          "match": {
+            "Native / first language": 100,
+            "Fluent": 90,
+            "Conversational": 55,
+            "Basic": 25
+          },
+          "reason": {
+            "Native / first language": "English as a first language clears the language bar for UK, Gulf, and Australian routes.",
+            "Fluent": "Fluent English is typically sufficient for most hospitality destinations.",
+            "Conversational": "Conversational English works for many kitchen roles, but skilled visas often require a formal test.",
+            "Basic": "Basic English is a real blocker for guest-facing and skilled-visa roles abroad."
+          }
+        },
+        {
+          "field_id": "qualifications.english_test",
+          "type": "match",
+          "match": {
+            "Have valid IELTS/OET/PTE (within 2 years)": 100,
+            "Booked / studying for one": 70,
+            "Not yet — need to take one": 30,
+            "Not applicable to my target": 80
+          },
+          "reason": {
+            "Have valid IELTS/OET/PTE (within 2 years)": "A valid English test on record meets the requirement for the Australian skilled route and most employers.",
+            "Booked / studying for one": "English test booked; sit it early, as the Australian skilled route requires the result.",
+            "Not yet — need to take one": "No English test yet; the Australian skilled route and some employers will require one.",
+            "Not applicable to my target": "No test needed for your target route; confirm this with the employer before applying."
+          }
+        }
+      ]
+    },
+    {
+      "key": "readiness",
+      "label": "Family & Timing",
+      "weight": 0.10,
+      "rules": [
+        {
+          "field_id": "readiness.has_dependants",
+          "type": "match",
+          "match": { "true": 60, "false": 100 },
+          "reason": {
+            "true": "Bringing dependants adds visa steps and cost; UAE work visas often don't cover dependants below a salary threshold.",
+            "false": "No dependants to relocate, the easiest profile to move quickly."
+          }
+        },
+        {
+          "field_id": "readiness.target_year",
+          "type": "match",
+          "match": {
+            "2026": 100,
+            "2027": 85,
+            "2028": 65,
+            "Just exploring": 40
+          },
+          "reason": {
+            "2026": "A 2026 departure means you should start applications and documents now to match recruitment cycles.",
+            "2027": "A 2027 horizon is realistic for most routes once documents and any trade test are ready.",
+            "2028": "A 2028 horizon gives ample time for credential preparation and visa processing.",
+            "Just exploring": "Exploring only, so no urgency; you can plan your route strategically."
+          }
+        }
+      ]
+    }
+  ]
+}

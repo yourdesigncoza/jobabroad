@@ -1,0 +1,267 @@
+{
+  "category": "engineering",
+  "version": 1,
+  "bands": { "high_blockers_lt": 40, "needs_prep_lt": 70 },
+  "dimensions": [
+    {
+      "key": "credentials",
+      "label": "Credentials & Registration",
+      "weight": 0.25,
+      "rules": [
+        {
+          "field_id": "qualifications.degree_level",
+          "type": "match",
+          "match": {
+            "BEng / BSc(Eng) (4-year professional degree)": 100,
+            "BTech / BEngTech (3-year technologist)": 80,
+            "National Diploma (3-year technician)": 65,
+            "Honours / Postgrad in engineering": 100,
+            "Master / PhD in engineering": 100,
+            "Currently studying": 30,
+            "Non-engineering degree": 20
+          },
+          "reason": {
+            "BEng / BSc(Eng) (4-year professional degree)": "A 4-year BEng falls under the Washington Accord, the strongest base for overseas recognition.",
+            "BTech / BEngTech (3-year technologist)": "A BTech maps to the Sydney Accord technologist track, recognised but a notch below the BEng professional route.",
+            "National Diploma (3-year technician)": "A National Diploma sits on the Dublin Accord technician track, with narrower overseas demand than a full degree.",
+            "Honours / Postgrad in engineering": "A postgraduate engineering qualification strengthens credential recognition and senior applications.",
+            "Master / PhD in engineering": "A Master or PhD is a strong differentiator for senior and research-led roles abroad.",
+            "Currently studying": "Finish your qualification first, as overseas assessors require a completed accredited degree.",
+            "Non-engineering degree": "A non-engineering degree will not pass an Engineers Australia or Ecctis competency assessment without a recognised engineering qualification."
+          }
+        },
+        {
+          "field_id": "registration.ecsa_status",
+          "type": "match",
+          "match": {
+            "Pr Eng (Professional Engineer)": 100,
+            "Pr Tech Eng (Professional Engineering Technologist)": 85,
+            "Pr Techni Eng (Professional Engineering Technician)": 70,
+            "Candidate (Candidate Eng / Tech / Techni)": 50,
+            "Graduate (not yet registered)": 30,
+            "Lapsed": 25,
+            "Not registered": 15
+          },
+          "reason": {
+            "Pr Eng (Professional Engineer)": "Pr Eng is the top ECSA category and unlocks the SAICE to ICE chartered route in the UK.",
+            "Pr Tech Eng (Professional Engineering Technologist)": "Pr Tech Eng is a strong professional registration recognised across Sydney Accord economies.",
+            "Pr Techni Eng (Professional Engineering Technician)": "Pr Techni Eng is a recognised technician registration, useful for technician-stream visas.",
+            "Candidate (Candidate Eng / Tech / Techni)": "Candidate status shows you are in the ECSA pipeline but professional registration carries far more weight abroad.",
+            "Graduate (not yet registered)": "You are not yet ECSA-registered, so start the candidate process to build toward professional status.",
+            "Lapsed": "Your ECSA registration has lapsed, so reinstate it before relying on it for overseas applications.",
+            "Not registered": "Without ECSA registration you lose the easiest evidence of competence for migration assessors."
+          }
+        },
+        {
+          "field_id": "assessment.ea_status",
+          "type": "match",
+          "match": {
+            "Outcome letter received": 100,
+            "Submitted — in progress": 70,
+            "Not started": 30,
+            "Not applying to Australia": 50
+          },
+          "reason": {
+            "Outcome letter received": "A positive Engineers Australia outcome letter is the gold-standard Washington Accord competency assessment and is valid for three years.",
+            "Submitted — in progress": "Your Engineers Australia assessment is underway, which typically takes 6 to 9 months to an outcome.",
+            "Not started": "No overseas competency assessment is underway yet, the key step that converts your SA qualification into a recognised credential.",
+            "Not applying to Australia": "You are skipping the Engineers Australia route, so confirm the equivalent assessor for your target country such as Ecctis for the UK or WES for Canada."
+          }
+        }
+      ]
+    },
+    {
+      "key": "discipline",
+      "label": "Discipline Demand",
+      "weight": 0.20,
+      "rules": [
+        {
+          "field_id": "qualifications.discipline",
+          "type": "best_match",
+          "match": {
+            "Civil": 100,
+            "Structural": 100,
+            "Mechanical": 100,
+            "Electrical": 100,
+            "Electronics / Telecommunications": 90,
+            "Chemical": 95,
+            "Industrial": 70,
+            "Mining": 95,
+            "Mechatronics": 95,
+            "Aerospace / Aeronautical": 80,
+            "Geotechnical": 90,
+            "Environmental": 75,
+            "Materials / Metallurgical": 75,
+            "Other": 60
+          },
+          "reason": {
+            "Civil": "Civil engineering is a global shortage discipline, with strong demand across Australia, NZ, the UK and Canada.",
+            "Structural": "Structural engineers are in acute demand, particularly in Australia and the UK infrastructure pipeline.",
+            "Mechanical": "Mechanical engineering is broadly in demand across most destinations and industry sectors.",
+            "Electrical": "Electrical engineers are a priority shortage occupation in most Accord economies.",
+            "Electronics / Telecommunications": "Electronics and telecoms engineering is well demanded, especially in tech-heavy markets.",
+            "Chemical": "Chemical engineering is in solid demand, particularly in resource and process-heavy economies.",
+            "Industrial": "Industrial engineering demand is steadier but more competitive than the core shortage disciplines.",
+            "Mining": "Mining engineering is highly sought in Australia and Canada, where SA experience is a genuine advantage.",
+            "Mechatronics": "Mechatronics sits at the automation frontier and is a fast-growing shortage area.",
+            "Aerospace / Aeronautical": "Aerospace roles are concentrated in specific hubs, so target destinations with an aerospace sector.",
+            "Geotechnical": "Geotechnical engineering is in good demand on major infrastructure and mining projects abroad.",
+            "Environmental": "Environmental engineering demand is growing but more variable by destination than the core disciplines.",
+            "Materials / Metallurgical": "Materials and metallurgical roles are demanded in resource economies but narrower than mainstream disciplines.",
+            "Other": "Confirm how your discipline maps to the target country's skilled occupation list, as demand varies widely."
+          },
+          "empty_reason": "No engineering discipline recorded. Shortage disciplines such as Civil, Structural, Mechanical, Electrical and Mining get hiring priority abroad, so add yours."
+        }
+      ]
+    },
+    {
+      "key": "experience",
+      "label": "Experience",
+      "weight": 0.15,
+      "rules": [
+        {
+          "field_id": "registration.years_experience",
+          "type": "range",
+          "ranges": [
+            { "lt": 2, "score": 30, "reason": "Under 2 years post-graduation, most skilled visas and professional registrations need more experience." },
+            { "lt": 5, "score": 70, "reason": "2 to 5 years experience meets the bar for most skilled migration routes." },
+            { "lt": 10, "score": 90, "reason": "5 to 10 years experience makes you a strong applicant for competitive engineering roles." },
+            { "score": 100, "reason": "10+ years experience positions you as a senior-level engineer abroad." }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "documents",
+      "label": "Documents & Finances",
+      "weight": 0.20,
+      "rules": [
+        {
+          "field_id": "documents.passport_status",
+          "type": "match",
+          "match": {
+            "Valid — 2+ years remaining": 100,
+            "Valid — under 2 years remaining": 50,
+            "Expired": 10,
+            "No passport": 0
+          },
+          "reason": {
+            "Valid — 2+ years remaining": "Passport valid with 2+ years remaining, which meets typical work-visa requirements.",
+            "Valid — under 2 years remaining": "Passport valid but renew soon, as most work visas need 2+ years remaining.",
+            "Expired": "Passport expired, so renew it before lodging any visa application.",
+            "No passport": "No passport yet, the first blocker to clear before any overseas engineering move."
+          }
+        },
+        {
+          "field_id": "documents.police_clearance",
+          "type": "match",
+          "match": {
+            "Current (within 6 months)": 100,
+            "Older than 6 months": 40,
+            "Applied / in progress": 60,
+            "None": 0
+          },
+          "reason": {
+            "Current (within 6 months)": "Current SAPS clearance, valid for the 6-month window most visa lodgements require.",
+            "Older than 6 months": "Your clearance is older than 6 months, so most visa applications will require a fresh one.",
+            "Applied / in progress": "Your SAPS clearance is in progress, so time it to land near your visa lodgement.",
+            "None": "No police clearance yet, so apply now as SAPS turnaround can run several weeks."
+          }
+        },
+        {
+          "field_id": "documents.available_capital",
+          "type": "match",
+          "match": {
+            "Under R50k": 20,
+            "R50k – R100k": 50,
+            "R100k – R200k": 80,
+            "R200k – R400k": 95,
+            "R400k+": 100,
+            "Prefer not to say": 50
+          },
+          "reason": {
+            "Under R50k": "Below the typical R80k to R200k engineering relocation budget for assessment, visa and settling costs.",
+            "R50k – R100k": "Covers entry-level relocation costs but tight once assessment and visa fees are paid.",
+            "R100k – R200k": "A comfortable relocation budget for most single-applicant engineering moves.",
+            "R200k – R400k": "A strong budget that also helps with Canada's proof-of-settlement-funds requirement.",
+            "R400k+": "A very strong financial position for relocation, including family moves.",
+            "Prefer not to say": "Budget not declared, so share it privately with us if it shapes your destination options."
+          }
+        }
+      ]
+    },
+    {
+      "key": "language",
+      "label": "Language",
+      "weight": 0.10,
+      "rules": [
+        {
+          "field_id": "readiness.english_rating",
+          "type": "match",
+          "match": {
+            "Conversational": 50,
+            "Fluent": 90,
+            "Native / first language": 100
+          },
+          "reason": {
+            "Conversational": "Conversational English will need a strong IELTS or PTE score to clear skilled-visa language bars.",
+            "Fluent": "Fluent English is typically sufficient for most engineering destinations once a test confirms it.",
+            "Native / first language": "English as a first language comfortably meets the language bar for all major destinations."
+          }
+        },
+        {
+          "field_id": "readiness.english_test",
+          "type": "match",
+          "match": {
+            "IELTS Academic (general purpose)": 85,
+            "IELTS for UKVI (UK Skilled Worker)": 100,
+            "IELTS General Training (Canada Express Entry)": 100,
+            "PTE Academic": 90,
+            "None yet": 30
+          },
+          "reason": {
+            "IELTS Academic (general purpose)": "Standard IELTS Academic is widely accepted but not valid for the UK Skilled Worker visa, so check your target.",
+            "IELTS for UKVI (UK Skilled Worker)": "IELTS for UKVI is the correct test for the UK Skilled Worker route.",
+            "IELTS General Training (Canada Express Entry)": "IELTS General Training is the right test for Canada Express Entry.",
+            "PTE Academic": "PTE Academic is accepted by Australia and the UK but not by Canada Express Entry.",
+            "None yet": "No English test on record yet, which most skilled-visa routes will require."
+          }
+        }
+      ]
+    },
+    {
+      "key": "readiness",
+      "label": "Family & Timing",
+      "weight": 0.10,
+      "rules": [
+        {
+          "field_id": "documents.dependants_count",
+          "type": "range",
+          "ranges": [
+            { "lt": 1, "score": 100, "reason": "No dependants, the simplest profile to relocate with no dependant visas needed." },
+            { "lt": 3, "score": 70, "reason": "One or two dependants adds dependant visas and settling costs but stays manageable." },
+            { "score": 45, "reason": "Three or more dependants means higher visa, schooling and settling costs, so budget and plan carefully." }
+          ]
+        },
+        {
+          "field_id": "readiness.target_timeline",
+          "type": "match",
+          "match": {
+            "As soon as possible": 100,
+            "Within 6 months": 90,
+            "Within 1 year": 75,
+            "Within 2 years": 55,
+            "Just exploring": 40
+          },
+          "reason": {
+            "As soon as possible": "An ASAP timeline is realistic only once your competency assessment is in hand, so start it immediately.",
+            "Within 6 months": "A 6-month horizon is tight given assessment lead times, so prioritise the assessor application now.",
+            "Within 1 year": "A 1-year horizon fits well with assessment, registration and visa processing.",
+            "Within 2 years": "A 2-year horizon gives ample room to complete assessments and strengthen your application.",
+            "Just exploring": "Exploring only, so use the time to plan the assessment and registration sequence strategically."
+          }
+        }
+      ]
+    }
+  ]
+}

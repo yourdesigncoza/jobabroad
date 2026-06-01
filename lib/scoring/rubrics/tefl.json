@@ -1,0 +1,227 @@
+{
+  "category": "tefl",
+  "version": 1,
+  "bands": { "high_blockers_lt": 40, "needs_prep_lt": 70 },
+  "dimensions": [
+    {
+      "key": "credentials",
+      "label": "TEFL Credentials",
+      "weight": 0.28,
+      "rules": [
+        {
+          "field_id": "credential.tefl_cert_type",
+          "type": "match",
+          "match": {
+            "CELTA (Cambridge)": 100,
+            "Trinity CertTESOL": 100,
+            "Ofqual-regulated Level 5 Diploma": 95,
+            "Online TEFL (120hr+)": 80,
+            "Online TEFL (under 120hr)": 45,
+            "None yet — planning to get one": 25,
+            "None — not planning": 0
+          },
+          "reason": {
+            "CELTA (Cambridge)": "CELTA is the premium credential and opens the best-paid Korea, Gulf and Vietnam roles.",
+            "Trinity CertTESOL": "Trinity CertTESOL is treated on par with CELTA by reputable employers worldwide.",
+            "Ofqual-regulated Level 5 Diploma": "An Ofqual-regulated Level 5 diploma is widely accepted and clears most strict visa checks.",
+            "Online TEFL (120hr+)": "A 120-hour-plus certificate meets the market standard and qualifies you for most China, Vietnam and Thailand jobs.",
+            "Online TEFL (under 120hr)": "A sub-120-hour course falls below the market standard, so top up to at least 120 hours before applying.",
+            "None yet — planning to get one": "No certificate yet is a real blocker; book a 120-hour-plus course now as it is the baseline hiring requirement.",
+            "None — not planning": "Without a TEFL or TESOL certificate almost no legitimate employer abroad will hire you."
+          }
+        },
+        {
+          "field_id": "qualifications.degree_status",
+          "type": "match",
+          "match": {
+            "Bachelor (any field)": 100,
+            "Honours / Postgrad Diploma": 100,
+            "Master / PhD": 100,
+            "Diploma (3-year)": 45,
+            "Matric only": 10,
+            "Currently studying": 30
+          },
+          "reason": {
+            "Bachelor (any field)": "A completed bachelor degree satisfies the hard visa requirement in China, Vietnam, the Gulf and South Korea.",
+            "Honours / Postgrad Diploma": "Your degree clears the visa bar in every major TEFL market and helps with international-school roles.",
+            "Master / PhD": "A postgraduate degree clears every visa requirement and qualifies you for university and senior posts.",
+            "Diploma (3-year)": "A diploma is not a bachelor degree, so China, Korea and the Gulf visa routes are closed; Cambodia and some private options remain.",
+            "Matric only": "Without a degree the main work-visa markets are closed; Cambodia or online teaching are the realistic routes.",
+            "Currently studying": "Finish and graduate first, as the degree certificate is a hard visa requirement in the best-paid markets."
+          }
+        }
+      ]
+    },
+    {
+      "key": "experience",
+      "label": "Experience",
+      "weight": 0.15,
+      "rules": [
+        {
+          "field_id": "experience.years_teaching",
+          "type": "match",
+          "match": {
+            "None": 30,
+            "Under 1 year": 50,
+            "1–2 years": 70,
+            "3–5 years": 90,
+            "5+ years": 100
+          },
+          "reason": {
+            "None": "No teaching experience yet is workable for entry-level hagwon and language-centre jobs but limits the better posts.",
+            "Under 1 year": "Under a year of teaching is enough for entry-level roles; a first overseas contract builds the rest.",
+            "1–2 years": "One to two years of experience meets the bar for most mainstream TEFL employers.",
+            "3–5 years": "Three to five years makes you a strong candidate for selective schools and government programmes.",
+            "5+ years": "Five years or more positions you for senior, university and international-school roles."
+          }
+        },
+        {
+          "field_id": "experience.taught_abroad",
+          "type": "match",
+          "match": { "true": 100, "false": 50 },
+          "reason": {
+            "true": "Prior overseas teaching reassures employers and strengthens every application.",
+            "false": "No overseas experience yet is normal for first-time teachers and not a barrier to entry-level roles."
+          }
+        }
+      ]
+    },
+    {
+      "key": "language",
+      "label": "Language / English",
+      "weight": 0.20,
+      "rules": [
+        {
+          "field_id": "readiness.english_rating",
+          "type": "match",
+          "match": {
+            "Native / first language": 100,
+            "Fluent": 90,
+            "Conversational": 45
+          },
+          "reason": {
+            "Native / first language": "English as your first language meets the native-speaker preference of Korea, the Gulf and most premium employers.",
+            "Fluent": "Fluent English is accepted by most employers, though a few native-only programmes may still screen you out.",
+            "Conversational": "Conversational English is a blocker for teaching the language; build towards fluency and a proof-of-proficiency test."
+          }
+        }
+      ]
+    },
+    {
+      "key": "documents",
+      "label": "Documents & Finances",
+      "weight": 0.20,
+      "rules": [
+        {
+          "field_id": "documents.passport_status",
+          "type": "match",
+          "match": {
+            "Valid — 2+ years remaining": 100,
+            "Valid — under 2 years remaining": 50,
+            "Expired": 10,
+            "No passport": 0
+          },
+          "reason": {
+            "Valid — 2+ years remaining": "Your passport meets the validity most TEFL work visas require.",
+            "Valid — under 2 years remaining": "Renew your passport soon, as most work visas need at least two years remaining.",
+            "Expired": "An expired passport must be renewed before any visa application can start.",
+            "No passport": "No passport is the first blocker; apply immediately as it gates every other step."
+          }
+        },
+        {
+          "field_id": "documents.police_clearance",
+          "type": "match",
+          "match": {
+            "Current (within 6 months)": 100,
+            "Older than 6 months": 40,
+            "None": 0
+          },
+          "reason": {
+            "Current (within 6 months)": "A current SAPS police clearance meets the visa-ready bar for every TEFL destination.",
+            "Older than 6 months": "Your police clearance is over six months old and most visas require a fresh one.",
+            "None": "No police clearance yet; apply now as SAPS turnaround runs several weeks and every TEFL visa needs it."
+          }
+        },
+        {
+          "field_id": "documents.available_capital",
+          "type": "match",
+          "match": {
+            "Under R30k": 20,
+            "R30k – R70k": 60,
+            "R70k – R150k": 90,
+            "R150k+": 100,
+            "Prefer not to say": 50
+          },
+          "reason": {
+            "Under R30k": "Below the R40k to R80k usually needed upfront before your first overseas salary lands.",
+            "R30k – R70k": "Covers a lean relocation if your employer reimburses flights and provides housing.",
+            "R70k – R150k": "A comfortable buffer for flights, deposits and living costs until your first pay cheque.",
+            "R150k+": "A strong financial position that covers relocation and any unexpected delays.",
+            "Prefer not to say": "Budget not declared; share it privately with us if it shapes your destination options."
+          }
+        }
+      ]
+    },
+    {
+      "key": "specialism",
+      "label": "Specialism Demand",
+      "weight": 0.07,
+      "rules": [
+        {
+          "field_id": "credential.specialism",
+          "type": "best_match",
+          "match": {
+            "Young Learners (YL)": 100,
+            "Business English": 95,
+            "IELTS / exam prep": 90,
+            "Online teaching": 70,
+            "One-to-one tutoring": 60,
+            "None": 0
+          },
+          "reason": {
+            "Young Learners (YL)": "Young-learner training is in heavy demand across Asian language centres and hagwons.",
+            "Business English": "Business English specialists earn a premium with corporate and adult-learner employers.",
+            "IELTS / exam prep": "Exam-prep skills are sought after and let you charge more for results-driven classes.",
+            "Online teaching": "Online-teaching training adds a flexible income stream alongside a classroom contract.",
+            "One-to-one tutoring": "Tutoring experience helps with private students but carries less weight than classroom specialisms.",
+            "None": "No specialism recorded; a young-learner or exam-prep add-on would lift your demand and pay."
+          },
+          "empty_reason": "No specialism training recorded. A young-learner or exam-prep credential is the easiest way to raise your demand and starting salary."
+        }
+      ]
+    },
+    {
+      "key": "readiness",
+      "label": "Family & Timing",
+      "weight": 0.10,
+      "rules": [
+        {
+          "field_id": "documents.dependants_count",
+          "type": "range",
+          "ranges": [
+            { "lt": 1, "score": 100, "reason": "No dependants makes you the easiest profile to relocate, with no dependant visas to arrange." },
+            { "lt": 2, "score": 70, "reason": "One dependant adds a visa step and cost but is manageable in most TEFL markets." },
+            { "lt": 3, "score": 50, "reason": "Two dependants raise visa, housing and schooling costs, so favour family-friendly destinations." },
+            { "score": 30, "reason": "Three or more dependants make relocation costly and complex; specialist guidance is needed." }
+          ]
+        },
+        {
+          "field_id": "readiness.target_timeline",
+          "type": "match",
+          "match": {
+            "As soon as possible": 100,
+            "Within 6 months": 90,
+            "Within 1 year": 70,
+            "Just exploring": 40
+          },
+          "reason": {
+            "As soon as possible": "An ASAP timeline lines up with the rolling hagwon and language-centre hiring cycles.",
+            "Within 6 months": "A six-month horizon is realistic once your certificate and documents are ready.",
+            "Within 1 year": "A year gives you room to certify, legalise documents and process the visa without rushing.",
+            "Just exploring": "Exploring only means no urgency, so you can plan your route and budget at your own pace."
+          }
+        }
+      ]
+    }
+  ]
+}

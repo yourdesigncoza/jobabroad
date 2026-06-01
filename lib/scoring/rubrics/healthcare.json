@@ -1,0 +1,233 @@
+{
+  "category": "healthcare",
+  "version": 1,
+  "bands": { "high_blockers_lt": 40, "needs_prep_lt": 70 },
+  "dimensions": [
+    {
+      "key": "credentials",
+      "label": "Credentials & Registration",
+      "weight": 0.25,
+      "rules": [
+        {
+          "field_id": "qualifications.highest_qualification",
+          "type": "match",
+          "match": {
+            "Diploma": 80,
+            "Degree": 100,
+            "Honours": 100,
+            "Masters": 100,
+            "Other": 40
+          },
+          "reason": {
+            "Diploma": "A nursing diploma is registrable in most destinations, though a degree eases UK and Australian pathways.",
+            "Degree": "A nursing degree is recognised internationally and meets most overseas registration bars.",
+            "Honours": "An Honours-level nursing qualification is well regarded internationally.",
+            "Masters": "A Masters-level qualification supports senior and specialist posts abroad.",
+            "Other": "A non-standard qualification may need credential evaluation before overseas registration."
+          }
+        },
+        {
+          "field_id": "registration.sanc_status",
+          "type": "match",
+          "match": {
+            "Active": 100,
+            "Pending renewal": 50,
+            "Lapsed": 25
+          },
+          "reason": {
+            "Active": "Active SANC registration is in good standing, which overseas councils require for verification.",
+            "Pending renewal": "Your SANC renewal is in progress, clear it before applying as councils verify current standing.",
+            "Lapsed": "Lapsed SANC registration must be renewed before overseas councils will verify your status."
+          }
+        },
+        {
+          "field_id": "registration.prior_nmc_ahpra_ncnz",
+          "type": "match",
+          "match": {
+            "Completed": 100,
+            "In progress": 60,
+            "None started": 30
+          },
+          "reason": {
+            "Completed": "Completed overseas registration with NMC, AHPRA, or NCNZ puts you ready to be hired.",
+            "In progress": "Overseas registration is underway, keep the process moving as it is the main timeline driver.",
+            "None started": "No overseas registration started yet, NMC, AHPRA, and NCNZ all require it before you can practise."
+          }
+        }
+      ]
+    },
+    {
+      "key": "speciality",
+      "label": "Speciality Demand",
+      "weight": 0.20,
+      "rules": [
+        {
+          "field_id": "qualifications.speciality",
+          "type": "best_match",
+          "match": {
+            "ICU": 100,
+            "Theatre": 98,
+            "Emergency": 98,
+            "Maternity": 95,
+            "General": 75,
+            "Paediatrics": 75,
+            "Psychiatry": 70,
+            "Other": 50
+          },
+          "reason": {
+            "ICU": "ICU nurses are in acute global shortage, expect hiring priority and strong salary leverage.",
+            "Theatre": "Theatre nurses are highly sought after across the UK and Gulf, a significant advantage.",
+            "Emergency": "Emergency nursing is a critical shortage area abroad, very strong demand.",
+            "Maternity": "Maternity and midwifery nurses are scarce worldwide, strong leverage in most markets.",
+            "General": "General nursing is widely needed and gives you solid, broad demand abroad.",
+            "Paediatrics": "Paediatric nursing has steady demand, particularly in the UK and Gulf.",
+            "Psychiatry": "Mental health nursing is needed in the UK and Australia, solid demand.",
+            "Other": "Confirm how your speciality maps to overseas roles, demand varies by destination."
+          },
+          "empty_reason": "No speciality recorded. Shortage specialities such as ICU, Theatre, Emergency, and Maternity get hiring priority and often a salary premium, so add yours."
+        }
+      ]
+    },
+    {
+      "key": "experience",
+      "label": "Experience",
+      "weight": 0.15,
+      "rules": [
+        {
+          "field_id": "experience.years_experience",
+          "type": "range",
+          "ranges": [
+            { "lt": 2, "score": 30, "reason": "Under 2 years post-qualifying, most overseas employers require at least 2 years of post-registration experience." },
+            { "lt": 5, "score": 70, "reason": "2 to 5 years experience meets the bar for most overseas nursing roles." },
+            { "lt": 10, "score": 90, "reason": "5 to 10 years experience makes you a strong applicant for competitive posts." },
+            { "score": 100, "reason": "10+ years experience marks you as a senior-level applicant." }
+          ]
+        },
+        {
+          "field_id": "experience.worked_abroad",
+          "type": "match",
+          "match": { "true": 100, "false": 50 },
+          "reason": {
+            "true": "Prior overseas nursing experience significantly strengthens your applications.",
+            "false": "No overseas experience yet, workable but recruiters favour nurses with international exposure."
+          }
+        }
+      ]
+    },
+    {
+      "key": "documents",
+      "label": "Documents & Finances",
+      "weight": 0.20,
+      "rules": [
+        {
+          "field_id": "documents.passport_status",
+          "type": "match",
+          "match": {
+            "Valid — 2+ years remaining": 100,
+            "Valid — under 2 years remaining": 50,
+            "Expired": 10,
+            "No passport": 0
+          },
+          "reason": {
+            "Valid — 2+ years remaining": "Your passport is valid and meets typical work visa requirements.",
+            "Valid — under 2 years remaining": "Your passport is valid but renew it soon, most work visas need 2+ years remaining.",
+            "Expired": "Your passport is expired, renew it before applying.",
+            "No passport": "You have no passport, apply immediately as this is the first blocker."
+          }
+        },
+        {
+          "field_id": "documents.police_clearance",
+          "type": "match",
+          "match": {
+            "Current (within 6 months)": 100,
+            "Older than 6 months": 40,
+            "None": 0
+          },
+          "reason": {
+            "Current (within 6 months)": "Your police clearance is current and meets the visa-ready bar.",
+            "Older than 6 months": "Your police clearance is older than 6 months, most visa applications require a fresh one.",
+            "None": "You have no police clearance, apply now as SAPS turnaround is typically 4 to 8 weeks."
+          }
+        },
+        {
+          "field_id": "documents.available_capital",
+          "type": "match",
+          "match": {
+            "Under R30k": 20,
+            "R30k – R70k": 50,
+            "R70k – R150k": 80,
+            "R150k+": 100,
+            "Prefer not to say": 50
+          },
+          "reason": {
+            "Under R30k": "Below the typical pre-departure budget, registration exams and visa fees add up quickly.",
+            "R30k – R70k": "Covers basic pre-departure costs but tight once registration and relocation fees stack up.",
+            "R70k – R150k": "A comfortable pre-departure budget for most nursing destinations.",
+            "R150k+": "A strong financial position for relocation.",
+            "Prefer not to say": "Budget not declared, share it privately with us if it shapes your options."
+          }
+        }
+      ]
+    },
+    {
+      "key": "language",
+      "label": "Language",
+      "weight": 0.12,
+      "rules": [
+        {
+          "field_id": "readiness.english_rating",
+          "type": "match",
+          "match": {
+            "Native / first language": 100,
+            "Fluent": 90,
+            "Conversational": 50,
+            "Basic": 20
+          },
+          "reason": {
+            "Native / first language": "English as a first language meets the language bar for the UK, Australia, and NZ.",
+            "Fluent": "Fluent English is typically sufficient, but you will still need an IELTS or OET result to register.",
+            "Conversational": "Conversational English needs strengthening, NMC and AHPRA require evidence via IELTS or OET.",
+            "Basic": "Basic English is a significant blocker for overseas nursing registration."
+          }
+        },
+        {
+          "field_id": "readiness.english_test",
+          "type": "match",
+          "match": {
+            "IELTS": 100,
+            "OET": 100,
+            "Not yet": 30
+          },
+          "reason": {
+            "IELTS": "IELTS is accepted by nursing councils in the UK, Australia, and NZ.",
+            "OET": "OET is the healthcare-specific test accepted by NMC, AHPRA, and NCNZ.",
+            "Not yet": "No English test taken yet, NMC and AHPRA both require IELTS or OET before registration."
+          }
+        }
+      ]
+    },
+    {
+      "key": "readiness",
+      "label": "Family & Timing",
+      "weight": 0.08,
+      "rules": [
+        {
+          "field_id": "readiness.target_timeline",
+          "type": "match",
+          "match": {
+            "As soon as possible": 100,
+            "Within 6 months": 90,
+            "Within 1 year": 70,
+            "Just exploring": 40
+          },
+          "reason": {
+            "As soon as possible": "An ASAP timeline is realistic once registration and English tests are in hand, start now.",
+            "Within 6 months": "A 6-month horizon is workable provided your registration and documents are progressing.",
+            "Within 1 year": "A 1-year horizon is ideal for completing overseas registration and visa processing.",
+            "Just exploring": "Exploring only, no urgency means you can plan the registration steps strategically."
+          }
+        }
+      ]
+    }
+  ]
+}

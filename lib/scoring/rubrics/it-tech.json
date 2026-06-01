@@ -1,0 +1,283 @@
+{
+  "category": "it-tech",
+  "version": 1,
+  "bands": { "high_blockers_lt": 40, "needs_prep_lt": 70 },
+  "dimensions": [
+    {
+      "key": "credentials",
+      "label": "Qualifications & Certifications",
+      "weight": 0.22,
+      "rules": [
+        {
+          "field_id": "qualifications.highest_qualification",
+          "type": "match",
+          "match": {
+            "BSc / BEng / BCom in CS or IT (3-year)": 95,
+            "BTech / BSc Honours / 4-year IT degree": 100,
+            "Master / PhD in computing": 100,
+            "National Diploma in IT": 70,
+            "Industry certifications only (AWS, Azure, CCNA, etc.)": 65,
+            "Matric (NSC) + self-taught": 50,
+            "Bootcamp graduate": 50,
+            "Other non-IT degree": 60,
+            "Currently studying": 40
+          },
+          "reason": {
+            "BSc / BEng / BCom in CS or IT (3-year)": "A 3-year computing degree maps cleanly to skilled-worker visas in the UK, Germany, Canada and Australia.",
+            "BTech / BSc Honours / 4-year IT degree": "A 4-year IT degree is RQF 6 plus and clears the degree-level bar for every major skilled-worker route.",
+            "Master / PhD in computing": "A postgraduate computing qualification is the strongest credential profile and helps with points-based routes.",
+            "National Diploma in IT": "A National Diploma may need an ECA or Ecctis equivalence to be read as degree-level abroad, but skills carry most of the weight in tech.",
+            "Industry certifications only (AWS, Azure, CCNA, etc.)": "Certifications without a degree still work for Germany IT-specialist and UK Skilled Worker where the role is degree-level, so demonstrable skills matter more here.",
+            "Matric (NSC) + self-taught": "Self-taught without a degree limits some points-based routes, but Germany IT-specialist accepts experience in place of a degree.",
+            "Bootcamp graduate": "A bootcamp alone rarely satisfies degree-equivalent checks, so lean on certifications and a strong portfolio.",
+            "Other non-IT degree": "A non-IT degree can still anchor a skilled-worker visa if your role is degree-level, paired with IT certifications.",
+            "Currently studying": "Finishing your qualification first will open more visa routes and stronger employer sponsorship."
+          }
+        },
+        {
+          "field_id": "qualifications.industry_certs",
+          "type": "best_match",
+          "match": {
+            "AWS (any level)": 100,
+            "Microsoft Azure": 100,
+            "Google Cloud (GCP)": 95,
+            "Kubernetes / CKA / CKAD": 95,
+            "CISSP / CISM / CEH": 100,
+            "Cisco (CCNA / CCNP / CCIE)": 85,
+            "CompTIA (Security+, Network+, etc.)": 75,
+            "Salesforce": 80,
+            "PMP / PRINCE2": 70,
+            "Scrum / SAFe": 60,
+            "Other / none": 40
+          },
+          "reason": {
+            "AWS (any level)": "An AWS certification is a globally recognised signal that shortens employer shortlisting for cloud and backend roles.",
+            "Microsoft Azure": "An Azure certification carries strong weight with the many destination employers running Microsoft stacks.",
+            "Google Cloud (GCP)": "A GCP certification is well regarded for cloud and data roles abroad.",
+            "Kubernetes / CKA / CKAD": "A Kubernetes certification is a sought-after DevOps credential that employers actively screen for.",
+            "CISSP / CISM / CEH": "A senior security certification is in acute global demand and often unlocks a salary premium.",
+            "Cisco (CCNA / CCNP / CCIE)": "A Cisco certification is solid evidence for networking and infrastructure roles abroad.",
+            "CompTIA (Security+, Network+, etc.)": "CompTIA certifications are a useful baseline, strongest when paired with a degree-level role.",
+            "Salesforce": "A Salesforce certification opens a steady niche market across the UK, Ireland and Canada.",
+            "PMP / PRINCE2": "A project-management certification supports technical lead and delivery roles abroad.",
+            "Scrum / SAFe": "An agile certification is a helpful add-on but rarely the deciding credential on its own.",
+            "Other / none": "No headline certification recorded, so an in-demand cloud or security cert would noticeably strengthen your applications."
+          },
+          "empty_reason": "No industry certifications recorded. A cloud certification (AWS, Azure, GCP) or a security certification (CISSP, CISM) is a fast, recognised way to strengthen overseas applications."
+        }
+      ]
+    },
+    {
+      "key": "skill_demand",
+      "label": "Skill Demand",
+      "weight": 0.25,
+      "rules": [
+        {
+          "field_id": "role.discipline",
+          "type": "best_match",
+          "match": {
+            "Software developer / engineer": 100,
+            "Cloud architect / DevOps / SRE": 100,
+            "Cybersecurity specialist": 100,
+            "Data engineer / data scientist": 95,
+            "ML / AI engineer": 95,
+            "Database administrator": 85,
+            "Web / multimedia developer": 80,
+            "Mobile developer": 80,
+            "Network engineer / sysadmin": 78,
+            "QA / test engineer": 75,
+            "IT business analyst / systems designer": 70,
+            "Product / project manager (technical)": 70,
+            "IT support / help desk (technician)": 55,
+            "Other": 60
+          },
+          "reason": {
+            "Software developer / engineer": "Software engineering is the highest-demand category abroad and is degree-level for UK, German and Canadian skilled-worker routes.",
+            "Cloud architect / DevOps / SRE": "Cloud, DevOps and SRE skills are among the most acute global shortages and command priority hiring.",
+            "Cybersecurity specialist": "Cybersecurity is a worldwide shortage area with strong sponsorship appetite and salary premiums.",
+            "Data engineer / data scientist": "Data engineering and data science are in heavy demand across all your target markets.",
+            "ML / AI engineer": "ML and AI engineering is a fast-growing, high-leverage specialism that employers actively sponsor.",
+            "Database administrator": "Database administration is steady, in-demand work that maps to degree-level skilled-worker roles.",
+            "Web / multimedia developer": "Web development has solid demand abroad, strongest when backed by a public portfolio.",
+            "Mobile developer": "Mobile development has reliable demand, particularly where you show shipped apps.",
+            "Network engineer / sysadmin": "Networking and sysadmin roles are in good demand, often paired with Cisco or cloud certifications.",
+            "QA / test engineer": "QA and test engineering has steady demand, strongest with automation experience.",
+            "IT business analyst / systems designer": "Technical analyst roles are workable but more competitive than core engineering, so lean on domain depth.",
+            "Product / project manager (technical)": "Technical product and project roles hire well when paired with delivery track record and a recognised certification.",
+            "IT support / help desk (technician)": "IT support is the hardest tech route abroad and the UK only accepts it via the Temporary Shortage List, which expires 31 December 2026.",
+            "Other": "Confirm how your role maps to destination shortage lists, since demand varies sharply by specialism."
+          },
+          "empty_reason": "No IT discipline recorded. The strongest leverage abroad is in software, cloud or DevOps, cybersecurity and data or AI roles, so record your primary specialism."
+        }
+      ]
+    },
+    {
+      "key": "experience",
+      "label": "Experience",
+      "weight": 0.15,
+      "rules": [
+        {
+          "field_id": "role.years_experience",
+          "type": "range",
+          "ranges": [
+            { "lt": 2, "score": 35, "reason": "Under 2 years of experience limits sponsorship appetite, though Germany IT-specialist counts experience over a degree." },
+            { "lt": 5, "score": 70, "reason": "2 to 5 years of experience meets the bar for most skilled-worker sponsorship abroad." },
+            { "lt": 10, "score": 90, "reason": "5 to 10 years of experience makes you a strong applicant for competitive roles." },
+            { "score": 100, "reason": "10+ years of experience positions you for senior and staff-level roles abroad." }
+          ]
+        },
+        {
+          "field_id": "readiness.remote_offer",
+          "type": "match",
+          "match": {
+            "Active interviews with destination employers": 100,
+            "Remote-first offer from destination employer": 100,
+            "Currently remote for SA employer only": 60,
+            "Not yet — just exploring": 40
+          },
+          "reason": {
+            "Active interviews with destination employers": "Live interviews with destination employers put you close to a sponsoring offer.",
+            "Remote-first offer from destination employer": "An offer from a destination employer is the strongest position and often the gateway to sponsorship.",
+            "Currently remote for SA employer only": "Remote work for an SA employer builds relevant track record, but you still need a destination offer to anchor a visa.",
+            "Not yet — just exploring": "No live offer yet, so the next step is targeting destination employers who sponsor."
+          }
+        }
+      ]
+    },
+    {
+      "key": "documents",
+      "label": "Documents & Finances",
+      "weight": 0.18,
+      "rules": [
+        {
+          "field_id": "documents.passport_status",
+          "type": "match",
+          "match": {
+            "Valid — 2+ years remaining": 100,
+            "Valid — under 2 years remaining": 50,
+            "Expired": 10,
+            "No passport": 0
+          },
+          "reason": {
+            "Valid — 2+ years remaining": "Passport valid, which meets typical work-visa requirements.",
+            "Valid — under 2 years remaining": "Passport valid but renew soon, as most work visas need 2+ years remaining.",
+            "Expired": "Passport expired, so renew it before applying.",
+            "No passport": "No passport, so apply immediately as this is the first blocker."
+          }
+        },
+        {
+          "field_id": "documents.police_clearance",
+          "type": "match",
+          "match": {
+            "Current (within 6 months)": 100,
+            "Older than 6 months": 40,
+            "Applied / in progress": 60,
+            "None": 0
+          },
+          "reason": {
+            "Current (within 6 months)": "Current SAPS clearance, which meets the visa-ready bar.",
+            "Older than 6 months": "Clearance older than 6 months, so most visa applications will need a fresh one timed to lodgement.",
+            "Applied / in progress": "Clearance in progress, which is the right move as SAPS turnaround is typically 4 to 8 weeks.",
+            "None": "No police clearance, so apply now as visa lodgement will require it."
+          }
+        },
+        {
+          "field_id": "documents.available_capital",
+          "type": "match",
+          "match": {
+            "Under R50k": 20,
+            "R50k – R100k": 55,
+            "R100k – R200k": 80,
+            "R200k – R400k": 95,
+            "R400k+": 100,
+            "Prefer not to say": 50
+          },
+          "reason": {
+            "Under R50k": "Below the typical R60k to R150k IT relocation budget, so build a buffer before lodging.",
+            "R50k – R100k": "Covers a lean single relocation but tight once a Germany Opportunity Card blocked account is in play.",
+            "R100k – R200k": "A comfortable relocation budget for most destinations.",
+            "R200k – R400k": "A strong financial position that covers a blocked-account route and family relocation.",
+            "R400k+": "An excellent financial cushion for any destination, including family moves.",
+            "Prefer not to say": "Budget not declared, so share it privately with us if it shapes your options."
+          }
+        }
+      ]
+    },
+    {
+      "key": "language",
+      "label": "Language",
+      "weight": 0.10,
+      "rules": [
+        {
+          "field_id": "readiness.english_rating",
+          "type": "match",
+          "match": {
+            "Native / first language": 100,
+            "Fluent": 90,
+            "Conversational": 50
+          },
+          "reason": {
+            "Native / first language": "English as a first language clears the language bar for the UK, Ireland and Canada.",
+            "Fluent": "Fluent English is typically sufficient for English-language destinations.",
+            "Conversational": "Conversational English will need a test result, as UK Skilled Worker requires CEFR B2 from 8 January 2026."
+          }
+        },
+        {
+          "field_id": "readiness.english_test",
+          "type": "match",
+          "match": {
+            "IELTS Academic": 90,
+            "IELTS for UKVI (UK Skilled Worker — required from 8 Jan 2026)": 100,
+            "IELTS General Training (Canada Express Entry)": 100,
+            "PTE Academic": 80,
+            "TOEFL": 85,
+            "None yet": 30
+          },
+          "reason": {
+            "IELTS Academic": "IELTS Academic is widely accepted, though confirm the exact variant your destination needs.",
+            "IELTS for UKVI (UK Skilled Worker — required from 8 Jan 2026)": "IELTS for UKVI matches the UK Skilled Worker requirement from 8 January 2026.",
+            "IELTS General Training (Canada Express Entry)": "IELTS General Training is the accepted test for Canada Express Entry.",
+            "PTE Academic": "PTE Academic works for several destinations but is not accepted for Canada Express Entry.",
+            "TOEFL": "TOEFL is accepted by many destination employers, so confirm it for your specific route.",
+            "None yet": "No English test on record, which UK and Canada routes will require."
+          }
+        }
+      ]
+    },
+    {
+      "key": "readiness",
+      "label": "Family & Timing",
+      "weight": 0.10,
+      "rules": [
+        {
+          "field_id": "documents.dependants_count",
+          "type": "range",
+          "ranges": [
+            { "lt": 1, "score": 100, "reason": "No dependants is the easiest profile to relocate, with no dependant visas needed." },
+            { "lt": 2, "score": 75, "reason": "One dependant adds a partner or child visa step but is straightforward in most destinations." },
+            { "lt": 4, "score": 55, "reason": "Two or three dependants add visa cost and schooling logistics, so budget for them early." },
+            { "score": 40, "reason": "Four or more dependants raise relocation cost and visa complexity, so specialist planning helps." }
+          ]
+        },
+        {
+          "field_id": "readiness.target_timeline",
+          "type": "match",
+          "match": {
+            "As soon as possible": 100,
+            "Within 6 months": 90,
+            "Within 1 year": 70,
+            "Within 2 years": 55,
+            "Just exploring": 40
+          },
+          "reason": {
+            "As soon as possible": "An ASAP timeline means you can start employer applications now.",
+            "Within 6 months": "A 6-month horizon is realistic once documents and a test are in hand.",
+            "Within 1 year": "A 1-year horizon is ideal for credential checks and visa processing.",
+            "Within 2 years": "A 2-year horizon gives room to add certifications and target the strongest route.",
+            "Just exploring": "Exploring only, so you can plan strategically without time pressure."
+          }
+        }
+      ]
+    }
+  ]
+}

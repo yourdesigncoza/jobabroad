@@ -12,9 +12,29 @@ import type {
 const DEFAULT_BANDS = { high_blockers_lt: 40, needs_prep_lt: 70 };
 
 export async function loadRubric(category: string): Promise<Rubric | null> {
+  // Explicit static imports (not a template-literal path) so the bundler can
+  // see every rubric at build time. One case per category that has a rubric.
   switch (category) {
     case 'teaching':
       return (await import('./rubrics/teaching.json')).default as Rubric;
+    case 'healthcare':
+      return (await import('./rubrics/healthcare.json')).default as Rubric;
+    case 'engineering':
+      return (await import('./rubrics/engineering.json')).default as Rubric;
+    case 'it-tech':
+      return (await import('./rubrics/it-tech.json')).default as Rubric;
+    case 'trades':
+      return (await import('./rubrics/trades.json')).default as Rubric;
+    case 'tefl':
+      return (await import('./rubrics/tefl.json')).default as Rubric;
+    case 'hospitality':
+      return (await import('./rubrics/hospitality.json')).default as Rubric;
+    case 'farming':
+      return (await import('./rubrics/farming.json')).default as Rubric;
+    case 'seasonal':
+      return (await import('./rubrics/seasonal.json')).default as Rubric;
+    case 'au-pair':
+      return (await import('./rubrics/au-pair.json')).default as Rubric;
     default:
       return null;
   }

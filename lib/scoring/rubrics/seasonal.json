@@ -1,0 +1,201 @@
+{
+  "category": "seasonal",
+  "version": 1,
+  "bands": { "high_blockers_lt": 40, "needs_prep_lt": 70 },
+  "dimensions": [
+    {
+      "key": "eligibility",
+      "label": "Eligibility & Documents",
+      "weight": 0.32,
+      "rules": [
+        {
+          "field_id": "personal.age",
+          "type": "range",
+          "ranges": [
+            { "lt": 18, "score": 20, "reason": "Under 18 falls below the minimum age for most seasonal programmes; wait until you turn 18." },
+            { "lt": 29, "score": 100, "reason": "Within the 18 to 28 sweet spot that qualifies for J-1 Summer Work Travel and Canada IEC." },
+            { "lt": 36, "score": 70, "reason": "Past the J-1 cap but still inside the Canada IEC and UK seasonal age limits of 35." },
+            { "score": 40, "reason": "Above 35 rules out most youth-mobility schemes; focus on employer-petitioned routes like H-2B." }
+          ]
+        },
+        {
+          "field_id": "documents.passport_status",
+          "type": "match",
+          "match": {
+            "Valid — 18+ months remaining": 100,
+            "Valid — under 18 months remaining": 55,
+            "Expired": 10,
+            "No passport": 0
+          },
+          "reason": {
+            "Valid — 18+ months remaining": "Passport comfortably valid, meets the validity window for seasonal visas.",
+            "Valid — under 18 months remaining": "Passport valid but renew soon; some consulates want validity beyond your programme end date.",
+            "Expired": "Passport expired, renew at Home Affairs before applying to any sponsor.",
+            "No passport": "No passport yet, apply immediately; this is the first blocker for any season abroad."
+          }
+        },
+        {
+          "field_id": "documents.police_clearance",
+          "type": "match",
+          "match": {
+            "Current (within 6 months)": 100,
+            "Older than 6 months": 45,
+            "Applied — waiting": 70,
+            "None": 0
+          },
+          "reason": {
+            "Current (within 6 months)": "Current SAPS clearance, meets the visa-ready bar for seasonal programmes.",
+            "Older than 6 months": "Police clearance older than 6 months; most sponsors want one issued within the last 6 months.",
+            "Applied — waiting": "SAPS clearance in progress; allow for the typical 4 to 8 week turnaround in your timeline.",
+            "None": "No police clearance, apply to SAPS now as turnaround is typically 4 to 8 weeks."
+          }
+        },
+        {
+          "field_id": "documents.available_capital",
+          "type": "match",
+          "match": {
+            "Under R20k": 25,
+            "R20k – R40k": 55,
+            "R40k – R70k": 85,
+            "R70k+": 100,
+            "Prefer not to say": 55
+          },
+          "reason": {
+            "Under R20k": "Below the typical R45k to R65k needed to cover sponsor fees, flights and your first weeks abroad.",
+            "R20k – R40k": "Partway to the R45k to R65k all-in budget; line up the balance before committing.",
+            "R40k – R70k": "Covers the usual J-1 SWT spend through to your first paycheck.",
+            "R70k+": "Strong buffer for sponsor fees, flights and settling-in costs.",
+            "Prefer not to say": "Budget not declared; share it with us privately as it shapes which programmes are realistic."
+          }
+        }
+      ]
+    },
+    {
+      "key": "work_fit",
+      "label": "Work-Type Fit / Demand",
+      "weight": 0.20,
+      "rules": [
+        {
+          "field_id": "experience.sector",
+          "type": "best_match",
+          "match": {
+            "Hospitality / restaurants": 100,
+            "Theme park / resort": 100,
+            "Lifeguarding / camp": 95,
+            "Agriculture / farming": 90,
+            "Customer service / call centre": 80,
+            "Retail": 75,
+            "Other": 50,
+            "None yet": 30
+          },
+          "reason": {
+            "Hospitality / restaurants": "Hospitality is the core of seasonal hiring; resorts and restaurants fill these roles every cycle.",
+            "Theme park / resort": "Theme park and resort experience maps directly onto the highest-volume J-1 placements.",
+            "Lifeguarding / camp": "Camp and lifeguarding experience is prized for US summer programmes and often pays a premium.",
+            "Agriculture / farming": "Agricultural experience suits UK and Canada seasonal harvest roles where demand is steady.",
+            "Customer service / call centre": "Customer-facing experience transfers well to most front-of-house seasonal placements.",
+            "Retail": "Retail experience is solid groundwork for the customer-facing roles sponsors recruit for.",
+            "Other": "Confirm how your sector maps to seasonal placements; transferability varies by programme.",
+            "None yet": "No sector experience yet; any customer-facing or hands-on work will strengthen your placement."
+          },
+          "empty_reason": "No work sectors recorded. Hospitality, resort and camp experience get placement priority, so add any customer-facing or hands-on work you have done."
+        }
+      ]
+    },
+    {
+      "key": "experience",
+      "label": "Experience",
+      "weight": 0.15,
+      "rules": [
+        {
+          "field_id": "experience.years_relevant",
+          "type": "range",
+          "ranges": [
+            { "lt": 1, "score": 40, "reason": "Under a year of customer-facing work; sponsors accept entry-level applicants but more hours help." },
+            { "lt": 3, "score": 75, "reason": "One to three years of relevant experience, a comfortable fit for most seasonal roles." },
+            { "lt": 6, "score": 90, "reason": "Three to six years of experience, a strong candidate for better-paid placements." },
+            { "score": 100, "reason": "Six or more years of customer-facing experience, a standout seasonal applicant." }
+          ]
+        },
+        {
+          "field_id": "programme.previously_applied",
+          "type": "match",
+          "match": {
+            "No": 60,
+            "Yes — completed": 100,
+            "Yes — in progress": 80,
+            "Yes — was refused": 35
+          },
+          "reason": {
+            "No": "First-time applicant, which is normal; sponsors place plenty of new arrivals each season.",
+            "Yes — completed": "A completed programme is a strong signal that sponsors and consulates trust returners.",
+            "Yes — in progress": "An application already underway gives you a head start on the next cycle.",
+            "Yes — was refused": "A prior refusal needs careful handling; understand the reason before reapplying."
+          }
+        }
+      ]
+    },
+    {
+      "key": "timing",
+      "label": "Availability & Timing",
+      "weight": 0.20,
+      "rules": [
+        {
+          "field_id": "readiness.target_year",
+          "type": "match",
+          "match": {
+            "2026": 100,
+            "2027": 80,
+            "2028": 55,
+            "Just exploring": 35
+          },
+          "reason": {
+            "2026": "Targeting 2026 means recruitment cycles are open now, so start applications immediately.",
+            "2027": "A 2027 target gives ample runway to line up documents and a sponsor.",
+            "2028": "A 2028 target is early; use the time to save and build customer-facing experience.",
+            "Just exploring": "Exploring only, so there is no urgency yet; plan around the season that suits you."
+          }
+        },
+        {
+          "field_id": "readiness.commitment_length",
+          "type": "match",
+          "match": {
+            "Up to 4 months (typical SWT)": 100,
+            "4–12 months": 90,
+            "12–24 months (Canada IEC)": 80,
+            "Open": 95
+          },
+          "reason": {
+            "Up to 4 months (typical SWT)": "Up to 4 months fits the J-1 Summer Work Travel window perfectly.",
+            "4–12 months": "A 4 to 12 month window opens UK seasonal and longer resort contracts.",
+            "12–24 months (Canada IEC)": "A 12 to 24 month commitment suits the Canada IEC working holiday.",
+            "Open": "Flexible availability lets us match you to whichever season recruits first."
+          }
+        }
+      ]
+    },
+    {
+      "key": "language",
+      "label": "Language",
+      "weight": 0.13,
+      "rules": [
+        {
+          "field_id": "readiness.english_rating",
+          "type": "match",
+          "match": {
+            "Native / first language": 100,
+            "Fluent": 95,
+            "Conversational": 65,
+            "Basic": 30
+          },
+          "reason": {
+            "Native / first language": "English as a first language clears the bar for all customer-facing seasonal roles.",
+            "Fluent": "Fluent English is sufficient for the front-of-house roles sponsors recruit for.",
+            "Conversational": "Conversational English works for many roles but limits guest-facing placements.",
+            "Basic": "Basic English is a real blocker for customer-facing seasonal work; build it up first."
+          }
+        }
+      ]
+    }
+  ]
+}

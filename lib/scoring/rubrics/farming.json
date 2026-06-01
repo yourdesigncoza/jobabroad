@@ -1,0 +1,232 @@
+{
+  "category": "farming",
+  "version": 1,
+  "bands": { "high_blockers_lt": 40, "needs_prep_lt": 70 },
+  "dimensions": [
+    {
+      "key": "skills",
+      "label": "Skills & Qualifications",
+      "weight": 0.22,
+      "rules": [
+        {
+          "field_id": "skills.drivers_licence",
+          "type": "match",
+          "match": {
+            "Full SA Code 8/EB": 70,
+            "Code 10/14 (LDV/HDV)": 90,
+            "Heavy machinery / Code EC": 100,
+            "Tractor experience only (no licence)": 55,
+            "None": 25
+          },
+          "reason": {
+            "Full SA Code 8/EB": "A standard car licence covers most farm roles but limits machinery and driving work.",
+            "Code 10/14 (LDV/HDV)": "A Code 10/14 licence widens USA H-2A and Canada LMIA options that need vehicle operators.",
+            "Heavy machinery / Code EC": "A heavy machinery or Code EC licence is a strong asset for mechanised and equipment-operator roles.",
+            "Tractor experience only (no licence)": "Tractor experience helps but a formal licence broadens your eligible roles.",
+            "None": "No driving licence narrows your options to general labouring roles only."
+          }
+        },
+        {
+          "field_id": "skills.physical_fitness",
+          "type": "match",
+          "match": {
+            "Excellent — daily heavy labour now": 100,
+            "Good — fit and active": 85,
+            "Fair — would need to build up": 50,
+            "Poor — health concerns": 20
+          },
+          "reason": {
+            "Excellent — daily heavy labour now": "Excellent fitness meets the physical demands of seasonal farm work.",
+            "Good — fit and active": "Good fitness is sufficient for most farm roles abroad.",
+            "Fair — would need to build up": "Build up your fitness before departure, as farm days are long and physical.",
+            "Poor — health concerns": "Health concerns are a significant blocker for physically demanding farm work; seek advice first."
+          }
+        }
+      ]
+    },
+    {
+      "key": "specialism",
+      "label": "Specialism Demand",
+      "weight": 0.22,
+      "rules": [
+        {
+          "field_id": "experience.experience_types",
+          "type": "best_match",
+          "match": {
+            "Livestock / dairy": 100,
+            "Machinery / equipment operator": 100,
+            "Crops / grain": 95,
+            "Horticulture / orchard": 90,
+            "Irrigation": 90,
+            "Poultry": 80,
+            "Packing / grading": 70,
+            "Other": 65,
+            "None yet": 30
+          },
+          "reason": {
+            "Livestock / dairy": "Livestock and dairy handling is in high demand for NZ and Canada year-round roles.",
+            "Machinery / equipment operator": "Machinery and equipment operation is a sought-after skill that unlocks better-paid roles.",
+            "Crops / grain": "Crop and grain experience is in strong demand across UK and Canada programmes.",
+            "Horticulture / orchard": "Horticulture and orchard work is the core of the UK Seasonal Worker Visa intake.",
+            "Irrigation": "Irrigation experience is valued on larger commercial farms abroad.",
+            "Poultry": "Poultry experience suits the UK winter poultry window and similar roles.",
+            "Packing / grading": "Packing and grading is useful but more entry-level, with modest hiring priority.",
+            "Other": "Confirm how your farm experience maps to overseas roles; demand varies by sector.",
+            "None yet": "No farm experience recorded yet; UK horticulture entry roles accept beginners, so this is workable."
+          },
+          "empty_reason": "No farm experience recorded. Livestock, dairy, crop and machinery skills get hiring priority, so add the work you have done."
+        }
+      ]
+    },
+    {
+      "key": "experience",
+      "label": "Experience",
+      "weight": 0.18,
+      "rules": [
+        {
+          "field_id": "experience.years_farm_experience",
+          "type": "range",
+          "ranges": [
+            { "lt": 1, "score": 40, "reason": "No farm experience yet; UK Seasonal Worker Visa entry roles still accept beginners." },
+            { "lt": 3, "score": 70, "reason": "1 to 3 years of farm experience meets the bar for most seasonal programmes." },
+            { "lt": 6, "score": 90, "reason": "3 to 6 years of experience unlocks the NZ Global Workforce Seasonal Visa and skilled roles." },
+            { "score": 100, "reason": "6 or more years of farm experience makes you a strong applicant for skilled and supervisory roles." }
+          ]
+        },
+        {
+          "field_id": "experience.prior_farm_abroad",
+          "type": "best_match",
+          "match": {
+            "UK (Seasonal Worker Visa)": 100,
+            "USA (H-2A Visa)": 100,
+            "Canada": 100,
+            "New Zealand": 100,
+            "Other country": 80,
+            "None": 50
+          },
+          "reason": {
+            "UK (Seasonal Worker Visa)": "Prior UK Seasonal Worker Visa work is a strong track record for repeat placements.",
+            "USA (H-2A Visa)": "Prior USA H-2A experience significantly strengthens future applications.",
+            "Canada": "Prior Canadian farm work helps with LMIA-backed roles and possible return.",
+            "New Zealand": "Prior New Zealand farm work supports seasonal and skilled re-entry.",
+            "Other country": "Prior overseas farm work abroad improves your applications.",
+            "None": "No overseas farm work yet; workable, though returners are favoured for repeat seasons."
+          },
+          "empty_reason": "No prior overseas farm work recorded; this is fine for first-time applicants to the UK scheme."
+        }
+      ]
+    },
+    {
+      "key": "documents",
+      "label": "Documents & Finances",
+      "weight": 0.20,
+      "rules": [
+        {
+          "field_id": "documents.passport_status",
+          "type": "match",
+          "match": {
+            "Valid — 18+ months remaining": 100,
+            "Valid — under 18 months remaining": 50,
+            "Expired": 10,
+            "No passport": 0
+          },
+          "reason": {
+            "Valid — 18+ months remaining": "Passport valid with good runway, meets typical seasonal visa requirements.",
+            "Valid — under 18 months remaining": "Passport valid but renew soon, as some visas need more runway.",
+            "Expired": "Passport expired, renew before applying.",
+            "No passport": "No passport, apply immediately; this is the first blocker."
+          }
+        },
+        {
+          "field_id": "documents.police_clearance",
+          "type": "match",
+          "match": {
+            "Current (within 6 months)": 100,
+            "Older than 6 months": 40,
+            "Applied — waiting": 60,
+            "None": 0
+          },
+          "reason": {
+            "Current (within 6 months)": "Current police clearance, meets visa-ready bar.",
+            "Older than 6 months": "Police clearance older than 6 months, most visa applications require a fresh one.",
+            "Applied — waiting": "Police clearance applied for; SAPS turnaround is typically 4 to 8 weeks.",
+            "None": "No police clearance, apply now; SAPS turnaround is typically 4 to 8 weeks."
+          }
+        },
+        {
+          "field_id": "documents.available_capital",
+          "type": "match",
+          "match": {
+            "Under R10k": 25,
+            "R10k – R30k": 70,
+            "R30k – R60k": 90,
+            "R60k+": 100,
+            "Prefer not to say": 50
+          },
+          "reason": {
+            "Under R10k": "Below the typical UK upfront budget of R20 to 30k for visa fee and flight.",
+            "R10k – R30k": "Covers the UK upfront budget; USA H-2A reimburses most costs anyway.",
+            "R30k – R60k": "Comfortable budget for visa fees, flights and first weeks abroad.",
+            "R60k+": "Strong financial position for any seasonal route.",
+            "Prefer not to say": "Budget not declared, share privately with us if it shapes your options."
+          }
+        }
+      ]
+    },
+    {
+      "key": "language",
+      "label": "Language",
+      "weight": 0.08,
+      "rules": [
+        {
+          "field_id": "skills.english_rating",
+          "type": "match",
+          "match": {
+            "Native / first language": 100,
+            "Fluent": 95,
+            "Conversational": 70,
+            "Basic": 40
+          },
+          "reason": {
+            "Native / first language": "English as first language easily clears the low language bar for farm roles.",
+            "Fluent": "Fluent English is more than enough for farm work abroad.",
+            "Conversational": "Conversational English is sufficient for most farm roles, which have a low language bar.",
+            "Basic": "Basic English is workable for many farm roles, though it limits supervisory positions."
+          }
+        }
+      ]
+    },
+    {
+      "key": "readiness",
+      "label": "Family & Timing",
+      "weight": 0.10,
+      "rules": [
+        {
+          "field_id": "readiness.has_dependants",
+          "type": "match",
+          "match": { "true": 60, "false": 100 },
+          "reason": {
+            "true": "Bringing a spouse or children adds visa steps and cost; relevant mainly for longer-term Canada routes.",
+            "false": "No dependants to bring, the simplest profile for seasonal farm relocation."
+          }
+        },
+        {
+          "field_id": "readiness.target_year",
+          "type": "match",
+          "match": {
+            "2026": 100,
+            "2027": 80,
+            "2028": 60,
+            "Just exploring": 40
+          },
+          "reason": {
+            "2026": "A 2026 departure aligns with the upcoming recruitment cycles; start applications now.",
+            "2027": "A 2027 horizon gives ample time for documents and visa processing.",
+            "2028": "A 2028 horizon is well ahead; use the time to build experience and savings.",
+            "Just exploring": "Exploring only, no urgency means you can plan strategically."
+          }
+        }
+      ]
+    }
+  ]
+}

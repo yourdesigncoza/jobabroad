@@ -1,0 +1,261 @@
+{
+  "category": "trades",
+  "version": 1,
+  "bands": { "high_blockers_lt": 40, "needs_prep_lt": 70 },
+  "dimensions": [
+    {
+      "key": "credentials",
+      "label": "Trade Credentials",
+      "weight": 0.25,
+      "rules": [
+        {
+          "field_id": "trade.red_seal_status",
+          "type": "match",
+          "match": {
+            "Passed — certificate in hand": 100,
+            "Passed — certificate lost": 70,
+            "Booked / writing soon": 45,
+            "Not yet — apprentice": 20,
+            "No formal trade test": 0
+          },
+          "reason": {
+            "Passed — certificate in hand": "Red Seal trade test passed with the certificate on hand, the key credential every destination requires.",
+            "Passed — certificate lost": "Trade test passed but certificate lost, request a reprint from QCTO or your old SETA before applying.",
+            "Booked / writing soon": "Trade test booked but not yet passed, your overseas pathway opens once you have the result.",
+            "Not yet — apprentice": "Still an apprentice without a trade test, complete the Red Seal before pursuing offshore assessments.",
+            "No formal trade test": "No formal trade test, this is the primary blocker as every destination requires the Red Seal."
+          }
+        },
+        {
+          "field_id": "assessment.tra_osap_status",
+          "type": "match",
+          "match": {
+            "Outcome received": 100,
+            "Submitted — in progress": 70,
+            "Not started": 40,
+            "Not applying to Australia": 60
+          },
+          "reason": {
+            "Outcome received": "TRA Offshore Skills Assessment outcome received, the mandatory step for an Australian skilled visa is done.",
+            "Submitted — in progress": "TRA assessment submitted and in progress, expect roughly 15 weeks before the outcome.",
+            "Not started": "TRA Offshore Skills Assessment not started, this is required before any Australian skilled visa lodgement.",
+            "Not applying to Australia": "Not targeting Australia, so the TRA assessment does not apply to your pathway."
+          }
+        }
+      ]
+    },
+    {
+      "key": "specialism",
+      "label": "Trade Demand",
+      "weight": 0.22,
+      "rules": [
+        {
+          "field_id": "trade.occupation",
+          "type": "best_match",
+          "match": {
+            "Electrician": 100,
+            "Welder": 100,
+            "Boilermaker": 100,
+            "Fitter & Turner": 95,
+            "Diesel Mechanic": 95,
+            "Millwright": 95,
+            "Plumber": 90,
+            "Refrigeration / HVAC": 85,
+            "Auto Electrician": 80,
+            "Motor Mechanic": 78,
+            "Carpenter / Joiner": 75,
+            "Rigger": 72,
+            "Bricklayer": 70,
+            "Painter": 60,
+            "Other": 60
+          },
+          "reason": {
+            "Electrician": "Electricians are in acute demand across Australia, Canada and the UK, one of the strongest trades to take abroad.",
+            "Welder": "Welders are a global shortage trade, expect strong hiring priority and good pay offshore.",
+            "Boilermaker": "Boilermakers are highly sought after in Australian mining and resources, very strong demand.",
+            "Fitter & Turner": "Fitters and turners are in steady demand across mining and manufacturing destinations.",
+            "Diesel Mechanic": "Diesel mechanics are in high demand in Australian and Canadian resource sectors, strong leverage.",
+            "Millwright": "Millwrights combine mechanical and electrical skills and are scarce worldwide, a significant advantage.",
+            "Plumber": "Plumbers are in solid demand abroad, though local licensing tests usually apply on arrival.",
+            "Refrigeration / HVAC": "Refrigeration and HVAC technicians are in good demand, especially in the Gulf and Australia.",
+            "Auto Electrician": "Auto electricians are sought after but the market is smaller than for core construction trades.",
+            "Motor Mechanic": "Motor mechanics have steady demand, target employers tied to skilled-visa sponsorship.",
+            "Carpenter / Joiner": "Carpenters and joiners are in moderate demand, strongest in Australia and New Zealand construction.",
+            "Rigger": "Riggers have moderate demand tied to mining and construction projects, target sponsoring employers.",
+            "Bricklayer": "Bricklayers see moderate demand, mainly in Australian and New Zealand residential construction.",
+            "Painter": "Painters face a smaller offshore market, pair your trade with strong references to stand out.",
+            "Other": "Confirm how your trade maps to the destination occupation list, as demand varies widely by trade."
+          },
+          "empty_reason": "No trade recorded. High-demand trades such as Electrician, Welder, Boilermaker and Diesel Mechanic get hiring priority abroad, so add yours."
+        }
+      ]
+    },
+    {
+      "key": "experience",
+      "label": "Experience",
+      "weight": 0.15,
+      "rules": [
+        {
+          "field_id": "experience.years_post_qualification",
+          "type": "range",
+          "ranges": [
+            { "lt": 2, "score": 30, "reason": "Under 2 years post-qualification, most skilled-visa routes want more documented trade experience." },
+            { "lt": 5, "score": 70, "reason": "2 to 5 years post-qualification, meets the bar for most offshore assessments." },
+            { "lt": 10, "score": 90, "reason": "5 to 10 years post-qualification, a strong applicant for skilled-visa routes." },
+            { "score": 100, "reason": "10+ years post-qualification, a senior tradesperson with deep documented experience." }
+          ]
+        },
+        {
+          "field_id": "experience.recent_12_months",
+          "type": "match",
+          "match": {
+            "Yes — same trade": 100,
+            "Yes — but different/related trade": 60,
+            "No — gap of 1+ year": 30,
+            "No — recently qualified": 40
+          },
+          "reason": {
+            "Yes — same trade": "12 recent months in your nominated trade, meeting the TRA recency requirement.",
+            "Yes — but different/related trade": "Recent work was in a related trade, document how it maps to your nominated occupation.",
+            "No — gap of 1+ year": "A gap of over a year in your trade may fail recency rules, get back into paid trade work.",
+            "No — recently qualified": "Recently qualified with limited recent hours, build up documented trade time before assessment."
+          }
+        }
+      ]
+    },
+    {
+      "key": "documents",
+      "label": "Documents & Finances",
+      "weight": 0.20,
+      "rules": [
+        {
+          "field_id": "documents.passport_status",
+          "type": "match",
+          "match": {
+            "Valid — 2+ years remaining": 100,
+            "Valid — under 2 years remaining": 50,
+            "Expired": 10,
+            "No passport": 0
+          },
+          "reason": {
+            "Valid — 2+ years remaining": "Passport valid with 2+ years remaining, meeting typical work-visa requirements.",
+            "Valid — under 2 years remaining": "Passport valid but renew soon, most work visas need 2+ years remaining.",
+            "Expired": "Passport expired, renew it before applying.",
+            "No passport": "No passport, apply immediately as this is the first blocker."
+          }
+        },
+        {
+          "field_id": "documents.police_clearance",
+          "type": "match",
+          "match": {
+            "Current (within 6 months)": 100,
+            "Older than 6 months": 40,
+            "Applied / in progress": 60,
+            "None": 0
+          },
+          "reason": {
+            "Current (within 6 months)": "Current SAPS police clearance, meeting the visa-ready bar.",
+            "Older than 6 months": "Police clearance older than 6 months, most visa applications need one issued within 6 months.",
+            "Applied / in progress": "Police clearance applied for, time it to land near your visa lodgement.",
+            "None": "No police clearance, apply now as SAPS turnaround is typically 4 to 8 weeks."
+          }
+        },
+        {
+          "field_id": "documents.available_capital",
+          "type": "match",
+          "match": {
+            "Under R50k": 25,
+            "R50k – R100k": 60,
+            "R100k – R200k": 85,
+            "R200k – R400k": 100,
+            "R400k+": 100,
+            "Prefer not to say": 50
+          },
+          "reason": {
+            "Under R50k": "Below the typical R60k to R150k that trades relocation needs upfront, build savings first.",
+            "R50k – R100k": "Covers a lean solo relocation, tight once verification and assessment fees are included.",
+            "R100k – R200k": "A comfortable budget for verification, skills assessment, visa and flights.",
+            "R200k – R400k": "A strong financial position that covers relocation with dependants.",
+            "R400k+": "An excellent financial position for relocation with room for contingencies.",
+            "Prefer not to say": "Budget not declared, share it privately with us if it shapes your options."
+          }
+        }
+      ]
+    },
+    {
+      "key": "language",
+      "label": "Language",
+      "weight": 0.08,
+      "rules": [
+        {
+          "field_id": "readiness.english_rating",
+          "type": "match",
+          "match": {
+            "Native / first language": 100,
+            "Fluent": 90,
+            "Conversational": 60,
+            "Basic": 30
+          },
+          "reason": {
+            "Native / first language": "English as a first language clears the bar for every English-speaking destination.",
+            "Fluent": "Fluent English is sufficient for trades work in most destinations.",
+            "Conversational": "Conversational English works on site but skilled visas will want a test score.",
+            "Basic": "Basic English is a blocker for skilled-visa English tests, plan to improve before applying."
+          }
+        },
+        {
+          "field_id": "readiness.english_test",
+          "type": "match",
+          "match": {
+            "IELTS Academic": 90,
+            "IELTS for UKVI (UK Skilled Worker)": 100,
+            "IELTS General Training (Canada / NZ)": 100,
+            "PTE Academic": 100,
+            "None yet": 30
+          },
+          "reason": {
+            "IELTS Academic": "IELTS Academic taken, note the UK Skilled Worker route needs IELTS for UKVI specifically.",
+            "IELTS for UKVI (UK Skilled Worker)": "IELTS for UKVI taken, the correct test for the UK Skilled Worker route.",
+            "IELTS General Training (Canada / NZ)": "IELTS General Training taken, accepted for Canada and New Zealand applications.",
+            "PTE Academic": "PTE Academic taken, accepted by Australia and several other destinations.",
+            "None yet": "No English test on record, skilled-visa routes will require one."
+          }
+        }
+      ]
+    },
+    {
+      "key": "readiness",
+      "label": "Family & Timing",
+      "weight": 0.10,
+      "rules": [
+        {
+          "field_id": "documents.dependants_count",
+          "type": "range",
+          "ranges": [
+            { "lt": 1, "score": 100, "reason": "No dependants, the easiest profile to relocate with no dependant visas needed." },
+            { "lt": 3, "score": 70, "reason": "One or two dependants, dependant visas add cost and paperwork but remain workable." },
+            { "score": 45, "reason": "Three or more dependants, plan for higher visa costs, schooling and a larger relocation budget." }
+          ]
+        },
+        {
+          "field_id": "readiness.target_timeline",
+          "type": "match",
+          "match": {
+            "As soon as possible": 100,
+            "Within 6 months": 90,
+            "Within 1 year": 75,
+            "Within 2 years": 55,
+            "Just exploring": 40
+          },
+          "reason": {
+            "As soon as possible": "An ASAP timeline is realistic only once verification and assessment are already underway.",
+            "Within 6 months": "A 6-month horizon is tight given assessment timelines, start documents immediately.",
+            "Within 1 year": "A 1-year horizon suits the verification, skills assessment and visa sequence well.",
+            "Within 2 years": "A 2-year horizon gives ample time to verify documents and complete a skills assessment.",
+            "Just exploring": "Exploring only, no urgency means you can plan the sequence strategically."
+          }
+        }
+      ]
+    }
+  ]
+}

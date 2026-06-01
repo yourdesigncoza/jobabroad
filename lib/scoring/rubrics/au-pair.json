@@ -1,0 +1,262 @@
+{
+  "category": "au-pair",
+  "version": 1,
+  "bands": { "high_blockers_lt": 40, "needs_prep_lt": 70 },
+  "dimensions": [
+    {
+      "key": "childcare",
+      "label": "Childcare Experience & Credentials",
+      "weight": 0.28,
+      "rules": [
+        {
+          "field_id": "experience.childcare_hours",
+          "type": "match",
+          "match": {
+            "Under 50 hours": 25,
+            "50–200 hours": 55,
+            "200–500 hours": 90,
+            "500+ hours": 100,
+            "Not sure": 40
+          },
+          "reason": {
+            "Under 50 hours": "Under 50 documented hours falls short of the 200-hour USA J-1 minimum, so build and log more childcare time first.",
+            "50–200 hours": "Between 50 and 200 hours is close but below the J-1 threshold, so add documented hours before applying.",
+            "200–500 hours": "Over 200 documented hours meets the USA J-1 minimum and satisfies most European programmes.",
+            "500+ hours": "More than 500 documented hours is a strong childcare record that host families value highly.",
+            "Not sure": "Unsure of your documented hours, so total and verify them since sponsors require proof of at least 200."
+          }
+        },
+        {
+          "field_id": "experience.references",
+          "type": "match",
+          "match": {
+            "3+ contactable references": 100,
+            "1–2 references": 55,
+            "None yet": 15
+          },
+          "reason": {
+            "3+ contactable references": "Three or more contactable references meet the typical J-1 sponsor requirement.",
+            "1–2 references": "One or two references is a start, but most sponsors want three non-family written references.",
+            "None yet": "No childcare references yet is a blocker, so line up three contactable referees now."
+          }
+        },
+        {
+          "field_id": "experience.youngest_age",
+          "type": "match",
+          "match": {
+            "Under 12 months (infant)": 100,
+            "1–2 years (toddler)": 90,
+            "3–5 years (preschool)": 75,
+            "6–12 years (school age)": 60,
+            "13+ years (teen)": 45,
+            "Not sure": 50
+          },
+          "reason": {
+            "Under 12 months (infant)": "Infant experience opens the under-2 placements many host families specifically request.",
+            "1–2 years (toddler)": "Toddler experience is widely sought and covers most host-family needs.",
+            "3–5 years (preschool)": "Preschool-age experience suits a broad range of placements.",
+            "6–12 years (school age)": "School-age experience is useful but limits the infant and toddler placements families often prioritise.",
+            "13+ years (teen)": "Only teen experience narrows your options, since most au-pair roles centre on younger children.",
+            "Not sure": "Unclear youngest age cared for, so confirm it as infant experience widens your placement options."
+          }
+        },
+        {
+          "field_id": "experience.first_aid",
+          "type": "match",
+          "match": {
+            "Current (within 2 years)": 100,
+            "Expired": 50,
+            "None": 25
+          },
+          "reason": {
+            "Current (within 2 years)": "A current first aid or CPR certificate reassures host families and meets common programme expectations.",
+            "Expired": "Your first aid certificate has expired, so renew it before applying.",
+            "None": "No first aid or CPR certificate yet, so book a course since many sponsors and families expect one."
+          }
+        }
+      ]
+    },
+    {
+      "key": "eligibility",
+      "label": "Programme Eligibility",
+      "weight": 0.25,
+      "rules": [
+        {
+          "field_id": "personal.age",
+          "type": "range",
+          "ranges": [
+            { "lt": 18, "score": 10, "reason": "Under 18 is below every au-pair programme age floor, so you cannot apply yet." },
+            { "lt": 27, "score": 100, "reason": "Aged 18 to 26 sits inside the USA J-1 and most European age windows, the ideal band." },
+            { "lt": 31, "score": 55, "reason": "Aged 27 to 30 rules out the USA J-1 but France still accepts you up to 30." },
+            { "score": 15, "reason": "Over 30 is above the age cap for the main au-pair programmes, so the standard routes are closed." }
+          ]
+        },
+        {
+          "field_id": "practical.drivers_licence",
+          "type": "match",
+          "match": {
+            "Code B (full)": 100,
+            "Learners only": 45,
+            "In progress": 35,
+            "None": 15
+          },
+          "reason": {
+            "Code B (full)": "A full Code B licence meets the USA J-1 driving requirement and most European host-family expectations.",
+            "Learners only": "A learners licence is not enough, so finish your full Code B before applying since J-1 effectively requires it.",
+            "In progress": "Your licence is still in progress, so complete the full Code B as J-1 placements depend on it.",
+            "None": "No driver's licence is a major blocker for J-1 and most European families, so start the process now."
+          }
+        },
+        {
+          "field_id": "documents.dependants_count",
+          "type": "range",
+          "ranges": [
+            { "lt": 1, "score": 100, "reason": "No children of your own keeps you eligible for the standard au-pair programmes." },
+            { "score": 20, "reason": "Having children of your own conflicts with most au-pair programme rules, so seek specialist guidance on the few that allow it." }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "documents",
+      "label": "Documents & Finances",
+      "weight": 0.17,
+      "rules": [
+        {
+          "field_id": "documents.passport_status",
+          "type": "match",
+          "match": {
+            "Valid — 2+ years remaining": 100,
+            "Valid — under 2 years remaining": 50,
+            "Expired": 10,
+            "No passport": 0
+          },
+          "reason": {
+            "Valid — 2+ years remaining": "Your passport has enough validity for a 12-month placement and visa.",
+            "Valid — under 2 years remaining": "Your passport is valid but renew it soon, as visas usually need validity beyond the placement.",
+            "Expired": "An expired passport must be renewed before any application can move forward.",
+            "No passport": "No passport is the first blocker to clear, so apply immediately."
+          }
+        },
+        {
+          "field_id": "documents.police_clearance",
+          "type": "match",
+          "match": {
+            "Current (within 6 months)": 100,
+            "Older than 6 months": 45,
+            "Applied / in progress": 60,
+            "None": 0
+          },
+          "reason": {
+            "Current (within 6 months)": "A current SAPS clearance keeps your application visa-ready.",
+            "Older than 6 months": "Your police clearance is over six months old, so a fresh SAPS certificate will likely be required.",
+            "Applied / in progress": "Your SAPS clearance is in progress, which is on track since turnaround runs several weeks.",
+            "None": "No police clearance yet, so apply now as SAPS turnaround is typically four to eight weeks."
+          }
+        },
+        {
+          "field_id": "documents.available_capital",
+          "type": "match",
+          "match": {
+            "Under R15k": 30,
+            "R15k – R30k": 80,
+            "R30k – R60k": 100,
+            "R60k+": 100,
+            "Prefer not to say": 50
+          },
+          "reason": {
+            "Under R15k": "Under R15k is below the typical R15k to R30k pre-departure budget for fees, apostille, visa and medical.",
+            "R15k – R30k": "R15k to R30k covers the usual au-pair pre-departure costs.",
+            "R30k – R60k": "R30k to R60k gives a comfortable buffer for pre-departure costs and a flight.",
+            "R60k+": "Over R60k is a strong financial position for the move.",
+            "Prefer not to say": "Budget not declared, so share it privately if it shapes your timing since pre-departure costs run R15k to R30k."
+          }
+        }
+      ]
+    },
+    {
+      "key": "language",
+      "label": "Language",
+      "weight": 0.15,
+      "rules": [
+        {
+          "field_id": "qualifications.english_rating",
+          "type": "match",
+          "match": {
+            "Native / first language": 100,
+            "Fluent": 95,
+            "Conversational": 65,
+            "Basic": 25
+          },
+          "reason": {
+            "Native / first language": "English as a first language clears every host-family interview comfortably.",
+            "Fluent": "Fluent English is more than enough for host-family interviews and daily childcare.",
+            "Conversational": "Conversational English handles most interviews, though stronger fluency widens your placement options.",
+            "Basic": "Basic English is a real blocker, since host families interview and place in English."
+          }
+        },
+        {
+          "field_id": "qualifications.highest_qualification",
+          "type": "match",
+          "match": {
+            "Matric (NSC)": 90,
+            "Diploma / Certificate": 100,
+            "Bachelor degree": 100,
+            "Honours / Postgrad": 100,
+            "Currently studying": 70,
+            "Other": 60
+          },
+          "reason": {
+            "Matric (NSC)": "A completed matric meets the secondary-education requirement for the USA J-1 programme.",
+            "Diploma / Certificate": "A post-school diploma exceeds the secondary-education bar and strengthens your profile.",
+            "Bachelor degree": "A degree exceeds the education requirement and appeals to host families.",
+            "Honours / Postgrad": "A postgraduate qualification comfortably exceeds the education requirement.",
+            "Currently studying": "Still studying may meet the bar, so confirm a completed matric since J-1 requires secondary education.",
+            "Other": "A non-standard qualification may need checking against the secondary-education requirement for J-1."
+          }
+        }
+      ]
+    },
+    {
+      "key": "readiness",
+      "label": "Timing & Readiness",
+      "weight": 0.15,
+      "rules": [
+        {
+          "field_id": "readiness.target_timeline",
+          "type": "match",
+          "match": {
+            "As soon as possible": 100,
+            "Within 6 months": 90,
+            "Within 1 year": 70,
+            "Just exploring": 40
+          },
+          "reason": {
+            "As soon as possible": "An ASAP timeline lets you start matching with host families now.",
+            "Within 6 months": "A six-month horizon is realistic once your documents and references are ready.",
+            "Within 1 year": "A one-year horizon gives ample room for references, the licence and visa paperwork.",
+            "Just exploring": "Just exploring means no urgency, so you can plan the documents and hours at your own pace."
+          }
+        },
+        {
+          "field_id": "readiness.contract_length",
+          "type": "match",
+          "match": {
+            "6 months": 60,
+            "12 months": 100,
+            "12 months + extension": 100,
+            "24 months (USA max)": 100,
+            "Not sure": 55
+          },
+          "reason": {
+            "6 months": "A six-month commitment suits some European placements but rules out the 12-month J-1 minimum.",
+            "12 months": "A 12-month commitment matches the J-1 minimum and most European programmes.",
+            "12 months + extension": "Willingness to extend beyond 12 months is attractive to host families and fits the J-1 extension.",
+            "24 months (USA max)": "Committing up to the 24-month J-1 maximum is highly appealing to host families.",
+            "Not sure": "Undecided on contract length, so note that the J-1 needs a 12-month minimum when you plan."
+          }
+        }
+      ]
+    }
+  ]
+}

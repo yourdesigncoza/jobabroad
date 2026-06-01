@@ -28,7 +28,8 @@ export default async function ScorePage({
 
   const rubric = await loadRubric(category);
   if (!rubric) {
-    // Teaching-only pilot: site is private; no public path can reach a rubricless category.
+    // All categories have a rubric except accounting (which has no assessment
+    // yet). Send anyone who reaches a rubricless category back to the dashboard.
     redirect('/dashboard');
   }
 
