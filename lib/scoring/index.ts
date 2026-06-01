@@ -125,6 +125,41 @@ function evaluateRule(rule: Rule, answers: AssessmentData): ContributingRow {
         reason: rule.reason,
       };
     }
+
+    case 'best_match': {
+      const maxPoints = Math.max(0, ...Object.values(rule.match));
+      const selected = Array.isArray(value)
+        ? value.map(String)
+        : value != null && value !== ''
+          ? [String(value)]
+          : [];
+      // Pick the single highest-scoring selected option that the map knows.
+      let bestPoints = -1;
+      let bestKey = '';
+      for (const item of selected) {
+        const p = rule.match[item];
+        if (p !== undefined && p > bestPoints) {
+          bestPoints = p;
+          bestKey = item;
+        }
+      }
+      if (bestPoints < 0) {
+        return {
+          field_id: rule.field_id,
+          value: value ?? null,
+          points: 0,
+          max_points: maxPoints,
+          reason: rule.empty_reason,
+        };
+      }
+      return {
+        field_id: rule.field_id,
+        value: selected,
+        points: bestPoints,
+        max_points: maxPoints,
+        reason: rule.reason[bestKey] ?? rule.empty_reason,
+      };
+    }
   }
 }
 

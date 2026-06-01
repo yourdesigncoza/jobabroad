@@ -28,7 +28,21 @@ export interface CountRule {
   reason: string;
 }
 
-export type Rule = MatchRule | RangeRule | PresentRule | CountRule;
+/**
+ * For multi-select fields (e.g. subject specialisms, trade tickets): scores the
+ * SINGLE highest-value option the applicant holds, not the sum. Rewards holding
+ * at least one in-demand specialism without penalising breadth. `empty_reason`
+ * is used when nothing was selected or no selection matches the map.
+ */
+export interface BestMatchRule {
+  field_id: string;
+  type: 'best_match';
+  match: Record<string, number>;
+  reason: Record<string, string>;
+  empty_reason: string;
+}
+
+export type Rule = MatchRule | RangeRule | PresentRule | CountRule | BestMatchRule;
 
 export interface Dimension {
   key: string;

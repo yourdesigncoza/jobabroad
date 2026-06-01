@@ -4,6 +4,15 @@ export interface ReportData {
   userName: string;
   categoryLabel: string;
   generatedAt: string;
+  /**
+   * The buyer's stated goal, echoed back on the cover so the report reads as
+   * "your plan for X" rather than generic advice. Omitted when the assessment
+   * captured neither destinations nor specialisms.
+   */
+  focus?: {
+    destinations: string[];
+    specialisms: string[];
+  };
   score: ScoreResult;
   whatsWorking: string;
   whatsBlocking: string;

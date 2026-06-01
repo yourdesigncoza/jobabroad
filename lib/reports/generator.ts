@@ -7,6 +7,7 @@ import { calculateScore, loadRubric } from '@/lib/scoring';
 import type { DimensionResult, ScoreResult } from '@/lib/scoring/types';
 import { getOrGenerateNarratives } from '@/lib/scoring/narratives';
 import { assessmentDataSchema } from '@/lib/assessments/schemas/assessment';
+import { readTargetDestinations, readSpecialisms } from '@/lib/assessments/answers';
 import { CATEGORIES, type CategoryId } from '@/lib/categories';
 import { getTrustedPartnersForBuyer } from '@/lib/recruiters';
 import { getRedFlagsForCategory } from './red-flags';
@@ -57,6 +58,7 @@ async function generateNextActions(
   score: ScoreResult,
   category: string,
   corpus: CorpusChunk[],
+  destinations: string[],
 ): Promise<Array<{ title: string; body: string }>> {
   // Pull 5 bottom dims so the model has enough specific gaps to reach 5-7
   // distinct, concrete actions instead of repeating itself.
@@ -88,6 +90,8 @@ async function generateNextActions(
 
 Each "body" MUST include at least one concrete first step the reader can take today: a URL, a fee in ZAR, a timeline ("4-6 weeks"), a specific document name, or a registration body name (e.g. SACE, AHPRA, NMC). No abstract advice. No "consider doing X" — say "do X by visiting Y, expect Z weeks".
 
+The reader's target destinations are in "destinations". Tailor each action to those destinations: name the registration body, visa rule, or document each one requires (e.g. UK needs QTS + a salary threshold; the Gulf needs degree attestation/apostille). Only state a destination-specific fact if it appears in the corpus passages — never invent one. When the corpus is silent on a destination, tell the reader to verify with that country's official body and name it.
+
 Prioritise actions in order: the lowest-scoring dimension's gap first, then the next, and so on. Skip a gap if the corpus has nothing useful on it.
 
 Write exactly like a natural, smart human having a conversation. Be clear, concise, and direct. Vary your sentence lengths. Never, under any circumstances, use em dashes (—). Instead, use commas, periods, parentheses, or colons.
@@ -98,6 +102,7 @@ No hedging. No invented facts. Return JSON: { "actions": [{title, body}, ...] } 
           role: 'user',
           content: JSON.stringify({
             category,
+            destinations,
             gaps,
             corpus: corpus.slice(0, 8).map((c) => ({
               heading: c.heading,
@@ -153,19 +158,6 @@ function pickContactChunks(
   return out;
 }
 
-/**
- * Reads the assessment's destinations multiselect by field id. Returns [] when
- * the field is absent or the buyer left it blank, which makes the partner
- * matcher fall through to "no destination signal → no destination match".
- */
-function readTargetDestinations(answers: AssessmentData): string[] {
-  const entry = answers['readiness.target_destinations'];
-  if (!entry) return [];
-  if (Array.isArray(entry.v)) return entry.v.map(String);
-  if (typeof entry.v === 'string' && entry.v.trim()) return [entry.v];
-  return [];
-}
-
 function pickPartners(
   category: CategoryId,
   answers: AssessmentData,
@@ -187,20 +179,22 @@ function pickPartners(
   });
 }
 
-function corpusQueryFromGaps(score: ScoreResult): string {
+function corpusQueryFromGaps(score: ScoreResult, destinations: string[]): string {
   // Build a search query from the LOWEST-scoring rule in each bottom
   // dimension. Critical: a dimension's first contributing rule isn't always
   // the worst one — for a Strong profile the "Language" dim's first rule
   // might be "Fluent English, typically sufficient..." (positive, 90/100)
   // which semantically matches nothing in the knowledge base. Sorting by
   // points ascending picks the actual gap rule ("No English test on
-  // record..."), which matches relevant corpus chunks.
-  return bottomDims(score, 3)
+  // record..."), which matches relevant corpus chunks. Prepending the buyer's
+  // target destinations skews retrieval toward destination-specific chunks
+  // (visa rules, registration bodies) so the grounded advice fits their goal.
+  const gapText = bottomDims(score, 3)
     .flatMap((d) =>
       [...d.contributing].sort((a, b) => a.points - b.points).slice(0, 1).map((c) => c.reason),
     )
-    .join(' ')
-    .slice(0, 400);
+    .join(' ');
+  return `${destinations.join(' ')} ${gapText}`.trim().slice(0, 400);
 }
 
 export interface GenerateReportResult {
@@ -271,18 +265,20 @@ async function generateReportInner(userId: string): Promise<GenerateReportResult
 
   const answers = assessmentDataSchema.parse(assessment.data);
   const score = calculateScore(answers, rubric);
+  const destinations = readTargetDestinations(answers);
+  const specialisms = readSpecialisms(answers);
 
   // Pull the full search window — pickContactChunks needs the full list to find
   // guide chunks (which often rank below tighter wiki notes). LLM prompts that
   // consume corpus do their own slicing.
-  const corpus = await searchCorpus(category, corpusQueryFromGaps(score));
+  const corpus = await searchCorpus(category, corpusQueryFromGaps(score, destinations));
 
   // Narratives reuse the cached entry on assessments.cached_narratives so
   // the PDF gen path doesn't pay the LLM tax twice when the user already
   // visited /score (which is the normal flow).
   const [narratives, nextActions] = await Promise.all([
     getOrGenerateNarratives(assessment.id, score, category),
-    generateNextActions(score, category, corpus),
+    generateNextActions(score, category, corpus, destinations),
   ]);
   const { whatsWorking, whatsBlocking } = narratives;
 
@@ -296,6 +292,10 @@ async function generateReportInner(userId: string): Promise<GenerateReportResult
     userName,
     categoryLabel,
     generatedAt: new Date().toISOString().slice(0, 10),
+    focus:
+      destinations.length || specialisms.length
+        ? { destinations, specialisms }
+        : undefined,
     score,
     whatsWorking,
     whatsBlocking,

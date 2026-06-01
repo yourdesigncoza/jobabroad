@@ -111,6 +111,24 @@ const styles = StyleSheet.create({
     color: COLOURS.muted,
     marginBottom: 4,
   },
+  focusBox: {
+    backgroundColor: '#EDE8E0',
+    borderRadius: 6,
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingLeft: 12,
+    paddingRight: 12,
+    marginBottom: 12,
+  },
+  focusRow: {
+    fontSize: 9,
+    color: COLOURS.ink,
+    marginBottom: 2,
+  },
+  focusLabel: {
+    fontWeight: 'bold',
+    color: COLOURS.green,
+  },
   divider: {
     borderBottomWidth: 1,
     borderBottomColor: COLOURS.rule,
@@ -308,6 +326,26 @@ export function ReportTemplate({ data }: { data: ReportData }) {
           <Text style={styles.scoreNumber}>{data.score.overall}</Text>
           {' / 100'}
         </Text>
+
+        {/* "Your focus" — echoes the buyer's stated goal (target destinations +
+            specialism) back to them so the report reads as their plan, not a
+            generic handout. Rendered only when the assessment captured either. */}
+        {data.focus && (data.focus.destinations.length > 0 || data.focus.specialisms.length > 0) && (
+          <View style={styles.focusBox}>
+            {data.focus.destinations.length > 0 && (
+              <Text style={styles.focusRow}>
+                <Text style={styles.focusLabel}>Targeting: </Text>
+                {lig(data.focus.destinations.join(', '))}
+              </Text>
+            )}
+            {data.focus.specialisms.length > 0 && (
+              <Text style={styles.focusRow}>
+                <Text style={styles.focusLabel}>Specialism: </Text>
+                {lig(data.focus.specialisms.join(', '))}
+              </Text>
+            )}
+          </View>
+        )}
 
         <Text style={styles.meta}>Generated {data.generatedAt}</Text>
 

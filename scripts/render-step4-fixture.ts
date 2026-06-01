@@ -38,15 +38,20 @@ const data: ReportData = {
   userName: 'Sarah van der Merwe',
   categoryLabel: 'Teaching',
   generatedAt: '2026-05-17',
+  focus: {
+    destinations: ['UAE', 'UK'],
+    specialisms: ['Maths', 'Sciences'],
+  },
   score: {
-    overall: 72,
-    band: 'needs_prep',
+    overall: 76,
+    band: 'strong_potential',
     dimensions: [
-      { key: 'credentials', label: 'Credentials', weight: 0.3, score: 80, contributing: [] },
-      { key: 'experience', label: 'Experience', weight: 0.2, score: 70, contributing: [] },
-      { key: 'language', label: 'Language', weight: 0.15, score: 90, contributing: [] },
-      { key: 'documents', label: 'Documents', weight: 0.2, score: 50, contributing: [] },
-      { key: 'readiness', label: 'Readiness', weight: 0.15, score: 75, contributing: [] },
+      { key: 'credentials', label: 'Credentials & Registration', weight: 0.25, score: 80, contributing: [] },
+      { key: 'specialism', label: 'Subject Demand', weight: 0.2, score: 100, contributing: [] },
+      { key: 'experience', label: 'Teaching Experience', weight: 0.15, score: 70, contributing: [] },
+      { key: 'documents', label: 'Documents & Finances', weight: 0.2, score: 50, contributing: [] },
+      { key: 'language', label: 'Language', weight: 0.1, score: 90, contributing: [] },
+      { key: 'readiness', label: 'Family & Timing', weight: 0.1, score: 75, contributing: [] },
     ],
   },
   whatsWorking:

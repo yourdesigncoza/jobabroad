@@ -2,6 +2,8 @@ import 'server-only';
 import OpenAI from 'openai';
 import { createClient } from '@supabase/supabase-js';
 import type { DimensionResult, ScoreResult } from './types';
+import { readTargetDestinations } from '@/lib/assessments/answers';
+import type { AssessmentData } from '@/lib/assessments/schemas/assessment';
 
 // Lazy, cached singleton — built on first call, not at module load, so
 // importing this during `next build` doesn't require OPENAI_API_KEY.
@@ -45,16 +47,20 @@ export async function getOrGenerateNarratives(
 
   const { data: row } = await sb
     .from('assessments')
-    .select('cached_narratives')
+    .select('cached_narratives, data')
     .eq('id', assessmentId)
     .single();
 
   const cached = row?.cached_narratives as CachedNarratives | null | undefined;
   if (cached?.whatsWorking && cached?.whatsBlocking) return cached;
 
+  const destinations = row?.data
+    ? readTargetDestinations(row.data as AssessmentData)
+    : [];
+
   const [whatsWorking, whatsBlocking] = await Promise.all([
-    generateWhatsWorking(score, category),
-    generateWhatsBlocking(score, category),
+    generateWhatsWorking(score, category, destinations),
+    generateWhatsBlocking(score, category, destinations),
   ]);
 
   const next: CachedNarratives = {
@@ -82,6 +88,8 @@ function bottomDims(score: ScoreResult, n = 2): DimensionResult[] {
 
 const PROSE_SYSTEM = `You write one short paragraph (max 80 words, single paragraph) for a South African work-abroad assessment report. Name the dimensions explicitly. Cite the rule reasons near-verbatim, but smooth them into natural prose.
 
+When "destinations" is non-empty, frame the paragraph around those target destinations by name (e.g. "for your UK and UAE plans"). Use them for framing only: do NOT assert any destination-specific fact (visa rule, salary, registration body) that isn't already implied by the findings.
+
 Write exactly like a natural, smart human having a conversation. Be clear, concise, and direct. Vary your sentence lengths. Never, under any circumstances, use em dashes (—). Instead, use commas, periods, parentheses, or colons.
 
 No hedging ("might", "could", "should consider"). No new facts. Return JSON: { "paragraph": "..." }`;
@@ -95,6 +103,7 @@ No hedging ("might", "could", "should consider"). No new facts. Return JSON: { "
 export async function generateWhatsWorking(
   score: ScoreResult,
   category: string,
+  destinations: string[] = [],
 ): Promise<string> {
   const top = topDims(score, 2);
   const findings = top.map((d) => ({
@@ -120,7 +129,7 @@ export async function generateWhatsWorking(
       response_format: { type: 'json_object' },
       messages: [
         { role: 'system', content: PROSE_SYSTEM },
-        { role: 'user', content: JSON.stringify({ category, top_dimensions: findings }) },
+        { role: 'user', content: JSON.stringify({ category, destinations, top_dimensions: findings }) },
       ],
     });
     const raw = completion.choices[0]?.message?.content?.trim() ?? '';
@@ -140,6 +149,7 @@ export async function generateWhatsWorking(
 export async function generateWhatsBlocking(
   score: ScoreResult,
   category: string,
+  destinations: string[] = [],
 ): Promise<string> {
   const bottom = bottomDims(score, 2);
   const findings = bottom.map((d) => ({
@@ -171,7 +181,7 @@ export async function generateWhatsBlocking(
             'Describe the biggest blockers, naming the dimensions explicitly.',
           ),
         },
-        { role: 'user', content: JSON.stringify({ category, bottom_dimensions: findings }) },
+        { role: 'user', content: JSON.stringify({ category, destinations, bottom_dimensions: findings }) },
       ],
     });
     const raw = completion.choices[0]?.message?.content?.trim() ?? '';

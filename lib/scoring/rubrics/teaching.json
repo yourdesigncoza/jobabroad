@@ -6,7 +6,7 @@
     {
       "key": "credentials",
       "label": "Credentials & Registration",
-      "weight": 0.30,
+      "weight": 0.25,
       "rules": [
         {
           "field_id": "qualifications.highest_qualification",
@@ -63,9 +63,45 @@
       ]
     },
     {
+      "key": "specialism",
+      "label": "Subject Demand",
+      "weight": 0.20,
+      "rules": [
+        {
+          "field_id": "qualifications.subjects",
+          "type": "best_match",
+          "match": {
+            "Maths": 100,
+            "Sciences": 100,
+            "Tech / Computing": 100,
+            "Special Needs": 95,
+            "English": 85,
+            "Languages": 75,
+            "Humanities / Social Sciences": 55,
+            "Phys Ed": 45,
+            "Arts / Music": 45,
+            "Other": 50
+          },
+          "reason": {
+            "Maths": "Maths is a global shortage subject; expect hiring priority and often a salary premium.",
+            "Sciences": "Sciences (Physics/Chemistry/Biology) are in acute demand across the UK and Gulf; strong leverage.",
+            "Tech / Computing": "Computing/IT teaching is a fast-growing shortage area; very strong demand abroad.",
+            "Special Needs": "SEN specialists are scarce worldwide; a significant advantage in most markets.",
+            "English": "English is widely needed, especially in the Gulf and Asia; solid demand.",
+            "Languages": "Languages are sought after at international schools, particularly mainstream European ones.",
+            "Humanities / Social Sciences": "Humanities posts are more competitive; pair with a shortage subject or international-curriculum experience to stand out.",
+            "Phys Ed": "PE roles are limited and competitive; broaden your offer or target international schools.",
+            "Arts / Music": "Arts/Music posts are fewer and competitive; international and IB schools are your best route.",
+            "Other": "Confirm how your subject maps to international curricula; demand varies by destination."
+          },
+          "empty_reason": "No subject specialism recorded. Shortage subjects (Maths, Sciences, Tech, Special Needs) get hiring priority and often a salary premium, so add yours."
+        }
+      ]
+    },
+    {
       "key": "experience",
       "label": "Teaching Experience",
-      "weight": 0.20,
+      "weight": 0.15,
       "rules": [
         {
           "field_id": "experience.years_teaching",
@@ -91,7 +127,7 @@
     {
       "key": "language",
       "label": "Language",
-      "weight": 0.15,
+      "weight": 0.10,
       "rules": [
         {
           "field_id": "readiness.english_rating",
@@ -185,7 +221,7 @@
     {
       "key": "readiness",
       "label": "Family & Timing",
-      "weight": 0.15,
+      "weight": 0.10,
       "rules": [
         {
           "field_id": "situation.family_status",
