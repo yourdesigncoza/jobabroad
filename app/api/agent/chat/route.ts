@@ -12,6 +12,7 @@ import {
 } from '@/lib/agent/prompt';
 import { getJourney, updateJourney } from '@/lib/agent/journey';
 import { rollWindow, isWindowOpen } from '@/lib/agent/access';
+import { hasCoachAccess } from '@/lib/access';
 import type { MilestoneUpdate, MilestoneStatus } from '@/lib/agent/milestones';
 import { assessmentDataSchema, type AssessmentData } from '@/lib/assessments/schemas/assessment';
 import { CATEGORIES, type CategoryId } from '@/lib/categories';
@@ -92,8 +93,10 @@ export async function POST(req: NextRequest) {
     .eq('user_id', user.id)
     .single();
   if (!profile) return NextResponse.json({ error: 'no_profile' }, { status: 401 });
-  if (profile.tier !== 'paid') return NextResponse.json({ error: 'paid_only' }, { status: 403 });
-  if (!isWindowOpen(profile.agent_access_expires_at as string | null))
+  if (!hasCoachAccess(profile.tier))
+    return NextResponse.json({ error: 'no_access' }, { status: 403 });
+  // Paid users carry the rolling-90-day window; free users have none to enforce.
+  if (profile.tier === 'paid' && !isWindowOpen(profile.agent_access_expires_at as string | null))
     return NextResponse.json({ error: 'on_hold' }, { status: 403 });
 
   const category = profile.category as string;

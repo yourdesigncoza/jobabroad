@@ -3,6 +3,7 @@ import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { createSupabaseServiceClient } from '@/lib/supabase/service';
 import { getJourney } from '@/lib/agent/journey';
 import { extractCitedIndexes } from '@/lib/rag/prompt';
+import { hasCoachAccess } from '@/lib/access';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -22,8 +23,9 @@ export async function GET() {
     .select('category, tier')
     .eq('user_id', user.id)
     .single();
-  if (profile?.tier !== 'paid')
-    return NextResponse.json({ error: 'paid_only' }, { status: 403 });
+  if (!profile) return NextResponse.json({ error: 'no_profile' }, { status: 401 });
+  if (!hasCoachAccess(profile.tier))
+    return NextResponse.json({ error: 'no_access' }, { status: 403 });
 
   const category = profile.category as string;
   const [{ data: rows }, journey] = await Promise.all([

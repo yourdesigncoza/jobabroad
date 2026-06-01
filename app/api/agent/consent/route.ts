@@ -2,6 +2,7 @@ import { randomUUID } from 'node:crypto';
 import { NextResponse } from 'next/server';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { createSupabaseServiceClient } from '@/lib/supabase/service';
+import { hasCoachAccess } from '@/lib/access';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -20,8 +21,9 @@ export async function POST() {
     .select('tier, agent_nudge_unsub_token')
     .eq('user_id', user.id)
     .single();
-  if (profile?.tier !== 'paid')
-    return NextResponse.json({ error: 'paid_only' }, { status: 403 });
+  if (!profile) return NextResponse.json({ error: 'no_profile' }, { status: 401 });
+  if (!hasCoachAccess(profile.tier))
+    return NextResponse.json({ error: 'no_access' }, { status: 403 });
 
   const { error } = await svc
     .from('profiles')

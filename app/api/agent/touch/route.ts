@@ -3,6 +3,7 @@ import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { createSupabaseServiceClient } from '@/lib/supabase/service';
 import { rollWindow } from '@/lib/agent/access';
 import { getJourney } from '@/lib/agent/journey';
+import { hasCoachAccess } from '@/lib/access';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -23,8 +24,9 @@ export async function POST() {
     .select('tier, category')
     .eq('user_id', user.id)
     .single();
-  if (profile?.tier !== 'paid')
-    return NextResponse.json({ error: 'paid_only' }, { status: 403 });
+  if (!profile) return NextResponse.json({ error: 'no_profile' }, { status: 401 });
+  if (!hasCoachAccess(profile.tier))
+    return NextResponse.json({ error: 'no_access' }, { status: 403 });
 
   // Roll the window and persist the journey seed (idempotent) now that the user
   // is actively here — keeps both writes out of server render.

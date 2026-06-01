@@ -12,9 +12,9 @@ import {
 
 const PASSWORD = 'Test12345!';
 
-// Coach is paid-only. While payments are shelved nothing is for sale, so a
-// user without coach access is sent back to the dashboard rather than shown an
-// upsell. Branch on the flag so the gate test is correct in both modes.
+// Coach access now tracks hasFullAccess: open to everyone while payments are
+// shelved, paid-only once payments are on. Branch on the flag so the gate tests
+// are correct in both modes.
 const PAYMENTS_ENABLED = process.env.NEXT_PUBLIC_PAYMENTS_ENABLED === 'true';
 
 async function setupPaidTeacher(page: import('@playwright/test').Page, email: string) {
@@ -43,7 +43,7 @@ test.describe('Coach — access gates', () => {
     expect(r.status()).toBe(401);
   });
 
-  test('free user → coach page shows premium gate', async ({ page }) => {
+  test('free user → coach page (open when payments off, premium gate when on)', async ({ page }) => {
     const email = uniqueEmail('coach-free');
     await registerAndLogin(page, {
       email,
@@ -57,14 +57,15 @@ test.describe('Coach — access gates', () => {
       if (PAYMENTS_ENABLED) {
         await expect(page.getByText(/premium feature/i)).toBeVisible();
       } else {
-        await expect(page).toHaveURL(/\/dashboard/);
+        await expect(page.getByRole('heading', { name: /teaching assistant/i })).toBeVisible();
+        await expect(page.getByPlaceholder(/ask your assistant/i)).toBeVisible();
       }
     } finally {
       await deleteUser(email);
     }
   });
 
-  test('free user chat request → 403 paid_only', async ({ page }) => {
+  test('free user chat request — allowed when payments off, 403 when on', async ({ page }) => {
     const email = uniqueEmail('coach-free-api');
     await registerAndLogin(page, {
       email,
@@ -73,11 +74,26 @@ test.describe('Coach — access gates', () => {
       phone: uniquePhone(),
       category: 'teaching',
     });
+    const userId = await findUserIdByEmail(email);
     try {
-      const r = await page.request.post('/api/agent/chat', {
-        data: { query: 'hi', requestId: 'rid-1' },
-      });
-      expect(r.status()).toBe(403);
+      if (PAYMENTS_ENABLED) {
+        const r = await page.request.post('/api/agent/chat', {
+          data: { query: 'hi', requestId: 'rid-1' },
+        });
+        expect(r.status()).toBe(403);
+      } else {
+        // Prove access via the idempotent replay path so no live OpenAI call
+        // fires: seed an answered turn, then re-post the same requestId.
+        await svc().from('agent_messages').insert([
+          { user_id: userId, role: 'user', content: 'seeded q', request_id: 'free-dup' },
+          { user_id: userId, role: 'assistant', content: 'Seeded answer [1].', request_id: 'free-dup' },
+        ]);
+        const r = await page.request.post('/api/agent/chat', {
+          data: { query: 'seeded q', requestId: 'free-dup' },
+        });
+        expect(r.ok()).toBeTruthy();
+        expect((await r.json()).replayed).toBe(true);
+      }
     } finally {
       await deleteUser(email);
     }

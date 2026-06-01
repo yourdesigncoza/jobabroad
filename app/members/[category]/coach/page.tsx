@@ -6,7 +6,7 @@ import SiteFooter from '@/components/SiteFooter';
 import AgentChat from '@/components/AgentChat';
 import { CATEGORIES } from '@/lib/categories';
 import { requireProfile } from '@/lib/auth-guards';
-import { PAYMENTS_ENABLED } from '@/lib/access';
+import { hasCoachAccess } from '@/lib/access';
 import { createSupabaseServiceClient } from '@/lib/supabase/service';
 import { extractCitedIndexes } from '@/lib/rag/prompt';
 
@@ -39,12 +39,12 @@ export default async function CoachPage({
     .select('tier, agent_nudge_consent')
     .eq('user_id', user.id)
     .single();
+  if (!agentProfile) redirect('/dashboard');
 
-  if (agentProfile?.tier !== 'paid') {
-    // Coach is hidden while payments are shelved and nothing is for sale, so
-    // route direct visitors back to their dashboard instead of an upsell that
-    // can't be acted on. (When payments are on, fall through to the pitch.)
-    if (!PAYMENTS_ENABLED) redirect('/dashboard');
+  if (!hasCoachAccess(agentProfile.tier)) {
+    // Reached only when payments are ON and the user hasn't paid — show the
+    // pitch. While payments are shelved hasCoachAccess is true for everyone, so
+    // free users fall through to the live coach below.
     return (
       <main className="min-h-screen" style={{ backgroundColor: '#F8F5F0' }}>
         <SiteNav />
