@@ -11,6 +11,8 @@ export interface MemberRow {
   categoryLabel: string;
   registeredAt: string | null;
   assessmentSubmitted: boolean;
+  /** Free-text "Tell us about yourself" answer; '' when left blank. */
+  aboutSummary: string;
   reportStatus: 'pending' | 'completed' | 'failed' | null;
   reportGeneratedAt: string | null;
   reportAttempts: number;
@@ -24,7 +26,7 @@ interface Props {
   rows: MemberRow[];
 }
 
-const COLS = 7;
+const COLS = 8;
 
 function formatDateTime(iso: string | null): string {
   if (!iso) return '—';
@@ -62,6 +64,7 @@ export default function UsersDashboardClient({ rows }: Props) {
             <Th>Member</Th>
             <Th>Registered</Th>
             <Th>Check</Th>
+            <Th>About you</Th>
             <Th>Report</Th>
             <Th>Chat</Th>
             <Th>Summary / activity</Th>
@@ -195,6 +198,11 @@ function UserRow({ row }: { row: MemberRow }) {
           />
         </td>
 
+        {/* About you */}
+        <td className={CELL}>
+          <AboutCell text={row.aboutSummary} />
+        </td>
+
         {/* Report */}
         <td className={CELL}>
           <ReportPill status={row.reportStatus} attempts={row.reportAttempts} />
@@ -293,6 +301,40 @@ function UserRow({ row }: { row: MemberRow }) {
         </tr>
       )}
     </>
+  );
+}
+
+/** The member's free-text "about you" answer. Long answers (>140 chars) are
+ *  clamped with an inline Show more / Show less toggle so a verbose member
+ *  doesn't blow out the row height. Blank answers render an em dash. */
+function AboutCell({ text }: { text: string }) {
+  const [expanded, setExpanded] = useState(false);
+  const trimmed = text.trim();
+  if (!trimmed) {
+    return (
+      <span className="text-xs" style={{ color: '#9A958C' }}>
+        —
+      </span>
+    );
+  }
+  const isLong = trimmed.length > 140;
+  const shown = expanded || !isLong ? trimmed : `${trimmed.slice(0, 140).trimEnd()}…`;
+  return (
+    <div className="flex flex-col gap-1" style={{ minWidth: 200, maxWidth: 320 }}>
+      <span className="text-xs whitespace-pre-wrap" style={{ color: '#2C2C2C' }}>
+        {shown}
+      </span>
+      {isLong && (
+        <button
+          type="button"
+          onClick={() => setExpanded((e) => !e)}
+          className="self-start font-display font-bold uppercase tracking-wide text-[0.6rem]"
+          style={{ color: '#1B4D3E', cursor: 'pointer' }}
+        >
+          {expanded ? 'Show less' : 'Show more'}
+        </button>
+      )}
+    </div>
   );
 }
 

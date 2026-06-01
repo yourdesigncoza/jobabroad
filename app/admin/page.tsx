@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { createSupabaseServiceClient } from '@/lib/supabase/service';
 import { requireAdmin } from '@/lib/auth-guards';
 import { CATEGORIES } from '@/lib/categories';
+import { extractPersonalContext } from '@/lib/agent/prompt';
+import type { AssessmentData } from '@/lib/assessments/schemas/assessment';
 import UsersDashboardClient, { type MemberRow } from './UsersDashboardClient';
 
 export const dynamic = 'force-dynamic';
@@ -23,7 +25,11 @@ export default async function AdminUsersPage() {
     await Promise.all([
       svc.from('profiles').select('user_id, name, category, tier'),
       svc.auth.admin.listUsers(),
-      svc.from('assessments').select('user_id').eq('status', 'submitted'),
+      svc
+        .from('assessments')
+        .select('user_id, data, updated_at')
+        .eq('status', 'submitted')
+        .order('updated_at', { ascending: false }),
       svc
         .from('paid_reports')
         .select('user_id, generated_at, generation_status, generation_attempts, pdf_path'),
@@ -36,7 +42,18 @@ export default async function AdminUsersPage() {
     if (u.id) authByUser.set(u.id, { email: u.email ?? '', createdAt: u.created_at ?? null });
   }
 
-  const submittedUsers = new Set((submittedRes.data ?? []).map((a) => a.user_id as string));
+  // Submitted-assessment spine + each member's free-text "about you" (newest
+  // assessment per user wins). Reuses the coach's extractor so admin reads
+  // exactly what the assistant was handed for that member.
+  const submittedUsers = new Set<string>();
+  const aboutByUser = new Map<string, string>();
+  for (const a of submittedRes.data ?? []) {
+    const uid = a.user_id as string;
+    submittedUsers.add(uid);
+    if (!aboutByUser.has(uid)) {
+      aboutByUser.set(uid, extractPersonalContext(a.data as AssessmentData | null));
+    }
+  }
 
   const reportsByUser = new Map<
     string,
@@ -88,6 +105,7 @@ export default async function AdminUsersPage() {
       categoryLabel: CATEGORIES.find((c) => c.id === p.category)?.label ?? (p.category ?? ''),
       registeredAt: auth?.createdAt ?? null,
       assessmentSubmitted: submittedUsers.has(p.user_id),
+      aboutSummary: aboutByUser.get(p.user_id) ?? '',
       reportStatus: report?.generation_status ?? null,
       reportGeneratedAt: report?.generated_at ?? null,
       reportAttempts: report?.generation_attempts ?? 0,
@@ -132,9 +150,10 @@ export default async function AdminUsersPage() {
           </h1>
           <p className="font-body text-sm" style={{ color: '#6B6B6B' }}>
             Every registered user, newest first: when they signed up, whether
-            they&apos;ve completed the eligibility check, their report status, and
-            their chatbot activity. Hit <em>Summarise chats</em> on any member
-            who&apos;s chatted to generate an on-demand summary of what they asked.
+            they&apos;ve completed the eligibility check, what they told us about
+            themselves in their own words, their report status, and their chatbot
+            activity. Hit <em>Summarise chats</em> on any member who&apos;s chatted
+            to generate an on-demand summary of what they asked.
           </p>
         </div>
 

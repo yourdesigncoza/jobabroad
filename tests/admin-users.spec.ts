@@ -2,6 +2,7 @@ import { test, expect, type Page } from '@playwright/test';
 import {
   deleteUser,
   findUserIdByEmail,
+  insertSubmittedTeachingAssessment,
   makePaid,
   registerAndLogin,
   seedReport,
@@ -200,6 +201,79 @@ test.describe('Admin users dashboard — happy path', () => {
       await adminCtx.close();
       await deleteUser(ADMIN_EMAIL);
       await deleteUser(memberEmail);
+    }
+  });
+});
+
+test.describe('Admin users dashboard — about-you column', () => {
+  test.skip(!ADMIN_EMAIL, 'PLAYWRIGHT_ADMIN_EMAIL not set');
+
+  test('shows each member\'s free-text about-you, with Show more for long answers', async ({ page, browser }) => {
+    // Member A: standard seeded assessment → short about-text (renders in full).
+    const shortEmail = uniqueEmail('about-short');
+    await registerAndLogin(page, {
+      email: shortEmail,
+      password: PASSWORD,
+      name: 'About Short',
+      phone: uniquePhone(),
+      category: 'teaching',
+    });
+    const shortId = await findUserIdByEmail(shortEmail);
+    await insertSubmittedTeachingAssessment(shortId);
+    const SHORT_ABOUT = 'I have a hearing impairment and would prefer a school experienced in supporting it.';
+
+    // Member B: same seed, but overwrite about.summary with a >140-char answer so
+    // the cell clamps and offers Show more / Show less.
+    const longEmail = uniqueEmail('about-long');
+    const longCtx = await browser.newContext();
+    const longPage = await longCtx.newPage();
+    await registerAndLogin(longPage, {
+      email: longEmail,
+      password: PASSWORD,
+      name: 'About Long',
+      phone: uniquePhone(),
+      category: 'teaching',
+    });
+    await longCtx.close();
+    const longId = await findUserIdByEmail(longEmail);
+    await insertSubmittedTeachingAssessment(longId);
+    const LONG_ABOUT =
+      'I am a single parent of two school-age children and I am specifically looking for a placement in a country with strong public schooling and an established South African community so the kids settle quickly.';
+    const { data: longRow } = await svc()
+      .from('assessments')
+      .select('id, data')
+      .eq('user_id', longId)
+      .single();
+    const mergedData = {
+      ...(longRow!.data as Record<string, unknown>),
+      'about.summary': { q: 'about.summary.v1', v: LONG_ABOUT },
+    };
+    await svc().from('assessments').update({ data: mergedData }).eq('id', longRow!.id);
+
+    const adminCtx = await browser.newContext();
+    const adminPage = await adminCtx.newPage();
+    try {
+      await seedAndLoginAdmin(adminPage);
+      await adminPage.goto('/admin');
+      await expect(adminPage.getByRole('heading', { name: /registered members/i })).toBeVisible();
+
+      // Short answer renders in full, no toggle needed.
+      const shortMemberRow = adminPage.locator('tr', { hasText: shortEmail });
+      await expect(shortMemberRow.getByText(SHORT_ABOUT)).toBeVisible();
+      await expect(shortMemberRow.getByRole('button', { name: /show more/i })).toHaveCount(0);
+
+      // Long answer is clamped behind Show more; expanding reveals the tail.
+      const longMemberRow = adminPage.locator('tr', { hasText: longEmail });
+      const tail = 'so the kids settle quickly.';
+      await expect(longMemberRow.getByText(tail, { exact: false })).toHaveCount(0);
+      await longMemberRow.getByRole('button', { name: /show more/i }).click();
+      await expect(longMemberRow.getByText(tail, { exact: false })).toBeVisible();
+      await expect(longMemberRow.getByRole('button', { name: /show less/i })).toBeVisible();
+    } finally {
+      await adminCtx.close();
+      await deleteUser(ADMIN_EMAIL);
+      await deleteUser(shortEmail);
+      await deleteUser(longEmail);
     }
   });
 });
