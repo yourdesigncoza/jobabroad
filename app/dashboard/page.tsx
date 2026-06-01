@@ -185,8 +185,8 @@ export default async function DashboardPage() {
   // once the user has completed the eligibility check.
   let standing: { band: Band; whatsWorking: string; whatsBlocking: string } | null = null;
   // Journey/milestone checklist — surfaced here (moved off the assistant page)
-  // for every full-access user whose category has a milestone model (teaching
-  // pilot). The seed is computed read-only; the first manual toggle persists it.
+  // for every full-access user whose category has a milestone model (all 11
+  // verticals do). The seed is computed read-only; the first manual toggle persists it.
   let journey: Awaited<ReturnType<typeof getJourneyForDisplay>> | null = null;
   if (fullAccess && assessmentSubmitted && latestAssessment) {
     const rubric = await loadRubric(profile.category);
