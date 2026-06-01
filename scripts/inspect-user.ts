@@ -31,7 +31,7 @@ async function main() {
       .eq('user_id', p.user_id);
     const { data: reports } = await sb
       .from('paid_reports')
-      .select('user_id, generated_at, call_notes')
+      .select('user_id, generated_at, generation_status')
       .eq('user_id', p.user_id);
     console.log(JSON.stringify({ id: p.user_id, email: auth?.email, ...p, assessments, reports }, null, 2));
   }
