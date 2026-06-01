@@ -412,6 +412,14 @@ test.describe('Admin user RUD — happy path', () => {
     });
     const userId = await findUserIdByEmail(email);
 
+    // Seed a report PDF in Storage so we can prove the delete purges it.
+    await svc()
+      .storage.from('paid-reports')
+      .upload(`${userId}/report-test.pdf`, Buffer.from('%PDF-1.4 test'), {
+        contentType: 'application/pdf',
+        upsert: true,
+      });
+
     const adminCtx = await browser.newContext();
     const adminPage = await adminCtx.newPage();
     try {
@@ -423,6 +431,10 @@ test.describe('Admin user RUD — happy path', () => {
       expect(prof).toBeNull();
       const { data: authUser } = await svc().auth.admin.getUserById(userId);
       expect(authUser?.user).toBeFalsy();
+
+      // Storage folder is now empty (the PDF blob was purged).
+      const { data: files } = await svc().storage.from('paid-reports').list(userId);
+      expect(files ?? []).toHaveLength(0);
     } finally {
       await adminCtx.close();
       await deleteUser(ADMIN_EMAIL);

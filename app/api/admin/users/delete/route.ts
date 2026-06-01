@@ -21,6 +21,10 @@ const USER_TABLES = [
   'user_journey',
 ];
 
+// Generated report PDFs live in this Storage bucket under a per-user folder
+// (see lib/reports/generator.ts: pdfPath = `${userId}/report-${ts}.pdf`).
+const REPORTS_BUCKET = 'paid-reports';
+
 export async function POST(req: NextRequest) {
   const ssr = await createSupabaseServerClient();
   const {
@@ -46,6 +50,18 @@ export async function POST(req: NextRequest) {
   for (const table of USER_TABLES) {
     const { error } = await svc.from(table).delete().eq('user_id', body.userId);
     if (error) console.error(`[admin/users/delete] ${table} cleanup failed`, error);
+  }
+
+  // Purge the generated report PDF(s) from Storage — the paid_reports row above
+  // only pointed at them. Best-effort: list the user's folder and remove every
+  // object so we don't leave personal-data blobs orphaned in the bucket.
+  const { data: files, error: listErr } = await svc.storage.from(REPORTS_BUCKET).list(body.userId);
+  if (listErr) {
+    console.error('[admin/users/delete] storage list failed', listErr);
+  } else if (files && files.length) {
+    const paths = files.map((f) => `${body.userId}/${f.name}`);
+    const { error: rmErr } = await svc.storage.from(REPORTS_BUCKET).remove(paths);
+    if (rmErr) console.error('[admin/users/delete] storage remove failed', rmErr);
   }
 
   const { error } = await svc.auth.admin.deleteUser(body.userId);
