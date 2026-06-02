@@ -16,6 +16,11 @@ _Nothing open. 🎉_
 
 ## Done
 
+- ✅ **2026-06-02 — Admin funnel dashboard** (`/admin/funnel`). Conversion funnel
+  (registered→confirmed→started→submitted→paid→booked), raw-numbers snapshot, and
+  signups-by-category — live from `lib/admin/funnel-metrics.ts`. Replaces ad-hoc
+  DB queries; first move from `docs/strategic-assessment.md` (action C). Playwright
+  spec `tests/admin-funnel.spec.ts` (gates + dashboard) green.
 - ✅ **2026-06-02 — Admin notification on new-user email confirmation.** When a
   newly-registered user confirms their email, `/auth/callback` fires
   `notifyAdminOfNewUser` (background `waitUntil`) → branded email to

@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 
 const NAV_ITEMS = [
   { href: '/admin', label: 'Members' },
+  { href: '/admin/funnel', label: 'Funnel' },
   { href: '/admin/wa-assistant', label: 'WhatsApp' },
 ];
 

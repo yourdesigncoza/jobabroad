@@ -5,6 +5,7 @@ import { CATEGORIES } from '@/lib/categories';
 import { extractPersonalContext } from '@/lib/agent/prompt';
 import type { AssessmentData } from '@/lib/assessments/schemas/assessment';
 import UsersDashboardClient, { type MemberRow } from './UsersDashboardClient';
+import StatCard from '@/components/admin/StatCard';
 
 export const dynamic = 'force-dynamic';
 
@@ -167,24 +168,5 @@ export default async function AdminUsersPage() {
         <UsersDashboardClient rows={rows} />
       </div>
     </main>
-  );
-}
-
-function StatCard({ label, value }: { label: string; value: number }) {
-  return (
-    <div
-      className="rounded-2xl p-5 flex flex-col gap-1"
-      style={{ backgroundColor: '#FFFFFF', border: '1.5px solid #EDE8E0' }}
-    >
-      <span className="font-display font-bold text-3xl" style={{ color: '#1B4D3E' }}>
-        {value}
-      </span>
-      <span
-        className="font-display text-[0.65rem] font-semibold uppercase tracking-wider"
-        style={{ color: '#6B6B6B' }}
-      >
-        {label}
-      </span>
-    </div>
   );
 }
