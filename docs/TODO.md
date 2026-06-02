@@ -10,23 +10,22 @@ _Last updated: 2026-06-02._
 
 ## Open
 
-### 4. Live-render QA PDFs for the changed rubrics
-- **Owner:** Claude
-- **Priority:** Low (verification follow-up)
-- **Effort:** Medium (one render per vertical, uses OpenAI + corpus)
-- **Context:** On 2026-06-02 all 11 rubrics were domain-reviewed, but only
-  *healthcare* was eyeballed end-to-end in an actual PDF. The new caps/gates
-  render on the `/score` page and PDF cover. Worth confirming a representative
-  few render correctly: au-pair (own-children numeric cap), tefl (no-degree /
-  no-cert), trades (Red Seal cap + cash-in-hand experience).
-- **Done when:** Spot-checked PDFs for ~3 representative verticals show the gate
-  callout + corrected scoring as expected. Use the `scripts/render-*-live.ts`
-  pattern (`scripts/render-healthcare-live.ts` is the template).
+_Nothing open. 🎉_
 
 ---
 
 ## Done
 
+- ✅ **2026-06-02 — Live-rendered QA PDFs for the changed rubrics.** Spot-checked
+  au-pair, tefl, trades end-to-end (real scoring + corpus + OpenAI + PDF). All
+  three cap correctly to **needs prep** despite strong weighted scores:
+  au-pair 92/100 (own-children numeric cap), tefl 73/100 (no-degree + no-cert —
+  both gates render, heading pluralises to "CRITICAL GATES"), trades 75/100
+  (Red Seal cap + cash-in-hand discounts Experience to 73, not 100). Gate
+  callout + red dimension bars render on the PDF cover as expected. Added a DRY
+  parameterised runner `scripts/render-rubric-live.ts` (generalises the per-
+  vertical `render-*-live.ts` pattern); run via
+  `NODE_OPTIONS="--require ./scripts/shim-server-only.cjs" npx tsx scripts/render-rubric-live.ts --category=<cat>`.
 - ✅ **2026-06-02 — Vercel "deployment failed" email resolved.** Confirmed
   stale/other-scope — all projects green, site serving 200. No real failure.
 - ✅ **2026-06-02 — Dropped `paid_reports.call_notes` from the live DB.**
