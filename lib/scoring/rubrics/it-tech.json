@@ -1,12 +1,20 @@
 {
   "category": "it-tech",
-  "version": 1,
+  "version": 2,
   "bands": { "high_blockers_lt": 40, "needs_prep_lt": 70 },
+  "caps": [
+    {
+      "field_id": "documents.passport_status",
+      "when_value": ["No passport"],
+      "max_band": "needs_prep",
+      "reason": "You cannot be placed abroad without a passport, so your readiness is held at needs prep until you have one in hand. It is the first thing to sort, and SA passport turnaround is usually a few weeks."
+    }
+  ],
   "dimensions": [
     {
       "key": "credentials",
       "label": "Qualifications & Certifications",
-      "weight": 0.22,
+      "weight": 0.20,
       "rules": [
         {
           "field_id": "qualifications.highest_qualification",
@@ -114,7 +122,7 @@
     {
       "key": "experience",
       "label": "Experience",
-      "weight": 0.15,
+      "weight": 0.10,
       "rules": [
         {
           "field_id": "role.years_experience",
@@ -125,7 +133,14 @@
             { "lt": 10, "score": 90, "reason": "5 to 10 years of experience makes you a strong applicant for competitive roles." },
             { "score": 100, "reason": "10+ years of experience positions you for senior and staff-level roles abroad." }
           ]
-        },
+        }
+      ]
+    },
+    {
+      "key": "employer_traction",
+      "label": "Employer Traction",
+      "weight": 0.10,
+      "rules": [
         {
           "field_id": "readiness.remote_offer",
           "type": "match",
@@ -136,10 +151,10 @@
             "Not yet — just exploring": 40
           },
           "reason": {
-            "Active interviews with destination employers": "Live interviews with destination employers put you close to a sponsoring offer.",
+            "Active interviews with destination employers": "Live interviews with destination employers put you close to a sponsoring offer, which is the main gate for ICT roles.",
             "Remote-first offer from destination employer": "An offer from a destination employer is the strongest position and often the gateway to sponsorship.",
             "Currently remote for SA employer only": "Remote work for an SA employer builds relevant track record, but you still need a destination offer to anchor a visa.",
-            "Not yet — just exploring": "No live offer yet, so the next step is targeting destination employers who sponsor."
+            "Not yet — just exploring": "No live offer yet, so the next step is targeting destination employers who sponsor; employer sponsorship is the primary gate for ICT."
           }
         }
       ]
@@ -147,7 +162,7 @@
     {
       "key": "documents",
       "label": "Documents & Finances",
-      "weight": 0.18,
+      "weight": 0.15,
       "rules": [
         {
           "field_id": "documents.passport_status",
