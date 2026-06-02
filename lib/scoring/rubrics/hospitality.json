@@ -1,7 +1,15 @@
 {
   "category": "hospitality",
-  "version": 1,
+  "version": 2,
   "bands": { "high_blockers_lt": 40, "needs_prep_lt": 70 },
+  "caps": [
+    {
+      "field_id": "documents.passport_status",
+      "when_value": ["No passport"],
+      "max_band": "needs_prep",
+      "reason": "You cannot be placed abroad without a passport, so your readiness is held at needs prep until you have one in hand. It is the first thing to sort, and SA passport turnaround is usually a few weeks."
+    }
+  ],
   "dimensions": [
     {
       "key": "qualifications",
@@ -34,13 +42,13 @@
           "match": {
             "Yes — current": 100,
             "In progress": 60,
-            "No": 30,
+            "No": 50,
             "Not sure": 40
           },
           "reason": {
             "Yes — current": "A current trade test certificate meets the VETASSESS Pathway 1 requirement and strengthens Gulf hotel applications.",
             "In progress": "Your trade test in progress; completing it unlocks the Australian VETASSESS route.",
-            "No": "No trade test certificate; this is a hard requirement for the Australian skilled route and helps UAE 5-star applications.",
+            "No": "No trade test certificate. It is only required for the Australian skilled route, not for UAE, cruise or UK, but completing one would widen your options and help UAE 5-star applications.",
             "Not sure": "Confirm your trade test status, as it is decisive for the Australian skilled route."
           }
         }
@@ -180,6 +188,26 @@
             "R30k – R60k": "A comfortable budget for most hospitality routes other than the costlier Australian skilled visa.",
             "R60k+": "A strong financial position that covers even the upfront Australian VETASSESS and visa costs.",
             "Prefer not to say": "Budget not declared; share it privately with us if it shapes your destination options."
+          }
+        },
+        {
+          "field_id": "documents.visa_refusal_history",
+          "type": "match",
+          "match": {
+            "None": 100,
+            "Yes — UK": 60,
+            "Yes — UAE": 60,
+            "Yes — Australia": 60,
+            "Yes — other country": 60,
+            "Multiple": 25
+          },
+          "reason": {
+            "None": "No prior visa refusals, which keeps your applications clean.",
+            "Yes — UK": "A prior UK refusal must be declared on future applications; understand and address the original ground before reapplying.",
+            "Yes — UAE": "A prior UAE refusal must be declared; understand why it was refused before your next application.",
+            "Yes — Australia": "A prior Australian refusal must be declared on future applications; resolve the original ground before reapplying.",
+            "Yes — other country": "A prior visa refusal must be declared on future applications; address the original reason before reapplying.",
+            "Multiple": "Multiple prior refusals are a serious risk factor that visa officers weigh heavily, so get specialist advice before reapplying."
           }
         }
       ]
