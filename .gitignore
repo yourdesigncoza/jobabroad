@@ -57,3 +57,6 @@ schema/
 docs/prompt-tests/
 # Loose root-level smoke scripts.
 /score-smoke.mjs
+
+# User PII backups — never commit
+docs/user-backups/

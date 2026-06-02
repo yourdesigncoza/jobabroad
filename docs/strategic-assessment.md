@@ -20,6 +20,16 @@ is one week away and we've never asked the question.
 
 ---
 
+## ⚠️ Data caveat — the real benchmark starts 2026-06-02
+
+The pre-2026-06-02 signups are **not a valid benchmark.** They arrived largely via
+ChatGPT referrals while the site was still being built, and many registered on
+verticals that were **incomplete at the time** — so the thin assessment-start rate
+below reflects a half-built product, not real user behaviour. **2026-06-02 is the
+first day all 11 verticals are complete**; treat metrics from this date forward as
+the true baseline. (Re-engagement email to these early users is going out — see
+`scripts/send-relaunch.ts`.)
+
 ## The numbers (live DB snapshot, 2026-06-02)
 
 - **auth.users:** 20 (18 confirmed) over ~2 weeks (17 May – 1 Jun)
