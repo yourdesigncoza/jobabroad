@@ -164,10 +164,14 @@ test('all rubrics validate against their assessments', async () => {
       const f = fields.get(cap.field_id);
       expect(f, `${category}/caps: field ${cap.field_id} exists`).toBeTruthy();
       expect(validBands.has(cap.max_band), `${category}/caps: max_band ${cap.max_band} valid`).toBe(true);
+      expect(cap.when_value != null || cap.when_min != null, `${category}/caps: ${cap.field_id} has when_value or when_min`).toBe(true);
       if (f) {
-        for (const v of cap.when_value) {
+        for (const v of cap.when_value ?? []) {
           const ok = f.type === 'boolean' ? v === 'true' || v === 'false' : f.options.has(v);
           expect(ok, `${category}/caps: "${cap.field_id}" when_value ${JSON.stringify(v)} is a valid option`).toBe(true);
+        }
+        if (cap.when_min != null) {
+          expect(f.type, `${category}/caps: "${cap.field_id}" when_min needs a number field`).toBe('number');
         }
       }
     }

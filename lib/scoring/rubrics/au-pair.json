@@ -1,7 +1,21 @@
 {
   "category": "au-pair",
-  "version": 1,
+  "version": 2,
   "bands": { "high_blockers_lt": 40, "needs_prep_lt": 70 },
+  "caps": [
+    {
+      "field_id": "documents.passport_status",
+      "when_value": ["No passport"],
+      "max_band": "needs_prep",
+      "reason": "You cannot be placed abroad without a passport, so your readiness is held at needs prep until you have one in hand. It is the first thing to sort, and SA passport turnaround is usually a few weeks."
+    },
+    {
+      "field_id": "documents.dependants_count",
+      "when_min": 1,
+      "max_band": "needs_prep",
+      "reason": "Au pairs live in with the host family, so the USA J-1 and European programmes require that you have no dependent children of your own. With children your readiness is held at needs prep; ask us about the few specialist routes that may allow it."
+    }
+  ],
   "dimensions": [
     {
       "key": "childcare",

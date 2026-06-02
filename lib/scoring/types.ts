@@ -72,7 +72,10 @@ export interface Dimension {
 export interface BandCap {
   field_id: string;
   /** Field values that trip the cap (exact option strings, or "true"/"false"). */
-  when_value: string[];
+  when_value?: string[];
+  /** Numeric trip: caps when the field's number value is >= this (e.g. an
+   *  au pair with own children — dependants_count >= 1). */
+  when_min?: number;
   /** Highest band the applicant can reach while this field is tripped. */
   max_band: Band;
   /** User-facing explanation, surfaced on the score page and in the report. */

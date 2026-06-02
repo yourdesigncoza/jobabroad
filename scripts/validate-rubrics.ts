@@ -45,7 +45,10 @@ function checkCaps(rubric: Rubric, fields: Map<string, FieldInfo>, errors: strin
     if (!VALID_BANDS.has(cap.max_band)) {
       errors.push(`${where}: "${cap.field_id}" max_band ${JSON.stringify(cap.max_band)} is not a valid band`);
     }
-    for (const v of cap.when_value) {
+    if (cap.when_value == null && cap.when_min == null) {
+      errors.push(`${where}: "${cap.field_id}" cap has neither when_value nor when_min`);
+    }
+    for (const v of cap.when_value ?? []) {
       const ok = f.type === 'boolean' ? v === 'true' || v === 'false' : f.options.has(v);
       if (!ok) {
         errors.push(
@@ -53,6 +56,9 @@ function checkCaps(rubric: Rubric, fields: Map<string, FieldInfo>, errors: strin
             (f.type === 'boolean' ? ' (boolean expects "true"/"false")' : ` (field type ${f.type})`),
         );
       }
+    }
+    if (cap.when_min != null && f.type !== 'number') {
+      errors.push(`${where}: "${cap.field_id}" uses when_min but field type is ${f.type}`);
     }
   }
 }

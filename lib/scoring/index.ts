@@ -71,7 +71,11 @@ export function calculateScore(answers: AssessmentData, rubric: Rubric): ScoreRe
   for (const cap of rubric.caps ?? []) {
     const value = answers[cap.field_id]?.v;
     const key = value == null ? '' : String(value);
-    if (!cap.when_value.includes(key)) continue;
+    const trippedByValue = cap.when_value?.includes(key) ?? false;
+    const numeric = typeof value === 'number' ? value : Number(value);
+    const trippedByMin =
+      cap.when_min != null && !Number.isNaN(numeric) && numeric >= cap.when_min;
+    if (!trippedByValue && !trippedByMin) continue;
     applied_caps.push({
       field_id: cap.field_id,
       value: value ?? null,
