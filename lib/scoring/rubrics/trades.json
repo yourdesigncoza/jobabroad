@@ -1,7 +1,21 @@
 {
   "category": "trades",
-  "version": 1,
+  "version": 2,
   "bands": { "high_blockers_lt": 40, "needs_prep_lt": 70 },
+  "caps": [
+    {
+      "field_id": "documents.passport_status",
+      "when_value": ["No passport"],
+      "max_band": "needs_prep",
+      "reason": "You cannot be placed abroad without a passport, so your readiness is held at needs prep until you have one in hand. It is the first thing to sort, and SA passport turnaround is usually a few weeks."
+    },
+    {
+      "field_id": "trade.red_seal_status",
+      "when_value": ["No formal trade test"],
+      "max_band": "needs_prep",
+      "reason": "Every destination requires a completed trade test (Red Seal) before you can sit a skills assessment or be placed, so your readiness is held at needs prep until you have passed it. It is the single most important credential for going abroad as an artisan."
+    }
+  ],
   "dimensions": [
     {
       "key": "credentials",
@@ -27,20 +41,27 @@
           }
         },
         {
-          "field_id": "assessment.tra_osap_status",
-          "type": "match",
+          "field_ids": [
+            "assessment.tra_osap_status",
+            "assessment.canadian_tea_status",
+            "assessment.nz_iqa_status"
+          ],
+          "type": "best_match",
           "match": {
             "Outcome received": 100,
+            "Approved by a province": 100,
+            "Completed": 100,
             "Submitted — in progress": 70,
-            "Not started": 40,
-            "Not applying to Australia": 60
+            "Not started": 40
           },
           "reason": {
-            "Outcome received": "TRA Offshore Skills Assessment outcome received, the mandatory step for an Australian skilled visa is done.",
-            "Submitted — in progress": "TRA assessment submitted and in progress, expect roughly 15 weeks before the outcome.",
-            "Not started": "TRA Offshore Skills Assessment not started, this is required before any Australian skilled visa lodgement.",
-            "Not applying to Australia": "Not targeting Australia, so the TRA assessment does not apply to your pathway."
-          }
+            "Outcome received": "Your TRA Offshore Skills Assessment outcome is in hand, the mandatory step for an Australian skilled visa.",
+            "Approved by a province": "Your Canadian provincial Trade Equivalency Assessment is approved, the key recognition step for Canada.",
+            "Completed": "Your New Zealand qualification check is complete, clearing the NZ recognition step.",
+            "Submitted — in progress": "Your destination skills assessment is underway; TRA runs about 15 weeks and Canadian provincial TEAs 3 to 12 months.",
+            "Not started": "No destination skills assessment started yet, the step that converts your Red Seal into a recognised overseas credential."
+          },
+          "empty_reason": "No destination skills assessment recorded. Starting the right one for your target (TRA for Australia, a provincial TEA for Canada, or the NZ check) converts your Red Seal into a recognised overseas credential."
         }
       ]
     },
@@ -119,6 +140,40 @@
             "Yes — but different/related trade": "Recent work was in a related trade, document how it maps to your nominated occupation.",
             "No — gap of 1+ year": "A gap of over a year in your trade may fail recency rules, get back into paid trade work.",
             "No — recently qualified": "Recently qualified with limited recent hours, build up documented trade time before assessment."
+          }
+        },
+        {
+          "field_id": "experience.employment_type",
+          "type": "match",
+          "match": {
+            "PAYE / IRP5 documented": 100,
+            "Self-employed (with SARS records)": 85,
+            "Mix of PAYE and cash": 60,
+            "Other": 50,
+            "Mostly cash-in-hand / family business": 25
+          },
+          "reason": {
+            "PAYE / IRP5 documented": "Your work is PAYE/IRP5 documented, exactly what TRA and Canadian assessors accept as proof of experience.",
+            "Self-employed (with SARS records)": "Self-employed with SARS records is assessable, so gather invoices, contracts and tax records to evidence your hours.",
+            "Mix of PAYE and cash": "A mix of PAYE and cash means only the documented portion counts toward an assessment, so maximise your evidenced hours.",
+            "Other": "Confirm how your work history can be evidenced, as assessors require documented, verifiable experience.",
+            "Mostly cash-in-hand / family business": "Cash-in-hand work without IRP5s or tax records is excluded from TRA and Canadian assessments, so you will need to build a documented track record."
+          }
+        },
+        {
+          "field_id": "experience.employer_references",
+          "type": "match",
+          "match": {
+            "All employers contactable + letterhead refs available": 100,
+            "Some employers contactable": 65,
+            "Old employers closed / unreachable": 35,
+            "None": 15
+          },
+          "reason": {
+            "All employers contactable + letterhead refs available": "Letterhead references from contactable employers meet the TRA OSAP and Canadian provincial requirements.",
+            "Some employers contactable": "Some employers are contactable, so secure letterhead references now while those contacts are still reachable.",
+            "Old employers closed / unreachable": "Unreachable past employers make references hard, so look for colleagues, payslips or contracts as alternative evidence.",
+            "None": "No employer references is a real obstacle, as every skills assessment requires verifiable letterhead references."
           }
         }
       ]
