@@ -1,7 +1,15 @@
 {
   "category": "farming",
-  "version": 1,
+  "version": 2,
   "bands": { "high_blockers_lt": 40, "needs_prep_lt": 70 },
+  "caps": [
+    {
+      "field_id": "documents.passport_status",
+      "when_value": ["No passport"],
+      "max_band": "needs_prep",
+      "reason": "You cannot be placed abroad without a passport, so your readiness is held at needs prep until you have one in hand. It is the first thing to sort, and SA passport turnaround is usually a few weeks."
+    }
+  ],
   "dimensions": [
     {
       "key": "skills",
@@ -169,6 +177,24 @@
             "R30k – R60k": "Comfortable budget for visa fees, flights and first weeks abroad.",
             "R60k+": "Strong financial position for any seasonal route.",
             "Prefer not to say": "Budget not declared, share privately with us if it shapes your options."
+          }
+        },
+        {
+          "field_id": "documents.visa_refusal_history",
+          "type": "match",
+          "match": {
+            "None": 100,
+            "Yes — UK": 60,
+            "Yes — USA": 60,
+            "Yes — other country": 60,
+            "Multiple": 25
+          },
+          "reason": {
+            "None": "No prior visa refusals, which keeps your applications clean.",
+            "Yes — UK": "A prior UK refusal must be declared on future applications; understand and address the original ground before reapplying.",
+            "Yes — USA": "A prior USA refusal must be declared; H-2A and other US visas weigh prior refusals, so resolve the original reason first.",
+            "Yes — other country": "A prior visa refusal must be declared on future applications; address the original reason before reapplying.",
+            "Multiple": "Multiple prior refusals are a serious risk factor that visa officers weigh heavily, so get specialist advice before reapplying."
           }
         }
       ]
