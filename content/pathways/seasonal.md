@@ -43,7 +43,7 @@ Only use sponsors that appear on the US Department of State's official designate
 
 **Timeline — this programme has a hard annual cutoff:**
 
-Applications for the May–September season typically close January–February, with the 2025 season closing in early February. <!-- src: tier=secondary | url=https://www.travelextra.ie/sponsors-urge-early-applications-for-summer-2026-j1-programme/ | path=wiki/CIEE.md | claim_id=01-destinations-012 --> To avoid missing the window:
+Applications for the May–September season typically close January–February. The 2026 season has already closed and participants are on placement, so the next open window is the 2027 season — applications for it open around October 2026. <!-- src: tier=secondary | url=https://www.travelextra.ie/sponsors-urge-early-applications-for-summer-2026-j1-programme/ | path=wiki/CIEE.md | claim_id=01-destinations-012 --> To avoid missing the window:
 
 - **October–November:** Contact a designated sponsor; secure a confirmed job offer
 - **November–January:** Sponsor vets job and issues DS-2019 (allow 30–60 days)
