@@ -1,7 +1,27 @@
 {
   "category": "tefl",
-  "version": 1,
+  "version": 2,
   "bands": { "high_blockers_lt": 40, "needs_prep_lt": 70 },
+  "caps": [
+    {
+      "field_id": "documents.passport_status",
+      "when_value": ["No passport"],
+      "max_band": "needs_prep",
+      "reason": "You cannot be placed abroad without a passport, so your readiness is held at needs prep until you have one in hand. It is the first thing to sort, and SA passport turnaround is usually a few weeks."
+    },
+    {
+      "field_id": "qualifications.degree_status",
+      "when_value": ["Matric only"],
+      "max_band": "needs_prep",
+      "reason": "A completed bachelor degree is a hard visa requirement for China, South Korea, the Gulf and Vietnam, so without one those markets are closed and your readiness is held at needs prep. Cambodia and online teaching remain open, or finishing a degree unlocks the main markets."
+    },
+    {
+      "field_id": "credential.tefl_cert_type",
+      "when_value": ["None — not planning"],
+      "max_band": "needs_prep",
+      "reason": "Almost no legitimate employer abroad will hire you without a TEFL or TESOL certificate, so your readiness is held at needs prep until you commit to one. A 120-hour-plus course is the baseline; CELTA or Trinity opens the best-paid roles."
+    }
+  ],
   "dimensions": [
     {
       "key": "credentials",
