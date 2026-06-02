@@ -16,6 +16,14 @@ _Nothing open. 🎉_
 
 ## Done
 
+- ✅ **2026-06-02 — Admin notification on new-user email confirmation.** When a
+  newly-registered user confirms their email, `/auth/callback` fires
+  `notifyAdminOfNewUser` (background `waitUntil`) → branded email to
+  `ADMIN_EMAILS` with name/category/email/WhatsApp + reply-to set to the user.
+  Gated off the password-reset path; idempotent via `profiles.admin_notified_at`
+  (migration `20260602_profiles_admin_notified_at.sql`, applied to live DB).
+  Verified: `scripts/test-new-user-notify.ts --live` — all 7 checks pass, real
+  email delivered.
 - ✅ **2026-06-02 — Live-rendered QA PDFs for the changed rubrics.** Spot-checked
   au-pair, tefl, trades end-to-end (real scoring + corpus + OpenAI + PDF). All
   three cap correctly to **needs prep** despite strong weighted scores:
