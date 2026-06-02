@@ -94,7 +94,7 @@ function bodyFor(r: Recipient): string {
       </tr>
       <tr>
         <td style="padding:0 28px 24px;">
-          <p style="margin:0;font-size:11px;color:#9a9a9a;">You&rsquo;re receiving this because you registered at jobabroad.co.za. Reply &ldquo;stop&rdquo; and we&rsquo;ll take you off the list.</p>
+          <p style="margin:0;font-size:11px;color:#9a9a9a;">You&rsquo;re receiving this because you registered at jobabroad.co.za. Reply &ldquo;stop&rdquo; and we&rsquo;ll take you off the list. Inactive accounts may be removed after 90 days, so log in to keep yours active.</p>
         </td>
       </tr>
     </table>
