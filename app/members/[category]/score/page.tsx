@@ -95,6 +95,7 @@ export default async function ScorePage({
         overall={score.overall}
         band={score.band}
         dimensions={score.dimensions}
+        appliedCaps={score.applied_caps ?? []}
         whatsWorking={whatsWorking}
         whatsBlocking={whatsBlocking}
         isPaid={isPaid}

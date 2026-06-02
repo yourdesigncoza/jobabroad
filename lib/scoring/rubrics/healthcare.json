@@ -1,12 +1,26 @@
 {
   "category": "healthcare",
-  "version": 1,
+  "version": 2,
   "bands": { "high_blockers_lt": 40, "needs_prep_lt": 70 },
+  "caps": [
+    {
+      "field_id": "documents.passport_status",
+      "when_value": ["No passport"],
+      "max_band": "needs_prep",
+      "reason": "You cannot be placed abroad without a passport, so your readiness is held at needs prep until you have one in hand. It is the first thing to sort, and SA passport turnaround is usually a few weeks."
+    },
+    {
+      "field_id": "readiness.english_rating",
+      "when_value": ["Basic"],
+      "max_band": "needs_prep",
+      "reason": "Overseas nursing councils (NMC, AHPRA, NCNZ) require an IELTS or OET pass, which Basic English cannot meet. Until your English is raised to the test standard, registration is not possible, so your readiness is held at needs prep."
+    }
+  ],
   "dimensions": [
     {
       "key": "credentials",
-      "label": "Credentials & Registration",
-      "weight": 0.25,
+      "label": "Qualification & SANC",
+      "weight": 0.15,
       "rules": [
         {
           "field_id": "qualifications.highest_qualification",
@@ -39,7 +53,14 @@
             "Pending renewal": "Your SANC renewal is in progress, clear it before applying as councils verify current standing.",
             "Lapsed": "Lapsed SANC registration must be renewed before overseas councils will verify your status."
           }
-        },
+        }
+      ]
+    },
+    {
+      "key": "registration",
+      "label": "Overseas Registration",
+      "weight": 0.15,
+      "rules": [
         {
           "field_id": "registration.prior_nmc_ahpra_ncnz",
           "type": "match",
@@ -51,7 +72,7 @@
           "reason": {
             "Completed": "Completed overseas registration with NMC, AHPRA, or NCNZ puts you ready to be hired.",
             "In progress": "Overseas registration is underway, keep the process moving as it is the main timeline driver.",
-            "None started": "No overseas registration started yet, NMC, AHPRA, and NCNZ all require it before you can practise."
+            "None started": "No overseas registration started yet, NMC, AHPRA, and NCNZ all require it before you can practise, and it is the single biggest driver of your timeline."
           }
         }
       ]
@@ -71,7 +92,7 @@
             "Maternity": 95,
             "General": 75,
             "Paediatrics": 75,
-            "Psychiatry": 70,
+            "Psychiatry": 85,
             "Other": 50
           },
           "reason": {
@@ -81,7 +102,7 @@
             "Maternity": "Maternity and midwifery nurses are scarce worldwide, strong leverage in most markets.",
             "General": "General nursing is widely needed and gives you solid, broad demand abroad.",
             "Paediatrics": "Paediatric nursing has steady demand, particularly in the UK and Gulf.",
-            "Psychiatry": "Mental health nursing is needed in the UK and Australia, solid demand.",
+            "Psychiatry": "Mental health nursing is in strong shortage across the UK and Australia, a significant advantage.",
             "Other": "Confirm how your speciality maps to overseas roles, demand varies by destination."
           },
           "empty_reason": "No speciality recorded. Shortage specialities such as ICU, Theatre, Emergency, and Maternity get hiring priority and often a salary premium, so add yours."
@@ -117,7 +138,7 @@
     {
       "key": "documents",
       "label": "Documents & Finances",
-      "weight": 0.20,
+      "weight": 0.15,
       "rules": [
         {
           "field_id": "documents.passport_status",
@@ -208,7 +229,7 @@
     },
     {
       "key": "readiness",
-      "label": "Family & Timing",
+      "label": "Timing",
       "weight": 0.08,
       "rules": [
         {

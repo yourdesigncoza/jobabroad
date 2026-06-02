@@ -32,6 +32,31 @@ function fieldIndex(category: string): Map<string, FieldInfo> | null {
   return idx;
 }
 
+const VALID_BANDS = new Set(['high_blockers', 'needs_prep', 'strong_potential']);
+
+function checkCaps(rubric: Rubric, fields: Map<string, FieldInfo>, errors: string[], category: string) {
+  for (const cap of rubric.caps ?? []) {
+    const where = `${category}/caps`;
+    const f = fields.get(cap.field_id);
+    if (!f) {
+      errors.push(`${where}: field_id "${cap.field_id}" does not exist in the assessment`);
+      continue;
+    }
+    if (!VALID_BANDS.has(cap.max_band)) {
+      errors.push(`${where}: "${cap.field_id}" max_band ${JSON.stringify(cap.max_band)} is not a valid band`);
+    }
+    for (const v of cap.when_value) {
+      const ok = f.type === 'boolean' ? v === 'true' || v === 'false' : f.options.has(v);
+      if (!ok) {
+        errors.push(
+          `${where}: "${cap.field_id}" when_value ${JSON.stringify(v)} is not a valid option` +
+            (f.type === 'boolean' ? ' (boolean expects "true"/"false")' : ` (field type ${f.type})`),
+        );
+      }
+    }
+  }
+}
+
 function checkRule(rule: Rule, fields: Map<string, FieldInfo>, errors: string[], where: string) {
   const f = fields.get(rule.field_id);
   if (!f) {
@@ -73,6 +98,7 @@ for (const file of files.sort()) {
     for (const dim of rubric.dimensions) {
       for (const rule of dim.rules) checkRule(rule, fields, errors, `${category}/${dim.key}`);
     }
+    checkCaps(rubric, fields, errors, category);
   }
 
   totalErrors += errors.length;

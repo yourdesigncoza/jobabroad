@@ -12,10 +12,14 @@ import type { AssessmentData } from '@/lib/assessments/schemas/assessment';
 // rewards shortage subjects. The rubric is read from disk (not via loadRubric's
 // dynamic JSON import) so the Playwright ESM loader doesn't need a JSON import
 // attribute; the app path is unaffected.
-function teachingRubric(): Rubric {
+function rubricFor(category: string): Rubric {
   return JSON.parse(
-    readFileSync(join(process.cwd(), 'lib/scoring/rubrics/teaching.json'), 'utf8'),
+    readFileSync(join(process.cwd(), `lib/scoring/rubrics/${category}.json`), 'utf8'),
   ) as Rubric;
+}
+
+function teachingRubric(): Rubric {
+  return rubricFor('teaching');
 }
 
 const BASE: AssessmentData = {
@@ -66,6 +70,54 @@ test('answer helpers read destinations + specialisms by field-id suffix', async 
   expect(readSpecialisms({ ...BASE, 'qualifications.subjects': { q: 'S', v: ['Maths'] } })).toEqual(['Maths']);
 });
 
+// Band-capping: a critical-fail field clamps the band down regardless of the
+// weighted total, but leaves the numeric score untouched. Without this, a nurse
+// strong everywhere but with Basic English (Language is only 12%) would average
+// into strong_potential, which no overseas council would honour.
+const HEALTHY_NURSE: AssessmentData = {
+  'qualifications.highest_qualification': { q: 'Qual', v: 'Degree' },
+  'qualifications.speciality': { q: 'Spec', v: 'ICU' },
+  'registration.sanc_status': { q: 'SANC', v: 'Active' },
+  'registration.prior_nmc_ahpra_ncnz': { q: 'Reg', v: 'Completed' },
+  'experience.years_experience': { q: 'Years', v: 8 },
+  'experience.worked_abroad': { q: 'Abroad', v: true },
+  'documents.passport_status': { q: 'PP', v: 'Valid — 2+ years remaining' },
+  'documents.police_clearance': { q: 'PCC', v: 'Current (within 6 months)' },
+  'documents.available_capital': { q: 'Cap', v: 'R150k+' },
+  'readiness.english_rating': { q: 'Eng', v: 'Native / first language' },
+  'readiness.english_test': { q: 'Test', v: 'IELTS' },
+  'readiness.target_timeline': { q: 'When', v: 'As soon as possible' },
+};
+
+test('band cap holds a strong nurse with Basic English at needs_prep', async () => {
+  const rubric = rubricFor('healthcare');
+
+  const strong = calculateScore(HEALTHY_NURSE, rubric);
+  expect(strong.band).toBe('strong_potential');
+  expect(strong.applied_caps).toBeUndefined();
+
+  const basicEnglish = calculateScore(
+    { ...HEALTHY_NURSE, 'readiness.english_rating': { q: 'Eng', v: 'Basic' } },
+    rubric,
+  );
+  // The numeric score still reflects strong fundamentals…
+  expect(basicEnglish.overall).toBeGreaterThanOrEqual(70);
+  // …but the band is capped, and the cap is surfaced with its reason.
+  expect(basicEnglish.band).toBe('needs_prep');
+  expect(basicEnglish.applied_caps?.[0]?.field_id).toBe('readiness.english_rating');
+  expect(basicEnglish.applied_caps?.[0]?.reason).toMatch(/IELTS or OET/i);
+});
+
+test('band cap holds a strong nurse with no passport at needs_prep', async () => {
+  const rubric = rubricFor('healthcare');
+  const noPassport = calculateScore(
+    { ...HEALTHY_NURSE, 'documents.passport_status': { q: 'PP', v: 'No passport' } },
+    rubric,
+  );
+  expect(noPassport.band).toBe('needs_prep');
+  expect(noPassport.applied_caps?.[0]?.field_id).toBe('documents.passport_status');
+});
+
 // Every rubric must stay in lockstep with its assessment: weights sum to 1, and
 // every match/best_match key must be a real option (a typo silently scores 0).
 test('all rubrics validate against their assessments', async () => {
@@ -96,6 +148,21 @@ test('all rubrics validate against their assessments', async () => {
             const ok = f.type === 'boolean' ? key === 'true' || key === 'false' : f.options.has(key);
             expect(ok, `${category}/${dim.key}: "${rule.field_id}" key ${JSON.stringify(key)} is a valid option`).toBe(true);
           }
+        }
+      }
+    }
+
+    // Caps must reference a real field, a real option, and a valid band — a typo
+    // would silently never fire, defeating the gate.
+    const validBands = new Set(['high_blockers', 'needs_prep', 'strong_potential']);
+    for (const cap of rubric.caps ?? []) {
+      const f = fields.get(cap.field_id);
+      expect(f, `${category}/caps: field ${cap.field_id} exists`).toBeTruthy();
+      expect(validBands.has(cap.max_band), `${category}/caps: max_band ${cap.max_band} valid`).toBe(true);
+      if (f) {
+        for (const v of cap.when_value) {
+          const ok = f.type === 'boolean' ? v === 'true' || v === 'false' : f.options.has(v);
+          expect(ok, `${category}/caps: "${cap.field_id}" when_value ${JSON.stringify(v)} is a valid option`).toBe(true);
         }
       }
     }

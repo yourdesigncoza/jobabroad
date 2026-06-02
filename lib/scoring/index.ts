@@ -1,5 +1,6 @@
 import type { AssessmentData } from '@/lib/assessments/schemas/assessment';
 import type {
+  AppliedCap,
   Band,
   ContributingRow,
   Dimension,
@@ -10,6 +11,13 @@ import type {
 } from './types';
 
 const DEFAULT_BANDS = { high_blockers_lt: 40, needs_prep_lt: 70 };
+
+// Lower rank = more restrictive. A cap clamps the band to min(current, max_band).
+const BAND_RANK: Record<Band, number> = {
+  high_blockers: 0,
+  needs_prep: 1,
+  strong_potential: 2,
+};
 
 export async function loadRubric(category: string): Promise<Rubric | null> {
   // Explicit static imports (not a template-literal path) so the bundler can
@@ -49,14 +57,36 @@ export function calculateScore(answers: AssessmentData, rubric: Rubric): ScoreRe
   const overall = clamp(weighted, 0, 100);
 
   const bands = rubric.bands ?? DEFAULT_BANDS;
-  const band: Band =
+  let band: Band =
     overall < bands.high_blockers_lt
       ? 'high_blockers'
       : overall < bands.needs_prep_lt
         ? 'needs_prep'
         : 'strong_potential';
 
-  return { overall: Math.round(overall), band, dimensions };
+  // Band-capping: a critical-fail field (e.g. no passport, Basic English for a
+  // nurse) clamps the band down regardless of the weighted total. The numeric
+  // score is left as-is; only the band is lowered.
+  const applied_caps: AppliedCap[] = [];
+  for (const cap of rubric.caps ?? []) {
+    const value = answers[cap.field_id]?.v;
+    const key = value == null ? '' : String(value);
+    if (!cap.when_value.includes(key)) continue;
+    applied_caps.push({
+      field_id: cap.field_id,
+      value: value ?? null,
+      max_band: cap.max_band,
+      reason: cap.reason,
+    });
+    if (BAND_RANK[cap.max_band] < BAND_RANK[band]) band = cap.max_band;
+  }
+
+  return {
+    overall: Math.round(overall),
+    band,
+    dimensions,
+    ...(applied_caps.length ? { applied_caps } : {}),
+  };
 }
 
 function evaluateDimension(dim: Dimension, answers: AssessmentData): DimensionResult {

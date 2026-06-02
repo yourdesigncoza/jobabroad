@@ -51,10 +51,30 @@ export interface Dimension {
   rules: Rule[];
 }
 
+/**
+ * A critical-fail gate. Scoring is a weighted average, so a strong applicant can
+ * mask an absolute blocker — e.g. a nurse with "Basic" English averaging into
+ * strong_potential even though no overseas council will register them. A cap
+ * clamps the band to no higher than `max_band` whenever the named field holds
+ * one of `when_value`, regardless of the weighted total. The numeric score is
+ * left untouched (the score page still shows the real number); only the band is
+ * lowered, and the cap's `reason` explains why.
+ */
+export interface BandCap {
+  field_id: string;
+  /** Field values that trip the cap (exact option strings, or "true"/"false"). */
+  when_value: string[];
+  /** Highest band the applicant can reach while this field is tripped. */
+  max_band: Band;
+  /** User-facing explanation, surfaced on the score page and in the report. */
+  reason: string;
+}
+
 export interface Rubric {
   category: string;
   version: number;
   bands?: { high_blockers_lt: number; needs_prep_lt: number };
+  caps?: BandCap[];
   dimensions: Dimension[];
 }
 
@@ -74,8 +94,17 @@ export interface DimensionResult {
   contributing: ContributingRow[];
 }
 
+export interface AppliedCap {
+  field_id: string;
+  value: unknown;
+  max_band: Band;
+  reason: string;
+}
+
 export interface ScoreResult {
   overall: number;
   band: Band;
   dimensions: DimensionResult[];
+  /** Caps that tripped and lowered the band. Empty/absent when none fired. */
+  applied_caps?: AppliedCap[];
 }

@@ -129,6 +129,30 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: COLOURS.green,
   },
+  gateBox: {
+    backgroundColor: '#FBEEEC',
+    borderLeftWidth: 3,
+    borderLeftColor: COLOURS.red,
+    borderRadius: 6,
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingLeft: 12,
+    paddingRight: 12,
+    marginBottom: 12,
+  },
+  gateLabel: {
+    fontSize: 9,
+    fontWeight: 'bold',
+    color: COLOURS.red,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+    marginBottom: 4,
+  },
+  gateBullet: {
+    fontSize: 9,
+    color: COLOURS.ink,
+    marginTop: 3,
+  },
   divider: {
     borderBottomWidth: 1,
     borderBottomColor: COLOURS.rule,
@@ -326,6 +350,24 @@ export function ReportTemplate({ data }: { data: ReportData }) {
           <Text style={styles.scoreNumber}>{data.score.overall}</Text>
           {' / 100'}
         </Text>
+
+        {/* Critical gates — absolute requirements that capped the band below
+            what the weighted number alone would suggest. Mirrors the on-screen
+            /score notice so the PDF and page tell the same story. */}
+        {data.score.applied_caps && data.score.applied_caps.length > 0 && (
+          <View style={styles.gateBox}>
+            <Text style={styles.gateLabel}>
+              {data.score.applied_caps.length === 1
+                ? 'A critical gate to clear first'
+                : 'Critical gates to clear first'}
+            </Text>
+            {data.score.applied_caps.map((cap) => (
+              <Text key={cap.field_id} style={styles.gateBullet}>
+                • {lig(cap.reason)}
+              </Text>
+            ))}
+          </View>
+        )}
 
         {/* "Your focus" — echoes the buyer's stated goal (target destinations +
             specialism) back to them so the report reads as their plan, not a

@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import type { Band, DimensionResult } from '@/lib/scoring/types';
+import type { AppliedCap, Band, DimensionResult } from '@/lib/scoring/types';
 import PremiumUpsell from './PremiumUpsell';
 
 interface Props {
@@ -9,6 +9,8 @@ interface Props {
   overall: number;
   band: Band;
   dimensions: DimensionResult[];
+  /** Critical-fail gates that capped the band. Empty when none fired. */
+  appliedCaps?: AppliedCap[];
   whatsWorking: string;
   whatsBlocking: string;
   isPaid: boolean;
@@ -59,6 +61,7 @@ export default function ScoreResult({
   overall,
   band,
   dimensions,
+  appliedCaps = [],
   whatsWorking,
   whatsBlocking,
   isPaid,
@@ -161,6 +164,40 @@ export default function ScoreResult({
             ))}
           </div>
         </div>
+
+        {/* Critical gate notice — when a band cap fired, the weighted score
+            alone would overstate readiness (e.g. strong everywhere but no
+            passport, or Basic English for a nurse). Explain WHY the band is
+            held back so the number and the band don't read as contradictory. */}
+        {appliedCaps.length > 0 && (
+          <div
+            className="rounded-2xl p-6 sm:p-8 flex flex-col gap-3 border-l-4"
+            style={{ backgroundColor: '#FFFFFF', borderLeftColor: '#B53A2B' }}
+          >
+            <p
+              className="font-display uppercase tracking-wider text-xs font-bold"
+              style={{ color: '#B53A2B' }}
+            >
+              {appliedCaps.length === 1 ? 'A critical gate to clear first' : 'Critical gates to clear first'}
+            </p>
+            <p className="font-body text-sm leading-relaxed" style={{ color: '#6B6B6B' }}>
+              Your fundamentals score well, but the items below are absolute
+              requirements, not just weighted factors. Until they are sorted,
+              your overall readiness is capped here regardless of the number above.
+            </p>
+            <ul className="flex flex-col gap-3">
+              {appliedCaps.map((cap) => (
+                <li
+                  key={cap.field_id}
+                  className="font-body text-sm sm:text-base leading-relaxed"
+                  style={{ color: '#2C2C2C' }}
+                >
+                  {cap.reason}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         {/* What's working + Biggest blocker — full paragraphs, same LLM
             output the PDF uses. The page now earns trust BEFORE pitching. */}
