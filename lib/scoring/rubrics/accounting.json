@@ -1,7 +1,15 @@
 {
   "category": "accounting",
-  "version": 1,
+  "version": 2,
   "bands": { "high_blockers_lt": 40, "needs_prep_lt": 70 },
+  "caps": [
+    {
+      "field_id": "documents.passport_status",
+      "when_value": ["No passport"],
+      "max_band": "needs_prep",
+      "reason": "You cannot be placed abroad without a passport, so your readiness is held at needs prep until you have one in hand. It is the first thing to sort, and SA passport turnaround is usually a few weeks."
+    }
+  ],
   "dimensions": [
     {
       "key": "credentials",
@@ -62,6 +70,22 @@
             "Researching / Letter of Good Standing requested": "Good start; submit to the destination body (ICAEW, CA ANZ, CPA Canada or CPA Ireland) once your letter arrives.",
             "Application submitted": "Your recognition application is in progress; follow up directly with the partner body, never through a paid intermediary.",
             "Completed / admitted": "You already hold destination-body membership, so the hardest credential step is behind you."
+          }
+        },
+        {
+          "field_id": "registration.public_practice",
+          "type": "match",
+          "match": {
+            "No — commerce / industry roles (no audit rights needed)": 100,
+            "I hold RA / audit signing rights in SA": 80,
+            "Not sure": 60,
+            "Yes — I need public practice or audit rights abroad": 30
+          },
+          "reason": {
+            "No — commerce / industry roles (no audit rights needed)": "Commerce and industry roles only, so MRA membership covers you fully with no extra audit qualification needed.",
+            "I hold RA / audit signing rights in SA": "Holding SA audit signing rights is a strong base, but statutory audit signing abroad still needs the destination's own audit qualification and practising certificate.",
+            "Not sure": "Clarify whether you need statutory audit signing abroad; MRA membership covers finance roles but not audit rights, and the two routes differ significantly.",
+            "Yes — I need public practice or audit rights abroad": "Statutory audit signing is not covered by MRA membership; it needs a separate destination audit qualification, a practising certificate and Registered Auditor status, a materially longer path."
           }
         }
       ]
