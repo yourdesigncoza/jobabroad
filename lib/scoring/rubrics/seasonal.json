@@ -1,7 +1,15 @@
 {
   "category": "seasonal",
-  "version": 1,
+  "version": 2,
   "bands": { "high_blockers_lt": 40, "needs_prep_lt": 70 },
+  "caps": [
+    {
+      "field_id": "documents.passport_status",
+      "when_value": ["No passport"],
+      "max_band": "needs_prep",
+      "reason": "You cannot be placed abroad without a passport, so your readiness is held at needs prep until you have one in hand. It is the first thing to sort, and SA passport turnaround is usually a few weeks."
+    }
+  ],
   "dimensions": [
     {
       "key": "eligibility",
@@ -66,6 +74,22 @@
             "R40k – R70k": "Covers the usual J-1 SWT spend through to your first paycheck.",
             "R70k+": "Strong buffer for sponsor fees, flights and settling-in costs.",
             "Prefer not to say": "Budget not declared; share it with us privately as it shapes which programmes are realistic."
+          }
+        },
+        {
+          "field_id": "education.student_status",
+          "type": "match",
+          "match": {
+            "Currently enrolled full-time": 100,
+            "Recently graduated (within 12 months)": 65,
+            "Graduated more than 12 months ago": 40,
+            "Not a student": 30
+          },
+          "reason": {
+            "Currently enrolled full-time": "Full-time enrolment meets the J-1 Summer Work Travel requirement, the flagship US seasonal route.",
+            "Recently graduated (within 12 months)": "As a recent graduate you may still qualify with some sponsors and for Canada IEC, but J-1 SWT needs current enrolment, so confirm your eligibility window.",
+            "Graduated more than 12 months ago": "Graduating over a year ago closes J-1 SWT, but Canada IEC (18 to 35) and employer-petitioned H-2B remain open.",
+            "Not a student": "Not being a student closes the J-1 SWT route, but Canada IEC, H-2B and UK seasonal work do not require student status, so target those."
           }
         }
       ]
