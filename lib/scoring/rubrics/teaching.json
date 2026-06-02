@@ -1,7 +1,15 @@
 {
   "category": "teaching",
-  "version": 1,
+  "version": 2,
   "bands": { "high_blockers_lt": 40, "needs_prep_lt": 70 },
+  "caps": [
+    {
+      "field_id": "documents.passport_status",
+      "when_value": ["No passport"],
+      "max_band": "needs_prep",
+      "reason": "You cannot be placed abroad without a passport, so your readiness is held at needs prep until you have one in hand. It is the first thing to sort, and SA passport turnaround is usually a few weeks."
+    }
+  ],
   "dimensions": [
     {
       "key": "credentials",
@@ -52,12 +60,12 @@
           "match": {
             "Completed": 100,
             "In progress": 60,
-            "None started": 30
+            "None started": 55
           },
           "reason": {
             "Completed": "UK QTS / iQTS completed, UK roles open.",
             "In progress": "QTS in progress, keep momentum.",
-            "None started": "No overseas teacher registration yet, required for UK and some Middle East roles."
+            "None started": "No overseas teacher registration yet. Most Gulf and Asia roles do not require it, but the UK and some Middle East schools do, so start it if the UK is your target."
           }
         }
       ]
