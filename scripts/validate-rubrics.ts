@@ -58,27 +58,35 @@ function checkCaps(rubric: Rubric, fields: Map<string, FieldInfo>, errors: strin
 }
 
 function checkRule(rule: Rule, fields: Map<string, FieldInfo>, errors: string[], where: string) {
-  const f = fields.get(rule.field_id);
-  if (!f) {
-    errors.push(`${where}: field_id "${rule.field_id}" does not exist in the assessment`);
+  // A best_match rule may read several fields together (field_ids); every other
+  // rule reads one (field_id). Match keys must be valid for at least one of the
+  // rule's fields (the union of their options).
+  const ruleFieldIds =
+    rule.type === 'best_match' && rule.field_ids ? rule.field_ids : rule.field_id ? [rule.field_id] : [];
+  if (ruleFieldIds.length === 0) {
+    errors.push(`${where}: rule has no field_id or field_ids`);
     return;
   }
+  const infos: FieldInfo[] = [];
+  for (const fid of ruleFieldIds) {
+    const f = fields.get(fid);
+    if (!f) errors.push(`${where}: field_id "${fid}" does not exist in the assessment`);
+    else infos.push(f);
+  }
+  if (infos.length === 0) return;
+
+  const optionValid = (key: string) =>
+    infos.some((f) => (f.type === 'boolean' ? key === 'true' || key === 'false' : f.options.has(key)));
+
   const keysToCheck =
     rule.type === 'match' || rule.type === 'best_match' ? Object.keys(rule.match) : [];
   for (const key of keysToCheck) {
-    const ok =
-      f.type === 'boolean'
-        ? key === 'true' || key === 'false'
-        : f.options.has(key);
-    if (!ok) {
-      errors.push(
-        `${where}: "${rule.field_id}" key ${JSON.stringify(key)} is not a valid option` +
-          (f.type === 'boolean' ? ' (boolean expects "true"/"false")' : ` (field type ${f.type})`),
-      );
+    if (!optionValid(key)) {
+      errors.push(`${where}: key ${JSON.stringify(key)} is not a valid option of ${ruleFieldIds.join(' / ')}`);
     }
   }
-  if ((rule.type === 'range' || rule.type === 'count') && f.type !== 'number') {
-    errors.push(`${where}: "${rule.field_id}" uses a ${rule.type} rule but field type is ${f.type}`);
+  if ((rule.type === 'range' || rule.type === 'count') && infos[0]!.type !== 'number') {
+    errors.push(`${where}: "${ruleFieldIds[0]}" uses a ${rule.type} rule but field type is ${infos[0]!.type}`);
   }
 }
 

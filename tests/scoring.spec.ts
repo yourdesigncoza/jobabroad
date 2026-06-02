@@ -141,12 +141,17 @@ test('all rubrics validate against their assessments', async () => {
 
     for (const dim of rubric.dimensions) {
       for (const rule of dim.rules) {
-        const f = fields.get(rule.field_id);
-        expect(f, `${category}/${dim.key}: field ${rule.field_id} exists`).toBeTruthy();
-        if ((rule.type === 'match' || rule.type === 'best_match') && f) {
+        const ruleFieldIds =
+          rule.type === 'best_match' && rule.field_ids ? rule.field_ids : rule.field_id ? [rule.field_id] : [];
+        expect(ruleFieldIds.length, `${category}/${dim.key}: rule has a field`).toBeGreaterThan(0);
+        const infos = ruleFieldIds.map((fid) => fields.get(fid));
+        for (let i = 0; i < ruleFieldIds.length; i++) {
+          expect(infos[i], `${category}/${dim.key}: field ${ruleFieldIds[i]} exists`).toBeTruthy();
+        }
+        if (rule.type === 'match' || rule.type === 'best_match') {
           for (const key of Object.keys(rule.match)) {
-            const ok = f.type === 'boolean' ? key === 'true' || key === 'false' : f.options.has(key);
-            expect(ok, `${category}/${dim.key}: "${rule.field_id}" key ${JSON.stringify(key)} is a valid option`).toBe(true);
+            const ok = infos.some((f) => f && (f.type === 'boolean' ? key === 'true' || key === 'false' : f.options.has(key)));
+            expect(ok, `${category}/${dim.key}: key ${JSON.stringify(key)} valid for ${ruleFieldIds.join(' / ')}`).toBe(true);
           }
         }
       }

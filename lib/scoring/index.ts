@@ -104,8 +104,9 @@ function evaluateDimension(dim: Dimension, answers: AssessmentData): DimensionRe
 }
 
 function evaluateRule(rule: Rule, answers: AssessmentData): ContributingRow {
-  const entry = answers[rule.field_id];
-  const value = entry?.v;
+  // best_match may carry field_ids instead of a single field_id (handled in its
+  // own branch); every other rule type has a required field_id.
+  const value = rule.field_id != null ? answers[rule.field_id]?.v : undefined;
 
   switch (rule.type) {
     case 'match': {
@@ -180,11 +181,16 @@ function evaluateRule(rule: Rule, answers: AssessmentData): ContributingRow {
 
     case 'best_match': {
       const maxPoints = Math.max(0, ...Object.values(rule.match));
-      const selected = Array.isArray(value)
-        ? value.map(String)
-        : value != null && value !== ''
-          ? [String(value)]
-          : [];
+      // Gather candidate values: either one multi-select field's array, or a set
+      // of single-select fields read together (field_ids). Both collapse to a
+      // flat list of selected option strings, from which we pick the best.
+      const fieldIds = rule.field_ids ?? (rule.field_id ? [rule.field_id] : []);
+      const primaryFieldId = rule.field_id ?? fieldIds[0] ?? '';
+      const selected = fieldIds.flatMap((fid) => {
+        const v = answers[fid]?.v;
+        if (Array.isArray(v)) return v.map(String);
+        return v != null && v !== '' ? [String(v)] : [];
+      });
       // Pick the single highest-scoring selected option that the map knows.
       let bestPoints = -1;
       let bestKey = '';
@@ -197,15 +203,15 @@ function evaluateRule(rule: Rule, answers: AssessmentData): ContributingRow {
       }
       if (bestPoints < 0) {
         return {
-          field_id: rule.field_id,
-          value: value ?? null,
+          field_id: primaryFieldId,
+          value: selected.length ? selected : null,
           points: 0,
           max_points: maxPoints,
           reason: rule.empty_reason,
         };
       }
       return {
-        field_id: rule.field_id,
+        field_id: primaryFieldId,
         value: selected,
         points: bestPoints,
         max_points: maxPoints,

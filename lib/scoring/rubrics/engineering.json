@@ -1,7 +1,15 @@
 {
   "category": "engineering",
-  "version": 1,
+  "version": 2,
   "bands": { "high_blockers_lt": 40, "needs_prep_lt": 70 },
+  "caps": [
+    {
+      "field_id": "documents.passport_status",
+      "when_value": ["No passport"],
+      "max_band": "needs_prep",
+      "reason": "You cannot be placed abroad without a passport, so your readiness is held at needs prep until you have one in hand. It is the first thing to sort, and SA passport turnaround is usually a few weeks."
+    }
+  ],
   "dimensions": [
     {
       "key": "credentials",
@@ -53,20 +61,32 @@
           }
         },
         {
-          "field_id": "assessment.ea_status",
-          "type": "match",
+          "field_ids": [
+            "assessment.ea_status",
+            "assessment.enz_status",
+            "assessment.ecctis_status",
+            "assessment.wes_status"
+          ],
+          "type": "best_match",
           "match": {
             "Outcome letter received": 100,
+            "Completed": 100,
+            "Reference letter received": 100,
+            "ECA letter received": 100,
             "Submitted — in progress": 70,
-            "Not started": 30,
-            "Not applying to Australia": 50
+            "Applied — in progress": 70,
+            "Not started": 30
           },
           "reason": {
-            "Outcome letter received": "A positive Engineers Australia outcome letter is the gold-standard Washington Accord competency assessment and is valid for three years.",
-            "Submitted — in progress": "Your Engineers Australia assessment is underway, which typically takes 6 to 9 months to an outcome.",
-            "Not started": "No overseas competency assessment is underway yet, the key step that converts your SA qualification into a recognised credential.",
-            "Not applying to Australia": "You are skipping the Engineers Australia route, so confirm the equivalent assessor for your target country such as Ecctis for the UK or WES for Canada."
-          }
+            "Outcome letter received": "Your Engineers Australia outcome letter is the gold-standard Washington Accord assessment, valid for three years.",
+            "Completed": "Your Engineering New Zealand credential check is complete, clearing the NZ recognition step.",
+            "Reference letter received": "Your Ecctis UK ENIC reference letter is in hand, the credential step for the UK Skilled Worker route.",
+            "ECA letter received": "Your WES assessment letter is in hand, the credential step for Canada Express Entry.",
+            "Submitted — in progress": "Your overseas competency assessment is underway, which typically takes a few months to reach an outcome.",
+            "Applied — in progress": "Your overseas competency assessment is underway, which typically takes a few months to reach an outcome.",
+            "Not started": "No overseas competency assessment is underway yet, the key step that converts your SA qualification into a recognised credential."
+          },
+          "empty_reason": "No destination competency assessment recorded. Starting the right assessor for your target country (Engineers Australia, Engineering NZ, Ecctis UK or WES Canada) is the key step that converts your SA qualification into a recognised credential."
         }
       ]
     },

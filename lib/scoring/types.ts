@@ -29,13 +29,22 @@ export interface CountRule {
 }
 
 /**
- * For multi-select fields (e.g. subject specialisms, trade tickets): scores the
- * SINGLE highest-value option the applicant holds, not the sum. Rewards holding
- * at least one in-demand specialism without penalising breadth. `empty_reason`
- * is used when nothing was selected or no selection matches the map.
+ * Scores the SINGLE highest-value option the applicant holds, not the sum.
+ *
+ * - `field_id`: one multi-select field (e.g. subject specialisms, trade tickets)
+ *   — rewards holding at least one in-demand option without penalising breadth.
+ * - `field_ids`: several single-select fields read together, taking the best
+ *   across all of them (e.g. destination credential assessments — an engineer
+ *   only progresses the assessor for where they're going, so "best across EA /
+ *   ENZ / Ecctis / WES" reflects their actual target). Options not in `match`
+ *   (e.g. "Not applying to Australia") simply don't contribute.
+ *
+ * Provide exactly one of `field_id` / `field_ids`. `empty_reason` is used when
+ * nothing was selected or no selection matches the map.
  */
 export interface BestMatchRule {
-  field_id: string;
+  field_id?: string;
+  field_ids?: string[];
   type: 'best_match';
   match: Record<string, number>;
   reason: Record<string, string>;
