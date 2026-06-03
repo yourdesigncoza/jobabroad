@@ -9,6 +9,8 @@ import SiteNav from '@/components/SiteNav';
 import SiteFooter from '@/components/SiteFooter';
 import HomeStickyCta from '@/components/HomeStickyCta';
 import { PAYMENTS_ENABLED } from '@/lib/access';
+import { listCompareSlugs, getComparePage } from '@/lib/compare-content';
+import { listGuideSlugs, getGuidePage } from '@/lib/guide-content';
 
 // Title, description and Open Graph come from the root layout's defaults;
 // only the canonical URL is page-specific (?src= UTM params must not fork it).
@@ -43,6 +45,16 @@ interface Props {
 
 export default async function Home({ searchParams }: Props) {
   const { src } = await searchParams;
+
+  // Hub-and-spoke internal linking: the homepage is the most-crawled page, so
+  // it links to /directory (the full index) plus the deepest/orphaned pages —
+  // comparisons and document guides — to pull them up to one click from home.
+  const compares = listCompareSlugs()
+    .map(getComparePage)
+    .filter((c): c is NonNullable<typeof c> => c !== null);
+  const guides = listGuideSlugs()
+    .map(getGuidePage)
+    .filter((g): g is NonNullable<typeof g> => g !== null);
 
   return (
     <main className="min-h-screen" style={{ backgroundColor: '#F8F5F0' }}>
@@ -281,6 +293,94 @@ export default async function Home({ searchParams }: Props) {
 
       {/* FAQ */}
       <FAQ />
+
+      {/* Explore — surfaces the full content library so route/compare/guide
+          pages sit one to two clicks from the most-crawled page (helps indexing
+          and gives non-converting visitors a way to browse). */}
+      <section className="px-6 py-14" style={{ backgroundColor: '#F8F5F0' }}>
+        <div className="max-w-6xl mx-auto flex flex-col gap-8">
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-px" style={{ backgroundColor: '#ff751f' }} aria-hidden="true" />
+              <span
+                className="font-display font-bold uppercase text-xs tracking-[0.18em]"
+                style={{ color: '#ff751f' }}
+              >
+                Browse everything
+              </span>
+            </div>
+            <h2
+              className="font-display font-bold uppercase tracking-wide text-2xl sm:text-3xl"
+              style={{ color: '#2C2C2C' }}
+            >
+              Explore every route &amp; guide
+            </h2>
+            <p className="font-body text-sm leading-relaxed max-w-2xl" style={{ color: '#6B6B6B' }}>
+              Already researching a specific role or country? Jump straight into our route guides,
+              destination comparisons, and document how-tos — or see the full index.
+            </p>
+            <Link
+              href="/directory"
+              className="font-body text-sm font-semibold underline underline-offset-4 w-fit"
+              style={{ color: '#1B4D3E' }}
+            >
+              Browse the full directory →
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-8">
+            {/* Compare your options */}
+            {compares.length > 0 && (
+              <div className="flex flex-col gap-3">
+                <h3
+                  className="font-display font-bold uppercase tracking-wide text-base"
+                  style={{ color: '#1B4D3E' }}
+                >
+                  Compare your options
+                </h3>
+                <ul className="flex flex-col gap-2">
+                  {compares.map((c) => (
+                    <li key={c.slug}>
+                      <Link
+                        href={`/compare/${c.slug}`}
+                        className="font-body text-sm leading-snug hover:underline underline-offset-4"
+                        style={{ color: '#2C2C2C' }}
+                      >
+                        {c.frontmatter.title}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* Document guides */}
+            {guides.length > 0 && (
+              <div className="flex flex-col gap-3">
+                <h3
+                  className="font-display font-bold uppercase tracking-wide text-base"
+                  style={{ color: '#1B4D3E' }}
+                >
+                  Document guides
+                </h3>
+                <ul className="flex flex-col gap-2">
+                  {guides.map((g) => (
+                    <li key={g.slug}>
+                      <Link
+                        href={`/guides/${g.slug}`}
+                        className="font-body text-sm leading-snug hover:underline underline-offset-4"
+                        style={{ color: '#2C2C2C' }}
+                      >
+                        {g.frontmatter.title}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
 
       {/* Country stats */}
       <CountryStats />

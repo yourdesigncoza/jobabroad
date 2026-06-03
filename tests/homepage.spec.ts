@@ -60,6 +60,30 @@ test.describe('Homepage — trust signals', () => {
   });
 });
 
+// Internal linking — guards the "Browse everything" section that pulls the
+// directory, comparison, and document-guide pages up to one click from home
+// (crawl-depth / indexing fix).
+test.describe('Homepage — content discovery links', () => {
+  test('links to the full directory hub', async ({ page }) => {
+    await page.goto('/');
+
+    const directoryLink = page.getByRole('link', { name: /browse the full directory/i });
+    await expect(directoryLink).toBeVisible();
+    await expect(directoryLink).toHaveAttribute('href', '/directory');
+  });
+
+  test('surfaces comparison and document-guide pages directly', async ({ page }) => {
+    await page.goto('/');
+
+    await expect(page.getByRole('heading', { name: 'Compare your options' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Document guides' })).toBeVisible();
+
+    // At least one of each deep page type is linked straight from the homepage.
+    await expect(page.locator('a[href^="/compare/"]').first()).toBeVisible();
+    await expect(page.locator('a[href^="/guides/"]').first()).toBeVisible();
+  });
+});
+
 // Mobile sticky CTA — keeps registration tappable once the hero scrolls away.
 test.describe('Homepage — mobile sticky CTA', () => {
   test.use({ viewport: { width: 390, height: 844 } });
