@@ -1,3 +1,52 @@
+---
+faqs:
+  - q: Can South African nurses work in the UK?
+    a: >-
+      Yes. South Africa is not on the WHO Health Workforce Safeguards List, so
+      the UK can legally recruit SA nurses, and NHS trusts recruit them
+      continuously via the Health and Care Worker Visa, which remains open for
+      registered nurses. You must register with the NMC (Nursing and Midwifery
+      Council) by passing the CBT (sittable in SA) and the OSCE (UK only). The
+      UK care worker visa closure on 22 July 2025 affected non-registered care
+      workers, not registered nurses.
+  - q: Which country gives South African nurses permanent residence the fastest?
+    a: >-
+      New Zealand. Registered nursing sits on New Zealand's Green List Tier 1
+      (Straight to Residence), so an SA nurse offered employment by an
+      accredited New Zealand employer receives a residence visa from day one
+      rather than a temporary work visa. There is no points competition and no
+      waiting period, and if you lose your job after arriving your residence
+      visa is unaffected.
+  - q: How much does it cost a South African nurse to register and move abroad?
+    a: >-
+      The SA-side documents cost roughly R12,000 to R16,000 regardless of
+      destination, covering the SANC Certificate of Good Standing, Annual
+      Practising Certificate, English test, police clearance and transcripts. On
+      top of that, total nurse out-of-pocket costs run about R29,000 to R116,000
+      for the UK, R51,000 to R130,000 for Australia, and R40,000 to R125,000 for
+      Ireland, depending on how much the employer covers. Every destination pays
+      2 to 3 times a SA public sector salary, so most nurses recover their
+      outlay in roughly one to one-and-a-half months of their first salary.
+  - q: 'Do I have to pay NMC, AHPRA or NMBI registration fees through an agent?'
+    a: >-
+      No. No legitimate party in the NMC, AHPRA or NMBI registration process
+      charges fees via a third party. Every exam, registration and application
+      fee is paid directly to the named official body, never to an agent,
+      consultant, or by EFT to a personal account. If someone asks you to pay
+      these fees through them, it is fraud every time. For Ireland specifically,
+      the €1,000 Critical Skills Employment Permit fee is legally the employer's
+      cost and cannot be charged to you.
+  - q: How do South African nurses move to Australia?
+    a: >-
+      SA nurses cannot apply to ANMAC directly from South Africa because SA is
+      not a comparable jurisdiction; the direct route uses the AHPRA Standard
+      OBA Pathway, which takes about 3 to 6 months for assessment.
+      Alternatively, nurses can go to the UK first, obtain an NMC PIN and
+      accumulate 1,800+ hours of practice, then qualify for AHPRA Pathway 2
+      (introduced April 2025) for streamlined registration in 1 to 3 months with
+      no Australian OSCE. The direct route typically takes 12 to 18 months from
+      decision to first day of work.
+---
 # SA Registered Nurses: Work Abroad Field Guide
 
 *Last updated: May 2026 — visa fees, salary thresholds, and occupation list status change regularly. Date-stamped figures are noted throughout.*

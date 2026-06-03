@@ -2,9 +2,19 @@ import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 import { renderMarkdown, type RenderedMarkdown, type TocItem } from './markdown';
+import type { Faq } from './schema';
 
 export type { TocItem };
-export type PathwayContent = RenderedMarkdown;
+
+/** Optional YAML frontmatter on a pathway markdown file. */
+export interface PathwayFrontmatter {
+  /** Structured FAQ — rendered on-page and as FAQPage JSON-LD. */
+  faqs?: Faq[];
+}
+
+export interface PathwayContent extends RenderedMarkdown {
+  frontmatter: PathwayFrontmatter;
+}
 
 /** Slugs (without `.md`) of every pathway guide currently shipped in /content/pathways. */
 export function listPathwaySlugs(): string[] {
@@ -20,6 +30,6 @@ export function listPathwaySlugs(): string[] {
 export function getPathwayContent(category: string): PathwayContent | null {
   const filePath = path.join(process.cwd(), 'content', 'pathways', `${category}.md`);
   if (!fs.existsSync(filePath)) return null;
-  const { content } = matter(fs.readFileSync(filePath, 'utf-8'));
-  return renderMarkdown(content);
+  const { data, content } = matter(fs.readFileSync(filePath, 'utf-8'));
+  return { frontmatter: data as PathwayFrontmatter, ...renderMarkdown(content) };
 }

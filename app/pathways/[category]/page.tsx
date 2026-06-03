@@ -7,6 +7,8 @@ import JsonLd from '@/components/JsonLd';
 import PathwaySearch from '@/components/PathwaySearch';
 import TableOfContents from '@/components/TableOfContents';
 import StickyNav from '@/components/StickyNav';
+import FaqSection from '@/components/FaqSection';
+import { faqPageSchema } from '@/lib/schema';
 import { getPathwayContent, listPathwaySlugs } from '@/lib/pathway-content';
 import { CATEGORIES } from '@/lib/categories';
 import { pageMetadata, SITE_URL, SITE_NAME, SITE_AUTHOR } from '@/lib/site';
@@ -89,10 +91,25 @@ export default async function DemoPage({
     mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
   };
 
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
+      { '@type': 'ListItem', position: 2, name: `${categoryLabel} pathway`, item: canonical },
+    ],
+  };
+
+  const faqs = pathway.frontmatter.faqs ?? [];
+  const faqSchema = faqPageSchema(faqs);
+  const tocItems = faqs.length ? [...pathway.toc, { id: 'faq', text: 'FAQ' }] : pathway.toc;
+
   return (
     <main className="min-h-screen" style={{ backgroundColor: '#F8F5F0' }}>
       <JsonLd data={articleSchema} />
-      <StickyNav items={pathway.toc} />
+      <JsonLd data={breadcrumbSchema} />
+      {faqSchema && <JsonLd data={faqSchema} />}
+      <StickyNav items={tocItems} />
 
       <div className="max-w-6xl mx-auto px-4 lg:px-8 py-10">
         <div className="lg:grid lg:grid-cols-[260px_1fr] lg:gap-12 lg:items-start">
@@ -101,7 +118,7 @@ export default async function DemoPage({
             className="hidden lg:block sticky top-20 self-start rounded-2xl p-5"
             style={{ backgroundColor: '#FFFFFF', border: '1.5px solid #EDE8E0' }}
           >
-            <TableOfContents items={pathway.toc} />
+            <TableOfContents items={tocItems} />
           </aside>
 
           <div className="flex flex-col gap-10 min-w-0">
@@ -130,6 +147,8 @@ export default async function DemoPage({
                 prose-hr:border-[#EDE8E0]"
               dangerouslySetInnerHTML={{ __html: pathway.html }}
             />
+
+            <FaqSection faqs={faqs} />
 
             <DemoUnlockCTA categoryLabel={categoryLabel} registerHref={registerHref} />
 

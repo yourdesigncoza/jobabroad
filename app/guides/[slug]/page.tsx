@@ -5,6 +5,8 @@ import JsonLd from '@/components/JsonLd';
 import SiteNav from '@/components/SiteNav';
 import SiteFooter from '@/components/SiteFooter';
 import TableOfContents from '@/components/TableOfContents';
+import FaqSection from '@/components/FaqSection';
+import { faqPageSchema } from '@/lib/schema';
 import { getGuidePage, listGuideSlugs } from '@/lib/guide-content';
 import { pageMetadata, SITE_URL, SITE_NAME, SITE_AUTHOR } from '@/lib/site';
 
@@ -88,17 +90,7 @@ export default async function GuidePageView({
     ],
   };
 
-  const faqSchema = faqs.length
-    ? {
-        '@context': 'https://schema.org',
-        '@type': 'FAQPage',
-        mainEntity: faqs.map(f => ({
-          '@type': 'Question',
-          name: f.q,
-          acceptedAnswer: { '@type': 'Answer', text: f.a },
-        })),
-      }
-    : null;
+  const faqSchema = faqPageSchema(faqs);
 
   // Body HTML is sanitised in getGuidePage → renderMarkdown (sanitize-html),
   // the same trusted pipeline used by pathway guides, blog and route pages.
@@ -181,30 +173,7 @@ export default async function GuidePageView({
               dangerouslySetInnerHTML={bodyHtml}
             />
 
-            {faqs.length > 0 && (
-              <section id="faq" className="flex flex-col gap-4 scroll-mt-24">
-                <h2
-                  className="font-display font-bold uppercase tracking-wide text-xl"
-                  style={{ color: '#2C2C2C' }}
-                >
-                  Frequently asked questions
-                </h2>
-                {faqs.map(faq => (
-                  <div
-                    key={faq.q}
-                    className="rounded-xl p-5 flex flex-col gap-2"
-                    style={{ backgroundColor: '#FFFFFF', border: '1px solid #EDE8E0' }}
-                  >
-                    <h3 className="font-display font-bold text-base" style={{ color: '#2C2C2C' }}>
-                      {faq.q}
-                    </h3>
-                    <p className="font-body text-sm leading-relaxed" style={{ color: '#2C2C2C' }}>
-                      {faq.a}
-                    </p>
-                  </div>
-                ))}
-              </section>
-            )}
+            <FaqSection faqs={faqs} />
 
             <footer
               className="border-t pt-6 pb-2 flex flex-col gap-3 font-body text-xs leading-relaxed"
