@@ -6,6 +6,19 @@ const nextConfig: NextConfig = {
   // (e.g. ~/package-lock.json) otherwise makes Next infer the wrong root, which
   // breaks API-route/redirect resolution under Turbopack dev.
   turbopack: { root: import.meta.dirname },
+  async headers() {
+    return [
+      {
+        // The service worker must never be served stale, or returning visitors
+        // get pinned to an old SW. Also force the correct JS content type.
+        source: '/sw.js',
+        headers: [
+          { key: 'Content-Type', value: 'application/javascript; charset=utf-8' },
+          { key: 'Cache-Control', value: 'no-cache, no-store, must-revalidate' },
+        ],
+      },
+    ];
+  },
   async redirects() {
     return [
       {

@@ -1,9 +1,10 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Oswald, DM_Sans } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import BackToTop from "@/components/BackToTop";
 import JsonLd from "@/components/JsonLd";
+import Pwa from "@/components/Pwa";
 import {
   SITE_URL,
   SITE_NAME,
@@ -47,6 +48,13 @@ export const metadata: Metadata = {
   },
   description: SITE_DESCRIPTION,
   applicationName: SITE_NAME,
+  // iOS standalone (home-screen) PWA chrome.
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: SITE_NAME,
+  },
+  formatDetection: { telephone: false },
   authors: [{ name: SITE_AUTHOR }],
   keywords: [
     "work abroad",
@@ -74,6 +82,12 @@ export const metadata: Metadata = {
     description: SITE_DESCRIPTION,
     images: [DEFAULT_OG_IMAGE],
   },
+};
+
+// Drives the <meta name="theme-color"> used for the mobile browser chrome and
+// the PWA splash/title bar. Matches the brand dark green.
+export const viewport: Viewport = {
+  themeColor: "#1B4D3E",
 };
 
 // Static JSON-LD — every value is a hardcoded constant (no request data, no
@@ -111,6 +125,7 @@ export default function RootLayout({
         <JsonLd data={jsonLd} />
         {children}
         <BackToTop />
+        <Pwa />
         <Analytics />
         <SpeedInsights />
       </body>
