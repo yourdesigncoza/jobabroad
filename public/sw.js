@@ -1,6 +1,6 @@
 // Jobabroad service worker — installability + offline shell.
 // Bump CACHE_VERSION on any change here to roll caches for returning visitors.
-const CACHE_VERSION = 'v1';
+const CACHE_VERSION = 'v2';
 const STATIC_CACHE = `ja-static-${CACHE_VERSION}`;
 const PAGES_CACHE = `ja-pages-${CACHE_VERSION}`;
 const OFFLINE_URL = '/offline.html';

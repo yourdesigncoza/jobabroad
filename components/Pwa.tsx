@@ -175,9 +175,12 @@ export default function Pwa() {
       style={{ backgroundColor: '#1B4D3E', color: '#F8F5F0' }}
     >
       <div className="flex items-start gap-3">
-        {/* Plain img: 40px static brand icon — next/image optimization is needless overhead here. */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/icon-192.png" alt="" width={40} height={40} className="rounded-lg" />
+        {/* Cream chip so the dark-green app icon stays visible on the green banner. */}
+        <span className="shrink-0 rounded-xl p-1" style={{ backgroundColor: '#F8F5F0' }}>
+          {/* Plain img: small static brand icon — next/image optimization is needless overhead here. */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/icon-192.png" alt="" width={36} height={36} className="block rounded-lg" />
+        </span>
         <div className="min-w-0 flex-1">
           <p className="font-display font-semibold uppercase tracking-wide" style={{ fontSize: '0.95rem' }}>
             Install Jobabroad
