@@ -1,30 +1,87 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { usePathname } from 'next/navigation';
 
 // Chrome/Android fire this before showing their native install prompt; we
-// capture it so we can trigger the prompt from our own button.
+// capture it so we can trigger the prompt from our own button at the right
+// moment (rather than on a cold first paint).
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
   userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
 }
 
 const DISMISS_KEY = 'ja-pwa-install-dismissed';
+const SEEN_KEY = 'ja-pwa-seen'; // set on first-ever visit → presence means "returning"
+const PV_KEY = 'ja-pwa-pageviews'; // per-session pageview counter
+
+// Conversion-critical pages: the install banner must never compete with the
+// primary CTA (sign up / pay), so it is suppressed here regardless of intent.
+const SUPPRESS_EXACT = new Set([
+  '/',
+  '/login',
+  '/register',
+  '/forgot-password',
+  '/reset-password',
+]);
+
+function isSuppressed(path: string): boolean {
+  if (SUPPRESS_EXACT.has(path)) return true;
+  // Don't interrupt the payment / booking decision.
+  return path.endsWith('/paid') || path.endsWith('/book');
+}
+
+// Strong intent signal: a registered user inside the gated members area.
+function isIntentRoute(path: string): boolean {
+  return path.startsWith('/members') || path.startsWith('/dashboard');
+}
+
+// Computed once on first client render (lazy state init, never on the server).
+// Returns the install affordance for this device, or null when we can't / must
+// not offer one (already installed, previously dismissed, unsupported).
+function detectPlatform(): null | 'ios' | 'android' {
+  if (typeof window === 'undefined') return null;
+  try {
+    const standalone =
+      window.matchMedia('(display-mode: standalone)').matches ||
+      (window.navigator as Navigator & { standalone?: boolean }).standalone === true;
+    if (standalone) return null;
+    if (localStorage.getItem(DISMISS_KEY)) return null;
+  } catch {
+    return null;
+  }
+  const ios =
+    /iPad|iPhone|iPod/.test(navigator.userAgent) &&
+    !(window as Window & { MSStream?: unknown }).MSStream;
+  // Android/desktop Chrome only becomes installable once beforeinstallprompt
+  // fires, so it is promoted to 'android' from that listener — not here.
+  return ios ? 'ios' : null;
+}
 
 /**
  * Single mount point for PWA behaviour:
- *  - registers the service worker (/sw.js)
- *  - renders a subtle, dismissible "Add to Home Screen" banner on mobile
- *    (Android via beforeinstallprompt; iOS Safari via instructions).
+ *  - registers the service worker (/sw.js) globally — offline/caching helps
+ *    every visitor and is what makes the site install-eligible.
+ *  - renders a subtle, dismissible "Add to Home Screen" banner, but only once
+ *    the visitor has shown intent: inside /members or /dashboard, OR on a
+ *    return visit, OR from the 2nd pageview in a session. Never on the
+ *    conversion-critical pages above.
  */
 export default function Pwa() {
+  const [platform, setPlatform] = useState<null | 'ios' | 'android'>(detectPlatform);
   const [deferred, setDeferred] = useState<BeforeInstallPromptEvent | null>(null);
-  // null = hidden; 'ios' = show instructions; 'android' = show install button.
-  // Single state set only from async callbacks (avoids cascading-render lint).
-  const [banner, setBanner] = useState<null | 'ios' | 'android'>(null);
-  const isIOS = banner === 'ios';
+  // Flips true once the reveal delay has elapsed on an eligible route. Live
+  // visibility is still gated by routeEligible() below, so this only ever needs
+  // to go true (no synchronous reset in an effect).
+  const [revealed, setRevealed] = useState(false);
 
-  // Register the service worker once on mount.
+  const isReturnVisit = useRef(false);
+  const pageviews = useRef(0);
+
+  const pathname = usePathname();
+  const isIOS = platform === 'ios';
+
+  // Register the service worker once on mount (always, on every route).
   useEffect(() => {
     if (!('serviceWorker' in navigator)) return;
     const onLoad = () => {
@@ -39,31 +96,26 @@ export default function Pwa() {
     }
   }, []);
 
-  // Decide whether to show the install banner.
+  // Capture the Android install prompt + record return-visit state. Runs once.
   useEffect(() => {
-    const standalone =
-      window.matchMedia('(display-mode: standalone)').matches ||
-      // iOS Safari exposes navigator.standalone instead of display-mode.
-      (window.navigator as Navigator & { standalone?: boolean }).standalone === true;
-    if (standalone) return; // already installed
-    if (localStorage.getItem(DISMISS_KEY)) return; // user dismissed before
-
-    const ios =
-      /iPad|iPhone|iPod/.test(navigator.userAgent) &&
-      !(window as Window & { MSStream?: unknown }).MSStream;
-
-    // iOS gives no install event — show the instructional banner after a beat.
-    if (ios) {
-      const t = setTimeout(() => setBanner('ios'), 1200);
-      return () => clearTimeout(t);
+    // Return-visit detection: SEEN_KEY persists across sessions, so finding it
+    // already set means this isn't the visitor's first time here.
+    try {
+      isReturnVisit.current = !!localStorage.getItem(SEEN_KEY);
+      if (!isReturnVisit.current) localStorage.setItem(SEEN_KEY, '1');
+    } catch {
+      /* private mode — ignore */
     }
 
     const onBeforeInstall = (e: Event) => {
       e.preventDefault();
       setDeferred(e as BeforeInstallPromptEvent);
-      setBanner('android');
+      setPlatform('android'); // set from a callback, not synchronously in effect
     };
-    const onInstalled = () => setBanner(null);
+    const onInstalled = () => {
+      setPlatform(null);
+      setRevealed(false);
+    };
     window.addEventListener('beforeinstallprompt', onBeforeInstall);
     window.addEventListener('appinstalled', onInstalled);
     return () => {
@@ -72,8 +124,32 @@ export default function Pwa() {
     };
   }, []);
 
+  // Re-evaluate the trigger on every navigation. The component persists across
+  // App Router soft navigations, so counters + the captured prompt survive.
+  useEffect(() => {
+    try {
+      pageviews.current = Number(sessionStorage.getItem(PV_KEY) || '0') + 1;
+      sessionStorage.setItem(PV_KEY, String(pageviews.current));
+    } catch {
+      pageviews.current += 1;
+    }
+
+    if (!routeEligible(pathname)) return;
+    // Small delay so it doesn't pop the instant an eligible route paints.
+    const t = setTimeout(() => setRevealed(true), 600);
+    return () => clearTimeout(t);
+  }, [pathname]);
+
+  // Live eligibility for the current route — derived, so navigating to a
+  // suppressed page hides the banner without any state reset.
+  function routeEligible(path: string): boolean {
+    if (isSuppressed(path)) return false;
+    return isIntentRoute(path) || isReturnVisit.current || pageviews.current >= 2;
+  }
+
   function dismiss() {
-    setBanner(null);
+    setRevealed(false);
+    setPlatform(null); // don't reappear this session
     try {
       localStorage.setItem(DISMISS_KEY, '1');
     } catch {
@@ -89,7 +165,7 @@ export default function Pwa() {
     dismiss();
   }
 
-  if (!banner) return null;
+  if (platform === null || !revealed || !routeEligible(pathname)) return null;
 
   return (
     <div

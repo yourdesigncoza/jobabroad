@@ -62,6 +62,18 @@ test.describe('PWA', () => {
     expect(await res.text()).toContain("You're offline");
   });
 
+  test('does not show the install banner on the landing page', async ({ page }) => {
+    // The banner is gated on intent (members/return/2nd pageview) and is
+    // always suppressed on conversion-critical pages like the landing page,
+    // so it must never compete with the primary CTA there.
+    await page.goto('/');
+    await page.waitForLoadState('load');
+    await page.waitForTimeout(1200); // past the reveal delay
+    await expect(
+      page.getByRole('dialog', { name: 'Install Jobabroad app' }),
+    ).toHaveCount(0);
+  });
+
   test('registers the service worker on the client', async ({ page }) => {
     await page.goto('/');
     await page.waitForLoadState('load');
