@@ -88,6 +88,56 @@ test.describe('Follow-up nudge funnel — score-page entry', () => {
     }
   });
 
+  test('unsubscribe link actually opts out and burns the token', async ({ page, request }) => {
+    const email = uniqueEmail('nudge-unsub');
+    await registerAndLogin(page, {
+      email,
+      password: PASSWORD,
+      name: 'Nudge Unsub',
+      phone: uniquePhone(),
+      category: 'teaching',
+    });
+    const userId = await findUserIdByEmail(email);
+    await insertSubmittedTeachingAssessment(userId);
+
+    try {
+      // Real opt-in mints a real unsubscribe token.
+      const consentRes = await page.request.post('/api/agent/consent');
+      expect(consentRes.ok()).toBe(true);
+
+      const { data: before } = await svc()
+        .from('profiles')
+        .select('agent_nudge_consent, agent_nudge_unsub_token')
+        .eq('user_id', userId)
+        .single();
+      expect(before?.agent_nudge_consent).toBe(true);
+      const token = before?.agent_nudge_unsub_token as string;
+      expect(token).toBeTruthy();
+
+      // Hit the link the way an email client would — unauthenticated, token only.
+      const res = await request.get(`/api/agent/unsubscribe?token=${encodeURIComponent(token)}`);
+      expect(res.status()).toBe(200);
+      expect(await res.text()).toContain("You're unsubscribed");
+
+      // DB really flipped: consent off, timestamp set, token burned (single-use).
+      const { data: after } = await svc()
+        .from('profiles')
+        .select('agent_nudge_consent, agent_nudge_unsubscribed_at, agent_nudge_unsub_token')
+        .eq('user_id', userId)
+        .single();
+      expect(after?.agent_nudge_consent).toBe(false);
+      expect(after?.agent_nudge_unsubscribed_at).not.toBeNull();
+      expect(after?.agent_nudge_unsub_token).toBeNull();
+
+      // Anti-enumeration: a bogus token returns the SAME page, changes nothing.
+      const bogus = await request.get('/api/agent/unsubscribe?token=does-not-exist-xyz');
+      expect(bogus.status()).toBe(200);
+      expect(await bogus.text()).toContain("You're unsubscribed");
+    } finally {
+      await deleteUser(email);
+    }
+  });
+
   test('re-viewing the score does not reset the idle clock', async ({ page }) => {
     const email = uniqueEmail('nudge-clock');
     await registerAndLogin(page, {
