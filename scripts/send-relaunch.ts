@@ -39,6 +39,16 @@ const EXCLUDE = new Set(
     .filter(Boolean),
 );
 
+// RELAUNCH_ONLY (comma-separated) restricts the send to an explicit allowlist —
+// used to re-mail just the batch that received the broken-link version, rather
+// than every eligible user. Empty = no restriction (normal full send).
+const ONLY = new Set(
+  (process.env.RELAUNCH_ONLY ?? "")
+    .split(",")
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean),
+);
+
 const FROM_EMAIL = process.env.BREVO_FROM_EMAIL || "no-reply@jobabroad.co.za";
 const FROM_NAME = process.env.BREVO_FROM_NAME || "John at Jobabroad";
 // Branded reply-to so replies stay on the jobabroad domain (hello@ is the public
@@ -145,6 +155,7 @@ async function main() {
     if (email.startsWith("playwright+") || email.endsWith("@example.com"))
       continue; // skip test users
     if (EXCLUDE.has(email)) continue; // John's admin + test addresses
+    if (ONLY.size && !ONLY.has(email)) continue; // allowlist (broken-link batch)
     const category = (p.category as string) || "";
     recipients.push({
       email: auth.email,
