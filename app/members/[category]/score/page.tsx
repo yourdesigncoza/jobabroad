@@ -7,9 +7,11 @@ import { getOrGenerateNarratives } from '@/lib/scoring/narratives';
 import { getLatestAssessment } from '@/lib/assessments/assessment-client';
 import { assessmentDataSchema } from '@/lib/assessments/schemas/assessment';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
-import { hasFullAccess } from '@/lib/access';
+import { hasFullAccess, hasCoachAccess } from '@/lib/access';
 import { sendScoreEmailOnce } from '@/lib/notifications/score-email';
+import { seedFollowupOnScoreView } from '@/lib/agent/followup';
 import ScoreResult from '@/components/ScoreResult';
+import ScoreNudgeConsent from '@/components/ScoreNudgeConsent';
 import SiteNav from '@/components/SiteNav';
 import SiteFooter from '@/components/SiteFooter';
 
@@ -41,10 +43,14 @@ export default async function ScorePage({
   const ssr = await createSupabaseServerClient();
   const { data: tierRow } = await ssr
     .from('profiles')
-    .select('tier')
+    .select('tier, agent_nudge_consent')
     .eq('user_id', user.id)
     .single();
   const isPaid = hasFullAccess(tierRow?.tier);
+  // Follow-up nudge opt-in is only offered where the coach is reachable (free
+  // while the gate is off, paid otherwise) — the consent route gates the same way.
+  const canOptInToNudges = hasCoachAccess(tierRow?.tier);
+  const alreadyConsented = tierRow?.agent_nudge_consent === true;
 
   const parsedAnswers = assessmentDataSchema.parse(assessment.data);
   const score = calculateScore(parsedAnswers, rubric);
@@ -87,6 +93,13 @@ export default async function ScorePage({
     );
   }
 
+  // Bring this completer into the proactive-nudge funnel: persist their journey
+  // and start the 7-day idle clock. Idempotent + fire-and-forget (must not block
+  // render on the write). Only meaningful when nudges are reachable for them.
+  if (canOptInToNudges) {
+    waitUntil(seedFollowupOnScoreView(user.id, category));
+  }
+
   return (
     <main className="min-h-screen" style={{ backgroundColor: '#F8F5F0' }}>
       <SiteNav />
@@ -103,6 +116,7 @@ export default async function ScorePage({
         // has score_email_sent_at set; user might revisit but already has it.
         emailedCopy
       />
+      {canOptInToNudges && <ScoreNudgeConsent initialConsent={alreadyConsented} />}
       <SiteFooter />
     </main>
   );

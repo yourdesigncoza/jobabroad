@@ -4,6 +4,7 @@ import { createSupabaseServiceClient } from '@/lib/supabase/service';
 import { sendNudgeEmail } from '@/lib/notifications/agent-nudge-email';
 import { milestoneLabel } from '@/lib/agent/milestones';
 import { CATEGORIES } from '@/lib/categories';
+import { PAYMENTS_ENABLED } from '@/lib/access';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -39,7 +40,12 @@ export async function GET(req: NextRequest) {
   if (!authorized(req)) return new NextResponse('unauthorized', { status: 401 });
 
   const svc = createSupabaseServiceClient();
-  const { data, error } = await svc.rpc('claim_nudge_candidates', { p_limit: BATCH });
+  // While the payment gate is off the prospect base is all free-tier, so include
+  // them. If the R495 gate returns, this flips back to paid-only automatically.
+  const { data, error } = await svc.rpc('claim_nudge_candidates', {
+    p_limit: BATCH,
+    p_include_free: !PAYMENTS_ENABLED,
+  });
   if (error) {
     console.error('[cron/agent-nudge] claim failed', error);
     return NextResponse.json({ error: 'claim_failed' }, { status: 500 });
