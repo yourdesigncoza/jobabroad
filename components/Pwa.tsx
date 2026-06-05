@@ -36,6 +36,18 @@ function isIntentRoute(path: string): boolean {
   return path.startsWith('/members') || path.startsWith('/dashboard');
 }
 
+// "Add to Home Screen" only makes sense on a phone/tablet. Desktop Chrome also
+// fires beforeinstallprompt, so we gate the banner to touch devices to keep it
+// off desktop entirely.
+function isMobileDevice(): boolean {
+  if (typeof window === 'undefined') return false;
+  try {
+    return window.matchMedia('(pointer: coarse)').matches;
+  } catch {
+    return false;
+  }
+}
+
 // Computed once on first client render (lazy state init, never on the server).
 // Returns the install affordance for this device, or null when we can't / must
 // not offer one (already installed, previously dismissed, unsupported).
@@ -109,6 +121,7 @@ export default function Pwa() {
 
     const onBeforeInstall = (e: Event) => {
       e.preventDefault();
+      if (!isMobileDevice()) return; // never offer the banner on desktop
       setDeferred(e as BeforeInstallPromptEvent);
       setPlatform('android'); // set from a callback, not synchronously in effect
     };
