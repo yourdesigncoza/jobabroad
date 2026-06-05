@@ -96,6 +96,8 @@ function bodyFor(r: Recipient): string {
           <p style="margin:0 0 6px;font-family:Oswald,Arial,sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#C9A84C;">We&rsquo;re officially live</p>
           <h1 style="margin:0 0 18px;font-family:Oswald,Arial,sans-serif;font-size:24px;color:#2C2C2C;">Hi ${escapeHtml(firstName(r.name))}, your ${escapeHtml(r.categoryLabel)} pathway is ready</h1>
 
+          <p style="margin:0 0 14px;">First, a small apology. If you opened our last email and the button didn&rsquo;t take you anywhere, that was a teething issue on our side &mdash; the link was pointing to the wrong place. Entirely our fault, and now fixed. The button below will take you straight in.</p>
+
           <p style="margin:0 0 14px;">When you first signed up, we were still building Jobabroad and some pathways weren&rsquo;t finished yet. If your first visit felt thin or unfinished, that was on us, not you.</p>
 
           <p style="margin:0 0 14px;">Today that changes. <strong>Every pathway is now complete, including ${escapeHtml(r.categoryLabel)}.</strong> And we&rsquo;ve removed the payment gate, your full personalised eligibility assessment, your detailed ${escapeHtml(r.categoryLabel)} pathway guide, and your tailored report are all <strong>free</strong> to access.</p>
