@@ -45,7 +45,25 @@ const FROM_NAME = process.env.BREVO_FROM_NAME || "John at Jobabroad";
 // contact address). Override with RELAUNCH_REPLY_TO. NB: only works if this
 // mailbox actually delivers to John — verify by replying to the --test email.
 const REPLY_TO = process.env.RELAUNCH_REPLY_TO || "hello@jobabroad.co.za";
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://jobabroad.co.za";
+// RELAUNCH_BASE_URL is the explicit override for production sends. We do NOT
+// trust NEXT_PUBLIC_BASE_URL blindly: this script runs locally, where .env.local
+// sets it to http://localhost:3000 — which silently bakes dead localhost links
+// into every CTA (this happened on the 2026-06-02 batch). The guard below aborts
+// a real --send if the resolved URL is a dev host.
+const BASE_URL =
+  process.env.RELAUNCH_BASE_URL ||
+  process.env.NEXT_PUBLIC_BASE_URL ||
+  "https://jobabroad.co.za";
+
+// A real send must never emit dev links — every CTA would be dead for recipients.
+if (MODE === "send" && /localhost|127\.0\.0\.1/.test(BASE_URL)) {
+  console.error(
+    `ABORT: BASE_URL is '${BASE_URL}' — that's a dev URL, every link would be dead.\n` +
+      `Re-run with an explicit production URL:\n` +
+      `  RELAUNCH_BASE_URL=https://jobabroad.co.za NODE_OPTIONS="--require ./scripts/shim-server-only.cjs" npx tsx scripts/send-relaunch.ts --send`,
+  );
+  process.exit(1);
+}
 
 type Recipient = {
   email: string;
