@@ -3,6 +3,8 @@ import { createSupabaseServiceClient } from '@/lib/supabase/service';
 import { requireAdmin } from '@/lib/auth-guards';
 import { CATEGORIES } from '@/lib/categories';
 import { extractPersonalContext } from '@/lib/agent/prompt';
+import { calculateScore, loadRubric } from '@/lib/scoring';
+import type { Band, Rubric } from '@/lib/scoring/types';
 import type { AssessmentData } from '@/lib/assessments/schemas/assessment';
 import UsersDashboardClient, { type MemberRow } from './UsersDashboardClient';
 import StatCard from '@/components/admin/StatCard';
@@ -48,12 +50,42 @@ export default async function AdminUsersPage() {
   // exactly what the assistant was handed for that member.
   const submittedUsers = new Set<string>();
   const aboutByUser = new Map<string, string>();
+  const submittedDataByUser = new Map<string, AssessmentData | null>();
   for (const a of submittedRes.data ?? []) {
     const uid = a.user_id as string;
     submittedUsers.add(uid);
     if (!aboutByUser.has(uid)) {
       aboutByUser.set(uid, extractPersonalContext(a.data as AssessmentData | null));
+      submittedDataByUser.set(uid, (a.data as AssessmentData | null) ?? null);
     }
+  }
+
+  // Eligibility score per submitted member — reuses the exact engine + rubrics
+  // the score page and PDF report run on, so the admin number always matches what
+  // the user was shown. Rubrics are loaded once per category (not per user).
+  const categoryByUser = new Map<string, string>();
+  for (const p of profilesRes.data ?? []) categoryByUser.set(p.user_id, p.category ?? '');
+
+  const neededCategories = new Set<string>();
+  for (const uid of submittedDataByUser.keys()) {
+    const cat = categoryByUser.get(uid);
+    if (cat) neededCategories.add(cat);
+  }
+  const rubricByCategory = new Map<string, Rubric | null>(
+    await Promise.all(
+      [...neededCategories].map(
+        async (cat) => [cat, await loadRubric(cat)] as const,
+      ),
+    ),
+  );
+
+  const scoreByUser = new Map<string, { overall: number; band: Band }>();
+  for (const [uid, data] of submittedDataByUser) {
+    if (!data) continue;
+    const rubric = rubricByCategory.get(categoryByUser.get(uid) ?? '');
+    if (!rubric) continue;
+    const { overall, band } = calculateScore(data, rubric);
+    scoreByUser.set(uid, { overall, band });
   }
 
   const reportsByUser = new Map<
@@ -98,6 +130,7 @@ export default async function AdminUsersPage() {
     const report = reportsByUser.get(p.user_id);
     const chat = chatByUser.get(p.user_id);
     const journey = journeyByUser.get(p.user_id);
+    const score = scoreByUser.get(p.user_id);
     return {
       userId: p.user_id,
       name: p.name ?? '',
@@ -107,6 +140,8 @@ export default async function AdminUsersPage() {
       categoryLabel: CATEGORIES.find((c) => c.id === p.category)?.label ?? (p.category ?? ''),
       registeredAt: auth?.createdAt ?? null,
       assessmentSubmitted: submittedUsers.has(p.user_id),
+      score: score?.overall ?? null,
+      band: score?.band ?? null,
       aboutSummary: aboutByUser.get(p.user_id) ?? '',
       reportStatus: report?.generation_status ?? null,
       reportGeneratedAt: report?.generated_at ?? null,
@@ -152,9 +187,10 @@ export default async function AdminUsersPage() {
           </h1>
           <p className="font-body text-sm" style={{ color: '#6B6B6B' }}>
             Every registered user, newest first: when they signed up, whether
-            they&apos;ve completed the eligibility check, what they told us about
-            themselves in their own words, their report status, and their chatbot
-            activity. Hit <em>Summarise chats</em> on any member who&apos;s chatted
+            they&apos;ve completed the eligibility check, their score and band,
+            what they told us about themselves in their own words, their report
+            status, and their chatbot activity. Hit <em>Summarise chats</em> on
+            any member who&apos;s chatted
             to generate an on-demand summary of what they asked.
           </p>
         </div>

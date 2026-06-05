@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { BAND_COPY } from '@/lib/scoring/bands';
+import type { Band } from '@/lib/scoring/types';
 
 export interface MemberRow {
   userId: string;
@@ -12,6 +14,10 @@ export interface MemberRow {
   categoryLabel: string;
   registeredAt: string | null;
   assessmentSubmitted: boolean;
+  /** Eligibility score 0–100; null when no assessment submitted (or no rubric). */
+  score: number | null;
+  /** Eligibility band matching the score; null when unscored. */
+  band: Band | null;
   /** Free-text "Tell us about yourself" answer; '' when left blank. */
   aboutSummary: string;
   reportStatus: 'pending' | 'completed' | 'failed' | null;
@@ -28,10 +34,10 @@ interface Props {
 }
 
 const PAGE_SIZE = 20;
-// Primary-row columns (Member · Registered · Check · About you · Report · Chat).
-// The wide Summary/activity + the action buttons live on a second row that
-// spans all of these, so nothing clips off the right edge.
-const COLS = 6;
+// Primary-row columns (Member · Registered · Check · Score · About you · Report
+// · Chat). The wide Summary/activity + the action buttons live on a second row
+// that spans all of these, so nothing clips off the right edge.
+const COLS = 7;
 
 function formatDateTime(iso: string | null): string {
   if (!iso) return '—';
@@ -103,6 +109,7 @@ export default function UsersDashboardClient({ rows }: Props) {
               <Th>Member</Th>
               <Th>Registered</Th>
               <Th>Check</Th>
+              <Th>Score</Th>
               <Th>About you</Th>
               <Th>Report</Th>
               <Th>Chat</Th>
@@ -311,6 +318,9 @@ function UserRow({
             tone={row.assessmentSubmitted ? 'green' : 'grey'}
             label={row.assessmentSubmitted ? 'Complete' : 'No check'}
           />
+        </td>
+        <td className={CELL}>
+          <ScorePill score={row.score} band={row.band} />
         </td>
         <td className={CELL}>
           <AboutCell text={row.aboutSummary} />
@@ -687,6 +697,41 @@ function Tag({ tone, label }: { tone: 'green' | 'orange' | 'grey'; label: string
     >
       {label}
     </span>
+  );
+}
+
+// Score-at-a-glance: the number plus a colour-coded band chip. Colours mirror
+// the band tones used on the user-facing score page (green = strong, gold =
+// needs prep, red = high blockers) so the admin reads the same signal.
+function ScorePill({ score, band }: { score: number | null; band: Band | null }) {
+  if (score == null || !band) {
+    return (
+      <span className="text-xs" style={{ color: '#9A958C' }}>
+        —
+      </span>
+    );
+  }
+  const tones: Record<Band, { bg: string; fg: string }> = {
+    strong_potential: { bg: '#DCEFE6', fg: '#1B4D3E' },
+    needs_prep: { bg: '#FFF3D6', fg: '#8A6A1F' },
+    high_blockers: { bg: '#F8D7D1', fg: '#B53A2B' },
+  };
+  const t = tones[band];
+  return (
+    <div className="flex flex-col items-start gap-1">
+      <span className="font-display font-bold text-base leading-none" style={{ color: t.fg }}>
+        {score}
+        <span className="text-[0.65rem] font-semibold" style={{ color: '#9A958C' }}>
+          /100
+        </span>
+      </span>
+      <span
+        className="inline-block font-display font-bold text-[10px] uppercase tracking-wider px-2 py-1 rounded-full whitespace-nowrap"
+        style={{ backgroundColor: t.bg, color: t.fg }}
+      >
+        {BAND_COPY[band].label}
+      </span>
+    </div>
   );
 }
 

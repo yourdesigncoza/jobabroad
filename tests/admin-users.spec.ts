@@ -278,6 +278,62 @@ test.describe('Admin users dashboard — about-you column', () => {
   });
 });
 
+test.describe('Admin users dashboard — score column', () => {
+  test.skip(!ADMIN_EMAIL, 'PLAYWRIGHT_ADMIN_EMAIL not set');
+
+  test('shows an at-a-glance score + band for submitted members, dash for unscored', async ({ page, browser }) => {
+    // Member A: a submitted teaching assessment → has a computed score + band.
+    const scoredEmail = uniqueEmail('score-done');
+    await registerAndLogin(page, {
+      email: scoredEmail,
+      password: PASSWORD,
+      name: 'Score Done',
+      phone: uniquePhone(),
+      category: 'teaching',
+    });
+    const scoredId = await findUserIdByEmail(scoredEmail);
+    await insertSubmittedTeachingAssessment(scoredId);
+
+    // Member B: registered but never completed the check → no score (dash).
+    const unscoredEmail = uniqueEmail('score-none');
+    const ctxB = await browser.newContext();
+    const pageB = await ctxB.newPage();
+    await registerAndLogin(pageB, {
+      email: unscoredEmail,
+      password: PASSWORD,
+      name: 'Score None',
+      phone: uniquePhone(),
+      category: 'teaching',
+    });
+    await ctxB.close();
+
+    const adminCtx = await browser.newContext();
+    const adminPage = await adminCtx.newPage();
+    try {
+      await seedAndLoginAdmin(adminPage);
+      await adminPage.goto('/admin');
+      await expect(adminPage.getByRole('heading', { name: /registered members/i })).toBeVisible();
+      await expect(adminPage.getByRole('columnheader', { name: 'Score' })).toBeVisible();
+
+      // Submitted member: a number out of 100 + one of the three band chips.
+      const scoredRow = adminPage.locator('tr', { hasText: scoredEmail });
+      await expect(scoredRow.getByText(/\d{1,3}\/100/)).toBeVisible();
+      await expect(
+        scoredRow.getByText(/High blockers|Needs prep|Strong potential/),
+      ).toBeVisible();
+
+      // Unscored member: no "/100" in their row (score cell shows a dash).
+      const unscoredRow = adminPage.locator('tr', { hasText: unscoredEmail });
+      await expect(unscoredRow.getByText(/\d{1,3}\/100/)).toHaveCount(0);
+    } finally {
+      await adminCtx.close();
+      await deleteUser(ADMIN_EMAIL);
+      await deleteUser(scoredEmail);
+      await deleteUser(unscoredEmail);
+    }
+  });
+});
+
 test.describe('Admin force-regenerate — happy path', () => {
   test.skip(!ADMIN_EMAIL, 'PLAYWRIGHT_ADMIN_EMAIL not set');
 
