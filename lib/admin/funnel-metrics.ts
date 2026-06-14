@@ -28,6 +28,10 @@ export type FunnelMetrics = {
   bookings: number;
   reports: { rows: number; withPdf: number; completed: number; pending: number; failed: number };
   storageObjects: number;
+  /** AI coach engagement: who's actually using it, and who's opted into nudges. */
+  coach: { usersChatted: number; userTurns: number; nudgeOptIns: number };
+  /** Momentum read — new activity in the trailing 7 days. */
+  recent7d: { signups: number; submissions: number; paid: number };
   byCategory: CategoryStat[];
   funnel: FunnelStage[];
 };
@@ -35,7 +39,11 @@ export type FunnelMetrics = {
 /** Page through the auth admin API so the count stays right as users grow. */
 async function fetchAllAuthUsers(svc: ReturnType<typeof createSupabaseServiceClient>) {
   const perPage = 200;
-  const all: Array<{ email_confirmed_at?: string | null; confirmed_at?: string | null }> = [];
+  const all: Array<{
+    email_confirmed_at?: string | null;
+    confirmed_at?: string | null;
+    created_at?: string | null;
+  }> = [];
   for (let page = 1; page < 50; page++) {
     const { data, error } = await svc.auth.admin.listUsers({ page, perPage });
     const users = data?.users ?? [];
@@ -67,15 +75,21 @@ const pct = (n: number, d: number) => (d > 0 ? Math.round((n / d) * 1000) / 10 :
 export async function getFunnelMetrics(): Promise<FunnelMetrics> {
   const svc = createSupabaseServiceClient();
 
-  const [authUsers, profilesRes, assessRes, bookingsRes, reportsRes, storageObjects] =
+  const [authUsers, profilesRes, assessRes, bookingsRes, reportsRes, msgsRes, storageObjects] =
     await Promise.all([
       fetchAllAuthUsers(svc),
-      svc.from('profiles').select('category, tier'),
-      svc.from('assessments').select('user_id, status'),
+      svc.from('profiles').select('category, tier, agent_nudge_consent'),
+      svc.from('assessments').select('user_id, status, submitted_at'),
       svc.from('bookings').select('id', { count: 'exact', head: true }),
-      svc.from('paid_reports').select('generation_status, pdf_path'),
+      svc.from('paid_reports').select('generation_status, pdf_path, generated_at'),
+      svc.from('agent_messages').select('user_id, role'),
       countStorageObjects(svc),
     ]);
+
+  // Trailing-7-day cutoff for the momentum stats.
+  const cutoff = Date.now() - 7 * 24 * 60 * 60 * 1000;
+  const within7d = (ts: string | null | undefined) =>
+    ts != null && Date.parse(ts) >= cutoff;
 
   // Users
   const total = authUsers.length;
@@ -87,11 +101,13 @@ export async function getFunnelMetrics(): Promise<FunnelMetrics> {
   let free = 0;
   let paid = 0;
   let otherTier = 0;
+  let nudgeOptIns = 0;
   const catCount = new Map<string, number>();
   for (const p of profiles) {
     if (p.tier === 'paid') paid++;
     else if (p.tier === 'free' || p.tier == null) free++;
     else otherTier++;
+    if (p.agent_nudge_consent) nudgeOptIns++;
     const c = (p.category as string) || 'unknown';
     catCount.set(c, (catCount.get(c) ?? 0) + 1);
   }
@@ -102,12 +118,14 @@ export async function getFunnelMetrics(): Promise<FunnelMetrics> {
   let draft = 0;
   const startedUsers = new Set<string>();
   const submittedUsers = new Set<string>();
+  let submissions7d = 0;
   for (const a of assessments) {
     const uid = a.user_id as string;
     startedUsers.add(uid);
     if (a.status === 'submitted') {
       submitted++;
       submittedUsers.add(uid);
+      if (within7d(a.submitted_at as string | null)) submissions7d++;
     } else if (a.status === 'draft') {
       draft++;
     }
@@ -125,6 +143,21 @@ export async function getFunnelMetrics(): Promise<FunnelMetrics> {
     pending: reportRows.filter((r) => r.generation_status === 'pending').length,
     failed: reportRows.filter((r) => r.generation_status === 'failed').length,
   };
+  // A paid_reports row is created when payment flips the tier, so its timestamp
+  // is a faithful proxy for "paid this week".
+  const paid7d = reportRows.filter((r) => within7d(r.generated_at as string | null)).length;
+
+  // AI coach engagement — count user-authored turns and the distinct users behind them.
+  const chatUsers = new Set<string>();
+  let userTurns = 0;
+  for (const msg of msgsRes.data ?? []) {
+    if (msg.role !== 'user') continue;
+    userTurns++;
+    if (msg.user_id) chatUsers.add(msg.user_id as string);
+  }
+
+  // New signups in the trailing 7 days (auth user creation timestamp).
+  const signups7d = authUsers.filter((u) => within7d(u.created_at)).length;
 
   // By category — known categories first (in CATEGORIES order), then any stragglers.
   const byCategory: CategoryStat[] = [];
@@ -173,6 +206,8 @@ export async function getFunnelMetrics(): Promise<FunnelMetrics> {
     bookings,
     reports,
     storageObjects,
+    coach: { usersChatted: chatUsers.size, userTurns, nudgeOptIns },
+    recent7d: { signups: signups7d, submissions: submissions7d, paid: paid7d },
     byCategory,
     funnel,
   };

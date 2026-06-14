@@ -93,6 +93,21 @@ test.describe('Admin funnel — dashboard', () => {
       await expect(page.getByText('The numbers', { exact: true })).toBeVisible();
       await expect(page.getByText('Registered users', { exact: true })).toBeVisible();
 
+      // This-week momentum strip
+      await expect(page.getByText(/This week — last 7 days/i)).toBeVisible();
+      await expect(page.getByText('New signups', { exact: true })).toBeVisible();
+
+      // AI coach activity section
+      await expect(page.getByText('AI coach activity', { exact: true })).toBeVisible();
+      await expect(page.getByText('Used the coach', { exact: true })).toBeVisible();
+
+      // Traffic deep-links out to Vercel (new tab, per the external-links rule)
+      await expect(page.getByText('Traffic', { exact: true })).toBeVisible();
+      const analytics = page.getByRole('link', { name: /Web Analytics/i });
+      await expect(analytics).toHaveAttribute('href', /vercel\.com\/.+\/analytics/);
+      await expect(analytics).toHaveAttribute('target', '_blank');
+      await expect(analytics).toHaveAttribute('rel', /noopener/);
+
       // Signups by category — the seeded Teaching row must appear
       await expect(page.getByText(/Signups by category/i)).toBeVisible();
       await expect(page.getByText('Teaching', { exact: true })).toBeVisible();

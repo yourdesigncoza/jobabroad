@@ -50,6 +50,20 @@ export default async function AdminFunnelPage() {
           </p>
         </div>
 
+        {/* This week — momentum read */}
+        <section className="flex flex-col gap-4">
+          <SectionLabel>This week — last 7 days</SectionLabel>
+          <div className="grid grid-cols-3 gap-4">
+            <StatCard label="New signups" value={m.recent7d.signups} hint="registered in last 7d" />
+            <StatCard
+              label="New submissions"
+              value={m.recent7d.submissions}
+              hint="assessments submitted"
+            />
+            <StatCard label="New paid" value={m.recent7d.paid} hint="payments in last 7d" />
+          </div>
+        </section>
+
         {/* Conversion funnel */}
         <section className="flex flex-col gap-4">
           <SectionLabel>Conversion funnel</SectionLabel>
@@ -123,6 +137,59 @@ export default async function AdminFunnelPage() {
               value={m.tier.paid}
               hint={`${pctStr(m.tier.paid, m.users.total)} of registered`}
             />
+          </div>
+        </section>
+
+        {/* AI coach activity */}
+        <section className="flex flex-col gap-4">
+          <SectionLabel>AI coach activity</SectionLabel>
+          <div className="grid grid-cols-3 gap-4">
+            <StatCard
+              label="Used the coach"
+              value={m.coach.usersChatted}
+              hint={`${pctStr(m.coach.usersChatted, m.users.total)} of registered`}
+            />
+            <StatCard label="Questions asked" value={m.coach.userTurns} hint="user turns total" />
+            <StatCard
+              label="Nudge opt-ins"
+              value={m.coach.nudgeOptIns}
+              hint="consented to follow-up email"
+            />
+          </div>
+        </section>
+
+        {/* Traffic — lives in Vercel; deep-link out rather than double-count */}
+        <section className="flex flex-col gap-4">
+          <SectionLabel>Traffic</SectionLabel>
+          <div
+            className="rounded-2xl p-6 flex flex-col gap-4"
+            style={{ backgroundColor: '#FFFFFF', border: `1.5px solid ${OFFWHITE}` }}
+          >
+            <p className="font-body text-sm" style={{ color: MUTED }}>
+              Pageviews, top pages, referrers and per-source breakdowns live in
+              Vercel Analytics. Filter by the <code>src</code> query parameter in the
+              dashboard to see traffic per QR / campaign (the <code>?src=</code> UTMs).
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <a
+                href="https://vercel.com/yourdesigncozas-projects/jobroad/analytics"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-display text-xs font-semibold uppercase tracking-wider rounded-full px-5 py-2.5"
+                style={{ backgroundColor: GREEN, color: '#F8F5F0' }}
+              >
+                Web Analytics ↗
+              </a>
+              <a
+                href="https://vercel.com/yourdesigncozas-projects/jobroad/speed-insights"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-display text-xs font-semibold uppercase tracking-wider rounded-full px-5 py-2.5"
+                style={{ border: `1.5px solid ${GREEN}`, color: GREEN }}
+              >
+                Speed Insights ↗
+              </a>
+            </div>
           </div>
         </section>
 
