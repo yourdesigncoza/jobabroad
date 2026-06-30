@@ -19,8 +19,6 @@ See `docs/Work Abroad MVP Plan.md` for the full flow and what is deliberately de
 - **Next.js 16.2.4** (App Router) + **React 19** — check `node_modules/next/dist/docs/` before using any Next.js API
 - **Tailwind CSS v4** via `@tailwindcss/postcss` — no `tailwind.config.js`; config is in `postcss.config.mjs`
 - **Supabase Auth + Postgres** (`@supabase/ssr`) — profiles + assessments + paid-tier tables, pgvector for RAG
-- **Paystack** — payments (R495 = 49500 cents); swappable via `lib/payments/provider.ts`
-- **Cal.com** embed — booking (`@calcom/embed-react`)
 - **OpenAI** — RAG for personalised reports + AI coach
 - **@react-pdf/renderer** — server-side report PDFs, cached to Supabase Storage `paid-reports` bucket
 - **Brevo** — transactional email (`lib/email/brevo.ts`)
