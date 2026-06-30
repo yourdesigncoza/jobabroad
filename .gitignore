@@ -57,3 +57,6 @@ schema/
 docs/
 # Loose root-level smoke scripts.
 /score-smoke.mjs
+
+# Internal build-pathway skill — keep out of the public repo.
+.claude/skills/build-pathway/
